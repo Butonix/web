@@ -199,10 +199,14 @@ export default {
           this.confirmPassword = ''
           this.err = ''
           this.tab = 0
-          this.$refs.loginForm.reset()
-          this.$refs.loginForm.resetValidation()
-          this.$refs.signUpForm.reset()
-          this.$refs.signUpForm.resetValidation()
+          if (this.$refs.loginForm) {
+            this.$refs.loginForm.reset()
+            this.$refs.loginForm.resetValidation()
+          }
+          if (this.$refs.signUpForm) {
+            this.$refs.signUpForm.reset()
+            this.$refs.signUpForm.resetValidation()
+          }
         }
       })
     }

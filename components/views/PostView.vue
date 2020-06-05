@@ -2,8 +2,7 @@
   <v-container>
     <v-row>
       <v-col>
-        <Post v-if="post" :post="post" :expand="true" />
-        <v-skeleton-loader v-else type="v-list-item-avatar-three-line" />
+        <Post :post="post" :expand="true" />
 
         <div :style="$device.isDesktop ? 'width: 40%' : 'width: 100%'">
           <TextEditor
@@ -74,25 +73,23 @@ import Comment from '../Comment'
 
 export default {
   name: 'PostView',
-  metaInfo() {
+  components: { Comment, TextEditor, Post },
+  async asyncData(context) {
+    const client = context.app.apolloProvider.defaultClient
+    const postData = await client.query({
+      query: postGql,
+      variables: { postId: context.params.postId }
+    })
+
+    const postCommentsData = await client.query({
+      query: postCommentsGql,
+      variables: { postId: context.params.postId }
+    })
     return {
-      title: this.post.title,
-      meta: [
-        { property: 'og:title', content: `"${this.post.title}" on Comet` },
-        { property: 'og:site_name', content: 'getcomet.net' },
-        {
-          property: 'og:description',
-          content:
-            this.post.type === 'TEXT' ? this.post.textContent : this.post.link
-        },
-        {
-          property: 'og:image',
-          content: this.post.thumbnailUrl ? this.post.thumbnailUrl : ''
-        }
-      ]
+      post: postData.data.post,
+      postComments: postCommentsData.data.postComments
     }
   },
-  components: { Comment, TextEditor, Post },
   data: () => ({
     postComments: [],
     postView: null,
@@ -135,24 +132,6 @@ export default {
     })
     this.postView = data.postView
   },
-  apollo: {
-    postComments: {
-      query: postCommentsGql,
-      variables() {
-        return {
-          postId: this.postId
-        }
-      }
-    },
-    post: {
-      query: postGql,
-      variables() {
-        return {
-          postId: this.postId
-        }
-      }
-    }
-  },
   methods: {
     async submitComment() {
       this.loading = true
@@ -183,6 +162,24 @@ export default {
       })
       this.loading = false
       this.commentWriteText = ''
+    }
+  },
+  head() {
+    return {
+      title: this.post.title,
+      meta: [
+        { property: 'og:title', content: `"${this.post.title}" on Comet` },
+        { property: 'og:site_name', content: 'getcomet.net' },
+        {
+          property: 'og:description',
+          content:
+            this.post.type === 'TEXT' ? this.post.textContent : this.post.link
+        },
+        {
+          property: 'og:image',
+          content: this.post.thumbnailUrl ? this.post.thumbnailUrl : ''
+        }
+      ]
     }
   }
 }

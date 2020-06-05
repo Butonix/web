@@ -33,6 +33,9 @@ export default {
       }
     }
   },
+  head: {
+    title: 'Home'
+  },
   apollo: {
     homeFeed: {
       query: homeFeedGql

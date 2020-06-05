@@ -4,7 +4,7 @@
     app
     clipped
     width="220"
-    color="#1e1e1e"
+    :color="$vuetify.theme.dark ? '#1e1e1e' : 'white'"
     :mini-variant="collapsed"
     :value="value"
     @input="$emit('input', drawer)"

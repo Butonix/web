@@ -1,7 +1,7 @@
 {
   "name": "@comet/web",
   "version": "1.0.0",
-  "description": "My bee&#39;s knees Nuxt.js project",
+  "description": "Create and browse posts and comments on Comet",
   "author": "Dan Beneventano",
   "private": true,
   "engines": {

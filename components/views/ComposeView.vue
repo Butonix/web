@@ -110,9 +110,6 @@ import { escapeHtml } from '../../util/escapeHtml'
 
 export default {
   name: 'ComposeView',
-  metaInfo: {
-    title: 'New Post'
-  },
   components: { TextEditor },
   data: () => ({
     tab: null,
@@ -129,42 +126,6 @@ export default {
     topicSearchText: '',
     searchTopics: []
   }),
-  beforeRouteEnter(to, from, next) {
-    next((vm) => (vm.prevRoute = from))
-  },
-  apollo: {
-    currentUser: {
-      query: currentUserGql
-    },
-    previousTopic: {
-      query: topicGql,
-      variables() {
-        return {
-          topicName: this.previousTopicName
-        }
-      },
-      skip() {
-        return !this.previousTopicName
-      },
-      update(data) {
-        if (!this.selectedTopics.includes(data.topic.capitalizedName)) {
-          this.selectedTopics.unshift(data.topic.capitalizedName)
-        }
-        return data.topic
-      }
-    },
-    searchTopics: {
-      query: searchTopicsGql,
-      variables() {
-        return {
-          search: this.topicSearchText
-        }
-      },
-      skip() {
-        return !this.topicSearchText
-      }
-    }
-  },
   computed: {
     markedText() {
       return this.textContent
@@ -235,6 +196,45 @@ export default {
     remove(item) {
       const index = this.selectedTopics.indexOf(item)
       if (index >= 0) this.selectedTopics.splice(index, 1)
+    }
+  },
+  head: {
+    title: 'New Post'
+  },
+  beforeRouteEnter(to, from, next) {
+    next((vm) => (vm.prevRoute = from))
+  },
+  apollo: {
+    currentUser: {
+      query: currentUserGql
+    },
+    previousTopic: {
+      query: topicGql,
+      variables() {
+        return {
+          topicName: this.previousTopicName
+        }
+      },
+      skip() {
+        return !this.previousTopicName
+      },
+      update(data) {
+        if (!this.selectedTopics.includes(data.topic.capitalizedName)) {
+          this.selectedTopics.unshift(data.topic.capitalizedName)
+        }
+        return data.topic
+      }
+    },
+    searchTopics: {
+      query: searchTopicsGql,
+      variables() {
+        return {
+          search: this.topicSearchText
+        }
+      },
+      skip() {
+        return !this.topicSearchText
+      }
     }
   }
 }

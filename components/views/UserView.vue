@@ -80,11 +80,33 @@ import Post from '../Post'
 export default {
   name: 'PostView',
   components: { SortMenu, Comment, Post },
+  async asyncData(context) {
+    const client = context.app.apolloProvider.defaultClient
+    const userData = await client.query({
+      query: userGql,
+      variables: { username: context.params.username }
+    })
+
+    const userPostsData = await client.query({
+      query: userPostsGql,
+      variables: { username: context.params.username }
+    })
+
+    const userCommentsData = await client.query({
+      query: userCommentsGql,
+      variables: { username: context.params.username }
+    })
+
+    return {
+      user: userData.data.user,
+      userPosts: userPostsData.data.userPosts,
+      userComments: userCommentsData.data.userComments
+    }
+  },
   data() {
     return {
       currentTab: null,
-      // user: null,
-      notFound: false,
+      user: null,
       userPosts: [],
       userComments: []
     }
@@ -106,33 +128,20 @@ export default {
         )
     }
   },
-  apollo: {
-    user: {
-      query: userGql,
-      variables() {
-        return {
-          username: this.username
+  head() {
+    return {
+      title: this.user.username,
+      meta: [
+        {
+          property: 'og:title',
+          content: `${this.user.username}'s profile on Comet`
+        },
+        { property: 'og:site_name', content: 'getcomet.net' },
+        {
+          property: 'og:description',
+          content: `${this.user.postCount} Posts and ${this.user.commentCount} Comments`
         }
-      },
-      error() {
-        this.notFound = true
-      }
-    },
-    userPosts: {
-      query: userPostsGql,
-      variables() {
-        return {
-          username: this.username
-        }
-      }
-    },
-    userComments: {
-      query: userCommentsGql,
-      variables() {
-        return {
-          username: this.username
-        }
-      }
+      ]
     }
   }
 }

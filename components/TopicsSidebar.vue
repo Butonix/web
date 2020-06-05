@@ -1,5 +1,5 @@
 <template>
-  <v-list dense>
+  <v-list dense style="border-radius: 4px">
     <v-subheader class="ml-2"
       >TOPICS
       <span class="ml-4"

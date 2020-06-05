@@ -122,7 +122,7 @@ export default {
     },
     post: {
       type: Object,
-      required: true
+      required: false
     },
     postView: {
       type: Object,
@@ -212,7 +212,7 @@ export default {
         update: (store, { data: { toggleCommentEndorsement } }) => {
           const data = store.readQuery({
             query: postCommentsGql,
-            variables: { postId: this.post.id }
+            variables: { postId: this.comment.postId }
           })
           const index = data.postComments.findIndex(
             (comment) => comment.id === this.comment.id
@@ -220,7 +220,7 @@ export default {
           data.postComments[index].isEndorsed = toggleCommentEndorsement
           store.writeQuery({
             query: postCommentsGql,
-            variables: { postId: this.post.id },
+            variables: { postId: this.comment.postId },
             data
           })
         }

@@ -35,27 +35,12 @@ import topicGql from '../../gql/topic.graphql'
 export default {
   name: 'TopicView',
   components: { TopicsSidebar, SortMenu },
-  metaInfo() {
-    return {
-      title: this.topic ? this.topic.capitalizedName : ''
-    }
-  },
   data() {
     return {
       topic: null,
       sort: {
         sort: 'TOP',
         time: 'DAY'
-      }
-    }
-  },
-  apollo: {
-    topic: {
-      query: topicGql,
-      variables() {
-        return {
-          topicName: this.topicName
-        }
       }
     }
   },
@@ -88,6 +73,21 @@ export default {
         refetchQueries: [{ query: followedTopicsGql }],
         update: () => (this.topic.isFollowing = false)
       })
+    }
+  },
+  head() {
+    return {
+      title: this.topic ? this.topic.capitalizedName : ''
+    }
+  },
+  apollo: {
+    topic: {
+      query: topicGql,
+      variables() {
+        return {
+          topicName: this.topicName
+        }
+      }
     }
   }
 }

@@ -11,7 +11,6 @@
       x-small
       class="ml-1 font-weight-medium caption text--secondary"
       style="text-transform: none; font-size: 12px"
-      @click="toggleEndorsement"
     >
       <span v-if="$device.isDesktop" class="mr-1 text--secondary">
         {{ post.commentCount }}
