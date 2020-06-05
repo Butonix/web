@@ -1,0 +1,191 @@
+<template>
+  <v-container>
+    <v-row>
+      <v-col>
+        <Post v-if="post" :post="post" :expand="true" />
+        <v-skeleton-loader v-else type="v-list-item-avatar-three-line" />
+
+        <div :style="$device.isDesktop ? 'width: 40%' : 'width: 100%'">
+          <TextEditor
+            v-model="commentWriteText"
+            :label="'Write your comment'"
+            class="mt-2"
+            :rows="3"
+          />
+          <v-row>
+            <v-spacer />
+            <v-btn
+              depressed
+              small
+              class="mt-1"
+              text
+              :loading="loading"
+              :disabled="!commentWriteText"
+              @click="submitComment"
+              >Submit Comment</v-btn
+            >
+          </v-row>
+        </div>
+
+        <div
+          v-if="
+            threadedComments.length === 0 && (!post || post.commentCount !== 0)
+          "
+        >
+          <v-row class="ma-0">
+            <div class="title mr-6">Loading Comments...</div>
+            <v-progress-circular size="24" indeterminate />
+          </v-row>
+        </div>
+
+        <div v-else>
+          <div class="mb-1">
+            <span class="title"
+              >{{ postComments.length }} Comment{{
+                postComments.length === 1 ? '' : 's'
+              }}</span
+            >
+          </div>
+
+          <Comment
+            v-for="comment in threadedComments"
+            :key="comment.id"
+            :comment="comment"
+            :post="post"
+            :post-view="postView"
+            class="mb-1"
+          />
+
+          <div v-if="threadedComments.length > 0" style="height: 500px" />
+        </div>
+      </v-col>
+    </v-row>
+  </v-container>
+</template>
+
+<script>
+import Post from '../Post.vue'
+import submitCommentGql from '../../gql/submitComment.graphql'
+import postGql from '../../gql/post.graphql'
+import postCommentsGql from '../../gql/postComments.graphql'
+import postViewGql from '../../gql/postView.graphql'
+import TextEditor from '../TextEditor'
+import Comment from '../Comment'
+
+export default {
+  name: 'PostView',
+  metaInfo() {
+    return {
+      title: this.post.title,
+      meta: [
+        { property: 'og:title', content: `"${this.post.title}" on Comet` },
+        { property: 'og:site_name', content: 'getcomet.net' },
+        {
+          property: 'og:description',
+          content:
+            this.post.type === 'TEXT' ? this.post.textContent : this.post.link
+        },
+        {
+          property: 'og:image',
+          content: this.post.thumbnailUrl ? this.post.thumbnailUrl : ''
+        }
+      ]
+    }
+  },
+  components: { Comment, TextEditor, Post },
+  data: () => ({
+    postComments: [],
+    postView: null,
+    post: null,
+    commentWriteText: '',
+    loading: false
+  }),
+  computed: {
+    postId() {
+      return this.$route.params.postId
+    },
+    threadedComments() {
+      if (this.postComments.length === 0) return []
+      const thread = this.postComments.filter((c) => c.parentCommentId === null)
+      const fun = (comments) => {
+        for (const comment of comments) {
+          comment.childComments = this.postComments.filter(
+            (c) => c.parentCommentId === comment.id
+          )
+          fun(comment.childComments)
+        }
+      }
+      fun(thread)
+      return thread
+    }
+  },
+  watch: {
+    postComments() {
+      if (this.post) {
+        this.post.commentCount = this.postComments.length
+      }
+    }
+  },
+  async mounted() {
+    const { data } = await this.$apollo.mutate({
+      mutation: postViewGql,
+      variables: {
+        postId: this.postId
+      }
+    })
+    this.postView = data.postView
+  },
+  apollo: {
+    postComments: {
+      query: postCommentsGql,
+      variables() {
+        return {
+          postId: this.postId
+        }
+      }
+    },
+    post: {
+      query: postGql,
+      variables() {
+        return {
+          postId: this.postId
+        }
+      }
+    }
+  },
+  methods: {
+    async submitComment() {
+      this.loading = true
+      await this.$apollo.mutate({
+        mutation: submitCommentGql,
+        variables: {
+          postId: this.postId,
+          textContent: this.commentWriteText
+        },
+        update: (store, { data: { submitComment } }) => {
+          const data = store.readQuery({
+            query: postCommentsGql,
+            variables: { postId: this.postId }
+          })
+          data.postComments.unshift(submitComment)
+          store.writeQuery({
+            query: postCommentsGql,
+            variables: { postId: this.postId },
+            data
+          })
+        }
+      })
+      await this.$apollo.mutate({
+        mutation: postViewGql,
+        variables: {
+          postId: this.postId
+        }
+      })
+      this.loading = false
+      this.commentWriteText = ''
+    }
+  }
+}
+</script>
+
+<style scoped></style>

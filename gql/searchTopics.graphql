@@ -1,0 +1,8 @@
+query searchTopics($search: String!) {
+  searchTopics(search: $search) {
+    capitalizedName
+    isFollowing
+    isHidden
+    name
+  }
+}

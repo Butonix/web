@@ -4,15 +4,22 @@
       <a
         v-if="post.type === 'LINK' && post.thumbnailUrl && $device.isDesktop"
         :href="post.link"
+        rel="noopener"
         target="_blank"
         style="height: 72px"
       >
-        <img
+        <v-img
+          :transition="false"
+          :max-width="isYoutubeLink ? 128 : 72"
+          height="72"
+          :src="post.thumbnailUrl"
+        />
+        <!--<img
           :src="post.thumbnailUrl"
           style="height: 72px; object-fit: cover"
           :style="`width: ${isYoutubeLink ? '128px' : '72px'}`"
           alt="Thumbnail"
-        />
+        />-->
       </a>
 
       <v-list-item
@@ -39,11 +46,17 @@
           size="64"
           class="mb-0 ml-auto"
         >
-          <a :href="post.link" target="_blank">
-            <img
+          <a :href="post.link" rel="noopener" target="_blank">
+            <!--<img
               :src="post.thumbnailUrl"
               style="height: 64px; object-fit: contain"
               alt="Thumbnail"
+            />-->
+            <v-img
+              :transition="false"
+              max-width="64"
+              height="64"
+              :src="post.thumbnailUrl"
             />
           </a>
         </v-list-item-avatar>
@@ -65,6 +78,7 @@
           <a
             v-if="$route.name.startsWith('Post') && post.type === 'LINK'"
             :href="post.link"
+            rel="noopener"
             target="_blank"
             class="text--primary"
           >
@@ -116,13 +130,15 @@
 
         <div v-else-if="!isImageUrl">
           <div class="mx-4 body-2 pb-1">
-            <a :href="post.link" target="_blank">{{ post.link }}</a>
+            <a :href="post.link" rel="noopener" target="_blank">{{
+              post.link
+            }}</a>
           </div>
         </div>
 
         <div v-else-if="isImageUrl">
           <div class="mx-4 body-2 pb-1">
-            <a :href="post.link" target="_blank">
+            <a :href="post.link" rel="noopener" target="_blank">
               <img
                 :src="post.link"
                 style="display: block; max-width: 100%; max-height: 700px; width: auto; height: auto"
@@ -145,7 +161,7 @@ import marked from 'marked'
 import { formatDistanceToNowStrict } from 'date-fns'
 import isImageUrl from 'is-image-url'
 import { Tweet } from 'vue-tweet-embed'
-import DOMPurify from 'dompurify'
+import xss from 'xss'
 import { escapeHtml } from '../util/escapeHtml'
 import TopicChip from './TopicChip'
 import PostActions from './PostActions'
@@ -178,7 +194,7 @@ export default {
     },
     textContents() {
       return this.post.textContent
-        ? DOMPurify.sanitize(marked(escapeHtml(this.post.textContent)))
+        ? xss(marked(escapeHtml(this.post.textContent)))
         : undefined
     },
     timeSince() {

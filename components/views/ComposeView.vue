@@ -1,0 +1,247 @@
+<template>
+  <v-form v-model="valid">
+    <v-container>
+      <v-row>
+        <v-col>
+          <v-text-field
+            v-model="title"
+            filled
+            label="Title"
+            clearable
+            :loading="detectTitleLoading"
+          />
+          <v-tabs v-model="tab" class="mb-2" background-color="transparent">
+            <v-tab>Text Post</v-tab>
+            <v-tab>Link Post</v-tab>
+          </v-tabs>
+          <v-tabs-items v-model="tab" style="background-color: transparent">
+            <v-tab-item class="pb-7">
+              <TextEditor v-model="textContent" />
+            </v-tab-item>
+
+            <v-tab-item class="pb-7">
+              <v-text-field
+                v-model="link"
+                filled
+                hide-details
+                label="Link URL"
+                clearable
+              />
+            </v-tab-item>
+          </v-tabs-items>
+
+          <v-combobox
+            v-model="selectedTopics"
+            :items="searchTopicsNames"
+            label="Choose topics"
+            filled
+            hide-no-data
+            hide-selected
+            chips
+            multiple
+            dense
+            persistent-hint
+            hint="Select topics, or type and press enter to add a new topic"
+            clearable
+            append-icon=""
+            :search-input.sync="topicSearchText"
+            :loading="$apollo.queries.searchTopics.loading"
+          >
+            <template v-slot:selection="data">
+              <v-chip
+                v-bind="data.attrs"
+                :input-value="data.selected"
+                close
+                color="black"
+                small
+                label
+                @click="data.select"
+                @click:close="remove(data.item)"
+              >
+                {{ data.item }}
+              </v-chip>
+            </template>
+
+            <template v-slot:item="data">
+              <v-list-item-content>
+                <v-list-item-title>{{ data.item }}</v-list-item-title>
+              </v-list-item-content>
+            </template>
+          </v-combobox>
+
+          <v-row class="ma-0">
+            <v-spacer />
+            <v-btn
+              depressed
+              color="primary"
+              :loading="loading"
+              :disabled="!title || selectedTopics.length <= 0"
+              @click="submitPost"
+              >Submit</v-btn
+            >
+          </v-row>
+        </v-col>
+        <v-col v-if="$device.isDesktop">
+          <div v-if="tab === 0">
+            <div class="title mb-1">Preview</div>
+            <v-card flat>
+              <div class="pt-2 px-4">{{ title ? title : 'Title' }}</div>
+              <v-divider class="mt-2 mb-1" />
+              <div class="pb-1 pt-1 px-4 body-2 opensans" v-html="markedText" />
+            </v-card>
+          </div>
+        </v-col>
+      </v-row>
+    </v-container>
+  </v-form>
+</template>
+
+<script>
+import marked from 'marked'
+import gql from 'graphql-tag'
+import isUrl from 'is-url'
+import xss from 'xss'
+import TextEditor from '../TextEditor'
+import submitPostGql from '../../gql/submitPost.graphql'
+import currentUserGql from '../../gql/currentUser.graphql'
+import searchTopicsGql from '../../gql/searchTopics.graphql'
+import topicGql from '../../gql/topic.graphql'
+import { escapeHtml } from '../../util/escapeHtml'
+
+export default {
+  name: 'ComposeView',
+  metaInfo: {
+    title: 'New Post'
+  },
+  components: { TextEditor },
+  data: () => ({
+    tab: null,
+    title: '',
+    textContent: '',
+    link: '',
+    valid: false,
+    selectedTopics: [],
+    currentUser: null,
+    loading: false,
+    detectTitleLoading: false,
+    prevRoute: null,
+    previousTopic: null,
+    topicSearchText: '',
+    searchTopics: []
+  }),
+  beforeRouteEnter(to, from, next) {
+    next((vm) => (vm.prevRoute = from))
+  },
+  apollo: {
+    currentUser: {
+      query: currentUserGql
+    },
+    previousTopic: {
+      query: topicGql,
+      variables() {
+        return {
+          topicName: this.previousTopicName
+        }
+      },
+      skip() {
+        return !this.previousTopicName
+      },
+      update(data) {
+        if (!this.selectedTopics.includes(data.topic.capitalizedName)) {
+          this.selectedTopics.unshift(data.topic.capitalizedName)
+        }
+        return data.topic
+      }
+    },
+    searchTopics: {
+      query: searchTopicsGql,
+      variables() {
+        return {
+          search: this.topicSearchText
+        }
+      },
+      skip() {
+        return !this.topicSearchText
+      }
+    }
+  },
+  computed: {
+    markedText() {
+      return this.textContent
+        ? xss(marked(escapeHtml(this.textContent)))
+        : marked('(No content written)')
+    },
+    previousTopicName() {
+      if (this.prevRoute && this.prevRoute.name === 'Topic')
+        return this.prevRoute.params.topicName
+      else return ''
+    },
+    searchTopicsNames() {
+      return this.searchTopics.map((topic) => topic.capitalizedName)
+    },
+    urlName() {
+      return this.title
+        .toLowerCase()
+        .replace(/ /g, '_')
+        .replace(/\W/g, '')
+    }
+  },
+  watch: {
+    async link() {
+      if (!this.link || !isUrl(this.link) || this.title) {
+        this.detectTitleLoading = false
+        return
+      }
+      this.detectTitleLoading = true
+      this.title = (
+        await this.$apollo.query({
+          query: gql`
+            query($url: String!) {
+              getTitleAtUrl(url: $url)
+            }
+          `,
+          variables: {
+            url: this.link
+          }
+        })
+      ).data.getTitleAtUrl
+      this.detectTitleLoading = false
+    },
+    topicSearchText() {
+      if (!this.topicSearchText) this.searchTopics = []
+    },
+    selectedTopics() {
+      this.topicSearchText = ''
+    }
+  },
+  methods: {
+    async submitPost() {
+      this.loading = true
+      await this.$apollo.mutate({
+        mutation: submitPostGql,
+        variables: {
+          title: this.title,
+          type: this.tab === 0 ? 'TEXT' : 'LINK',
+          link: this.link ? this.link : undefined,
+          textContent: this.textContent ? this.textContent : undefined,
+          topics: this.selectedTopics
+        },
+        update: (store, { data: { submitPost } }) => {
+          this.$router.push(`/post/${submitPost.id}/${this.urlName}`)
+        }
+      })
+      this.loading = false
+    },
+    remove(item) {
+      const index = this.selectedTopics.indexOf(item)
+      if (index >= 0) this.selectedTopics.splice(index, 1)
+    }
+  }
+}
+</script>
+
+<style scoped>
+.opensans {
+  font-family: 'Open Sans', sans-serif !important;
+}
+</style>

@@ -35,11 +35,7 @@
 
       <v-tabs-items v-model="currentTab" style="background-color: transparent">
         <v-tab-item>
-          <div
-            v-for="(item, index) in postsAndComments"
-            :key="index"
-            class="mb-1"
-          >
+          <div v-for="item in postsAndComments" :key="item.id" class="mb-1">
             <Post v-if="item.__typename === 'Post'" :post="item" />
             <Comment
               v-else-if="item.__typename === 'Comment'"
@@ -74,14 +70,15 @@
 
 <script>
 import { format } from 'date-fns'
-import userGql from '../../../gql/user.graphql'
-import userPostsGql from '../../../gql/userPosts.graphql'
-import userCommentsGql from '../../../gql/userComments.graphql'
-import SortMenu from '../../../components/SortMenu'
-import Comment from '../../../components/Comment'
-import Post from '../../../components/Post'
+import userGql from '../../gql/user.graphql'
+import userPostsGql from '../../gql/userPosts.graphql'
+import userCommentsGql from '../../gql/userComments.graphql'
+import SortMenu from '../SortMenu'
+import Comment from '../Comment'
+import Post from '../Post'
 
 export default {
+  name: 'PostView',
   components: { SortMenu, Comment, Post },
   data() {
     return {

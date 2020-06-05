@@ -21,20 +21,24 @@
     "@nuxtjs/pwa": "^3.0.0-0",
     "@nuxtjs/vuetify": "^1.11.2",
     "date-fns": "^2.14.0",
-    "dompurify": "^2.0.11",
     "graphql-tag": "^2.10.3",
     "is-image-url": "^1.1.8",
+    "is-url": "^1.2.4",
     "marked": "^1.1.0",
     "nuxt": "^2.0.0",
-    "vue-tweet-embed": "^2.4.0"
+    "nuxt-webfontloader": "^1.1.0",
+    "vue-tweet-embed": "^2.4.0",
+    "vue-youtube": "^1.4.0",
+    "xss": "^1.0.6"
   },
   "devDependencies": {
     "@nuxtjs/eslint-config": "^2.0.0",
     "@nuxtjs/eslint-module": "^1.0.0",
+    "@nuxtjs/router": "^1.5.0",
     "babel-eslint": "^10.0.1",
     "eslint": "^6.1.0",
-    "eslint-plugin-nuxt": ">=0.4.2",
     "eslint-config-prettier": "^6.10.0",
+    "eslint-plugin-nuxt": ">=0.4.2",
     "eslint-plugin-prettier": "^3.1.2",
     "prettier": "^1.19.1"
   }

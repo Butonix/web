@@ -16,12 +16,13 @@
 </template>
 
 <script>
-import homeFeedGql from '../gql/homeFeed.graphql'
-import TopicsSidebar from '../components/TopicsSidebar'
-import SortMenu from '../components/SortMenu'
-import Post from '../components/Post'
+import homeFeedGql from '../../gql/homeFeed.graphql'
+import TopicsSidebar from '../TopicsSidebar'
+import SortMenu from '../SortMenu'
+import Post from '../Post'
 
 export default {
+  name: 'HomeView',
   components: { Post, SortMenu, TopicsSidebar },
   data() {
     return {

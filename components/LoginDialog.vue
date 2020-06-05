@@ -7,7 +7,6 @@
     :transition="
       $device.isDesktop ? 'dialog-transition' : 'dialog-bottom-transition'
     "
-    @close="reset"
   >
     <template v-slot:activator="{ on }">
       <v-list-item link v-on="on">

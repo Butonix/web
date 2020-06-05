@@ -28,7 +28,7 @@
       <v-spacer />
 
       <template v-if="$device.isDesktop">
-        <v-btn v-if="isAuthenticated" text dark to="/compose" class="mr-6">
+        <v-btn v-if="isAuthenticated" text dark to="/new" class="mr-6">
           <span class="mr-2">New Post</span>
           <v-icon>mdi-plus</v-icon>
         </v-btn>
@@ -57,7 +57,7 @@
           <v-icon>mdi-magnify</v-icon>
         </v-btn>
 
-        <v-btn v-if="isAuthenticated" icon dark to="/compose">
+        <v-btn v-if="isAuthenticated" icon dark to="/new">
           <v-icon>mdi-plus</v-icon>
         </v-btn>
       </div>

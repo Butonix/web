@@ -15,11 +15,11 @@
           : ''
       "
     >
-      <router-link
+      <nuxt-link
         v-if="profile"
         :to="`/post/${comment.postId}/${urlName}`"
         class="caption font-weight-medium text--secondary"
-        >{{ comment.post.title }}</router-link
+        >{{ comment.post.title }}</nuxt-link
       >
       <div
         class="body-2 comment"
@@ -58,7 +58,7 @@
 
     <div
       v-if="replying"
-      :style="$vuetify.breakpoint.mdAndUp ? 'width: 40%' : 'width: 100%'"
+      :style="$device.isDesktop ? 'width: 40%' : 'width: 100%'"
     >
       <TextEditor
         v-model="replyText"
@@ -95,7 +95,7 @@
 <script>
 import marked from 'marked'
 import { formatDistanceToNowStrict } from 'date-fns'
-import DOMPurify from 'dompurify'
+import xss from 'xss'
 import toggleCommentEndorsementGql from '../gql/toggleCommentEndorsement.graphql'
 import submitCommentGql from '../gql/submitComment.graphql'
 import postCommentsGql from '../gql/postComments.graphql'
@@ -139,7 +139,7 @@ export default {
   computed: {
     textContents() {
       return this.comment.textContent
-        ? DOMPurify.sanitize(marked(escapeHtml(this.comment.textContent)))
+        ? xss(marked(escapeHtml(this.comment.textContent)))
         : undefined
     },
     timeSince() {

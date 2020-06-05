@@ -39,14 +39,15 @@ export default {
   /*
    ** Plugins to load before mounting the App
    */
-  plugins: [],
+  plugins: ['~/plugins/vue-youtube'],
   /*
    ** Nuxt.js dev-modules
    */
   buildModules: [
     // Doc: https://github.com/nuxt-community/eslint-module
     '@nuxtjs/eslint-module',
-    '@nuxtjs/vuetify'
+    '@nuxtjs/vuetify',
+    '@nuxtjs/router'
   ],
   /*
    ** Nuxt.js modules
@@ -101,7 +102,9 @@ export default {
    */
   vuetify: {
     customVariables: ['~/assets/variables.scss'],
-    treeShake: true,
+    treeShake: {
+      components: ['VNavigationDrawer', 'VMenu']
+    },
     theme: {
       options: {
         customProperties: true

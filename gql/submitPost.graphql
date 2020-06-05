@@ -1,0 +1,17 @@
+mutation submitPost(
+  $title: String!
+  $type: PostType!
+  $link: String
+  $textContent: String
+  $topics: [String!]!
+) {
+  submitPost(
+    title: $title
+    type: $type
+    link: $link
+    textContent: $textContent
+    topics: $topics
+  ) {
+    id
+  }
+}
