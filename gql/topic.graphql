@@ -1,0 +1,9 @@
+query topic($topicName: String!) {
+  topic(topicName: $topicName) {
+    capitalizedName
+    isFollowing
+    isHidden
+    name
+    postCount
+  }
+}

@@ -1,0 +1,3 @@
+mutation followTopic($topicName: String!) {
+  followTopic(topicName: $topicName)
+}

@@ -1,0 +1,6 @@
+query popularTopics {
+  popularTopics {
+    capitalizedName
+    name
+  }
+}

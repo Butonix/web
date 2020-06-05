@@ -1,0 +1,8 @@
+query followedTopics {
+  followedTopics {
+    capitalizedName
+    isFollowing
+    isHidden
+    name
+  }
+}

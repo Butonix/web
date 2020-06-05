@@ -1,0 +1,29 @@
+query homeFeed {
+  homeFeed {
+    commentCount
+    createdAt
+    endorsementCount
+    id
+    isEndorsed
+    link
+    textContent
+    title
+    type
+    thumbnailUrl
+    domain
+    author {
+      id
+      username
+      isCurrentUser
+      isFollowing
+      isBlocking
+    }
+    topics {
+      capitalizedName
+      name
+      isFollowing
+      isHidden
+    }
+    newCommentCount
+  }
+}

@@ -1,0 +1,3 @@
+mutation hideTopic($topicName: String!) {
+  hideTopic(topicName: $topicName)
+}
