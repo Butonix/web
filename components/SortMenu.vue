@@ -7,32 +7,30 @@
             >Sort: {{ sort.sort }}
             {{ sort.sort === 'TOP' ? `(${selectedTopTime})` : '' }}</span
           >
-          <v-icon v-if="sort.sort === 'HOT'" small>mdi-fire</v-icon>
-          <v-icon v-if="sort.sort === 'TOP'" small
-            >mdi-format-list-bulleted-square</v-icon
-          >
-          <v-icon v-if="sort.sort === 'NEW'" small>mdi-clock-outline</v-icon>
+          <v-icon v-if="sort.sort === 'HOT'" small>{{ icons.fire }}</v-icon>
+          <v-icon v-if="sort.sort === 'TOP'" small>{{ icons.list }}</v-icon>
+          <v-icon v-if="sort.sort === 'NEW'" small>{{ icons.clock }}</v-icon>
         </v-btn>
       </template>
 
       <v-list v-if="!isSelectingTime" dense>
         <v-list-item v-if="hotEnabled" @click="chooseHot">
           <v-list-item-icon class="mr-1">
-            <v-icon small>mdi-fire</v-icon>
+            <v-icon small>{{ icons.fire }}</v-icon>
           </v-list-item-icon>
           <v-list-item-title>Hot</v-list-item-title>
         </v-list-item>
 
         <v-list-item @click="switchToTimeSelect">
           <v-list-item-icon class="mr-1">
-            <v-icon small>mdi-format-list-bulleted-square</v-icon>
+            <v-icon small>{{ icons.list }}</v-icon>
           </v-list-item-icon>
           <v-list-item-title>Top</v-list-item-title>
         </v-list-item>
 
         <v-list-item @click="chooseNew">
           <v-list-item-icon class="mr-1">
-            <v-icon small>mdi-clock-outline</v-icon>
+            <v-icon small>{{ icons.clock }}</v-icon>
           </v-list-item-icon>
           <v-list-item-title>New</v-list-item-title>
         </v-list-item>
@@ -51,6 +49,8 @@
 </template>
 
 <script>
+import { mdiFire, mdiFormatListBulletedSquare, mdiClockOutline } from '@mdi/js'
+
 export default {
   name: 'SortMenu',
   props: {
@@ -71,7 +71,12 @@ export default {
       sort: this.defaultSort,
       menu: false,
       isSelectingTime: false,
-      times: ['HOUR', 'DAY', 'WEEK', 'MONTH', 'YEAR', 'ALL']
+      times: ['HOUR', 'DAY', 'WEEK', 'MONTH', 'YEAR', 'ALL'],
+      icons: {
+        fire: mdiFire,
+        list: mdiFormatListBulletedSquare,
+        clock: mdiClockOutline
+      }
     }
   },
   computed: {

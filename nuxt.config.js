@@ -108,9 +108,11 @@ export default {
    */
   vuetify: {
     customVariables: ['~/assets/variables.scss'],
-    treeShake: {
-      components: ['VNavigationDrawer', 'VMenu']
+    defaultAssets: false,
+    icons: {
+      iconfont: 'mdiSvg'
     },
+    treeShake: true,
     theme: {
       options: {
         customProperties: true

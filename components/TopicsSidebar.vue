@@ -24,7 +24,7 @@
       flat
       label="Find topics"
       hide-details
-      append-icon="mdi-magnify"
+      :append-icon="icons.magnify"
       class="mb-2 mx-2"
     />
 
@@ -35,7 +35,7 @@
         <v-list-item-content>
           <v-list-item-title
             >Not following any topics.
-            <v-icon small>mdi-emoticon-frown</v-icon></v-list-item-title
+            <v-icon small>{{ icons.frown }}</v-icon></v-list-item-title
           >
         </v-list-item-content>
       </v-list-item>
@@ -69,6 +69,7 @@
 </template>
 
 <script>
+import { mdiEmoticonFrown, mdiMagnify } from '@mdi/js'
 import followedTopicsGql from '../gql/followedTopics.graphql'
 import popularTopicsGql from '../gql/popularTopics.graphql'
 
@@ -78,7 +79,11 @@ export default {
     return {
       followedTopics: [],
       popularTopics: [],
-      selected: 'Following'
+      selected: 'Following',
+      icons: {
+        frown: mdiEmoticonFrown,
+        magnify: mdiMagnify
+      }
     }
   },
   apollo: {

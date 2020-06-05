@@ -11,7 +11,7 @@
     <template v-slot:activator="{ on }">
       <v-list-item link v-on="on">
         <v-list-item-icon>
-          <v-icon>mdi-account-circle</v-icon>
+          <v-icon>{{ icons.accountCircle }}</v-icon>
         </v-list-item-icon>
 
         <v-list-item-content>
@@ -25,7 +25,7 @@
     <v-card>
       <v-toolbar v-if="!$device.isDesktop" dark color="primary">
         <v-btn icon dark @click="dialog = false">
-          <v-icon>mdi-close</v-icon>
+          <v-icon>{{ icons.close }}</v-icon>
         </v-btn>
         <v-toolbar-title>
           <span v-if="!err">{{
@@ -62,7 +62,7 @@
                 label="Password"
                 filled
                 dense
-                :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
+                :append-icon="showPassword ? icons.eye : icons.eyeOff"
                 :type="showPassword ? 'text' : 'password'"
                 :rules="rules.loginPasswordRules"
                 @click:append="showPassword = !showPassword"
@@ -108,7 +108,7 @@
               <v-text-field
                 v-model="password"
                 label="Password"
-                :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
+                :append-icon="showPassword ? icons.eye : icons.eyeOff"
                 :type="showPassword ? 'text' : 'password'"
                 filled
                 dense
@@ -119,7 +119,7 @@
               <v-text-field
                 v-model="confirmPassword"
                 label="Confirm Password"
-                :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
+                :append-icon="showPassword ? icons.eye : icons.eyeOff"
                 :type="showPassword ? 'text' : 'password'"
                 filled
                 dense
@@ -154,6 +154,7 @@
 </template>
 
 <script>
+import { mdiAccountCircle, mdiClose, mdiEye, mdiEyeOff } from '@mdi/js'
 import signUpGql from '../gql/signUp.graphql'
 import loginGql from '../gql/login.graphql'
 
@@ -161,6 +162,12 @@ export default {
   name: 'LoginDialog',
   data() {
     return {
+      icons: {
+        accountCircle: mdiAccountCircle,
+        close: mdiClose,
+        eye: mdiEye,
+        eyeOff: mdiEyeOff
+      },
       dialog: false,
       tab: null,
       username: '',

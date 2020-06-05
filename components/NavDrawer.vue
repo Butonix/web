@@ -14,7 +14,7 @@
 
       <v-list-item v-else link nuxt :to="`/user/${currentUser.username}`">
         <v-list-item-icon>
-          <v-icon>mdi-account</v-icon>
+          <v-icon>{{ icons.account }}</v-icon>
         </v-list-item-icon>
 
         <v-list-item-content>
@@ -27,7 +27,7 @@
       <v-list-item link>
         <v-list-item-icon>
           <v-badge overlap :content="1">
-            <v-icon>mdi-bell</v-icon>
+            <v-icon>{{ icons.bell }}</v-icon>
           </v-badge>
         </v-list-item-icon>
 
@@ -40,7 +40,7 @@
 
       <v-list-item link>
         <v-list-item-icon>
-          <v-icon>mdi-bookmark-multiple</v-icon>
+          <v-icon>{{ icons.bookmarkMultiple }}</v-icon>
         </v-list-item-icon>
 
         <v-list-item-content>
@@ -52,7 +52,7 @@
 
       <v-list-item link>
         <v-list-item-icon>
-          <v-icon>mdi-filter</v-icon>
+          <v-icon>{{ icons.filter }}</v-icon>
         </v-list-item-icon>
 
         <v-list-item-content>
@@ -68,7 +68,7 @@
       <v-list nav dense>
         <v-list-item link @click="toggleDark">
           <v-list-item-icon>
-            <v-icon>mdi-brightness-6</v-icon>
+            <v-icon>{{ icons.brightness }}</v-icon>
           </v-list-item-icon>
           <v-list-item-content>
             <v-list-item-title class="font-weight-regular"
@@ -82,9 +82,7 @@
 
         <v-list-item link @click="collapsed = !collapsed">
           <v-list-item-icon>
-            <v-icon>{{
-              collapsed ? 'mdi-chevron-right' : 'mdi-chevron-left'
-            }}</v-icon>
+            <v-icon>{{ collapsed ? icons.right : icons.left }}</v-icon>
           </v-list-item-icon>
           <v-list-item-content>
             <v-list-item-title class="font-weight-regular"
@@ -95,7 +93,7 @@
 
         <v-list-item v-if="currentUser" link @click="logout">
           <v-list-item-icon>
-            <v-icon>mdi-logout</v-icon>
+            <v-icon>{{ icons.logout }}</v-icon>
           </v-list-item-icon>
           <v-list-item-content>
             <v-list-item-title class="font-weight-regular"
@@ -109,6 +107,15 @@
 </template>
 
 <script>
+import {
+  mdiChevronLeft,
+  mdiChevronRight,
+  mdiAccount,
+  mdiBrightness6,
+  mdiBell,
+  mdiBookmarkMultiple,
+  mdiFilter
+} from '@mdi/js'
 import currentUserGql from '../gql/currentUser.graphql'
 import LoginDialog from '../components/LoginDialog'
 
@@ -127,7 +134,16 @@ export default {
       currentUser: null,
       collapsed: process.client
         ? localStorage.getItem('collapsed') === 'true'
-        : false
+        : false,
+      icons: {
+        left: mdiChevronLeft,
+        right: mdiChevronRight,
+        account: mdiAccount,
+        brightness: mdiBrightness6,
+        bell: mdiBell,
+        bookmarkMultiple: mdiBookmarkMultiple,
+        filter: mdiFilter
+      }
     }
   },
   apollo: {

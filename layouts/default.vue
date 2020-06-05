@@ -3,7 +3,9 @@
     <NavDrawer v-model="drawer" />
 
     <v-app-bar app color="primary" clipped-left flat dense>
-      <v-app-bar-nav-icon v-if="!$device.isDesktop" @click="drawer = !drawer" />
+      <v-app-bar-nav-icon v-if="!$device.isDesktop" @click="drawer = !drawer">
+        <v-icon>{{ icons.menu }}</v-icon>
+      </v-app-bar-nav-icon>
 
       <v-toolbar-title class="headline font-weight-medium">
         <nuxt-link to="/" class="hoverable white--text">Comet</nuxt-link>
@@ -30,12 +32,12 @@
       <template v-if="$device.isDesktop">
         <v-btn v-if="isAuthenticated" text dark to="/new" class="mr-6">
           <span class="mr-2">New Post</span>
-          <v-icon>mdi-plus</v-icon>
+          <v-icon>{{ icons.plus }}</v-icon>
         </v-btn>
 
         <v-btn v-else text dark class="mr-6">
           <span class="mr-2">New Post</span>
-          <v-icon>mdi-plus</v-icon>
+          <v-icon>{{ icons.plus }}</v-icon>
         </v-btn>
 
         <div style="width: 20%">
@@ -46,7 +48,7 @@
             dense
             hide-details
             label="Search"
-            append-icon="mdi-magnify"
+            :append-icon="icons.magnify"
             @click:append="$router.push('/search')"
           />
         </div>
@@ -54,11 +56,11 @@
 
       <div v-else>
         <v-btn icon dark>
-          <v-icon>mdi-magnify</v-icon>
+          <v-icon>{{ icons.magnify }}</v-icon>
         </v-btn>
 
         <v-btn v-if="isAuthenticated" icon dark to="/new">
-          <v-icon>mdi-plus</v-icon>
+          <v-icon>{{ icons.plus }}</v-icon>
         </v-btn>
       </div>
     </v-app-bar>
@@ -75,6 +77,7 @@
 </template>
 
 <script>
+import { mdiPlus, mdiMagnify, mdiMenu } from '@mdi/js'
 import NavDrawer from '../components/NavDrawer'
 
 export default {
@@ -82,7 +85,12 @@ export default {
   data() {
     return {
       isAuthenticated: false,
-      drawer: false
+      drawer: false,
+      icons: {
+        plus: mdiPlus,
+        magnify: mdiMagnify,
+        menu: mdiMenu
+      }
     }
   },
   mounted() {

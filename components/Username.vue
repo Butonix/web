@@ -17,7 +17,7 @@
     <v-list dense>
       <v-list-item :disabled="user.isBlocking" @click="toggleFollow">
         <v-list-item-icon class="mr-2">
-          <v-icon>mdi-plus-box</v-icon>
+          <v-icon>{{ icons.plusBox }}</v-icon>
         </v-list-item-icon>
 
         <v-list-item-content>
@@ -36,7 +36,7 @@
 
       <v-list-item @click="toggleBlock">
         <v-list-item-icon class="mr-2">
-          <v-icon>mdi-eye-off</v-icon>
+          <v-icon>{{ icons.eyeOff }}</v-icon>
         </v-list-item-icon>
 
         <v-list-item-title class="pr-3 font-weight-regular"
@@ -62,7 +62,7 @@
 
       <v-list-item link nuxt :to="`/user/${user.username}`">
         <v-list-item-icon class="mr-2">
-          <v-icon>mdi-open-in-new</v-icon>
+          <v-icon>{{ icons.openInNew }}</v-icon>
         </v-list-item-icon>
 
         <v-list-item-title class="pr-3 font-weight-regular"
@@ -76,6 +76,7 @@
 
 <script>
 import gql from 'graphql-tag'
+import { mdiPlusBox, mdiEyeOff, mdiOpenInNew } from '@mdi/js'
 import currentUserGql from '../gql/currentUser.graphql'
 
 const followUser = gql`
@@ -112,7 +113,12 @@ export default {
   },
   data: () => ({
     menu: false,
-    currentUser: null
+    currentUser: null,
+    icons: {
+      plusBox: mdiPlusBox,
+      eyeOff: mdiEyeOff,
+      openInNew: mdiOpenInNew
+    }
   }),
   apollo: {
     currentUser: {

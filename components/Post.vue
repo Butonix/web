@@ -70,9 +70,7 @@
             class="mr-1"
             @click="expanded = !expanded"
           >
-            <v-icon>{{
-              expanded ? 'mdi-chevron-up' : 'mdi-chevron-down'
-            }}</v-icon>
+            <v-icon>{{ expanded ? icons.up : icons.down }}</v-icon>
           </v-btn>
 
           <a
@@ -162,6 +160,7 @@ import { formatDistanceToNowStrict } from 'date-fns'
 import isImageUrl from 'is-image-url'
 import { Tweet } from 'vue-tweet-embed'
 import xss from 'xss'
+import { mdiChevronUp, mdiChevronDown } from '@mdi/js'
 import { escapeHtml } from '../util/escapeHtml'
 import TopicChip from './TopicChip'
 import PostActions from './PostActions'
@@ -182,7 +181,11 @@ export default {
   data() {
     return {
       expanded: this.expand,
-      postView: null
+      postView: null,
+      icons: {
+        down: mdiChevronDown,
+        up: mdiChevronUp
+      }
     }
   },
   computed: {

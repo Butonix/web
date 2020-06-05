@@ -25,7 +25,7 @@
     <v-list dense>
       <v-list-item :disabled="topic.isHidden" @click="toggleFollow">
         <v-list-item-icon class="mr-2">
-          <v-icon>mdi-plus-box</v-icon>
+          <v-icon>{{ icons.plusBox }}</v-icon>
         </v-list-item-icon>
 
         <v-list-item-content>
@@ -44,7 +44,7 @@
 
       <v-list-item @click="toggleHide">
         <v-list-item-icon class="mr-2">
-          <v-icon>mdi-eye-off</v-icon>
+          <v-icon>{{ icons.eyeOff }}</v-icon>
         </v-list-item-icon>
 
         <v-list-item-title class="pr-3 font-weight-regular"
@@ -67,7 +67,7 @@
 
       <v-list-item link nuxt :to="`/topic/${topic.name}`">
         <v-list-item-icon class="mr-2">
-          <v-icon>mdi-open-in-new</v-icon>
+          <v-icon>{{ icons.openInNew }}</v-icon>
         </v-list-item-icon>
 
         <v-list-item-title class="pr-3 font-weight-regular"
@@ -82,6 +82,7 @@
 </template>
 
 <script>
+import { mdiPlusBox, mdiEyeOff, mdiOpenInNew } from '@mdi/js'
 import unhideTopicGql from '../gql/unhideTopic.graphql'
 import hideTopicGql from '../gql/hideTopic.graphql'
 import unfollowTopicGql from '../gql/unfollowTopic.graphql'
@@ -98,7 +99,12 @@ export default {
   },
   data: () => ({
     subscribed: false,
-    menu: false
+    menu: false,
+    icons: {
+      plusBox: mdiPlusBox,
+      eyeOff: mdiEyeOff,
+      openInNew: mdiOpenInNew
+    }
   }),
   methods: {
     toggleFollow() {

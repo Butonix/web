@@ -25,7 +25,7 @@
         {{ post.commentCount }}
       </span>
 
-      <v-icon x-small class="text--secondary">mdi-comment</v-icon>
+      <v-icon x-small class="text--secondary">{{ icons.comment }}</v-icon>
     </v-btn>
 
     <!--Endorse-->
@@ -62,7 +62,7 @@
               x-small
               :style="post.isEndorsed ? 'color: var(--v-primary-base)' : ''"
               :class="post.isEndorsed ? '' : 'text--secondary'"
-              >mdi-star</v-icon
+              >{{ icons.star }}</v-icon
             >
           </v-btn>
         </span>
@@ -93,7 +93,7 @@
         x-small
         :style="post.isBookmarked ? 'color: var(--v-primary-base)' : ''"
         :class="post.isBookmarked ? '' : 'text--secondary'"
-        >mdi-bookmark</v-icon
+        >{{ icons.bookmark }}</v-icon
       >
     </v-btn>
 
@@ -109,7 +109,7 @@
         Share
       </span>
 
-      <v-icon x-small class="text--secondary">mdi-share-variant</v-icon>
+      <v-icon x-small class="text--secondary">{{ icons.share }}</v-icon>
     </v-btn>
 
     <!--Hide/Report-->
@@ -173,13 +173,20 @@
       class="ml-1 font-weight-medium caption"
       style="text-transform: none; font-size: 12px"
     >
-      <v-icon x-small class="text--secondary">mdi-dots-vertical</v-icon>
+      <v-icon x-small class="text--secondary">{{ icons.dots }}</v-icon>
     </v-btn>
   </span>
 </template>
 
 <script>
 import { formatDistanceToNowStrict } from 'date-fns'
+import {
+  mdiShareVariant,
+  mdiDotsVertical,
+  mdiComment,
+  mdiStar,
+  mdiBookmark
+} from '@mdi/js'
 import togglePostEndorsementGql from '../gql/togglePostEndorsement.graphql'
 import postGql from '../gql/post.graphql'
 import Username from './Username'
@@ -198,7 +205,14 @@ export default {
       hiding: false,
       hidden: false,
       reporting: false,
-      reported: false
+      reported: false,
+      icons: {
+        share: mdiShareVariant,
+        dots: mdiDotsVertical,
+        comment: mdiComment,
+        star: mdiStar,
+        bookmark: mdiBookmark
+      }
     }
   },
   computed: {
