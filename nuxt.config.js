@@ -39,7 +39,7 @@ export default {
   /*
    ** Plugins to load before mounting the App
    */
-  plugins: ['~/plugins/breakpoint'],
+  plugins: [],
   /*
    ** Nuxt.js dev-modules
    */
@@ -55,7 +55,8 @@ export default {
     // Doc: https://axios.nuxtjs.org/usage
     '@nuxtjs/axios',
     '@nuxtjs/pwa',
-    '@nuxtjs/apollo'
+    '@nuxtjs/apollo',
+    '@nuxtjs/device'
   ],
   /*
    ** Axios module configuration

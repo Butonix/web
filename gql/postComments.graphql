@@ -1,0 +1,18 @@
+query postComments($postId: ID!) {
+  postComments(postId: $postId) {
+    createdAt
+    textContent
+    parentCommentId
+    endorsementCount
+    id
+    postId
+    isEndorsed
+    author {
+      id
+      username
+      isCurrentUser
+      isFollowing
+      isBlocking
+    }
+  }
+}

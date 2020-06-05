@@ -19,6 +19,6 @@ module.exports = {
   ],
   // add your custom rules here
   rules: {
-    'require-await': "off"
+    'require-await': "off",
   }
 }

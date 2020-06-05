@@ -1,10 +1,13 @@
 <template>
   <v-navigation-drawer
+    v-model="drawer"
     app
     clipped
-    width="240"
+    width="220"
+    color="#1e1e1e"
     :mini-variant="collapsed"
-    :value="open"
+    :value="value"
+    @input="$emit('input', drawer)"
   >
     <v-list nav dense>
       <LoginDialog v-if="!currentUser" />
@@ -113,23 +116,29 @@ export default {
   name: 'NavDrawer',
   components: { LoginDialog },
   props: {
-    open: {
+    value: {
       type: Boolean,
-      default: true
+      default: false
     }
   },
-  data: () => ({
-    currentUser: null,
-    collapsed: process.client
-      ? localStorage.getItem('collapsed') === 'true'
-      : false
-  }),
+  data() {
+    return {
+      drawer: this.value,
+      currentUser: null,
+      collapsed: process.client
+        ? localStorage.getItem('collapsed') === 'true'
+        : false
+    }
+  },
   apollo: {
     currentUser: {
       query: currentUserGql
     }
   },
   watch: {
+    value() {
+      this.drawer = this.value
+    },
     collapsed() {
       if (process.client) {
         localStorage.setItem('collapsed', this.collapsed.toString())

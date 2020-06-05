@@ -1,17 +1,8 @@
 <template>
-  <v-card
-    v-show="!post.hidden || $route.name.startsWith('Post')"
-    outlined
-    nuxt
-    :to="
-      $breakpoint.mdAndUp || $route.name.startsWith('Post')
-        ? ''
-        : `/post/${post.id}/${urlName}`
-    "
-  >
+  <v-card v-show="!post.hidden || $route.name.startsWith('Post')" outlined>
     <v-row align="center" class="ma-0">
       <a
-        v-if="post.type === 'LINK' && post.thumbnailUrl && $breakpoint.mdAndUp"
+        v-if="post.type === 'LINK' && post.thumbnailUrl && $device.isDesktop"
         :href="post.link"
         target="_blank"
         style="height: 72px"
@@ -25,12 +16,16 @@
       </a>
 
       <v-list-item
-        v-if="!$breakpoint.mdAndUp"
+        v-if="!$device.isDesktop"
         style="min-height: 0"
         class="px-2 pb-0"
       >
         <div class="mt-2">
-          <span class="mr-2">{{ post.title }}</span>
+          <nuxt-link
+            :to="`/post/${post.id}/${urlName}`"
+            class="mr-2 text--primary"
+            >{{ post.title }}</nuxt-link
+          >
           <TopicChip
             v-for="topic in post.topics"
             :key="topic.name"
@@ -44,16 +39,19 @@
           size="64"
           class="mb-0 ml-auto"
         >
-          <img
-            :src="post.thumbnailUrl"
-            style="height: 64px; object-fit: contain"
-          />
+          <a :href="post.link" target="_blank">
+            <img
+              :src="post.thumbnailUrl"
+              style="height: 64px; object-fit: contain"
+              alt="Thumbnail"
+            />
+          </a>
         </v-list-item-avatar>
       </v-list-item>
       <div v-else class="px-3 pt-2 pb-1">
         <v-row align="center" class="ma-0">
           <v-btn
-            v-if="!isTitleOnlyTextPost && $breakpoint.mdAndUp"
+            v-if="!isTitleOnlyTextPost && $device.isDesktop"
             small
             icon
             class="mr-1"
@@ -96,7 +94,7 @@
       </div>
     </v-row>
 
-    <v-card-actions v-if="!$breakpoint.mdAndUp" class="pt-0 pb-1">
+    <v-card-actions v-if="!$device.isDesktop" class="pt-0 pb-1">
       <PostActions :post="post" />
     </v-card-actions>
 
@@ -107,7 +105,7 @@
 
         <div v-if="isYoutubeLink" class="px-4">
           <youtube
-            :width="$breakpoint.mdAndUp ? '640' : '100%'"
+            :width="$device.isDesktop ? '640' : '100%'"
             :video-id="$youtube.getIdFromUrl(post.link)"
           />
         </div>

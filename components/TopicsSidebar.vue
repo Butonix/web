@@ -31,6 +31,14 @@
     <v-divider class="mb-1" />
 
     <div v-if="selected === 'Following'">
+      <v-list-item v-if="followedTopics.length === 0">
+        <v-list-item-content>
+          <v-list-item-title
+            >Not following any topics.
+            <v-icon small>mdi-emoticon-frown</v-icon></v-list-item-title
+          >
+        </v-list-item-content>
+      </v-list-item>
       <v-list-item
         v-for="(topic, index) in followedTopics"
         :key="index"

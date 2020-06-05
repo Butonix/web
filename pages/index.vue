@@ -9,7 +9,7 @@
       </v-row>
       <Post v-for="post in homeFeed" :key="post.id" :post="post" class="mb-1" />
     </v-col>
-    <v-col v-if="$breakpoint.mdAndUp" cols="2">
+    <v-col v-if="$device.isDesktop" cols="2">
       <TopicsSidebar />
     </v-col>
   </v-row>

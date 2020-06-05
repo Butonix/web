@@ -13,10 +13,10 @@
       style="text-transform: none; font-size: 12px"
       @click="toggleEndorsement"
     >
-      <span v-if="$breakpoint.mdAndUp" class="mr-1 text--secondary">
+      <span v-if="$device.isDesktop" class="mr-1 text--secondary">
         {{ post.commentCount }}
         {{
-          $breakpoint.mdAndUp
+          $device.isDesktop
             ? `Comment${post.commentCount === 1 ? '' : 's'}`
             : ''
         }}
@@ -43,13 +43,13 @@
             @click="toggleEndorsement"
           >
             <span
-              v-if="$breakpoint.mdAndUp"
+              v-if="$device.isDesktop"
               class="mr-1"
               :class="post.isEndorsed ? '' : 'text--secondary'"
             >
               {{ post.endorsementCount }}
               {{
-                $breakpoint.mdAndUp
+                $device.isDesktop
                   ? `Endorsement${post.endorsementCount === 1 ? '' : 's'}`
                   : ''
               }}
@@ -83,7 +83,7 @@
       @click.prevent="post.isBookmarked = !post.isBookmarked"
     >
       <span
-        v-if="$breakpoint.mdAndUp"
+        v-if="$device.isDesktop"
         class="mr-1"
         :class="post.isBookmarked ? '' : 'text--secondary'"
       >
@@ -106,7 +106,7 @@
       style="text-transform: none; font-size: 12px"
       @click.prevent="sharePost"
     >
-      <span v-if="$breakpoint.mdAndUp" class="mr-1 text--secondary">
+      <span v-if="$device.isDesktop" class="mr-1 text--secondary">
         Share
       </span>
 
@@ -114,7 +114,7 @@
     </v-btn>
 
     <!--Hide/Report-->
-    <span v-if="$breakpoint.mdAndUp">
+    <span v-if="$device.isDesktop">
       <span v-if="!post.author.isCurrentUser">
         <span
           v-if="!hiding"

@@ -1,16 +1,13 @@
 <template>
   <v-app>
-    <NavDrawer :open.sync="$breakpoint.mdAndUp ? true : drawer" />
+    <NavDrawer v-model="drawer" />
 
     <v-app-bar app color="primary" clipped-left flat dense>
-      <v-app-bar-nav-icon
-        v-if="!$breakpoint.mdAndUp"
-        @click="drawer = !drawer"
-      />
+      <v-app-bar-nav-icon v-if="!$device.isDesktop" @click="drawer = !drawer" />
 
       <v-toolbar-title class="headline font-weight-medium">
         <nuxt-link to="/" class="hoverable white--text">Comet</nuxt-link>
-        <span v-if="$breakpoint.mdAndUp" class="caption ml-1">
+        <span v-if="$device.isDesktop" class="caption ml-1">
           <a
             href="https://github.com/"
             target="_blank"
@@ -30,7 +27,17 @@
 
       <v-spacer />
 
-      <template v-if="$breakpoint.mdAndUp">
+      <template v-if="$device.isDesktop">
+        <v-btn v-if="isAuthenticated" text dark to="/compose" class="mr-6">
+          <span class="mr-2">New Post</span>
+          <v-icon>mdi-plus</v-icon>
+        </v-btn>
+
+        <v-btn v-else text dark class="mr-6">
+          <span class="mr-2">New Post</span>
+          <v-icon>mdi-plus</v-icon>
+        </v-btn>
+
         <div style="width: 20%">
           <v-text-field
             solo-inverted
@@ -40,20 +47,9 @@
             hide-details
             label="Search"
             append-icon="mdi-magnify"
-            class="mr-6"
             @click:append="$router.push('/search')"
           />
         </div>
-
-        <v-btn v-if="isAuthenticated" text dark to="/compose">
-          <span class="mr-2">New Post</span>
-          <v-icon>mdi-plus</v-icon>
-        </v-btn>
-
-        <v-btn v-else text dark>
-          <span class="mr-2">New Post</span>
-          <v-icon>mdi-plus</v-icon>
-        </v-btn>
       </template>
 
       <div v-else>
@@ -92,7 +88,7 @@ export default {
   mounted() {
     this.isAuthenticated = !!this.$apolloHelpers.getToken()
     this.$vuetify.theme.dark = localStorage.getItem('dark') === 'true'
-    console.log(this.$breakpoint)
+    this.drawer = this.$device.isDesktop
   }
 }
 </script>

@@ -1,5 +1,14 @@
 <template>
-  <v-dialog v-model="dialog" width="35%">
+  <v-dialog
+    v-model="dialog"
+    width="35%"
+    :fullscreen="!$device.isDesktop"
+    :hide-overlay="!$device.isDesktop"
+    :transition="
+      $device.isDesktop ? 'dialog-transition' : 'dialog-bottom-transition'
+    "
+    @close="reset"
+  >
     <template v-slot:activator="{ on }">
       <v-list-item link v-on="on">
         <v-list-item-icon>
@@ -15,20 +24,33 @@
     </template>
 
     <v-card>
+      <v-toolbar v-if="!$device.isDesktop" dark color="primary">
+        <v-btn icon dark @click="dialog = false">
+          <v-icon>mdi-close</v-icon>
+        </v-btn>
+        <v-toolbar-title>
+          <span v-if="!err">{{
+            tab === 0 ? 'Login to Comet' : 'Sign Up'
+          }}</span>
+          <span v-else class="black--text">{{
+            err.split('GraphQL error: ')[1]
+          }}</span>
+        </v-toolbar-title>
+      </v-toolbar>
       <v-tabs v-model="tab" grow>
         <v-tab>Login</v-tab>
         <v-tab>Sign Up</v-tab>
       </v-tabs>
       <v-tabs-items v-model="tab">
         <v-tab-item>
-          <v-card-title
+          <v-card-title v-if="$device.isDesktop"
             ><span v-if="!err">Login</span>
             <span v-else class="error--text">{{
               err.split('GraphQL error: ')[1]
             }}</span></v-card-title
           >
           <v-card-text>
-            <v-form v-model="loginValid">
+            <v-form ref="loginForm" v-model="loginValid">
               <v-text-field
                 v-model="username"
                 label="Username"
@@ -69,14 +91,14 @@
         </v-tab-item>
 
         <v-tab-item>
-          <v-card-title
+          <v-card-title v-if="$device.isDesktop"
             ><span v-if="!err">Sign Up</span>
             <span v-else class="error--text">{{
               err.split('GraphQL error: ')[1]
             }}</span></v-card-title
           >
           <v-card-text>
-            <v-form v-model="signupValid">
+            <v-form ref="signUpForm" v-model="signupValid">
               <v-text-field
                 v-model="username"
                 label="Username"
@@ -167,6 +189,23 @@ export default {
           (v) => v === this.password || 'Passwords do not match'
         ]
       }
+    }
+  },
+  watch: {
+    dialog() {
+      this.$nextTick(() => {
+        if (!this.dialog) {
+          this.username = ''
+          this.password = ''
+          this.confirmPassword = ''
+          this.err = ''
+          this.tab = 0
+          this.$refs.loginForm.reset()
+          this.$refs.loginForm.resetValidation()
+          this.$refs.signUpForm.reset()
+          this.$refs.signUpForm.resetValidation()
+        }
+      })
     }
   },
   methods: {

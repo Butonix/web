@@ -1,0 +1,22 @@
+query userComments($username: String!) {
+  userComments(username: $username) {
+    __typename
+    textContent
+    createdAt
+    endorsementCount
+    id
+    isEndorsed
+    postId
+    post {
+      id
+      title
+    }
+    author {
+      id
+      username
+      isCurrentUser
+      isFollowing
+      isBlocking
+    }
+  }
+}

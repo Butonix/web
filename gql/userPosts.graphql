@@ -1,0 +1,23 @@
+query userPosts($username: String!) {
+  userPosts(username: $username) {
+    __typename
+    textContent
+    link
+    type
+    title
+    domain
+    thumbnailUrl
+    createdAt
+    endorsementCount
+    id
+    isEndorsed
+    commentCount
+    author {
+      id
+      username
+      isCurrentUser
+      isFollowing
+      isBlocking
+    }
+  }
+}
