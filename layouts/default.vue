@@ -9,7 +9,7 @@
 
       <v-toolbar-title class="headline font-weight-medium">
         <nuxt-link to="/" class="hoverable white--text">Comet</nuxt-link>
-        <span v-if="$device.isDesktop" class="caption ml-1">
+        <span v-if="$device.isDesktop" class="caption ml-1 white--text">
           <a
             href="https://github.com/"
             target="_blank"
@@ -30,7 +30,7 @@
       <v-spacer />
 
       <template v-if="$device.isDesktop">
-        <v-btn v-if="isAuthenticated" text dark nuxt to="/new" class="mr-6">
+        <v-btn v-if="currentUser" text dark nuxt to="/new" class="mr-6">
           <span class="mr-2">New Post</span>
           <v-icon>{{ icons.plus }}</v-icon>
         </v-btn>
@@ -59,7 +59,7 @@
           <v-icon>{{ icons.magnify }}</v-icon>
         </v-btn>
 
-        <v-btn v-if="isAuthenticated" icon dark nuxt to="/new">
+        <v-btn v-if="currentUser" icon dark nuxt to="/new">
           <v-icon>{{ icons.plus }}</v-icon>
         </v-btn>
 
@@ -83,12 +83,13 @@
 <script>
 import { mdiPlus, mdiMagnify, mdiMenu } from '@mdi/js'
 import NavDrawer from '../components/NavDrawer'
+import currentUserGql from '../gql/currentUser.graphql'
 
 export default {
   components: { NavDrawer },
   data() {
     return {
-      isAuthenticated: false,
+      currentUser: null,
       drawer: false,
       icons: {
         plus: mdiPlus,
@@ -97,8 +98,12 @@ export default {
       }
     }
   },
+  apollo: {
+    currentUser: {
+      query: currentUserGql
+    }
+  },
   mounted() {
-    this.isAuthenticated = !!this.$apolloHelpers.getToken()
     this.$vuetify.theme.dark = localStorage.getItem('dark') === 'true'
     this.drawer = this.$device.isDesktop
   },
