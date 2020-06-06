@@ -1,5 +1,5 @@
 <template>
-  <v-list dense style="border-radius: 4px">
+  <v-list dense style="border-radius: 4px" class="sticky">
     <v-subheader class="ml-2"
       >TOPICS
       <span class="ml-4"
@@ -97,4 +97,10 @@ export default {
 }
 </script>
 
-<style scoped></style>
+<style scoped>
+.sticky {
+  position: -webkit-sticky; /* Safari */
+  position: sticky;
+  top: 72px;
+}
+</style>
