@@ -1,65 +1,63 @@
 <template>
-  <v-container>
-    <v-row>
-      <v-col>
-        <Post :post="post" :expand="true" />
+  <v-row>
+    <v-col>
+      <Post :post="post" :expand="true" />
 
-        <div :style="$device.isDesktop ? 'width: 40%' : 'width: 100%'">
-          <TextEditor
-            v-model="commentWriteText"
-            :label="'Write your comment'"
-            class="mt-2"
-            :rows="3"
-          />
-          <v-row>
-            <v-spacer />
-            <v-btn
-              depressed
-              small
-              class="mt-1"
-              text
-              :loading="loading"
-              :disabled="!commentWriteText"
-              @click="submitComment"
-              >Submit Comment</v-btn
-            >
-          </v-row>
+      <div :style="$device.isDesktop ? 'width: 40%' : 'width: 100%'">
+        <TextEditor
+          v-model="commentWriteText"
+          :label="'Write your comment'"
+          class="mt-2"
+          :rows="3"
+        />
+        <v-row>
+          <v-spacer />
+          <v-btn
+            depressed
+            small
+            class="mt-1"
+            text
+            :loading="loading"
+            :disabled="!commentWriteText"
+            @click="submitComment"
+            >Submit Comment</v-btn
+          >
+        </v-row>
+      </div>
+
+      <div
+        v-if="
+          threadedComments.length === 0 && (!post || post.commentCount !== 0)
+        "
+      >
+        <v-row class="ma-0">
+          <div class="title mr-6">Loading Comments...</div>
+          <v-progress-circular size="24" indeterminate />
+        </v-row>
+      </div>
+
+      <div v-else>
+        <div class="mb-1">
+          <span class="title"
+            >{{ postComments.length }} Comment{{
+              postComments.length === 1 ? '' : 's'
+            }}</span
+          >
         </div>
 
-        <div
-          v-if="
-            threadedComments.length === 0 && (!post || post.commentCount !== 0)
-          "
-        >
-          <v-row class="ma-0">
-            <div class="title mr-6">Loading Comments...</div>
-            <v-progress-circular size="24" indeterminate />
-          </v-row>
-        </div>
+        <Comment
+          v-for="comment in threadedComments"
+          :key="comment.id"
+          :comment="comment"
+          :post="post"
+          :post-view="postView"
+          class="mb-1"
+        />
 
-        <div v-else>
-          <div class="mb-1">
-            <span class="title"
-              >{{ postComments.length }} Comment{{
-                postComments.length === 1 ? '' : 's'
-              }}</span
-            >
-          </div>
-
-          <Comment
-            v-for="comment in threadedComments"
-            :key="comment.id"
-            :comment="comment"
-            :post="post"
-            :post-view="postView"
-            class="mb-1"
-          />
-
-          <div v-if="threadedComments.length > 0" style="height: 500px" />
-        </div>
-      </v-col>
-    </v-row>
-  </v-container>
+        <div v-if="threadedComments.length > 0" style="height: 500px" />
+      </div>
+    </v-col>
+  </v-row>
 </template>
 
 <script>
@@ -173,18 +171,26 @@ export default {
         {
           hid: 'og:title',
           property: 'og:title',
-          content: `"${this.post.title}" on Comet`
+          content: `${this.post.title} / Comet`
         },
         {
           hid: 'og:site_name',
           property: 'og:site_name',
-          content: 'getcomet.net'
+          content: `Comet · ${this.post.commentCount} Comment${
+            this.post.commentCount === 1 ? '' : 's'
+          }`
         },
         {
           hid: 'og:description',
           property: 'og:description',
           content:
-            this.post.type === 'TEXT' ? this.post.textContent : this.post.link
+            this.post.type === 'TEXT'
+              ? this.post.textContent
+                ? `${this.post.textContent.substring(0, 50)}${
+                    this.post.textContent.length >= 50 ? '...' : ''
+                  }`
+                : this.post.title
+              : this.post.link
         },
         {
           hid: 'og:image',

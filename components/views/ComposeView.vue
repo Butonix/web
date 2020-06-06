@@ -1,106 +1,102 @@
 <template>
   <v-form v-model="valid">
-    <v-container>
-      <v-row>
-        <v-col>
-          <v-text-field
-            v-model="title"
-            filled
-            :label="currentUser ? 'Title' : 'Must log in to create a post'"
-            :disabled="!currentUser"
-            clearable
-            :loading="detectTitleLoading"
-          />
-          <v-tabs v-model="tab" class="mb-2" background-color="transparent">
-            <v-tab>Text Post</v-tab>
-            <v-tab>Link Post</v-tab>
-          </v-tabs>
-          <v-tabs-items v-model="tab" style="background-color: transparent">
-            <v-tab-item class="pb-7">
-              <TextEditor
-                v-model="textContent"
-                not-logged-in-label="Must log in to create a post"
-              />
-            </v-tab-item>
+    <v-row>
+      <v-col>
+        <v-text-field
+          v-model="title"
+          filled
+          :label="currentUser ? 'Title' : 'Must log in to create a post'"
+          :disabled="!currentUser"
+          clearable
+          :loading="detectTitleLoading"
+        />
+        <v-tabs v-model="tab" class="mb-2" background-color="transparent">
+          <v-tab>Text Post</v-tab>
+          <v-tab>Link Post</v-tab>
+        </v-tabs>
+        <v-tabs-items v-model="tab" style="background-color: transparent">
+          <v-tab-item class="pb-7">
+            <TextEditor
+              v-model="textContent"
+              not-logged-in-label="Must log in to create a post"
+            />
+          </v-tab-item>
 
-            <v-tab-item class="pb-7">
-              <v-text-field
-                v-model="link"
-                filled
-                hide-details
-                :label="
-                  currentUser ? 'Link URL' : 'Must log in to create a post'
-                "
-                :disabled="!currentUser"
-                clearable
-              />
-            </v-tab-item>
-          </v-tabs-items>
+          <v-tab-item class="pb-7">
+            <v-text-field
+              v-model="link"
+              filled
+              hide-details
+              :label="currentUser ? 'Link URL' : 'Must log in to create a post'"
+              :disabled="!currentUser"
+              clearable
+            />
+          </v-tab-item>
+        </v-tabs-items>
 
-          <v-combobox
-            v-model="selectedTopics"
-            :disabled="!currentUser"
-            :items="searchTopicsNames"
-            label="Choose topics"
-            filled
-            hide-no-data
-            hide-selected
-            chips
-            multiple
-            dense
-            persistent-hint
-            hint="Select topics, or type and press enter to add a new topic"
-            clearable
-            append-icon=""
-            :search-input.sync="topicSearchText"
-            :loading="$apollo.queries.searchTopics.loading"
-          >
-            <template v-slot:selection="data">
-              <v-chip
-                v-bind="data.attrs"
-                :input-value="data.selected"
-                close
-                color="black"
-                small
-                label
-                @click="data.select"
-                @click:close="remove(data.item)"
-              >
-                {{ data.item }}
-              </v-chip>
-            </template>
-
-            <template v-slot:item="data">
-              <v-list-item-content>
-                <v-list-item-title>{{ data.item }}</v-list-item-title>
-              </v-list-item-content>
-            </template>
-          </v-combobox>
-
-          <v-row class="ma-0">
-            <v-spacer />
-            <v-btn
-              depressed
-              color="primary"
-              :loading="loading"
-              :disabled="!title || selectedTopics.length <= 0 || !currentUser"
-              @click="submitPost"
-              >Submit</v-btn
+        <v-combobox
+          v-model="selectedTopics"
+          :disabled="!currentUser"
+          :items="searchTopicsNames"
+          label="Choose topics"
+          filled
+          hide-no-data
+          hide-selected
+          chips
+          multiple
+          dense
+          persistent-hint
+          hint="Select topics, or type and press enter to add a new topic"
+          clearable
+          append-icon=""
+          :search-input.sync="topicSearchText"
+          :loading="$apollo.queries.searchTopics.loading"
+        >
+          <template v-slot:selection="data">
+            <v-chip
+              v-bind="data.attrs"
+              :input-value="data.selected"
+              close
+              color="black"
+              small
+              label
+              @click="data.select"
+              @click:close="remove(data.item)"
             >
-          </v-row>
-        </v-col>
-        <v-col v-if="$device.isDesktop">
-          <div v-if="tab === 0">
-            <div class="title mb-1">Preview</div>
-            <v-card flat>
-              <div class="pt-2 px-4">{{ title ? title : 'Title' }}</div>
-              <v-divider class="mt-2 mb-1" />
-              <div class="pb-1 pt-1 px-4 body-2 opensans" v-html="markedText" />
-            </v-card>
-          </div>
-        </v-col>
-      </v-row>
-    </v-container>
+              {{ data.item }}
+            </v-chip>
+          </template>
+
+          <template v-slot:item="data">
+            <v-list-item-content>
+              <v-list-item-title>{{ data.item }}</v-list-item-title>
+            </v-list-item-content>
+          </template>
+        </v-combobox>
+
+        <v-row class="ma-0">
+          <v-spacer />
+          <v-btn
+            depressed
+            color="primary"
+            :loading="loading"
+            :disabled="!title || selectedTopics.length <= 0 || !currentUser"
+            @click="submitPost"
+            >Submit</v-btn
+          >
+        </v-row>
+      </v-col>
+      <v-col v-if="$device.isDesktop">
+        <div v-if="tab === 0">
+          <div class="title mb-1">Preview</div>
+          <v-card flat>
+            <div class="pt-2 px-4">{{ title ? title : 'Title' }}</div>
+            <v-divider class="mt-2 mb-1" />
+            <div class="pb-1 pt-1 px-4 body-2 opensans" v-html="markedText" />
+          </v-card>
+        </div>
+      </v-col>
+    </v-row>
   </v-form>
 </template>
 

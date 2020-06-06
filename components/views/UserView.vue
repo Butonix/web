@@ -138,7 +138,7 @@ export default {
         {
           hid: 'og:title',
           property: 'og:title',
-          content: `${this.user.username}'s profile on Comet`
+          content: `${this.user.username}'s profile / Comet`
         },
         {
           hid: 'og:site_name',

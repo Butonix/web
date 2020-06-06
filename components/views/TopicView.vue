@@ -1,27 +1,25 @@
 <template>
-  <v-container v-if="topic">
-    <v-row>
-      <v-col>
-        <div class="px-2">
-          <div class="overline">Topic</div>
-          <div class="headline">
-            <span>{{ topic.capitalizedName }}</span>
-            <!--<span class="body-2 ml-2"
-              >{{ topic.followerCount }} Follower{{ topic.followerCount === 1 ? '' : 's' }}</span
-            >-->
-            <v-btn small class="ml-1" @click="toggleFollow">{{
-              topic.isFollowing ? 'Unfollow' : 'Follow'
-            }}</v-btn>
-          </div>
+  <v-row>
+    <v-col>
+      <div class="px-2">
+        <div class="overline">Topic</div>
+        <div class="headline">
+          <span>{{ topic.capitalizedName }}</span>
+          <!--<span class="body-2 ml-2"
+            >{{ topic.followerCount }} Follower{{ topic.followerCount === 1 ? '' : 's' }}</span
+          >-->
+          <v-btn small class="ml-1" @click="toggleFollow">{{
+            topic.isFollowing ? 'Unfollow' : 'Follow'
+          }}</v-btn>
         </div>
-        <v-divider class="my-1" />
-        <SortMenu v-model="sort" />
-      </v-col>
-      <v-col v-if="$device.isDesktop" cols="2">
-        <TopicsSidebar />
-      </v-col>
-    </v-row>
-  </v-container>
+      </div>
+      <v-divider class="my-1" />
+      <SortMenu v-model="sort" />
+    </v-col>
+    <v-col v-if="$device.isDesktop" cols="2">
+      <TopicsSidebar />
+    </v-col>
+  </v-row>
 </template>
 
 <script>

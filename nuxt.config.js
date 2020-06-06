@@ -41,7 +41,8 @@ export default {
     // Doc: https://github.com/nuxt-community/eslint-module
     '@nuxtjs/eslint-module',
     '@nuxtjs/vuetify',
-    '@nuxtjs/router'
+    '@nuxtjs/router',
+    '@nuxtjs/pwa'
   ],
   /*
    ** Nuxt.js modules
@@ -49,7 +50,6 @@ export default {
   modules: [
     // Doc: https://axios.nuxtjs.org/usage
     '@nuxtjs/axios',
-    '@nuxtjs/pwa',
     '@nuxtjs/apollo',
     '@nuxtjs/device',
     'nuxt-webfontloader'
@@ -59,6 +59,14 @@ export default {
    ** See https://axios.nuxtjs.org/options
    */
   axios: {},
+
+  pwa: {
+    manifest: {
+      name: 'Comet',
+      description: 'Create and browse posts and comments on Comet',
+      theme_color: '#F44336'
+    }
+  },
 
   /*
    ** Apollo module configuration
