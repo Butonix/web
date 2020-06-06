@@ -30,7 +30,7 @@
         <span v-if="isOp" class="overline font-weight-medium text--primary"
           >[OP]&nbsp;</span
         >
-        <Username :user="comment.author" />
+        <Username :user-data="comment.author" />
         <span class="caption font-weight-medium ml-3">{{ timeSince }} ago</span>
         <span
           v-if="!comment.author.isCurrentUser"
@@ -99,7 +99,7 @@ import xss from 'xss'
 import toggleCommentEndorsementGql from '../gql/toggleCommentEndorsement.graphql'
 import submitCommentGql from '../gql/submitComment.graphql'
 import postCommentsGql from '../gql/postComments.graphql'
-import postViewGql from '../gql/postView.graphql'
+import recordPostViewGql from '../gql/recordPostView.graphql'
 import { escapeHtml } from '../util/escapeHtml'
 import Username from './Username'
 import TextEditor from './TextEditor'
@@ -189,7 +189,7 @@ export default {
         }
       })
       await this.$apollo.mutate({
-        mutation: postViewGql,
+        mutation: recordPostViewGql,
         variables: {
           postId: this.comment.postId
         }

@@ -2,24 +2,21 @@
   <v-card v-show="!post.hidden || $route.name.startsWith('Post')" outlined>
     <v-row align="center" class="ma-0">
       <a
-        v-if="post.type === 'LINK' && post.thumbnailUrl && $device.isDesktop"
+        v-if="
+          post.type === 'LINK' &&
+            (post.thumbnailUrl || isTwitterLink) &&
+            $device.isDesktop
+        "
         :href="post.link"
         rel="noopener"
         target="_blank"
         style="height: 72px"
       >
         <v-img
-          :transition="false"
           :max-width="isYoutubeLink ? 128 : 72"
           height="72"
-          :src="post.thumbnailUrl"
+          :src="isTwitterLink ? twitterbird : post.thumbnailUrl"
         />
-        <!--<img
-          :src="post.thumbnailUrl"
-          style="height: 72px; object-fit: cover"
-          :style="`width: ${isYoutubeLink ? '128px' : '72px'}`"
-          alt="Thumbnail"
-        />-->
       </a>
 
       <v-list-item
@@ -36,27 +33,21 @@
           <TopicChip
             v-for="topic in post.topics"
             :key="topic.name"
-            :topic="topic"
+            :topic-data="topic"
           />
         </div>
 
         <v-list-item-avatar
-          v-if="post.type === 'LINK' && post.thumbnailUrl"
+          v-if="post.type === 'LINK' && (post.thumbnailUrl || isTwitterLink)"
           tile
           size="64"
           class="mb-0 ml-auto"
         >
           <a :href="post.link" rel="noopener" target="_blank">
-            <!--<img
-              :src="post.thumbnailUrl"
-              style="height: 64px; object-fit: contain"
-              alt="Thumbnail"
-            />-->
             <v-img
-              :transition="false"
               max-width="64"
               height="64"
-              :src="post.thumbnailUrl"
+              :src="isTwitterLink ? twitterbird : post.thumbnailUrl"
             />
           </a>
         </v-list-item-avatar>
@@ -95,7 +86,7 @@
             <TopicChip
               v-for="topic in post.topics"
               :key="topic.name"
-              :topic="topic"
+              :topic-data="topic"
             />
           </span>
         </v-row>
@@ -185,7 +176,8 @@ export default {
       icons: {
         down: mdiChevronDown,
         up: mdiChevronUp
-      }
+      },
+      twitterbird: require('~/assets/twitterbird.jpg')
     }
   },
   computed: {

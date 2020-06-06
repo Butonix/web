@@ -35,6 +35,19 @@ import topicGql from '../../gql/topic.graphql'
 export default {
   name: 'TopicView',
   components: { TopicsSidebar, SortMenu },
+  async asyncData(context) {
+    const client = context.app.apolloProvider.defaultClient
+    const topicData = await client.query({
+      query: topicGql,
+      variables: {
+        topicName: context.params.topicName
+      }
+    })
+
+    return {
+      topic: topicData.data.topic
+    }
+  },
   data() {
     return {
       topic: null,
@@ -78,16 +91,6 @@ export default {
   head() {
     return {
       title: this.topic ? this.topic.capitalizedName : ''
-    }
-  },
-  apollo: {
-    topic: {
-      query: topicGql,
-      variables() {
-        return {
-          topicName: this.topicName
-        }
-      }
     }
   }
 }

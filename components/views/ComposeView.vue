@@ -6,7 +6,8 @@
           <v-text-field
             v-model="title"
             filled
-            label="Title"
+            :label="currentUser ? 'Title' : 'Must log in to create a post'"
+            :disabled="!currentUser"
             clearable
             :loading="detectTitleLoading"
           />
@@ -16,7 +17,10 @@
           </v-tabs>
           <v-tabs-items v-model="tab" style="background-color: transparent">
             <v-tab-item class="pb-7">
-              <TextEditor v-model="textContent" />
+              <TextEditor
+                v-model="textContent"
+                not-logged-in-label="Must log in to create a post"
+              />
             </v-tab-item>
 
             <v-tab-item class="pb-7">
@@ -24,7 +28,10 @@
                 v-model="link"
                 filled
                 hide-details
-                label="Link URL"
+                :label="
+                  currentUser ? 'Link URL' : 'Must log in to create a post'
+                "
+                :disabled="!currentUser"
                 clearable
               />
             </v-tab-item>
@@ -32,6 +39,7 @@
 
           <v-combobox
             v-model="selectedTopics"
+            :disabled="!currentUser"
             :items="searchTopicsNames"
             label="Choose topics"
             filled
@@ -75,7 +83,7 @@
               depressed
               color="primary"
               :loading="loading"
-              :disabled="!title || selectedTopics.length <= 0"
+              :disabled="!title || selectedTopics.length <= 0 || !currentUser"
               @click="submitPost"
               >Submit</v-btn
             >

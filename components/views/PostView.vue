@@ -67,7 +67,7 @@ import Post from '../Post.vue'
 import submitCommentGql from '../../gql/submitComment.graphql'
 import postGql from '../../gql/post.graphql'
 import postCommentsGql from '../../gql/postComments.graphql'
-import postViewGql from '../../gql/postView.graphql'
+import recordPostViewGql from '../../gql/recordPostView.graphql'
 import TextEditor from '../TextEditor'
 import Comment from '../Comment'
 
@@ -125,12 +125,12 @@ export default {
   },
   async mounted() {
     const { data } = await this.$apollo.mutate({
-      mutation: postViewGql,
+      mutation: recordPostViewGql,
       variables: {
         postId: this.postId
       }
     })
-    this.postView = data.postView
+    this.postView = data.recordPostView
   },
   methods: {
     async submitComment() {
@@ -155,7 +155,7 @@ export default {
         }
       })
       await this.$apollo.mutate({
-        mutation: postViewGql,
+        mutation: recordPostViewGql,
         variables: {
           postId: this.postId
         }

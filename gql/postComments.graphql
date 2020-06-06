@@ -11,8 +11,6 @@ query postComments($postId: ID!) {
       id
       username
       isCurrentUser
-      isFollowing
-      isBlocking
     }
   }
 }

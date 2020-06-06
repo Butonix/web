@@ -15,8 +15,6 @@ mutation submitComment($postId: ID!, $textContent: String!, $parentCommentId: ID
       id
       username
       isCurrentUser
-      isFollowing
-      isBlocking
     }
   }
 }

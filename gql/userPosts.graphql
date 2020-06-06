@@ -16,8 +16,6 @@ query userPosts($username: String!) {
       id
       username
       isCurrentUser
-      isFollowing
-      isBlocking
     }
   }
 }

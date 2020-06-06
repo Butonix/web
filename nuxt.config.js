@@ -65,6 +65,9 @@ export default {
    ** See https://github.com/nuxt-community/apollo-module
    */
   apollo: {
+    cookieAttributes: {
+      secure: process.env.NODE_ENV === 'production'
+    },
     // required
     clientConfigs: {
       default: {

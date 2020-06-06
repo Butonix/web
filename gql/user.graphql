@@ -7,6 +7,9 @@ query user($username: String!) {
     followerCount
     createdAt
     isFollowing
+    isBlocking
+    isBlocked
+    isFollowed
     isCurrentUser
   }
 }

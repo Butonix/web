@@ -1,20 +1,21 @@
 <template>
   <nuxt-link
     v-if="
-      !currentUser || (currentUser && currentUser.username === user.username)
+      !currentUser ||
+        (currentUser && currentUser.username === userData.username)
     "
-    :to="`/user/${user.username}`"
+    :to="`/user/${userData.username}`"
     class="caption font-weight-medium hoverable"
-    >@{{ user.username }}</nuxt-link
+    >@{{ userData.username }}</nuxt-link
   >
   <v-menu v-else v-model="menu" :close-on-content-click="false" offset-x>
     <template v-slot:activator="{ on }">
       <a class="caption font-weight-medium hoverable" v-on="on"
-        >@{{ user.username }}</a
+        >@{{ userData.username }}</a
       >
     </template>
 
-    <v-list dense>
+    <v-list v-if="user" dense>
       <v-list-item :disabled="user.isBlocking" @click="toggleFollow">
         <v-list-item-icon class="mr-2">
           <v-icon>{{ icons.plusBox }}</v-icon>
@@ -24,7 +25,7 @@
           <v-list-item-title class="pr-3 font-weight-regular"
             >Follow
             <span class="font-italic">{{
-              user.username
+              userData.username
             }}</span></v-list-item-title
           >
         </v-list-item-content>
@@ -42,7 +43,7 @@
         <v-list-item-title class="pr-3 font-weight-regular"
           >Hide Posts and Comments by
           <span class="font-italic"
-            >@{{ user.username }}</span
+            >@{{ userData.username }}</span
           ></v-list-item-title
         >
         <v-list-item-action class="ma-0">
@@ -55,18 +56,18 @@
           class="font-italic"
           style="white-space: pre"
         >
-          @{{ user.username }}
+          @{{ userData.username }}
         </span>
         will be hidden upon refresh</v-subheader
       >
 
-      <v-list-item link nuxt :to="`/user/${user.username}`">
+      <v-list-item link nuxt :to="`/user/${userData.username}`">
         <v-list-item-icon class="mr-2">
           <v-icon>{{ icons.openInNew }}</v-icon>
         </v-list-item-icon>
 
         <v-list-item-title class="pr-3 font-weight-regular"
-          >View <span class="font-italic">{{ user.username }}</span
+          >View <span class="font-italic">{{ userData.username }}</span
           >'s profile</v-list-item-title
         >
       </v-list-item>
@@ -75,38 +76,18 @@
 </template>
 
 <script>
-import gql from 'graphql-tag'
 import { mdiPlusBox, mdiEyeOff, mdiOpenInNew } from '@mdi/js'
+import gql from 'graphql-tag'
 import currentUserGql from '../gql/currentUser.graphql'
-
-const followUser = gql`
-  mutation($followedId: ID!) {
-    followUser(followedId: $followedId)
-  }
-`
-
-const unfollowUser = gql`
-  mutation($followedId: ID!) {
-    unfollowUser(followedId: $followedId)
-  }
-`
-
-const blockUser = gql`
-  mutation($blockedId: ID!) {
-    blockUser(blockedId: $blockedId)
-  }
-`
-
-const unblockUser = gql`
-  mutation($blockedId: ID!) {
-    unblockUser(blockedId: $blockedId)
-  }
-`
+import blockUserGql from '../gql/blockUser.graphql'
+import unblockUserGql from '../gql/unblockUser.graphql'
+import followUserGql from '../gql/followUser.graphql'
+import unfollowUserGql from '../gql/unfollowUser.graphql'
 
 export default {
   name: 'Username',
   props: {
-    user: {
+    userData: {
       type: Object,
       required: true
     }
@@ -114,6 +95,7 @@ export default {
   data: () => ({
     menu: false,
     currentUser: null,
+    user: null,
     icons: {
       plusBox: mdiPlusBox,
       eyeOff: mdiEyeOff,
@@ -123,6 +105,26 @@ export default {
   apollo: {
     currentUser: {
       query: currentUserGql
+    },
+    user: {
+      query: gql`
+        query($username: String!) {
+          user(username: $username) {
+            username
+            id
+            isBlocking
+            isFollowing
+          }
+        }
+      `,
+      variables() {
+        return {
+          username: this.userData.username
+        }
+      },
+      skip() {
+        return !this.menu
+      }
     }
   },
   methods: {
@@ -132,7 +134,7 @@ export default {
     },
     followUser() {
       this.$apollo.mutate({
-        mutation: followUser,
+        mutation: followUserGql,
         variables: {
           followedId: this.user.id
         },
@@ -141,7 +143,7 @@ export default {
     },
     unfollowUser() {
       this.$apollo.mutate({
-        mutation: unfollowUser,
+        mutation: unfollowUserGql,
         variables: {
           followedId: this.user.id
         },
@@ -154,7 +156,7 @@ export default {
     },
     blockUser() {
       this.$apollo.mutate({
-        mutation: blockUser,
+        mutation: blockUserGql,
         variables: {
           blockedId: this.user.id
         },
@@ -166,7 +168,7 @@ export default {
     },
     unblockUser() {
       this.$apollo.mutate({
-        mutation: unblockUser,
+        mutation: unblockUserGql,
         variables: {
           blockedId: this.user.id
         },

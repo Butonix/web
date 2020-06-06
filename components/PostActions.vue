@@ -1,6 +1,6 @@
 <template>
   <span class="text--secondary">
-    <Username :user="post.author" />
+    <Username :user-data="post.author" />
     <span class="ml-3 caption font-weight-medium">{{ timeSince }} ago</span>
 
     <!--Comment-->
@@ -14,63 +14,54 @@
     >
       <span v-if="$device.isDesktop" class="mr-1 text--secondary">
         {{ post.commentCount }}
-        {{
-          $device.isDesktop
-            ? `Comment${post.commentCount === 1 ? '' : 's'}`
-            : ''
-        }}
+        {{ `Comment${post.commentCount === 1 ? '' : 's'}` }}
+        {{ newCommentsCount > 0 ? `(${newCommentsCount} new)` : '' }}
       </span>
 
       <span v-else>
         {{ post.commentCount }}
+        {{ newCommentsCount > 0 ? `(+${newCommentsCount})` : '' }}
       </span>
 
       <v-icon x-small class="text--secondary">{{ icons.comment }}</v-icon>
     </v-btn>
 
     <!--Endorse-->
-    <v-tooltip top>
-      <template v-slot:activator="{ on }">
-        <span v-on="post.author.isCurrentUser ? on : undefined">
-          <v-btn
-            text
-            x-small
-            class="ml-1 font-weight-medium caption"
-            :style="post.isEndorsed ? 'color: var(--v-primary-base)' : ''"
-            style="text-transform: none; font-size: 12px"
-            :disabled="post.author.isCurrentUser"
-            @click="toggleEndorsement"
-          >
-            <span
-              v-if="$device.isDesktop"
-              class="mr-1"
-              :class="post.isEndorsed ? '' : 'text--secondary'"
-            >
-              {{ post.endorsementCount }}
-              {{
-                $device.isDesktop
-                  ? `Endorsement${post.endorsementCount === 1 ? '' : 's'}`
-                  : ''
-              }}
-            </span>
-
-            <span v-else>
-              {{ post.endorsementCount }}
-            </span>
-
-            <v-icon
-              x-small
-              :style="post.isEndorsed ? 'color: var(--v-primary-base)' : ''"
-              :class="post.isEndorsed ? '' : 'text--secondary'"
-              >{{ icons.star }}</v-icon
-            >
-          </v-btn>
-        </span>
-      </template>
-      <span v-if="post.author.isCurrentUser"
-        >Cannot endorse your own posts</span
+    <v-btn
+      text
+      x-small
+      class="ml-1 font-weight-medium caption"
+      :style="post.isEndorsed ? 'color: var(--v-primary-base)' : ''"
+      style="text-transform: none; font-size: 12px"
+      :disabled="post.author.isCurrentUser"
+      @click="toggleEndorsement"
+    >
+      <span
+        v-if="$device.isDesktop"
+        class="mr-1"
+        :class="
+          post.isEndorsed || post.author.isCurrentUser ? '' : 'text--secondary'
+        "
       >
-    </v-tooltip>
+        {{ post.endorsementCount }}
+        {{
+          $device.isDesktop
+            ? `Endorsement${post.endorsementCount === 1 ? '' : 's'}`
+            : ''
+        }}
+      </span>
+
+      <span v-else>
+        {{ post.endorsementCount }}
+      </span>
+
+      <v-icon
+        x-small
+        :style="post.isEndorsed ? 'color: var(--v-primary-base)' : ''"
+        :class="post.isEndorsed ? '' : 'text--secondary'"
+        >{{ icons.star }}</v-icon
+      >
+    </v-btn>
 
     <!--Bookmark-->
     <v-btn
@@ -167,14 +158,14 @@
     </span>
 
     <!--Hide/Report mobile menu-->
-    <v-btn
+    <!--<v-btn
       text
       x-small
       class="ml-1 font-weight-medium caption"
       style="text-transform: none; font-size: 12px"
     >
-      <v-icon x-small class="text--secondary">{{ icons.dots }}</v-icon>
-    </v-btn>
+      <v-icon x-small class="text&#45;&#45;secondary">{{ icons.dots }}</v-icon>
+    </v-btn>-->
   </span>
 </template>
 
@@ -182,7 +173,7 @@
 import { formatDistanceToNowStrict } from 'date-fns'
 import {
   mdiShareVariant,
-  mdiDotsVertical,
+  // mdiDotsVertical,
   mdiComment,
   mdiStar,
   mdiBookmark
@@ -198,6 +189,10 @@ export default {
     post: {
       type: Object,
       required: true
+    },
+    postView: {
+      type: Object,
+      required: false
     }
   },
   data() {
@@ -208,7 +203,7 @@ export default {
       reported: false,
       icons: {
         share: mdiShareVariant,
-        dots: mdiDotsVertical,
+        // dots: mdiDotsVertical,
         comment: mdiComment,
         star: mdiStar,
         bookmark: mdiBookmark
@@ -224,6 +219,10 @@ export default {
     },
     timeSince() {
       return formatDistanceToNowStrict(new Date(this.post.createdAt))
+    },
+    newCommentsCount() {
+      if (!this.postView) return 0
+      return this.post.commentCount - this.postView.lastCommentCount
     }
   },
   methods: {

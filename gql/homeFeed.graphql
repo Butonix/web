@@ -15,15 +15,17 @@ query homeFeed {
       id
       username
       isCurrentUser
-      isFollowing
-      isBlocking
     }
     topics {
       capitalizedName
       name
-      isFollowing
-      isHidden
     }
     newCommentCount
+    postView {
+      lastCommentCount
+      postId
+      userId
+      createdAt
+    }
   }
 }

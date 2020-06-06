@@ -4,8 +4,6 @@ query post($postId: ID!) {
         id
         username
         isCurrentUser
-        isFollowing
-        isBlocking
       }
       commentCount
       createdAt
@@ -21,8 +19,6 @@ query post($postId: ID!) {
       topics {
         capitalizedName
         name
-        isFollowing
-        isHidden
       }
       newCommentCount
     }

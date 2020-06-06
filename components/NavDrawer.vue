@@ -114,7 +114,8 @@ import {
   mdiBrightness6,
   mdiBell,
   mdiBookmarkMultiple,
-  mdiFilter
+  mdiFilter,
+  mdiLogout
 } from '@mdi/js'
 import currentUserGql from '../gql/currentUser.graphql'
 import LoginDialog from '../components/LoginDialog'
@@ -142,7 +143,8 @@ export default {
         brightness: mdiBrightness6,
         bell: mdiBell,
         bookmarkMultiple: mdiBookmarkMultiple,
-        filter: mdiFilter
+        filter: mdiFilter,
+        logout: mdiLogout
       }
     }
   },
@@ -165,6 +167,7 @@ export default {
     async logout() {
       this.currentUser = null
       await this.$apolloHelpers.onLogout()
+      await this.$apollo.query({ query: currentUserGql })
     },
     toggleDark() {
       this.$vuetify.theme.dark = !this.$vuetify.theme.dark

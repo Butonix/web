@@ -30,12 +30,12 @@
       <v-spacer />
 
       <template v-if="$device.isDesktop">
-        <v-btn v-if="isAuthenticated" text dark to="/new" class="mr-6">
+        <v-btn v-if="isAuthenticated" text dark nuxt to="/new" class="mr-6">
           <span class="mr-2">New Post</span>
           <v-icon>{{ icons.plus }}</v-icon>
         </v-btn>
 
-        <v-btn v-else text dark class="mr-6">
+        <v-btn v-else text dark class="mr-6" @click="showLoginDialog">
           <span class="mr-2">New Post</span>
           <v-icon>{{ icons.plus }}</v-icon>
         </v-btn>
@@ -59,7 +59,11 @@
           <v-icon>{{ icons.magnify }}</v-icon>
         </v-btn>
 
-        <v-btn v-if="isAuthenticated" icon dark to="/new">
+        <v-btn v-if="isAuthenticated" icon dark nuxt to="/new">
+          <v-icon>{{ icons.plus }}</v-icon>
+        </v-btn>
+
+        <v-btn v-else icon dark @click="showLoginDialog">
           <v-icon>{{ icons.plus }}</v-icon>
         </v-btn>
       </div>
@@ -97,6 +101,12 @@ export default {
     this.isAuthenticated = !!this.$apolloHelpers.getToken()
     this.$vuetify.theme.dark = localStorage.getItem('dark') === 'true'
     this.drawer = this.$device.isDesktop
+  },
+  methods: {
+    showLoginDialog() {
+      this.$store.commit('setLoginDialog', true)
+      this.$store.commit('setRedirectLoginDialogToCompose', true)
+    }
   }
 }
 </script>

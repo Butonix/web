@@ -22,7 +22,7 @@
       </v-list-item>
     </template>
 
-    <v-card>
+    <v-card :tile="!$device.isDesktop">
       <v-toolbar v-if="!$device.isDesktop" dark color="primary">
         <v-btn icon dark @click="dialog = false">
           <v-icon>{{ icons.close }}</v-icon>
@@ -168,7 +168,6 @@ export default {
         eye: mdiEye,
         eyeOff: mdiEyeOff
       },
-      dialog: false,
       tab: null,
       username: '',
       password: '',
@@ -194,6 +193,16 @@ export default {
           (v) => !!v || 'Password confirmation is required',
           (v) => v === this.password || 'Passwords do not match'
         ]
+      }
+    }
+  },
+  computed: {
+    dialog: {
+      get() {
+        return this.$store.state.loginDialog
+      },
+      set(val) {
+        this.$store.commit('setLoginDialog', val)
       }
     }
   },
@@ -237,10 +246,10 @@ export default {
         this.err = e.message
       }
       this.loading = false
-      /* if (this.$root.redirectLoginDialogToCompose) {
-        this.$router.push('/compose')
-        this.$root.redirectLoginDialogToCompose = false
-      } */
+      if (this.$store.state.redirectLoginDialogToCompose) {
+        this.$router.push('/new')
+        this.$store.commit('setRedirectLoginDialogToCompose', false)
+      }
     },
     async login() {
       this.loading = true
@@ -260,10 +269,10 @@ export default {
         this.err = e.message
       }
       this.loading = false
-      /* if (this.$root.redirectLoginDialogToCompose) {
-        this.$router.push('/compose')
-        this.$root.redirectLoginDialogToCompose = false
-      } */
+      if (this.$store.state.redirectLoginDialogToCompose) {
+        this.$router.push('/new')
+        this.$store.commit('setRedirectLoginDialogToCompose', false)
+      }
     }
   }
 }

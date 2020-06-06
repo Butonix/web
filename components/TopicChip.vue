@@ -1,16 +1,7 @@
 <template>
-  <v-menu v-if="topic" v-model="menu" :close-on-content-click="false" offset-x>
+  <v-menu v-model="menu" :close-on-content-click="false" offset-x>
     <template v-slot:activator="{ on }">
-      <v-chip
-        outlined
-        label
-        small
-        class="mr-1 px-2"
-        :close-icon="topic.isFollowing ? undefined : 'mdi-plus'"
-        :close="!topic.isFollowing && !topic.isHidden"
-        v-on="on"
-        @click:close="followTopic"
-      >
+      <v-chip outlined label small class="mr-1 px-2" v-on="on">
         <span
           :style="
             `font-weight: ${
@@ -82,30 +73,48 @@
 </template>
 
 <script>
-import { mdiPlusBox, mdiEyeOff, mdiOpenInNew } from '@mdi/js'
+import { mdiPlusBox, mdiEyeOff, mdiOpenInNew, mdiPlus } from '@mdi/js'
 import unhideTopicGql from '../gql/unhideTopic.graphql'
 import hideTopicGql from '../gql/hideTopic.graphql'
 import unfollowTopicGql from '../gql/unfollowTopic.graphql'
 import followTopicGql from '../gql/followTopic.graphql'
 import followedTopicsGql from '../gql/followedTopics.graphql'
+import topicGql from '../gql/topic.graphql'
 
 export default {
   name: 'TopicChip',
   props: {
-    topic: {
+    topicData: {
       type: Object,
       required: true
     }
   },
-  data: () => ({
-    subscribed: false,
-    menu: false,
-    icons: {
-      plusBox: mdiPlusBox,
-      eyeOff: mdiEyeOff,
-      openInNew: mdiOpenInNew
+  data() {
+    return {
+      subscribed: false,
+      menu: false,
+      icons: {
+        plus: mdiPlus,
+        plusBox: mdiPlusBox,
+        eyeOff: mdiEyeOff,
+        openInNew: mdiOpenInNew
+      },
+      topic: this.topicData
     }
-  }),
+  },
+  apollo: {
+    topic: {
+      query: topicGql,
+      variables() {
+        return {
+          topicName: this.topic.name
+        }
+      },
+      skip() {
+        return !this.menu
+      }
+    }
+  },
   methods: {
     toggleFollow() {
       if (this.topic.isFollowing) this.unfollowTopic()

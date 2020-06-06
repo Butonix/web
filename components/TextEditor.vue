@@ -73,7 +73,7 @@
       ref="textarea"
       v-model="$attrs.value"
       filled
-      :label="currentUser ? label : 'Must log in to comment'"
+      :label="currentUser ? label : notLoggedInLabel"
       :hide-details="!showDetails"
       :rows="rows"
       :disabled="!currentUser"
@@ -110,6 +110,10 @@ export default {
     showDetails: {
       type: Boolean,
       default: false
+    },
+    notLoggedInLabel: {
+      type: String,
+      default: 'Must log in to comment'
     }
   },
   data: () => ({

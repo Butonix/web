@@ -1,8 +1,0 @@
-mutation postView($postId: ID!) {
-  postView(postId: $postId) {
-    createdAt
-    lastCommentCount
-    postId
-    userId
-  }
-}
