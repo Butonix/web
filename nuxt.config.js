@@ -1,4 +1,5 @@
 import colors from 'vuetify/lib/util/colors'
+import redirectSSL from 'redirect-ssl'
 
 process.env.VUE_APP_VERSION = require('./package.json').version
 
@@ -148,5 +149,11 @@ export default {
      ** You can extend webpack config here
      */
     extend(config, ctx) {}
-  }
+  },
+
+  serverMiddleware: [
+    redirectSSL.create({
+      enabled: process.env.NODE_ENV === 'production'
+    })
+  ]
 }

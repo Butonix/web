@@ -28,6 +28,7 @@
     "marked": "^1.1.0",
     "nuxt": "^2.0.0",
     "nuxt-webfontloader": "^1.1.0",
+    "redirect-ssl": "^2.0.0",
     "vue-tweet-embed": "^2.4.0",
     "vue-youtube": "^1.4.0",
     "xss": "^1.0.6"
