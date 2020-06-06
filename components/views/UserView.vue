@@ -84,17 +84,20 @@ export default {
     const client = context.app.apolloProvider.defaultClient
     const userData = await client.query({
       query: userGql,
-      variables: { username: context.params.username }
+      variables: { username: context.params.username },
+      fetchPolicy: 'network-only'
     })
 
     const userPostsData = await client.query({
       query: userPostsGql,
-      variables: { username: context.params.username }
+      variables: { username: context.params.username },
+      fetchPolicy: 'network-only'
     })
 
     const userCommentsData = await client.query({
       query: userCommentsGql,
-      variables: { username: context.params.username }
+      variables: { username: context.params.username },
+      fetchPolicy: 'network-only'
     })
 
     return {

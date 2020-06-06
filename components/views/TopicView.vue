@@ -41,7 +41,8 @@ export default {
       query: topicGql,
       variables: {
         topicName: context.params.topicName
-      }
+      },
+      fetchPolicy: 'network-only'
     })
 
     return {

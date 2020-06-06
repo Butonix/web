@@ -78,12 +78,14 @@ export default {
     const client = context.app.apolloProvider.defaultClient
     const postData = await client.query({
       query: postGql,
-      variables: { postId: context.params.postId }
+      variables: { postId: context.params.postId },
+      fetchPolicy: 'network-only'
     })
 
     const postCommentsData = await client.query({
       query: postCommentsGql,
-      variables: { postId: context.params.postId }
+      variables: { postId: context.params.postId },
+      fetchPolicy: 'network-only'
     })
     return {
       post: postData.data.post,

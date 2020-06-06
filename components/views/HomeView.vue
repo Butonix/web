@@ -29,7 +29,8 @@ export default {
   async asyncData(context) {
     const client = context.app.apolloProvider.defaultClient
     const homeFeedData = await client.query({
-      query: homeFeedGql
+      query: homeFeedGql,
+      fetchPolicy: 'network-only'
     })
 
     return {
