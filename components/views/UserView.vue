@@ -136,11 +136,17 @@ export default {
       title: this.user.username,
       meta: [
         {
+          hid: 'og:title',
           property: 'og:title',
           content: `${this.user.username}'s profile on Comet`
         },
-        { property: 'og:site_name', content: 'getcomet.net' },
         {
+          hid: 'og:site_name',
+          property: 'og:site_name',
+          content: 'getcomet.net'
+        },
+        {
+          hid: 'og:description',
           property: 'og:description',
           content: `${this.user.postCount} Posts and ${this.user.commentCount} Comments`
         }

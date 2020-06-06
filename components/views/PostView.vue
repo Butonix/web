@@ -170,14 +170,24 @@ export default {
     return {
       title: this.post.title,
       meta: [
-        { property: 'og:title', content: `"${this.post.title}" on Comet` },
-        { property: 'og:site_name', content: 'getcomet.net' },
         {
+          hid: 'og:title',
+          property: 'og:title',
+          content: `"${this.post.title}" on Comet`
+        },
+        {
+          hid: 'og:site_name',
+          property: 'og:site_name',
+          content: 'getcomet.net'
+        },
+        {
+          hid: 'og:description',
           property: 'og:description',
           content:
             this.post.type === 'TEXT' ? this.post.textContent : this.post.link
         },
         {
+          hid: 'og:image',
           property: 'og:image',
           content: this.post.thumbnailUrl ? this.post.thumbnailUrl : ''
         }
