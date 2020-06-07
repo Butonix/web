@@ -1,15 +1,19 @@
 <template>
-  <v-menu v-model="menu" :close-on-content-click="false" offset-x>
+  <v-chip
+    v-if="!currentUser"
+    outlined
+    label
+    small
+    class="mr-1 px-2"
+    nuxt
+    :to="`/topic/${topic.name}`"
+  >
+    <span>{{ topic.capitalizedName }}</span>
+  </v-chip>
+  <v-menu v-else v-model="menu" :close-on-content-click="false" offset-x>
     <template v-slot:activator="{ on }">
       <v-chip outlined label small class="mr-1 px-2" v-on="on">
-        <span
-          :style="
-            `font-weight: ${
-              topic.isFollowing ? '600' : '400'
-            }; text-decoration: ${topic.isHidden ? 'line-through' : 'none'}`
-          "
-          >{{ topic.capitalizedName }}</span
-        >
+        <span>{{ topic.capitalizedName }}</span>
       </v-chip>
     </template>
 
@@ -50,10 +54,10 @@
       </v-list-item>
 
       <v-subheader v-show="topic.isHidden"
-        >Posts in<span class="font-italic" style="white-space: pre">
+        >Posts in&nbsp;<span class="font-italic">
           {{ topic.capitalizedName }}
         </span>
-        will be hidden upon refresh</v-subheader
+        &nbsp;will be hidden upon refresh</v-subheader
       >
 
       <v-list-item link nuxt :to="`/topic/${topic.name}`">
@@ -80,6 +84,7 @@ import unfollowTopicGql from '../gql/unfollowTopic.graphql'
 import followTopicGql from '../gql/followTopic.graphql'
 import followedTopicsGql from '../gql/followedTopics.graphql'
 import topicGql from '../gql/topic.graphql'
+import currentUserGql from '../gql/currentUser.graphql'
 
 export default {
   name: 'TopicChip',
@@ -99,10 +104,14 @@ export default {
         eyeOff: mdiEyeOff,
         openInNew: mdiOpenInNew
       },
-      topic: this.topicData
+      topic: this.topicData,
+      currentUser: null
     }
   },
   apollo: {
+    currentUser: {
+      query: currentUserGql
+    },
     topic: {
       query: topicGql,
       variables() {

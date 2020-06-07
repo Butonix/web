@@ -52,13 +52,10 @@
       </v-list-item>
 
       <v-subheader v-show="user.isBlocking"
-        >Posts and Comments by<span
-          class="font-italic"
-          style="white-space: pre"
-        >
+        >Posts and Comments by&nbsp;<span class="font-italic">
           @{{ userData.username }}
         </span>
-        will be hidden upon refresh</v-subheader
+        &nbsp;will be hidden upon refresh</v-subheader
       >
 
       <v-list-item link nuxt :to="`/user/${userData.username}`">

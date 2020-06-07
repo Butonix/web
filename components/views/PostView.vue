@@ -171,13 +171,15 @@ export default {
         {
           hid: 'og:title',
           property: 'og:title',
-          content: `${this.post.title} / Comet`
+          content: `${this.post.title}`
         },
         {
           hid: 'og:site_name',
           property: 'og:site_name',
-          content: `Comet · ${this.post.commentCount} Comment${
+          content: `Comet - ${this.post.commentCount} Comment${
             this.post.commentCount === 1 ? '' : 's'
+          } / ${this.post.endorsementCount} Endorsement${
+            this.post.endorsementCount === 1 ? '' : 's'
           }`
         },
         {
@@ -186,8 +188,8 @@ export default {
           content:
             this.post.type === 'TEXT'
               ? this.post.textContent
-                ? `${this.post.textContent.substring(0, 50)}${
-                    this.post.textContent.length >= 50 ? '...' : ''
+                ? `${this.post.textContent.substring(0, 100)}${
+                    this.post.textContent.length >= 100 ? '...' : ''
                   }`
                 : this.post.title
               : this.post.link

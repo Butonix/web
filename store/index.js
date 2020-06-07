@@ -1,6 +1,8 @@
 export const state = () => ({
   loginDialog: false,
-  redirectLoginDialogToCompose: false
+  redirectLoginDialogToCompose: false,
+  homeFeedPage: 0,
+  topicFeedPage: {}
 })
 
 export const mutations = {
@@ -9,5 +11,11 @@ export const mutations = {
   },
   setRedirectLoginDialogToCompose(state, redirect) {
     state.redirectLoginDialogToCompose = redirect
+  },
+  setHomeFeedPage(state, page) {
+    state.homeFeedPage = page
+  },
+  setTopicFeedPage(state, obj) {
+    state.topicFeedPage[obj.topicName] = obj.page
   }
 }

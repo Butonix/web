@@ -92,7 +92,7 @@
           <v-card flat>
             <div class="pt-2 px-4">{{ title ? title : 'Title' }}</div>
             <v-divider class="mt-2 mb-1" />
-            <div class="pb-1 pt-1 px-4 body-2 opensans" v-html="markedText" />
+            <div class="pb-1 pt-1 px-4 body-2" v-html="markedText" />
           </v-card>
         </div>
       </v-col>
@@ -244,8 +244,4 @@ export default {
 }
 </script>
 
-<style scoped>
-.opensans {
-  font-family: 'Open Sans', sans-serif !important;
-}
-</style>
+<style scoped></style>

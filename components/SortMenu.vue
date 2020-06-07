@@ -5,32 +5,32 @@
         <v-btn text small v-on="on">
           <span class="mr-1"
             >Sort: {{ sort.sort }}
-            {{ sort.sort === 'TOP' ? `(${selectedTopTime})` : '' }}</span
+            {{ sort.sort === 'top' ? `(${selectedTopTime})` : '' }}</span
           >
-          <v-icon v-if="sort.sort === 'HOT'" small>{{ icons.fire }}</v-icon>
-          <v-icon v-if="sort.sort === 'TOP'" small>{{ icons.list }}</v-icon>
-          <v-icon v-if="sort.sort === 'NEW'" small>{{ icons.clock }}</v-icon>
+          <v-icon v-if="sort.sort === 'hot'" small>{{ icons.fire }}</v-icon>
+          <v-icon v-if="sort.sort === 'top'" small>{{ icons.list }}</v-icon>
+          <v-icon v-if="sort.sort === 'new'" small>{{ icons.clock }}</v-icon>
         </v-btn>
       </template>
 
       <v-list v-if="!isSelectingTime" dense>
         <v-list-item v-if="hotEnabled" @click="chooseHot">
-          <v-list-item-icon class="mr-1">
-            <v-icon small>{{ icons.fire }}</v-icon>
+          <v-list-item-icon class="mr-2">
+            <v-icon>{{ icons.fire }}</v-icon>
           </v-list-item-icon>
           <v-list-item-title>Hot</v-list-item-title>
         </v-list-item>
 
         <v-list-item @click="switchToTimeSelect">
-          <v-list-item-icon class="mr-1">
-            <v-icon small>{{ icons.list }}</v-icon>
+          <v-list-item-icon class="mr-2">
+            <v-icon>{{ icons.list }}</v-icon>
           </v-list-item-icon>
           <v-list-item-title>Top</v-list-item-title>
         </v-list-item>
 
         <v-list-item @click="chooseNew">
-          <v-list-item-icon class="mr-1">
-            <v-icon small>{{ icons.clock }}</v-icon>
+          <v-list-item-icon class="mr-2">
+            <v-icon>{{ icons.clock }}</v-icon>
           </v-list-item-icon>
           <v-list-item-title>New</v-list-item-title>
         </v-list-item>
@@ -58,20 +58,17 @@ export default {
       type: Boolean,
       default: true
     },
-    defaultSort: {
+    value: {
       type: Object,
-      default: () => ({
-        sort: 'HOT',
-        time: 'DAY'
-      })
+      required: true
     }
   },
   data() {
     return {
-      sort: this.defaultSort,
+      sort: this.value,
       menu: false,
       isSelectingTime: false,
-      times: ['HOUR', 'DAY', 'WEEK', 'MONTH', 'YEAR', 'ALL'],
+      times: ['hour', 'day', 'week', 'month', 'year', 'all'],
       icons: {
         fire: mdiFire,
         list: mdiFormatListBulletedSquare,
@@ -101,17 +98,17 @@ export default {
     },
     topTime(time) {
       switch (time) {
-        case 'HOUR':
+        case 'hour':
           return '1 hour'
-        case 'DAY':
+        case 'day':
           return '24 hours'
-        case 'WEEK':
+        case 'week':
           return 'Week'
-        case 'MONTH':
+        case 'month':
           return 'Month'
-        case 'YEAR':
+        case 'year':
           return 'Year'
-        case 'ALL':
+        case 'all':
           return 'All'
         default:
           return undefined
@@ -120,13 +117,15 @@ export default {
     chooseTopTime(time) {
       this.sort.time = time
       this.isSelectingTime = false
-      this.sort.sort = 'TOP'
+      this.sort.sort = 'top'
     },
     chooseNew() {
-      this.sort.sort = 'NEW'
+      this.sort.sort = 'new'
+      this.sort.time = 'all'
     },
     chooseHot() {
-      this.sort.sort = 'HOT'
+      this.sort.sort = 'hot'
+      this.sort.time = 'all'
     }
   }
 }

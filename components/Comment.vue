@@ -21,11 +21,7 @@
         class="caption font-weight-medium text--secondary"
         >{{ comment.post.title }}</nuxt-link
       >
-      <div
-        class="body-2 comment"
-        style="font-family: 'Open Sans', sans-serif !important"
-        v-html="textContents"
-      />
+      <div class="body-2 comment" v-html="textContents" />
       <div class="text--secondary">
         <span v-if="isOp" class="overline font-weight-medium text--primary"
           >[OP]&nbsp;</span

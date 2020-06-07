@@ -139,7 +139,7 @@
 
       <div v-else-if="post.type === 'TEXT'">
         <v-divider class="mb-3 mt-0" />
-        <div class="mx-4 body-2 pb-1 opensans" v-html="textContents" />
+        <div class="mx-4 body-2 pb-1" v-html="textContents" />
       </div>
     </div>
   </v-card>
@@ -219,8 +219,4 @@ export default {
 }
 </script>
 
-<style scoped>
-.opensans {
-  font-family: 'Open Sans', sans-serif !important;
-}
-</style>
+<style scoped></style>

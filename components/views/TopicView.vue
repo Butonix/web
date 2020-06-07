@@ -5,9 +5,6 @@
         <div class="overline">Topic</div>
         <div class="headline">
           <span>{{ topic.capitalizedName }}</span>
-          <!--<span class="body-2 ml-2"
-            >{{ topic.followerCount }} Follower{{ topic.followerCount === 1 ? '' : 's' }}</span
-          >-->
           <v-btn small class="ml-1" @click="toggleFollow">{{
             topic.isFollowing ? 'Unfollow' : 'Follow'
           }}</v-btn>
@@ -15,6 +12,25 @@
       </div>
       <v-divider class="my-1" />
       <SortMenu v-model="sort" />
+
+      <Post
+        v-for="post in topicFeed.slice(0, topicFeed.length - 1)"
+        :key="post.id"
+        :post="post"
+        class="mb-1"
+      />
+      <Post
+        v-for="post in topicFeed.slice(topicFeed.length - 1, topicFeed.length)"
+        :key="post.id"
+        v-intersect.quiet="showMore"
+        :post="post"
+        class="mb-1"
+      />
+
+      <v-progress-linear
+        v-show="$apollo.queries.topicFeed.loading"
+        indeterminate
+      />
     </v-col>
     <v-col v-if="$device.isDesktop" cols="2">
       <TopicsSidebar />
@@ -29,10 +45,12 @@ import followedTopicsGql from '../../gql/followedTopics.graphql'
 import followTopicGql from '../../gql/followTopic.graphql'
 import unfollowTopicGql from '../../gql/unfollowTopic.graphql'
 import topicGql from '../../gql/topic.graphql'
+import topicFeedGql from '../../gql/topicFeed.graphql'
+import Post from '../Post'
 
 export default {
   name: 'TopicView',
-  components: { TopicsSidebar, SortMenu },
+  components: { Post, TopicsSidebar, SortMenu },
   async asyncData(context) {
     const client = context.app.apolloProvider.defaultClient
     const topicData = await client.query({
@@ -50,15 +68,70 @@ export default {
   data() {
     return {
       topic: null,
+      topicFeed: [],
+      hasMore: true,
       sort: {
-        sort: 'TOP',
-        time: 'DAY'
+        sort:
+          this.$route.query.sort &&
+          ['new', 'top', 'hot'].includes(this.$route.query.sort)
+            ? this.$route.query.sort
+            : 'hot',
+        time:
+          this.$route.query.time &&
+          ['hour', 'day', 'week', 'month', 'year', 'all'].includes(
+            this.$route.query.time
+          )
+            ? this.$route.query.time
+            : 'all'
       }
     }
   },
   computed: {
     topicName() {
       return this.$route.params.topicName
+    },
+    page: {
+      get() {
+        return this.$store.state.topicFeedPage[this.topicName]
+      },
+      set(val) {
+        this.$store.commit('setTopicFeedPage', {
+          topicName: this.topicName,
+          page: val
+        })
+      }
+    }
+  },
+  watch: {
+    sort: {
+      handler(val) {
+        let query
+        if (val.sort === 'top')
+          query = {
+            sort: val.sort,
+            time: val.time
+          }
+        else query = { sort: val.sort }
+        const filter = this.$route.query.filter
+        if (filter) query.filter = filter
+        this.$router.push({
+          path: `/topic/${this.topicName}`,
+          query
+        })
+      },
+      deep: true
+    }
+  },
+  apollo: {
+    topicFeed: {
+      query: topicFeedGql,
+      variables() {
+        return {
+          sort: this.sort.sort.toUpperCase(),
+          time: this.sort.time.toUpperCase(),
+          topicName: this.topicName
+        }
+      }
     }
   },
   methods: {
@@ -85,11 +158,48 @@ export default {
         refetchQueries: [{ query: followedTopicsGql }],
         update: () => (this.topic.isFollowing = false)
       })
+    },
+    showMore() {
+      if (!this.hasMore) return
+      this.page++
+      this.$apollo.queries.topicFeed.fetchMore({
+        query: topicFeedGql,
+        variables: {
+          page: this.page,
+          sort: this.sort.sort.toUpperCase(),
+          time: this.sort.time.toUpperCase(),
+          topicName: this.topicName
+        },
+        updateQuery: (previousResult, { fetchMoreResult }) => {
+          const newPosts = fetchMoreResult.topicFeed
+          if (newPosts.length === 0) this.hasMore = false
+          return {
+            topicFeed: [...previousResult.topicFeed, ...newPosts]
+          }
+        }
+      })
     }
   },
   head() {
     return {
-      title: this.topic ? this.topic.capitalizedName : ''
+      title: this.topic ? this.topic.capitalizedName : '',
+      meta: [
+        {
+          hid: 'og:title',
+          property: 'og:title',
+          content: `Topic: ${this.topicName}`
+        },
+        {
+          hid: 'og:site_name',
+          property: 'og:site_name',
+          content: 'Comet'
+        },
+        {
+          hid: 'og:description',
+          property: 'og:description',
+          content: `View all posts in the ${this.topicName} topic`
+        }
+      ]
     }
   }
 }

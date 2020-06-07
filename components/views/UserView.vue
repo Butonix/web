@@ -27,11 +27,7 @@
         >
       </v-tabs>
 
-      <SortMenu
-        :hot-enabled="false"
-        :default-sort="{ sort: 'NEW', time: 'ALL' }"
-        class="mb-1"
-      />
+      <SortMenu v-model="sort" :hot-enabled="false" class="mb-1" />
 
       <v-tabs-items v-model="currentTab" style="background-color: transparent">
         <v-tab-item>
@@ -111,7 +107,11 @@ export default {
       currentTab: null,
       user: null,
       userPosts: [],
-      userComments: []
+      userComments: [],
+      sort: {
+        sort: 'NEW',
+        time: 'ALL'
+      }
     }
   },
   computed: {

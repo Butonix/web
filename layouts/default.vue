@@ -86,6 +86,7 @@ import NavDrawer from '../components/NavDrawer'
 import currentUserGql from '../gql/currentUser.graphql'
 
 export default {
+  name: 'Default',
   components: { NavDrawer },
   data() {
     return {
