@@ -1,24 +1,33 @@
 <template>
-  <v-list dense style="border-radius: 4px" class="sticky">
+  <v-list
+    dense
+    style="border-radius: 4px; overflow-y: auto"
+    max-height="650"
+    class="sidebar"
+  >
     <v-subheader class="ml-2"
       >TOPICS
-      <span class="ml-4"
+      <span v-if="!topicSearchText" class="ml-4"
         ><span
-          class="hoverable"
-          :class="{ 'font-weight-bold': selected === 'Following' }"
-          @click="selected = 'Following'"
-          >Following</span
-        >
-        /
-        <span
           class="hoverable"
           :class="{ 'font-weight-bold': selected === 'Popular' }"
           @click="selected = 'Popular'"
           >Popular</span
+        >
+        /
+        <span
+          class="hoverable"
+          :class="{ 'font-weight-bold': selected === 'Following' }"
+          @click="selected = 'Following'"
+          >Following</span
         ></span
-      ></v-subheader
-    >
+      >
+      <span v-else class="ml-4 font-weight-bold">
+        Searching
+      </span>
+    </v-subheader>
     <v-text-field
+      v-model="topicSearchText"
       dense
       solo-inverted
       flat
@@ -30,7 +39,29 @@
 
     <v-divider class="mb-1" />
 
-    <div v-if="selected === 'Following'">
+    <div v-if="topicSearchText">
+      <v-list-item v-if="searchTopics.length === 0">
+        <v-list-item-content>
+          <v-list-item-title
+            >No topics matching {{ topicSearchText }} found.
+            <v-icon small>{{ icons.frown }}</v-icon></v-list-item-title
+          >
+        </v-list-item-content>
+      </v-list-item>
+      <v-list-item
+        v-for="(topic, index) in searchTopics"
+        :key="index"
+        link
+        nuxt
+        :to="`/topic/${topic.name}`"
+      >
+        <v-list-item-content>
+          <v-list-item-title>{{ topic.capitalizedName }}</v-list-item-title>
+        </v-list-item-content>
+      </v-list-item>
+    </div>
+
+    <div v-else-if="selected === 'Following'" style="max-height: 400px">
       <v-list-item v-if="followedTopics.length === 0">
         <v-list-item-content>
           <v-list-item-title
@@ -48,6 +79,12 @@
       >
         <v-list-item-content>
           <v-list-item-title>{{ topic.capitalizedName }}</v-list-item-title>
+          <v-list-item-subtitle
+            >{{ topic.postCount }} post{{
+              topic.postCount === 1 ? '' : 's'
+            }}
+            today</v-list-item-subtitle
+          >
         </v-list-item-content>
       </v-list-item>
     </div>
@@ -62,6 +99,12 @@
       >
         <v-list-item-content>
           <v-list-item-title>{{ topic.capitalizedName }}</v-list-item-title>
+          <v-list-item-subtitle
+            >{{ topic.postCount }} post{{
+              topic.postCount === 1 ? '' : 's'
+            }}
+            today</v-list-item-subtitle
+          >
         </v-list-item-content>
       </v-list-item>
     </div>
@@ -72,6 +115,7 @@
 import { mdiEmoticonFrown, mdiMagnify } from '@mdi/js'
 import followedTopicsGql from '../gql/followedTopics.graphql'
 import popularTopicsGql from '../gql/popularTopics.graphql'
+import searchTopicsGql from '../gql/searchTopics.graphql'
 
 export default {
   name: 'TopicsSidebar',
@@ -79,10 +123,28 @@ export default {
     return {
       followedTopics: [],
       popularTopics: [],
-      selected: 'Following',
+      searchTopics: [],
       icons: {
         frown: mdiEmoticonFrown,
         magnify: mdiMagnify
+      }
+    }
+  },
+  computed: {
+    selected: {
+      get() {
+        return this.$store.state.topicSidebarSelected
+      },
+      set(val) {
+        this.$store.commit('setTopicSidebarSelected', val)
+      }
+    },
+    topicSearchText: {
+      get() {
+        return this.$store.state.topicSidebarSearchText
+      },
+      set(val) {
+        this.$store.commit('setTopicSidebarSearchText', val)
       }
     }
   },
@@ -92,15 +154,32 @@ export default {
     },
     popularTopics: {
       query: popularTopicsGql
+    },
+    searchTopics: {
+      query: searchTopicsGql,
+      variables() {
+        return {
+          search: this.topicSearchText
+        }
+      },
+      skip() {
+        return !this.topicSearchText
+      }
     }
   }
 }
 </script>
 
 <style scoped>
-.sticky {
+.sidebar {
   position: -webkit-sticky; /* Safari */
   position: sticky;
   top: 72px;
+  -ms-overflow-style: none;
+  overflow: -moz-scrollbars-none;
+}
+
+.sidebar::-webkit-scrollbar {
+  width: 0 !important;
 }
 </style>

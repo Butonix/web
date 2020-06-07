@@ -25,6 +25,14 @@
       </v-row>
 
       <Post
+        v-for="post in globalStickies"
+        :key="post.id"
+        :post="post"
+        sticky
+        class="mb-1"
+      />
+
+      <Post
         v-for="post in homeFeed.slice(0, homeFeed.length - 1)"
         :key="post.id"
         :post="post"
@@ -51,6 +59,7 @@
 
 <script>
 import homeFeedGql from '../../gql/homeFeed.graphql'
+import globalStickiesGql from '../../gql/globalStickies.graphql'
 import TopicsSidebar from '../TopicsSidebar'
 import SortMenu from '../SortMenu'
 import Post from '../Post'
@@ -61,6 +70,7 @@ export default {
   data() {
     return {
       homeFeed: [],
+      globalStickies: [],
       hasMore: true,
       sort: {
         sort:
@@ -122,7 +132,12 @@ export default {
           time: this.sort.time.toUpperCase(),
           filter: this.filter.toUpperCase()
         }
-      }
+      },
+      fetchPolicy: 'cache-and-network'
+    },
+    globalStickies: {
+      query: globalStickiesGql,
+      fetchPolicy: 'cache-and-network'
     }
   },
   methods: {

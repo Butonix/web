@@ -2,7 +2,9 @@ export const state = () => ({
   loginDialog: false,
   redirectLoginDialogToCompose: false,
   homeFeedPage: 0,
-  topicFeedPage: {}
+  topicFeedPage: {},
+  topicSidebarSelected: 'Popular',
+  topicSidebarSearchText: ''
 })
 
 export const mutations = {
@@ -17,5 +19,11 @@ export const mutations = {
   },
   setTopicFeedPage(state, obj) {
     state.topicFeedPage[obj.topicName] = obj.page
+  },
+  setTopicSidebarSelected(state, selected) {
+    state.topicSidebarSelected = selected
+  },
+  setTopicSidebarSearchText(state, searchText) {
+    state.topicSidebarSearchText = searchText
   }
 }

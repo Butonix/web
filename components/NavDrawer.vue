@@ -10,6 +10,18 @@
     @input="$emit('input', drawer)"
   >
     <v-list nav dense>
+      <v-list-item link nuxt to="/">
+        <v-list-item-icon>
+          <v-icon>{{ icons.home }}</v-icon>
+        </v-list-item-icon>
+
+        <v-list-item-content>
+          <v-list-item-title class="font-weight-regular"
+            >Home</v-list-item-title
+          >
+        </v-list-item-content>
+      </v-list-item>
+
       <LoginDialog v-if="!currentUser" />
 
       <v-list-item v-else link nuxt :to="`/user/${currentUser.username}`">
@@ -115,7 +127,8 @@ import {
   mdiBell,
   mdiBookmarkMultiple,
   mdiFilter,
-  mdiLogout
+  mdiLogout,
+  mdiHome
 } from '@mdi/js'
 import currentUserGql from '../gql/currentUser.graphql'
 import LoginDialog from '../components/LoginDialog'
@@ -144,7 +157,8 @@ export default {
         bell: mdiBell,
         bookmarkMultiple: mdiBookmarkMultiple,
         filter: mdiFilter,
-        logout: mdiLogout
+        logout: mdiLogout,
+        home: mdiHome
       }
     }
   },

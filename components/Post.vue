@@ -25,6 +25,8 @@
         class="px-2 pb-0"
       >
         <div class="mt-2">
+          <div v-if="sticky" class="overline text--secondary">Announcement</div>
+
           <nuxt-link
             :to="`/post/${post.id}/${urlName}`"
             class="mr-2 text--primary"
@@ -53,6 +55,10 @@
         </v-list-item-avatar>
       </v-list-item>
       <div v-else class="px-3 pt-2 pb-1">
+        <div v-if="sticky" class="overline text--secondary ml-8">
+          Announcement
+        </div>
+
         <v-row align="center" class="ma-0">
           <v-btn
             v-if="!isTitleOnlyTextPost && $device.isDesktop"
@@ -165,6 +171,10 @@ export default {
       required: true
     },
     expand: {
+      type: Boolean,
+      default: false
+    },
+    sticky: {
       type: Boolean,
       default: false
     }

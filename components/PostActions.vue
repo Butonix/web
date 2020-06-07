@@ -21,6 +21,7 @@
       <span v-else>
         {{ post.commentCount }}
         {{ newCommentsCount > 0 ? `(+${newCommentsCount})` : '' }}
+        &nbsp;
       </span>
 
       <v-icon x-small class="text--secondary">{{ icons.comment }}</v-icon>
@@ -51,9 +52,7 @@
         }}
       </span>
 
-      <span v-else>
-        {{ post.endorsementCount }}
-      </span>
+      <span v-else> {{ post.endorsementCount }}&nbsp; </span>
 
       <v-icon
         x-small

@@ -51,6 +51,7 @@
           append-icon=""
           :search-input.sync="topicSearchText"
           :loading="$apollo.queries.searchTopics.loading"
+          :rules="topicRules"
         >
           <template v-slot:selection="data">
             <v-chip
@@ -128,7 +129,27 @@ export default {
     prevRoute: null,
     previousTopic: null,
     topicSearchText: '',
-    searchTopics: []
+    searchTopics: [],
+    topicRules: [
+      (topicNames) => {
+        for (const topicName of topicNames) {
+          if (!topicName.match(/^[a-z0-9 ]+$/i))
+            return 'Topic names must be alphanumeric.'
+        }
+        return true
+      },
+      (topicNames) => {
+        for (const topicName of topicNames) {
+          if (!topicName.length > 50)
+            return 'Topic names must be 50 characters or less.'
+        }
+        return true
+      },
+      (topicNames) => {
+        if (topicNames.length > 10) return 'Cannot add more than 10 topics.'
+        return true
+      }
+    ]
   }),
   computed: {
     markedText() {

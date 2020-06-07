@@ -11,7 +11,7 @@
         </div>
       </div>
       <v-divider class="my-1" />
-      <SortMenu v-model="sort" />
+      <SortMenu v-model="sort" class="mb-1" />
 
       <Post
         v-for="post in topicFeed.slice(0, topicFeed.length - 1)"
@@ -131,7 +131,8 @@ export default {
           time: this.sort.time.toUpperCase(),
           topicName: this.topicName
         }
-      }
+      },
+      fetchPolicy: 'cache-and-network'
     }
   },
   methods: {
