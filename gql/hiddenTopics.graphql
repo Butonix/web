@@ -1,0 +1,7 @@
+query hiddenTopics {
+  hiddenTopics {
+    name
+    capitalizedName
+    isHidden
+  }
+}

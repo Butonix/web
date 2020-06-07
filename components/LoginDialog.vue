@@ -9,7 +9,11 @@
     "
   >
     <template v-slot:activator="{ on }">
-      <v-list-item link v-on="on">
+      <v-list-item
+        link
+        v-on="on"
+        @click="$store.commit('setRedirectLoginDialogToCompose', false)"
+      >
         <v-list-item-icon>
           <v-icon>{{ icons.accountCircle }}</v-icon>
         </v-list-item-icon>

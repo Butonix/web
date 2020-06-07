@@ -5,6 +5,7 @@ import HomeView from './components/views/HomeView'
 import UserView from './components/views/UserView'
 import TopicView from './components/views/TopicView'
 import ComposeView from './components/views/ComposeView'
+import FiltersView from './components/views/FiltersView'
 
 Vue.use(Router)
 
@@ -91,6 +92,11 @@ export function createRouter() {
         path: '/new',
         component: ComposeView,
         name: 'Compose'
+      },
+      {
+        path: '/filters',
+        component: FiltersView,
+        name: 'Filters'
       }
     ]
   })

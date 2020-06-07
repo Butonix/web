@@ -41,7 +41,7 @@
         </v-list-item-icon>
 
         <v-list-item-title class="pr-3 font-weight-regular"
-          >Hide Posts and Comments by
+          >Block
           <span class="font-italic"
             >@{{ userData.username }}</span
           ></v-list-item-title
@@ -52,7 +52,7 @@
       </v-list-item>
 
       <v-subheader v-show="user.isBlocking"
-        >Posts and Comments by&nbsp;<span class="font-italic">
+        >Posts and Comments from&nbsp;<span class="font-italic">
           @{{ userData.username }}
         </span>
         &nbsp;will be hidden upon refresh</v-subheader

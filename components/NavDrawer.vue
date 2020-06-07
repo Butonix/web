@@ -62,7 +62,7 @@
         </v-list-item-content>
       </v-list-item>
 
-      <v-list-item link>
+      <v-list-item link nuxt to="/filters">
         <v-list-item-icon>
           <v-icon>{{ icons.filter }}</v-icon>
         </v-list-item-icon>
