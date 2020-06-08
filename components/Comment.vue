@@ -21,7 +21,7 @@
         class="caption font-weight-medium text--secondary"
         >{{ comment.post.title }}</nuxt-link
       >
-      <div class="body-2 comment" v-html="textContents" />
+      <TextContent :content="textContents" class="body-2 comment" />
       <div class="text--secondary">
         <span v-if="isOp" class="overline font-weight-medium text--primary"
           >[OP]&nbsp;</span
@@ -125,10 +125,11 @@ import { escapeHtml } from '../util/escapeHtml'
 import currentUserGql from '../gql/currentUser.graphql'
 import Username from './Username'
 import TextEditor from './TextEditor'
+import TextContent from './TextContent'
 
 export default {
   name: 'Comment',
-  components: { Username, TextEditor },
+  components: { TextContent, Username, TextEditor },
   props: {
     comment: {
       type: Object,
@@ -176,7 +177,14 @@ export default {
   computed: {
     textContents() {
       return this.comment.textContent
-        ? xss(marked(escapeHtml(this.comment.textContent)))
+        ? xss(
+            marked(
+              escapeHtml(this.comment.textContent).replace(
+                /(@\S+)/gi,
+                `<a href="/user/$1">$1</a>`
+              )
+            )
+          )
         : undefined
     },
     timeSince() {

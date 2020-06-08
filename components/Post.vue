@@ -74,23 +74,44 @@
             <v-icon>{{ expanded ? icons.up : icons.down }}</v-icon>
           </v-btn>
 
-          <a
-            v-if="$route.name.startsWith('Post') && post.type === 'LINK'"
-            :href="post.link"
-            rel="noopener"
-            target="_blank"
-            class="text--primary"
-          >
-            {{ post.title }}
-          </a>
+          <div>
+            <a
+              v-if="$route.name.startsWith('Post') && post.type === 'LINK'"
+              :href="post.link"
+              rel="noopener"
+              target="_blank"
+              class="text--primary"
+            >
+              {{ post.title }}
+            </a>
 
-          <nuxt-link
-            v-else
-            :to="`/post/${post.id}/${urlName}`"
-            class="text--primary"
-          >
-            {{ post.title }}
-          </nuxt-link>
+            <nuxt-link
+              v-else
+              :to="`/post/${post.id}/${urlName}`"
+              class="text--primary"
+            >
+              {{ post.title }}
+            </nuxt-link>
+
+            <span
+              v-if="post.type === 'TEXT'"
+              style="font-size: 10px"
+              class="text--secondary"
+            >
+              (text post)
+            </span>
+
+            <a
+              v-else
+              :href="post.link"
+              target="_blank"
+              rel="noopener"
+              style="font-size: 10px"
+              class="text--secondary hoverable"
+            >
+              ({{ post.domain }})
+            </a>
+          </div>
 
           <span class="ml-2">
             <TopicChip

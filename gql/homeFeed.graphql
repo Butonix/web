@@ -1,5 +1,5 @@
-query homeFeed($page: Int, $sort: Sort, $time: Time, $filter: Filter) {
-  homeFeed(page: $page, sort: $sort, time: $time, filter: $filter) {
+query homeFeed($page: Int, $sort: Sort, $time: Time, $filter: Filter, $type: Type) {
+  homeFeed(page: $page, sort: $sort, time: $time, filter: $filter, type: $type) {
     commentCount
     createdAt
     endorsementCount

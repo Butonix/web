@@ -8,7 +8,7 @@
           class="mr-1"
           :class="filter === 'all' ? '' : 'text--secondary'"
           :outlined="filter === 'all'"
-          @click="filterAll"
+          @click="filter = 'all'"
           >All</v-btn
         >
         <v-btn
@@ -18,11 +18,11 @@
           class="mr-1"
           :class="filter === 'following' ? '' : 'text--secondary'"
           :outlined="filter === 'following'"
-          @click="filterFollowing"
+          @click="filter = 'following'"
           >Following Only</v-btn
         >
-        <v-divider vertical class="mr-1" />
-        <SortMenu v-model="sort" />
+        <SortMenu v-model="sort" class="mr-1" />
+        <TypeMenu v-model="type" />
       </v-row>
 
       <div v-if="filter === 'all'">
@@ -67,10 +67,11 @@ import TopicsSidebar from '../TopicsSidebar'
 import SortMenu from '../SortMenu'
 import Post from '../Post'
 import currentUserGql from '../../gql/currentUser.graphql'
+import TypeMenu from '../TypeMenu'
 
 export default {
   name: 'HomeView',
-  components: { Post, SortMenu, TopicsSidebar },
+  components: { TypeMenu, Post, SortMenu, TopicsSidebar },
   data() {
     return {
       homeFeed: [],
@@ -79,22 +80,27 @@ export default {
       currentUser: null,
       sort: {
         sort:
-          this.$route.query.sort &&
-          ['new', 'top', 'hot'].includes(this.$route.query.sort)
-            ? this.$route.query.sort
+          this.$route.query.s &&
+          ['new', 'top', 'hot'].includes(this.$route.query.s)
+            ? this.$route.query.s
             : 'hot',
         time:
-          this.$route.query.time &&
+          this.$route.query.t &&
           ['hour', 'day', 'week', 'month', 'year', 'all'].includes(
-            this.$route.query.time
+            this.$route.query.t
           )
-            ? this.$route.query.time
+            ? this.$route.query.t
             : 'all'
       },
       filter:
-        this.$route.query.filter &&
-        ['all', 'following'].includes(this.$route.query.filter)
-          ? this.$route.query.filter
+        this.$route.query.f &&
+        ['all', 'following'].includes(this.$route.query.f)
+          ? this.$route.query.f
+          : 'all',
+      type:
+        this.$route.query.type &&
+        ['all', 'text', 'link'].includes(this.$route.query.type)
+          ? this.$route.query.type
           : 'all'
     }
   },
@@ -109,23 +115,25 @@ export default {
     }
   },
   watch: {
-    filter() {
+    async type(type) {
+      await this.$router.push({
+        path: '/',
+        query: { ...this.$route.query, type }
+      })
+      this.$store.commit('setHomeQuery', this.$route.query)
+    },
+    async filter(filter) {
+      await this.$router.push({
+        path: '/',
+        query: { ...this.$route.query, f: filter }
+      })
       this.$store.commit('setHomeQuery', this.$route.query)
     },
     sort: {
-      async handler(val) {
-        let query
-        if (val.sort === 'top')
-          query = {
-            sort: val.sort,
-            time: val.time
-          }
-        else query = { sort: val.sort }
-        const filter = this.$route.query.filter
-        if (filter) query.filter = filter
+      async handler(sort) {
         await this.$router.push({
           path: '/',
-          query
+          query: { ...this.$route.query, s: sort.sort, t: sort.time }
         })
         this.$store.commit('setHomeQuery', this.$route.query)
       },
@@ -142,7 +150,8 @@ export default {
         return {
           sort: this.sort.sort.toUpperCase(),
           time: this.sort.time.toUpperCase(),
-          filter: this.currentUser ? this.filter.toUpperCase() : 'ALL'
+          filter: this.currentUser ? this.filter.toUpperCase() : 'ALL',
+          type: this.type.toUpperCase()
         }
       },
       fetchPolicy: 'cache-and-network'
@@ -153,19 +162,6 @@ export default {
     }
   },
   methods: {
-    async filterFollowing() {
-      this.filter = 'following'
-      const query = { ...this.$route.query, filter: this.filter }
-      await this.$router.push({ path: '/', query })
-      this.$store.commit('setHomeQuery', this.$route.query)
-    },
-    async filterAll() {
-      this.filter = 'all'
-      const query = Object.assign({}, this.$route.query)
-      delete query.filter
-      await this.$router.push({ path: '/', query })
-      this.$store.commit('setHomeQuery', this.$route.query)
-    },
     showMore() {
       if (!this.hasMore) return
       this.page++
@@ -175,7 +171,8 @@ export default {
           page: this.page,
           sort: this.sort.sort.toUpperCase(),
           time: this.sort.time.toUpperCase(),
-          filter: this.filter.toUpperCase()
+          filter: this.filter.toUpperCase(),
+          type: this.type.toUpperCase()
         },
         updateQuery: (previousResult, { fetchMoreResult }) => {
           const newPosts = fetchMoreResult.homeFeed

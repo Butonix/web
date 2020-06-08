@@ -11,7 +11,10 @@
         </div>
       </div>
       <v-divider class="my-1" />
-      <SortMenu v-model="sort" class="mb-1" />
+      <v-row class="mb-1 mx-0">
+        <SortMenu v-model="sort" class="mr-1" />
+        <TypeMenu v-model="type" />
+      </v-row>
 
       <Post
         v-for="post in topicFeed.slice(0, topicFeed.length - 1)"
@@ -47,10 +50,11 @@ import unfollowTopicGql from '../../gql/unfollowTopic.graphql'
 import topicGql from '../../gql/topic.graphql'
 import topicFeedGql from '../../gql/topicFeed.graphql'
 import Post from '../Post'
+import TypeMenu from '../TypeMenu'
 
 export default {
   name: 'TopicView',
-  components: { Post, TopicsSidebar, SortMenu },
+  components: { TypeMenu, Post, TopicsSidebar, SortMenu },
   async asyncData(context) {
     const client = context.app.apolloProvider.defaultClient
     const topicData = await client.query({
@@ -70,6 +74,11 @@ export default {
       topic: null,
       topicFeed: [],
       hasMore: true,
+      type:
+        this.$route.query.type &&
+        ['all', 'text', 'link'].includes(this.$route.query.type)
+          ? this.$route.query.type
+          : 'all',
       sort: {
         sort:
           this.$route.query.sort &&
@@ -103,21 +112,20 @@ export default {
     }
   },
   watch: {
+    async type(type) {
+      await this.$router.push({
+        path: `/topic/${this.topicName}`,
+        query: { ...this.$route.query, type }
+      })
+      this.$store.commit('setHomeQuery', this.$route.query)
+    },
     sort: {
-      handler(val) {
-        let query
-        if (val.sort === 'top')
-          query = {
-            sort: val.sort,
-            time: val.time
-          }
-        else query = { sort: val.sort }
-        const filter = this.$route.query.filter
-        if (filter) query.filter = filter
-        this.$router.push({
+      async handler(sort) {
+        await this.$router.push({
           path: `/topic/${this.topicName}`,
-          query
+          query: { ...this.$route.query, s: sort.sort, t: sort.time }
         })
+        this.$store.commit('setHomeQuery', this.$route.query)
       },
       deep: true
     }
@@ -129,6 +137,7 @@ export default {
         return {
           sort: this.sort.sort.toUpperCase(),
           time: this.sort.time.toUpperCase(),
+          type: this.type.toUpperCase(),
           topicName: this.topicName
         }
       },
@@ -169,6 +178,7 @@ export default {
           page: this.page,
           sort: this.sort.sort.toUpperCase(),
           time: this.sort.time.toUpperCase(),
+          type: this.type.toUpperCase(),
           topicName: this.topicName
         },
         updateQuery: (previousResult, { fetchMoreResult }) => {

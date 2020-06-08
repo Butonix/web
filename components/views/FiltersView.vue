@@ -1,6 +1,6 @@
 <template>
   <v-row v-if="currentUser">
-    <v-col cols="6">
+    <v-col :cols="$device.isDesktop ? 6 : 12">
       <v-tabs v-model="tab" background-color="transparent">
         <v-tab>Blocked Users</v-tab>
         <v-tab>Hidden Topics</v-tab>
