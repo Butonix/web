@@ -42,7 +42,6 @@
 <script>
 import searchPostsGql from '../../gql/searchPosts.graphql'
 import Post from '../Post'
-import homeFeedGql from '../../gql/homeFeed.graphql'
 import SortMenu from '../SortMenu'
 
 export default {
@@ -103,32 +102,33 @@ export default {
       variables() {
         return {
           search: this.$route.query.q,
-          page: this.page,
           sort: this.sort.sort.toUpperCase(),
           time: this.sort.time.toUpperCase()
         }
       },
       skip() {
         return !this.$route.query.q
-      }
+      },
+      fetchPolicy: 'cache-and-network'
     }
   },
   methods: {
     showMore() {
       if (!this.hasMore) return
       this.page++
-      this.$apollo.queries.homeFeed.fetchMore({
-        query: homeFeedGql,
+      this.$apollo.queries.searchPosts.fetchMore({
+        query: searchPostsGql,
         variables: {
+          search: this.$route.query.q,
           page: this.page,
           sort: this.sort.sort.toUpperCase(),
           time: this.sort.time.toUpperCase()
         },
         updateQuery: (previousResult, { fetchMoreResult }) => {
-          const newPosts = fetchMoreResult.homeFeed
+          const newPosts = fetchMoreResult.searchPosts
           if (newPosts.length === 0) this.hasMore = false
           return {
-            homeFeed: [...previousResult.homeFeed, ...newPosts]
+            searchPosts: [...previousResult.searchPosts, ...newPosts]
           }
         }
       })
