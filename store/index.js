@@ -4,7 +4,9 @@ export const state = () => ({
   homeFeedPage: 0,
   topicFeedPage: {},
   topicSidebarSelected: 'Popular',
-  topicSidebarSearchText: ''
+  topicSidebarSearchText: '',
+  snackbarEnabled: false,
+  snackbarMessage: ''
 })
 
 export const mutations = {
@@ -25,5 +27,30 @@ export const mutations = {
   },
   setTopicSidebarSearchText(state, searchText) {
     state.topicSidebarSearchText = searchText
+  },
+  setSnackbarEnabled(state, enabled) {
+    state.snackbarEnabled = enabled
+  },
+  setSnackbarMessage(state, message) {
+    state.snackbarMessage = message
+  }
+}
+
+export const actions = {
+  showLoginDialog({ commit }) {
+    commit('setLoginDialog', true)
+    commit('setRedirectLoginDialogToCompose', false)
+  },
+  showLoginDialogCompose({ commit }) {
+    commit('setLoginDialog', true)
+    commit('setRedirectLoginDialogToCompose', true)
+  },
+  displaySnackbar({ commit }, message) {
+    commit('setSnackbarMessage', message)
+    commit('setSnackbarEnabled', true)
+    setTimeout(() => {
+      commit('setSnackbarEnabled', false)
+      commit('setSnackbarMessage', '')
+    }, 5000)
   }
 }

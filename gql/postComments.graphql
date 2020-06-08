@@ -1,12 +1,12 @@
-query postComments($postId: ID!) {
-  postComments(postId: $postId) {
+query postComments($postId: ID!, $sort: Sort) {
+  postComments(postId: $postId, sort: $sort) {
     createdAt
-    textContent
-    parentCommentId
     endorsementCount
     id
-    postId
     isEndorsed
+    textContent
+    postId
+    parentCommentId
     author {
       id
       username

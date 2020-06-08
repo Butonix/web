@@ -1,0 +1,26 @@
+query hiddenPosts {
+    hiddenPosts {
+      author {
+        id
+        username
+        isCurrentUser
+      }
+      commentCount
+      createdAt
+      domain
+      endorsementCount
+      id
+      isEndorsed
+      link
+      textContent
+      thumbnailUrl
+      title
+      type
+      isHidden
+      topics {
+        capitalizedName
+        name
+      }
+      newCommentCount
+    }
+  }

@@ -34,56 +34,43 @@
       class="ml-1 font-weight-medium caption"
       :style="post.isEndorsed ? 'color: var(--v-primary-base)' : ''"
       style="text-transform: none; font-size: 12px"
-      :disabled="post.author.isCurrentUser"
+      :disabled="currentUser && post.author.id === currentUser.id"
       @click="toggleEndorsement"
     >
       <span
         v-if="$device.isDesktop"
         class="mr-1"
         :class="
-          post.isEndorsed || post.author.isCurrentUser ? '' : 'text--secondary'
+          post.isEndorsed
+            ? ''
+            : currentUser && post.author.id === currentUser.id
+            ? ''
+            : 'text--secondary'
         "
       >
-        {{ post.endorsementCount }}
-        {{
-          $device.isDesktop
-            ? `Endorsement${post.endorsementCount === 1 ? '' : 's'}`
-            : ''
+        {{ post.endorsementCount }} Endorsement{{
+          post.endorsementCount === 1 ? '' : 's'
         }}
       </span>
 
-      <span v-else> {{ post.endorsementCount }}&nbsp; </span>
+      <span
+        v-else
+        :class="
+          post.isEndorsed
+            ? ''
+            : currentUser && post.author.id === currentUser.id
+            ? ''
+            : 'text--secondary'
+        "
+      >
+        {{ post.endorsementCount }}&nbsp;
+      </span>
 
       <v-icon
         x-small
         :style="post.isEndorsed ? 'color: var(--v-primary-base)' : ''"
         :class="post.isEndorsed ? '' : 'text--secondary'"
         >{{ icons.star }}</v-icon
-      >
-    </v-btn>
-
-    <!--Bookmark-->
-    <v-btn
-      text
-      x-small
-      class="ml-1 font-weight-medium caption"
-      :style="post.isBookmarked ? 'color: var(--v-primary-base)' : ''"
-      style="text-transform: none; font-size: 12px"
-      @click.prevent="post.isBookmarked = !post.isBookmarked"
-    >
-      <span
-        v-if="$device.isDesktop"
-        class="mr-1"
-        :class="post.isBookmarked ? '' : 'text--secondary'"
-      >
-        {{ post.isBookmarked ? 'Bookmarked' : 'Bookmark' }}
-      </span>
-
-      <v-icon
-        x-small
-        :style="post.isBookmarked ? 'color: var(--v-primary-base)' : ''"
-        :class="post.isBookmarked ? '' : 'text--secondary'"
-        >{{ icons.bookmark }}</v-icon
       >
     </v-btn>
 
@@ -102,69 +89,23 @@
       <v-icon x-small class="text--secondary">{{ icons.share }}</v-icon>
     </v-btn>
 
-    <!--Hide/Report-->
-    <span v-if="$device.isDesktop">
-      <span v-if="!post.author.isCurrentUser">
-        <span
-          v-if="!hiding"
-          class="caption ml-3 hoverable font-weight-regular"
-          @click="hiding = true"
-          >Hide</span
-        >
-        <span
-          v-else-if="hidden"
-          class="caption ml-3 font-weight-medium font-italic"
-          >Hidden</span
-        >
-        <span v-else class="caption ml-3 font-weight-medium">
-          <span class="font-weight-medium">
-            Hide this post? You won't see it again.
-          </span>
-          <span class="hoverable font-weight-medium" @click="hidePost"
-            >Yes</span
-          >
-          /
-          <span class="hoverable font-weight-medium" @click="hiding = false"
-            >No</span
-          >
-        </span>
-      </span>
-      <span v-if="!post.author.isCurrentUser">
-        <span
-          v-if="!reporting"
-          class="caption ml-3 hoverable font-weight-regular"
-          @click="reporting = true"
-          >Report</span
-        >
-        <span
-          v-else-if="reported"
-          class="caption ml-3 font-weight-medium font-italic"
-          >Reported</span
-        >
-        <span v-else class="caption ml-3 font-weight-medium">
-          <span class="font-weight-medium">
-            Report this post to Comet admins?
-          </span>
-          <span class="hoverable font-weight-medium" @click="reportPost"
-            >Yes</span
-          >
-          /
-          <span class="hoverable font-weight-medium" @click="reporting = false"
-            >No</span
-          >
-        </span>
-      </span>
-    </span>
-
-    <!--Hide/Report mobile menu-->
-    <!--<v-btn
+    <!--Hide-->
+    <v-btn
+      v-if="!sticky"
       text
       x-small
       class="ml-1 font-weight-medium caption"
       style="text-transform: none; font-size: 12px"
+      @click="toggleHide"
     >
-      <v-icon x-small class="text&#45;&#45;secondary">{{ icons.dots }}</v-icon>
-    </v-btn>-->
+      <span v-if="$device.isDesktop" class="mr-1 text--secondary">
+        {{ hidden ? 'Unhide' : 'Hide' }}
+      </span>
+
+      <v-icon x-small class="text--secondary">{{
+        hidden ? icons.eye : icons.eyeOff
+      }}</v-icon>
+    </v-btn>
   </span>
 </template>
 
@@ -172,13 +113,17 @@
 import { formatDistanceToNowStrict } from 'date-fns'
 import {
   mdiShareVariant,
-  // mdiDotsVertical,
   mdiComment,
   mdiStar,
-  mdiBookmark
+  mdiBookmark,
+  mdiEyeOff,
+  mdiEye
 } from '@mdi/js'
 import togglePostEndorsementGql from '../gql/togglePostEndorsement.graphql'
 import postGql from '../gql/post.graphql'
+import currentUserGql from '../gql/currentUser.graphql'
+import hidePostGql from '../gql/hidePost.graphql'
+import unhidePostGql from '../gql/unhidePost.graphql'
 import Username from './Username'
 
 export default {
@@ -191,21 +136,25 @@ export default {
     },
     postView: {
       type: Object,
-      required: false
+      required: false,
+      default: null
+    },
+    sticky: {
+      type: Boolean,
+      default: false
     }
   },
   data() {
     return {
-      hiding: false,
-      hidden: false,
-      reporting: false,
-      reported: false,
+      hidden: this.post.isHidden,
+      currentUser: null,
       icons: {
         share: mdiShareVariant,
-        // dots: mdiDotsVertical,
         comment: mdiComment,
         star: mdiStar,
-        bookmark: mdiBookmark
+        bookmark: mdiBookmark,
+        eyeOff: mdiEyeOff,
+        eye: mdiEye
       }
     }
   },
@@ -224,8 +173,18 @@ export default {
       return this.post.commentCount - this.postView.lastCommentCount
     }
   },
+  apollo: {
+    currentUser: {
+      query: currentUserGql
+    }
+  },
   methods: {
     async toggleEndorsement() {
+      if (!this.currentUser) {
+        this.$store.dispatch('showLoginDialog')
+        return
+      }
+
       if (this.post.isEndorsed) {
         this.post.isEndorsed = false
         this.post.endorsementCount--
@@ -254,19 +213,40 @@ export default {
         }
       })
     },
+    toggleHide() {
+      if (this.hidden) this.unhidePost()
+      else this.hidePost()
+    },
     hidePost() {
       this.hidden = true
+      this.$apollo.mutate({
+        mutation: hidePostGql,
+        variables: {
+          postId: this.post.id
+        }
+      })
     },
-    reportPost() {
-      this.reported = true
+    unhidePost() {
+      this.hidden = false
+      this.$apollo.mutate({
+        mutation: unhidePostGql,
+        variables: {
+          postId: this.post.id
+        }
+      })
     },
     sharePost() {
+      if (!process.client) return
+      const url = `https://getcomet.net/post/${this.post.id}/${this.urlName}`
       if (navigator.share) {
         navigator.share({
           title: `"${this.post.title}" on Comet`,
           text: `"${this.post.title}" on Comet`,
-          url: `https://getcomet.net/post/${this.post.id}/${this.urlName}`
+          url
         })
+      } else {
+        this.$copyText(url)
+        this.$store.dispatch('displaySnackbar', 'Copied post link')
       }
     }
   }

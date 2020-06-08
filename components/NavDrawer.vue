@@ -36,7 +36,7 @@
         </v-list-item-content>
       </v-list-item>
 
-      <v-list-item link>
+      <v-list-item v-if="currentUser" link>
         <v-list-item-icon>
           <v-badge overlap :content="1">
             <v-icon>{{ icons.bell }}</v-icon>
@@ -50,19 +50,31 @@
         </v-list-item-content>
       </v-list-item>
 
-      <v-list-item link>
+      <v-list-item v-else link @click="$store.dispatch('showLoginDialog')">
         <v-list-item-icon>
-          <v-icon>{{ icons.bookmarkMultiple }}</v-icon>
+          <v-icon>{{ icons.bell }}</v-icon>
         </v-list-item-icon>
 
         <v-list-item-content>
           <v-list-item-title class="font-weight-regular"
-            >Bookmarked</v-list-item-title
+            >Interactions</v-list-item-title
           >
         </v-list-item-content>
       </v-list-item>
 
-      <v-list-item link nuxt to="/filters">
+      <v-list-item v-if="currentUser" link nuxt to="/filters">
+        <v-list-item-icon>
+          <v-icon>{{ icons.filter }}</v-icon>
+        </v-list-item-icon>
+
+        <v-list-item-content>
+          <v-list-item-title class="font-weight-regular"
+            >Filters</v-list-item-title
+          >
+        </v-list-item-content>
+      </v-list-item>
+
+      <v-list-item v-else link @click="$store.dispatch('showLoginDialog')">
         <v-list-item-icon>
           <v-icon>{{ icons.filter }}</v-icon>
         </v-list-item-icon>
@@ -181,7 +193,10 @@ export default {
     async logout() {
       this.currentUser = null
       await this.$apolloHelpers.onLogout()
-      await this.$apollo.query({ query: currentUserGql })
+      await this.$apollo.provider.defaultClient.cache.writeQuery({
+        query: currentUserGql,
+        data: { currentUser: null }
+      })
     },
     toggleDark() {
       this.$vuetify.theme.dark = !this.$vuetify.theme.dark

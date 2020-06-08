@@ -25,11 +25,7 @@
         </v-row>
       </div>
 
-      <div
-        v-if="
-          threadedComments.length === 0 && (!post || post.commentCount !== 0)
-        "
-      >
+      <div v-if="threadedComments.length === 0 && post.commentCount !== 0">
         <v-row class="ma-0">
           <div class="title mr-6">Loading Comments...</div>
           <v-progress-circular size="24" indeterminate />
@@ -37,13 +33,18 @@
       </div>
 
       <div v-else>
-        <div class="mb-1">
-          <span class="title"
+        <v-row class="mb-1 mx-0 mt-0" align="center">
+          <span class="title mr-2"
             >{{ postComments.length }} Comment{{
               postComments.length === 1 ? '' : 's'
             }}</span
           >
-        </div>
+          <SortMenu
+            v-model="sort"
+            :hot-enabled="false"
+            :times-enabled="false"
+          />
+        </v-row>
 
         <Comment
           v-for="comment in threadedComments"
@@ -51,6 +52,7 @@
           :comment="comment"
           :post="post"
           :post-view="postView"
+          :sort="sort"
           class="mb-1"
         />
 
@@ -68,10 +70,11 @@ import postCommentsGql from '../../gql/postComments.graphql'
 import recordPostViewGql from '../../gql/recordPostView.graphql'
 import TextEditor from '../TextEditor'
 import Comment from '../Comment'
+import SortMenu from '../SortMenu'
 
 export default {
   name: 'PostView',
-  components: { Comment, TextEditor, Post },
+  components: { SortMenu, Comment, TextEditor, Post },
   async asyncData(context) {
     const client = context.app.apolloProvider.defaultClient
     const postData = await client.query({
@@ -80,26 +83,35 @@ export default {
       fetchPolicy: 'network-only'
     })
 
-    const postCommentsData = await client.query({
-      query: postCommentsGql,
-      variables: { postId: context.params.postId },
-      fetchPolicy: 'network-only'
-    })
     return {
-      post: postData.data.post,
-      postComments: postCommentsData.data.postComments
+      post: postData.data.post
     }
   },
-  data: () => ({
-    postComments: [],
-    postView: null,
-    post: null,
-    commentWriteText: '',
-    loading: false
-  }),
+  data() {
+    return {
+      postComments: [],
+      postView: null,
+      post: null,
+      commentWriteText: '',
+      loading: false,
+      sort: {
+        sort:
+          this.$route.query.sort &&
+          ['new', 'top'].includes(this.$route.query.sort)
+            ? this.$route.query.sort
+            : 'top'
+      }
+    }
+  },
   computed: {
     postId() {
       return this.$route.params.postId
+    },
+    urlName() {
+      return this.post.title
+        .toLowerCase()
+        .replace(/ /g, '_')
+        .replace(/\W/g, '')
     },
     threadedComments() {
       if (this.postComments.length === 0) return []
@@ -121,9 +133,30 @@ export default {
       if (this.post) {
         this.post.commentCount = this.postComments.length
       }
+    },
+    sort: {
+      handler(val) {
+        const query = {
+          sort: val.sort
+        }
+        this.$router.push({
+          path: `/post/${this.postId}/${this.urlName}`,
+          query
+        })
+      },
+      deep: true
     }
   },
   async mounted() {
+    if (
+      this.$route.query.sort &&
+      !['new', 'top'].includes(this.$route.query.sort)
+    ) {
+      this.$router.push({
+        path: `/post/${this.postId}/${this.urlName}`
+      })
+    }
+
     const { data } = await this.$apollo.mutate({
       mutation: recordPostViewGql,
       variables: {
@@ -131,6 +164,18 @@ export default {
       }
     })
     this.postView = data.recordPostView
+  },
+  apollo: {
+    postComments: {
+      query: postCommentsGql,
+      variables() {
+        return {
+          postId: this.postId,
+          sort: this.sort.sort.toUpperCase()
+        }
+      },
+      fetchPolicy: 'cache-and-network'
+    }
   },
   methods: {
     async submitComment() {
@@ -144,12 +189,18 @@ export default {
         update: (store, { data: { submitComment } }) => {
           const data = store.readQuery({
             query: postCommentsGql,
-            variables: { postId: this.postId }
+            variables: {
+              postId: this.postId,
+              sort: this.sort.sort.toUpperCase()
+            }
           })
           data.postComments.unshift(submitComment)
           store.writeQuery({
             query: postCommentsGql,
-            variables: { postId: this.postId },
+            variables: {
+              postId: this.postId,
+              sort: this.sort.sort.toUpperCase()
+            },
             data
           })
         }

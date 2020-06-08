@@ -5,7 +5,9 @@
         <v-btn text small v-on="on">
           <span class="mr-1"
             >Sort: {{ sort.sort }}
-            {{ sort.sort === 'top' ? `(${selectedTopTime})` : '' }}</span
+            {{
+              sort.sort === 'top' && timesEnabled ? `(${selectedTopTime})` : ''
+            }}</span
           >
           <v-icon v-if="sort.sort === 'hot'" small>{{ icons.fire }}</v-icon>
           <v-icon v-if="sort.sort === 'top'" small>{{ icons.list }}</v-icon>
@@ -58,6 +60,10 @@ export default {
       type: Boolean,
       default: true
     },
+    timesEnabled: {
+      type: Boolean,
+      default: true
+    },
     value: {
       type: Object,
       required: true
@@ -94,6 +100,10 @@ export default {
   },
   methods: {
     switchToTimeSelect() {
+      if (!this.timesEnabled) {
+        this.sort.sort = 'top'
+        return
+      }
       this.isSelectingTime = true
     },
     topTime(time) {

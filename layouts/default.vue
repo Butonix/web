@@ -35,7 +35,13 @@
           <v-icon>{{ icons.plus }}</v-icon>
         </v-btn>
 
-        <v-btn v-else text dark class="mr-6" @click="showLoginDialog">
+        <v-btn
+          v-else
+          text
+          dark
+          class="mr-6"
+          @click="$store.dispatch('showLoginDialogCompose')"
+        >
           <span class="mr-2">New Post</span>
           <v-icon>{{ icons.plus }}</v-icon>
         </v-btn>
@@ -63,7 +69,12 @@
           <v-icon>{{ icons.plus }}</v-icon>
         </v-btn>
 
-        <v-btn v-else icon dark @click="showLoginDialog">
+        <v-btn
+          v-else
+          icon
+          dark
+          @click="$store.dispatch('showLoginDialogCompose')"
+        >
           <v-icon>{{ icons.plus }}</v-icon>
         </v-btn>
       </div>
@@ -73,6 +84,7 @@
       <v-container fluid>
         <nuxt />
       </v-container>
+      <Snackbar />
     </v-content>
     <!--<v-footer :fixed="fixed" app>
       <span>&copy; {{ new Date().getFullYear() }}</span>
@@ -84,10 +96,11 @@
 import { mdiPlus, mdiMagnify, mdiMenu } from '@mdi/js'
 import NavDrawer from '../components/NavDrawer'
 import currentUserGql from '../gql/currentUser.graphql'
+import Snackbar from '../components/Snackbar'
 
 export default {
   name: 'Default',
-  components: { NavDrawer },
+  components: { Snackbar, NavDrawer },
   data() {
     return {
       currentUser: null,
@@ -105,14 +118,9 @@ export default {
     }
   },
   mounted() {
-    this.$vuetify.theme.dark = localStorage.getItem('dark') === 'true'
+    const dark = localStorage.getItem('dark')
+    this.$vuetify.theme.dark = dark ? dark === 'true' : true
     this.drawer = this.$device.isDesktop
-  },
-  methods: {
-    showLoginDialog() {
-      this.$store.commit('setLoginDialog', true)
-      this.$store.commit('setRedirectLoginDialogToCompose', true)
-    }
   }
 }
 </script>

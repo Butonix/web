@@ -1,12 +1,17 @@
 <template>
   <v-row v-if="currentUser">
-    <v-col cols="3">
+    <v-col cols="6">
       <v-tabs v-model="tab" background-color="transparent">
         <v-tab>Blocked Users</v-tab>
         <v-tab>Hidden Topics</v-tab>
+        <v-tab>Hidden Posts</v-tab>
       </v-tabs>
 
-      <v-tabs-items v-model="tab" class="mt-2">
+      <v-tabs-items
+        v-model="tab"
+        class="mt-2"
+        style="background-color: transparent"
+      >
         <v-tab-item>
           <v-list v-if="blockedUsers.length > 0">
             <v-list-item v-for="user in blockedUsers" :key="user.id">
@@ -52,6 +57,24 @@
             </v-list-item>
           </v-list>
         </v-tab-item>
+
+        <v-tab-item>
+          <div v-if="hiddenPosts.length > 0">
+            <Post
+              v-for="post in hiddenPosts"
+              :key="post.id"
+              class="mb-1"
+              :post="post"
+            />
+          </div>
+          <v-list v-else>
+            <v-list-item>
+              <v-list-item-content>
+                <v-list-item-title>Not hiding any posts.</v-list-item-title>
+              </v-list-item-content>
+            </v-list-item>
+          </v-list>
+        </v-tab-item>
       </v-tabs-items>
     </v-col>
   </v-row>
@@ -70,9 +93,12 @@ import hiddenTopicsGql from '../../gql/hiddenTopics.graphql'
 import hideTopicGql from '../../gql/hideTopic.graphql'
 import unhideTopicGql from '../../gql/unhideTopic.graphql'
 import currentUserGql from '../../gql/currentUser.graphql'
+import hiddenPostsGql from '../../gql/hiddenPosts.graphql'
+import Post from '../Post'
 
 export default {
   name: 'FiltersView',
+  components: { Post },
   async asyncData(context) {
     const client = context.app.apolloProvider.defaultClient
     const hiddenTopicsData = await client.query({
@@ -85,9 +111,15 @@ export default {
       fetchPolicy: 'network-only'
     })
 
+    const hiddenPostsData = await client.query({
+      query: hiddenPostsGql,
+      fetchPolicy: 'network-only'
+    })
+
     return {
       hiddenTopics: hiddenTopicsData.data.hiddenTopics,
-      blockedUsers: blockedUsersData.data.blockedUsers
+      blockedUsers: blockedUsersData.data.blockedUsers,
+      hiddenPosts: hiddenPostsData.data.hiddenPosts
     }
   },
   data() {
@@ -95,6 +127,7 @@ export default {
       tab: null,
       hiddenTopics: [],
       blockedUsers: [],
+      hiddenPosts: [],
       currentUser: null
     }
   },

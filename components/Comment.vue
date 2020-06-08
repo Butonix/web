@@ -28,21 +28,42 @@
         >
         <Username :user-data="comment.author" />
         <span class="caption font-weight-medium ml-3">{{ timeSince }} ago</span>
-        <span
-          v-if="!comment.author.isCurrentUser"
-          class="caption ml-3 hoverable font-weight-medium"
-          :style="{ 'font-style': comment.isEndorsed ? 'italic' : 'normal' }"
+
+        <v-btn
+          text
+          x-small
+          class="ml-1 font-weight-medium caption"
+          :style="comment.isEndorsed ? 'color: var(--v-primary-base)' : ''"
+          style="text-transform: none; font-size: 12px"
+          :disabled="currentUser && comment.author.id === currentUser.id"
           @click="toggleEndorsement"
         >
-          {{ comment.isEndorsed ? 'Endorsed!' : 'Endorse' }} ({{
-            comment.endorsementCount
-          }})
-        </span>
-        <span v-else class="caption ml-3 font-weight-medium"
-          >{{ comment.endorsementCount }} Endorsement{{
-            comment.endorsementCount === 1 ? '' : 's'
-          }}</span
-        >
+          <span
+            v-if="$device.isDesktop"
+            class="mr-1"
+            :class="
+              comment.isEndorsed
+                ? ''
+                : currentUser && comment.author.id === currentUser.id
+                ? ''
+                : 'text--secondary'
+            "
+          >
+            {{ comment.endorsementCount }} Endorsement{{
+              comment.endorsementCount === 1 ? '' : 's'
+            }}
+          </span>
+
+          <span v-else> {{ comment.endorsementCount }}&nbsp; </span>
+
+          <v-icon
+            x-small
+            :style="comment.isEndorsed ? 'color: var(--v-primary-base)' : ''"
+            :class="comment.isEndorsed ? '' : 'text--secondary'"
+            >{{ icons.star }}</v-icon
+          >
+        </v-btn>
+
         <span
           v-if="!profile"
           class="caption font-weight-medium hoverable ml-3"
@@ -84,6 +105,7 @@
       :post-view="postView"
       :comment="c"
       :level="level + 1"
+      :sort="sort"
     />
   </div>
 </template>
@@ -92,11 +114,13 @@
 import marked from 'marked'
 import { formatDistanceToNowStrict } from 'date-fns'
 import xss from 'xss'
+import { mdiBookmark, mdiComment, mdiShareVariant, mdiStar } from '@mdi/js'
 import toggleCommentEndorsementGql from '../gql/toggleCommentEndorsement.graphql'
 import submitCommentGql from '../gql/submitComment.graphql'
 import postCommentsGql from '../gql/postComments.graphql'
 import recordPostViewGql from '../gql/recordPostView.graphql'
 import { escapeHtml } from '../util/escapeHtml'
+import currentUserGql from '../gql/currentUser.graphql'
 import Username from './Username'
 import TextEditor from './TextEditor'
 
@@ -118,7 +142,13 @@ export default {
     },
     post: {
       type: Object,
-      required: false
+      required: false,
+      default: null
+    },
+    sort: {
+      type: Object,
+      required: false,
+      default: null
     },
     postView: {
       type: Object,
@@ -129,7 +159,15 @@ export default {
     return {
       replying: false,
       replyText: '',
-      loading: false
+      loading: false,
+      currentUser: null,
+      icons: {
+        share: mdiShareVariant,
+        // dots: mdiDotsVertical,
+        comment: mdiComment,
+        star: mdiStar,
+        bookmark: mdiBookmark
+      }
     }
   },
   computed: {
@@ -142,6 +180,7 @@ export default {
       return formatDistanceToNowStrict(new Date(this.comment.createdAt))
     },
     urlName() {
+      if (!this.comment.post) return ''
       return this.comment.post.title
         .toLowerCase()
         .replace(/ /g, '_')
@@ -159,6 +198,11 @@ export default {
       return this.comment.author.username === this.post.author.username
     }
   },
+  apollo: {
+    currentUser: {
+      query: currentUserGql
+    }
+  },
   methods: {
     async submitReply() {
       this.loading = true
@@ -172,12 +216,18 @@ export default {
         update: (store, { data: { submitComment } }) => {
           const data = store.readQuery({
             query: postCommentsGql,
-            variables: { postId: this.comment.postId }
+            variables: {
+              postId: this.comment.postId,
+              sort: this.sort.sort.toUpperCase()
+            }
           })
           data.postComments.unshift(submitComment)
           store.writeQuery({
             query: postCommentsGql,
-            variables: { postId: this.comment.postId },
+            variables: {
+              postId: this.comment.postId,
+              sort: this.sort.sort.toUpperCase()
+            },
             data
           })
           this.replyText = ''
@@ -193,6 +243,11 @@ export default {
       this.loading = false
     },
     async toggleEndorsement() {
+      if (!this.currentUser) {
+        this.$store.dispatch('showLoginDialog')
+        return
+      }
+
       if (this.comment.isEndorsed) {
         this.comment.isEndorsed = false
         this.comment.endorsementCount--
@@ -208,7 +263,10 @@ export default {
         update: (store, { data: { toggleCommentEndorsement } }) => {
           const data = store.readQuery({
             query: postCommentsGql,
-            variables: { postId: this.comment.postId }
+            variables: {
+              postId: this.comment.postId,
+              sort: this.sort.sort.toUpperCase()
+            }
           })
           const index = data.postComments.findIndex(
             (comment) => comment.id === this.comment.id
@@ -216,7 +274,10 @@ export default {
           data.postComments[index].isEndorsed = toggleCommentEndorsement
           store.writeQuery({
             query: postCommentsGql,
-            variables: { postId: this.comment.postId },
+            variables: {
+              postId: this.comment.postId,
+              sort: this.sort.sort.toUpperCase()
+            },
             data
           })
         }

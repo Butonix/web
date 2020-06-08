@@ -12,6 +12,7 @@
           >All</v-btn
         >
         <v-btn
+          v-if="currentUser"
           text
           small
           class="mr-1"
@@ -24,13 +25,15 @@
         <SortMenu v-model="sort" />
       </v-row>
 
-      <Post
-        v-for="post in globalStickies"
-        :key="post.id"
-        :post="post"
-        sticky
-        class="mb-1"
-      />
+      <div v-if="filter === 'all'">
+        <Post
+          v-for="post in globalStickies"
+          :key="post.id"
+          :post="post"
+          sticky
+          class="mb-1"
+        />
+      </div>
 
       <Post
         v-for="post in homeFeed.slice(0, homeFeed.length - 1)"
@@ -63,6 +66,7 @@ import globalStickiesGql from '../../gql/globalStickies.graphql'
 import TopicsSidebar from '../TopicsSidebar'
 import SortMenu from '../SortMenu'
 import Post from '../Post'
+import currentUserGql from '../../gql/currentUser.graphql'
 
 export default {
   name: 'HomeView',
@@ -72,6 +76,7 @@ export default {
       homeFeed: [],
       globalStickies: [],
       hasMore: true,
+      currentUser: null,
       sort: {
         sort:
           this.$route.query.sort &&
@@ -124,13 +129,16 @@ export default {
     }
   },
   apollo: {
+    currentUser: {
+      query: currentUserGql
+    },
     homeFeed: {
       query: homeFeedGql,
       variables() {
         return {
           sort: this.sort.sort.toUpperCase(),
           time: this.sort.time.toUpperCase(),
-          filter: this.filter.toUpperCase()
+          filter: this.currentUser ? this.filter.toUpperCase() : 'ALL'
         }
       },
       fetchPolicy: 'cache-and-network'
@@ -148,7 +156,8 @@ export default {
     },
     filterAll() {
       this.filter = 'all'
-      const query = { ...this.$route.query, filter: this.filter }
+      const query = Object.assign({}, this.$route.query)
+      delete query.filter
       this.$router.push({ path: '/', query })
     },
     showMore() {

@@ -98,13 +98,13 @@
         </v-row>
 
         <div>
-          <PostActions :post="post" />
+          <PostActions :post="post" :sticky="sticky" />
         </div>
       </div>
     </v-row>
 
     <v-card-actions v-if="!$device.isDesktop" class="pt-0 pb-1">
-      <PostActions :post="post" />
+      <PostActions :post="post" :sticky="sticky" />
     </v-card-actions>
 
     <!--Expand-->
