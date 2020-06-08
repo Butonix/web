@@ -59,7 +59,11 @@
           Announcement
         </div>
 
-        <v-row align="center" class="ma-0">
+        <v-row
+          align="center"
+          class="mx-0"
+          :class="isTitleOnlyTextPost ? 'mb-1' : ''"
+        >
           <v-btn
             v-if="!isTitleOnlyTextPost && $device.isDesktop"
             small
@@ -182,7 +186,6 @@ export default {
   data() {
     return {
       expanded: this.expand,
-      postView: null,
       icons: {
         down: mdiChevronDown,
         up: mdiChevronUp

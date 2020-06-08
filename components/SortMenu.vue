@@ -12,6 +12,9 @@
           <v-icon v-if="sort.sort === 'hot'" small>{{ icons.fire }}</v-icon>
           <v-icon v-if="sort.sort === 'top'" small>{{ icons.list }}</v-icon>
           <v-icon v-if="sort.sort === 'new'" small>{{ icons.clock }}</v-icon>
+          <v-icon v-if="sort.sort === 'relevance'" small>{{
+            icons.check
+          }}</v-icon>
         </v-btn>
       </template>
 
@@ -23,6 +26,13 @@
           <v-list-item-title>Hot</v-list-item-title>
         </v-list-item>
 
+        <v-list-item v-if="relevanceEnabled" @click="chooseRelevance">
+          <v-list-item-icon class="mr-2">
+            <v-icon>{{ icons.check }}</v-icon>
+          </v-list-item-icon>
+          <v-list-item-title>Relevance</v-list-item-title>
+        </v-list-item>
+
         <v-list-item @click="switchToTimeSelect">
           <v-list-item-icon class="mr-2">
             <v-icon>{{ icons.list }}</v-icon>
@@ -30,7 +40,7 @@
           <v-list-item-title>Top</v-list-item-title>
         </v-list-item>
 
-        <v-list-item @click="chooseNew">
+        <v-list-item v-if="newEnabled" @click="chooseNew">
           <v-list-item-icon class="mr-2">
             <v-icon>{{ icons.clock }}</v-icon>
           </v-list-item-icon>
@@ -51,7 +61,12 @@
 </template>
 
 <script>
-import { mdiFire, mdiFormatListBulletedSquare, mdiClockOutline } from '@mdi/js'
+import {
+  mdiFire,
+  mdiFormatListBulletedSquare,
+  mdiClockOutline,
+  mdiCheck
+} from '@mdi/js'
 
 export default {
   name: 'SortMenu',
@@ -63,6 +78,14 @@ export default {
     timesEnabled: {
       type: Boolean,
       default: true
+    },
+    newEnabled: {
+      type: Boolean,
+      default: true
+    },
+    relevanceEnabled: {
+      type: Boolean,
+      default: false
     },
     value: {
       type: Object,
@@ -78,7 +101,8 @@ export default {
       icons: {
         fire: mdiFire,
         list: mdiFormatListBulletedSquare,
-        clock: mdiClockOutline
+        clock: mdiClockOutline,
+        check: mdiCheck
       }
     }
   },
@@ -135,6 +159,10 @@ export default {
     },
     chooseHot() {
       this.sort.sort = 'hot'
+      this.sort.time = 'all'
+    },
+    chooseRelevance() {
+      this.sort.sort = 'relevance'
       this.sort.time = 'all'
     }
   }

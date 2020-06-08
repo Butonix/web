@@ -73,12 +73,6 @@
                 @keydown.enter="login"
               />
             </v-form>
-            <v-row class="mx-0">
-              <v-spacer />
-              <div class="body-2">
-                <a>Forgot password?</a>
-              </div>
-            </v-row>
           </v-card-text>
           <v-card-actions>
             <v-btn
@@ -132,6 +126,13 @@
                 @click:append="showPassword = !showPassword"
                 @keydown.enter="signUp"
               />
+              <v-row class="mx-0">
+                <v-spacer />
+                <div class="body-2">
+                  Note: Password reset is not yet available, so please use a
+                  memorable password.
+                </div>
+              </v-row>
             </v-form>
           </v-card-text>
           <v-card-actions>
@@ -147,9 +148,13 @@
           </v-card-actions>
           <div class="caption text-center pb-1">
             By clicking Sign Up, you agree to our
-            <a>Terms of Service</a>
+            <nuxt-link to="/terms-of-service" target="_blank"
+              >Terms of Service</nuxt-link
+            >
             and
-            <a>Privacy Policy</a>.
+            <nuxt-link to="/privacy-policy" target="_blank"
+              >Privacy Policy</nuxt-link
+            >.
           </div>
         </v-tab-item>
       </v-tabs-items>
@@ -185,12 +190,13 @@ export default {
         signUpUsernameRules: [
           (v) => !!v || 'Username is required',
           (v) => v.length >= 3 || 'Username must be at least 3 characters',
-          (v) => v.length <= 16 || 'Maximum username length is 16 characters'
+          (v) => v.length <= 20 || 'Maximum username length is 20 characters',
+          (v) => v.match(/^[a-z0-9]+$/i) || 'Username must be alphanumeric'
         ],
         loginUsernameRules: [(v) => !!v || 'Username is required'],
         signUpPasswordRules: [
           (v) => !!v || 'Password is required',
-          (v) => v.length >= 3 || 'Password must be at least 3 characters'
+          (v) => v.length >= 6 || 'Password must be at least 6 characters'
         ],
         loginPasswordRules: [(v) => !!v || 'Password is required'],
         signUpConfirmPasswordRules: [
@@ -220,11 +226,9 @@ export default {
           this.err = ''
           this.tab = 0
           if (this.$refs.loginForm) {
-            this.$refs.loginForm.reset()
             this.$refs.loginForm.resetValidation()
           }
           if (this.$refs.signUpForm) {
-            this.$refs.signUpForm.reset()
             this.$refs.signUpForm.resetValidation()
           }
         }

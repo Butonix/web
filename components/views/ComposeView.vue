@@ -35,6 +35,7 @@
         </v-tabs-items>
 
         <v-combobox
+          ref="combobox"
           v-model="selectedTopics"
           :disabled="!currentUser"
           :items="searchTopicsNames"
@@ -81,10 +82,25 @@
             depressed
             color="primary"
             :loading="loading"
-            :disabled="!title || selectedTopics.length <= 0 || !currentUser"
+            :disabled="
+              !title ||
+                selectedTopics.length <= 0 ||
+                !currentUser ||
+                !$refs.combobox.valid
+            "
             @click="submitPost"
             >Submit</v-btn
           >
+        </v-row>
+        <v-row class="caption mx-0 mt-1">
+          <v-spacer />
+          <div class="text--secondary">
+            Please review our
+            <nuxt-link to="/content-policy" target="_blank"
+              >Content Policy</nuxt-link
+            >
+            before posting
+          </div>
         </v-row>
       </v-col>
       <v-col v-if="$device.isDesktop">
@@ -252,6 +268,7 @@ export default {
     },
     searchTopics: {
       query: searchTopicsGql,
+      debounce: 300,
       variables() {
         return {
           search: this.topicSearchText

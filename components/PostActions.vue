@@ -134,11 +134,6 @@ export default {
       type: Object,
       required: true
     },
-    postView: {
-      type: Object,
-      required: false,
-      default: null
-    },
     sticky: {
       type: Boolean,
       default: false
@@ -169,8 +164,8 @@ export default {
       return formatDistanceToNowStrict(new Date(this.post.createdAt))
     },
     newCommentsCount() {
-      if (!this.postView) return 0
-      return this.post.commentCount - this.postView.lastCommentCount
+      if (!this.post.postView) return 0
+      return this.post.commentCount - this.post.postView.lastCommentCount
     }
   },
   apollo: {

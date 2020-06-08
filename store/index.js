@@ -6,7 +6,8 @@ export const state = () => ({
   topicSidebarSelected: 'Popular',
   topicSidebarSearchText: '',
   snackbarEnabled: false,
-  snackbarMessage: ''
+  snackbarMessage: '',
+  searchPage: 0
 })
 
 export const mutations = {
@@ -33,6 +34,9 @@ export const mutations = {
   },
   setSnackbarMessage(state, message) {
     state.snackbarMessage = message
+  },
+  setSearchPage(state, page) {
+    state.searchPage = page
   }
 }
 

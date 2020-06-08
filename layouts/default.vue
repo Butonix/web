@@ -48,14 +48,20 @@
 
         <div style="width: 20%">
           <v-text-field
+            v-model="searchText"
             solo-inverted
             dark
             flat
             dense
             hide-details
-            label="Search"
+            label="Search Posts"
             :append-icon="icons.magnify"
-            @click:append="$router.push('/search')"
+            @click:append="
+              $router.push({ path: '/search', query: { q: searchText } })
+            "
+            @keydown.enter="
+              $router.push({ path: '/search', query: { q: searchText } })
+            "
           />
         </div>
       </template>
@@ -105,6 +111,7 @@ export default {
     return {
       currentUser: null,
       drawer: false,
+      searchText: '',
       icons: {
         plus: mdiPlus,
         magnify: mdiMagnify,
@@ -118,8 +125,24 @@ export default {
     }
   },
   mounted() {
+    const mq = window.matchMedia('(prefers-color-scheme: dark)')
+
     const dark = localStorage.getItem('dark')
-    this.$vuetify.theme.dark = dark ? dark === 'true' : true
+
+    if (dark) {
+      this.$vuetify.theme.dark = dark === 'true'
+    } else if (mq.matches) {
+      this.$vuetify.theme.dark = true
+    } else {
+      this.$vuetify.theme.dark = false
+    }
+
+    mq.addEventListener('change', (e) => {
+      if (!localStorage.getItem('dark')) {
+        this.$vuetify.theme.dark = e.matches
+      }
+    })
+
     this.drawer = this.$device.isDesktop
   }
 }

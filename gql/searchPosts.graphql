@@ -1,0 +1,31 @@
+query searchPosts($search: String!, $page: Int, $pageSize: Int, $sort: Sort, $time: Time) {
+  searchPosts(search: $search, page: $page, pageSize: $pageSize, sort: $sort, time: $time) {
+    commentCount
+    createdAt
+    endorsementCount
+    id
+    isEndorsed
+    link
+    textContent
+    title
+    type
+    thumbnailUrl
+    domain
+    author {
+      id
+      username
+      isCurrentUser
+    }
+    topics {
+      capitalizedName
+      name
+    }
+    newCommentCount
+    postView {
+      lastCommentCount
+      postId
+      userId
+      createdAt
+    }
+  }
+}

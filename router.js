@@ -6,6 +6,10 @@ import UserView from './components/views/UserView'
 import TopicView from './components/views/TopicView'
 import ComposeView from './components/views/ComposeView'
 import FiltersView from './components/views/FiltersView'
+import ContentPolicyView from './components/views/ContentPolicyView'
+import PrivacyPolicy from './components/views/PrivacyPolicy'
+import TermsOfService from './components/views/TermsOfService'
+import SearchView from './components/views/SearchView'
 
 Vue.use(Router)
 
@@ -97,6 +101,26 @@ export function createRouter() {
         path: '/filters',
         component: FiltersView,
         name: 'Filters'
+      },
+      {
+        path: '/search',
+        component: SearchView,
+        name: 'Search'
+      },
+      {
+        path: '/content-policy',
+        component: ContentPolicyView,
+        name: 'Content Policy'
+      },
+      {
+        path: '/privacy-policy',
+        component: PrivacyPolicy,
+        name: 'Privacy Policy'
+      },
+      {
+        path: '/terms-of-service',
+        component: TermsOfService,
+        name: 'Terms of Service'
       }
     ]
   })
