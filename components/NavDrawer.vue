@@ -10,7 +10,7 @@
     @input="$emit('input', drawer)"
   >
     <v-list nav dense>
-      <v-list-item link nuxt to="/">
+      <v-list-item link nuxt :to="{ path: '/', query: $store.state.homeQuery }">
         <v-list-item-icon>
           <v-icon>{{ icons.home }}</v-icon>
         </v-list-item-icon>
@@ -24,7 +24,7 @@
 
       <LoginDialog v-if="!currentUser" />
 
-      <v-list-item v-else link nuxt :to="`/user/${currentUser.username}`">
+      <v-list-item v-else link nuxt :to="`/user/@${currentUser.username}`">
         <v-list-item-icon>
           <v-icon>{{ icons.account }}</v-icon>
         </v-list-item-icon>

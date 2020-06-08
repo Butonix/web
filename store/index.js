@@ -7,10 +7,14 @@ export const state = () => ({
   topicSidebarSearchText: '',
   snackbarEnabled: false,
   snackbarMessage: '',
-  searchPage: 0
+  searchPage: 0,
+  homeQuery: {}
 })
 
 export const mutations = {
+  setHomeQuery(state, query) {
+    state.homeQuery = query
+  },
   setLoginDialog(state, open) {
     state.loginDialog = open
   },

@@ -78,23 +78,32 @@ export default {
   components: { SortMenu, Comment, Post },
   async asyncData(context) {
     const client = context.app.apolloProvider.defaultClient
+
+    if (!context.params.username.startsWith('@'))
+      context.error({ statusCode: 404, message: 'User not found' })
+
+    const username = context.params.username.substring(1)
+
     const userData = await client.query({
       query: userGql,
-      variables: { username: context.params.username },
+      variables: { username },
       fetchPolicy: 'network-only'
     })
 
     const userPostsData = await client.query({
       query: userPostsGql,
-      variables: { username: context.params.username },
+      variables: { username },
       fetchPolicy: 'network-only'
     })
 
     const userCommentsData = await client.query({
       query: userCommentsGql,
-      variables: { username: context.params.username },
+      variables: { username },
       fetchPolicy: 'network-only'
     })
+
+    if (!userData.data.user)
+      context.error({ statusCode: 404, message: 'User not found' })
 
     return {
       user: userData.data.user,
@@ -116,7 +125,7 @@ export default {
   },
   computed: {
     username() {
-      return this.$route.params.username
+      return this.$route.params.username.substring(1)
     },
     joinDate() {
       if (!this.user) return undefined

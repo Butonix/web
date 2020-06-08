@@ -109,8 +109,11 @@ export default {
     }
   },
   watch: {
+    filter() {
+      this.$store.commit('setHomeQuery', this.$route.query)
+    },
     sort: {
-      handler(val) {
+      async handler(val) {
         let query
         if (val.sort === 'top')
           query = {
@@ -120,10 +123,11 @@ export default {
         else query = { sort: val.sort }
         const filter = this.$route.query.filter
         if (filter) query.filter = filter
-        this.$router.push({
+        await this.$router.push({
           path: '/',
           query
         })
+        this.$store.commit('setHomeQuery', this.$route.query)
       },
       deep: true
     }
@@ -149,16 +153,18 @@ export default {
     }
   },
   methods: {
-    filterFollowing() {
+    async filterFollowing() {
       this.filter = 'following'
       const query = { ...this.$route.query, filter: this.filter }
-      this.$router.push({ path: '/', query })
+      await this.$router.push({ path: '/', query })
+      this.$store.commit('setHomeQuery', this.$route.query)
     },
-    filterAll() {
+    async filterAll() {
       this.filter = 'all'
       const query = Object.assign({}, this.$route.query)
       delete query.filter
-      this.$router.push({ path: '/', query })
+      await this.$router.push({ path: '/', query })
+      this.$store.commit('setHomeQuery', this.$route.query)
     },
     showMore() {
       if (!this.hasMore) return

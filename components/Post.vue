@@ -149,7 +149,7 @@
 
       <div v-else-if="post.type === 'TEXT'">
         <v-divider class="mb-3 mt-0" />
-        <div class="mx-4 body-2 pb-1" v-html="textContents" />
+        <TextContent :content="textContents" class="mx-4 body-2 pb-1" />
       </div>
     </div>
   </v-card>
@@ -165,10 +165,11 @@ import { mdiChevronUp, mdiChevronDown } from '@mdi/js'
 import { escapeHtml } from '../util/escapeHtml'
 import TopicChip from './TopicChip'
 import PostActions from './PostActions'
+import TextContent from './TextContent'
 
 export default {
   name: 'Post',
-  components: { PostActions, TopicChip, Tweet },
+  components: { TextContent, PostActions, TopicChip, Tweet },
   props: {
     post: {
       type: Object,
@@ -202,7 +203,14 @@ export default {
     },
     textContents() {
       return this.post.textContent
-        ? xss(marked(escapeHtml(this.post.textContent)))
+        ? xss(
+            marked(
+              escapeHtml(this.post.textContent).replace(
+                /(@\S+)/gi,
+                `<a href="/user/$1">$1</a>`
+              )
+            )
+          )
         : undefined
     },
     timeSince() {

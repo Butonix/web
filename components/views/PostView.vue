@@ -85,6 +85,9 @@ export default {
       fetchPolicy: 'network-only'
     })
 
+    if (!postData.data.post)
+      context.error({ statusCode: 404, message: 'Post not found' })
+
     return {
       post: postData.data.post
     }

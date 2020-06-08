@@ -8,7 +8,11 @@
       </v-app-bar-nav-icon>
 
       <v-toolbar-title class="headline font-weight-medium">
-        <nuxt-link to="/" class="hoverable white--text">Comet</nuxt-link>
+        <nuxt-link
+          :to="{ path: '/', query: $store.state.homeQuery }"
+          class="hoverable white--text"
+          >Comet</nuxt-link
+        >
         <span v-if="$device.isDesktop" class="caption ml-1 white--text">
           <a
             href="https://github.com/"
