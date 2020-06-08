@@ -78,7 +78,10 @@
 
         <v-row class="ma-0" align="end">
           <v-spacer />
-          <div v-if="submitPostErr" class="error--text mr-2">
+          <div
+            v-if="submitPostErr"
+            class="error--text body-2 font-weight-medium mr-2"
+          >
             {{ submitPostErr }}
           </div>
           <v-btn

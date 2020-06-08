@@ -15,18 +15,20 @@
         >
         <span v-if="$device.isDesktop" class="caption ml-1 white--text">
           <a
-            href="https://github.com/"
+            href="https://github.com/comet-app"
             target="_blank"
+            rel="noopener"
             class="hoverable white--text"
           >
-            development v0.0.1</a
+            alpha v0.0.1</a
           >
           &middot;
           <a
-            href="https://github.com/"
+            href="https://discord.gg/NPCMGSm"
             target="_blank"
+            rel="noopener"
             class="hoverable white--text"
-            >send feedback</a
+            >join the Discord</a
           >
         </span>
       </v-toolbar-title>

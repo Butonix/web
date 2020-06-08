@@ -170,20 +170,20 @@
 
       <div v-else-if="post.type === 'TEXT'">
         <v-divider class="mb-3 mt-0" />
-        <TextContent :content="textContents" class="mx-4 body-2 pb-1" />
+        <TextContent
+          :text-content="post.textContent"
+          class="mx-4 body-2 pb-1"
+        />
       </div>
     </div>
   </v-card>
 </template>
 
 <script>
-import marked from 'marked'
 import { formatDistanceToNowStrict } from 'date-fns'
 import isImageUrl from 'is-image-url'
 import { Tweet } from 'vue-tweet-embed'
-import xss from 'xss'
 import { mdiChevronUp, mdiChevronDown } from '@mdi/js'
-import { escapeHtml } from '../util/escapeHtml'
 import TopicChip from './TopicChip'
 import PostActions from './PostActions'
 import TextContent from './TextContent'
@@ -221,18 +221,6 @@ export default {
         .toLowerCase()
         .replace(/ /g, '_')
         .replace(/\W/g, '')
-    },
-    textContents() {
-      return this.post.textContent
-        ? xss(
-            marked(
-              escapeHtml(this.post.textContent).replace(
-                /(@\S+)/gi,
-                `<a href="/user/$1">$1</a>`
-              )
-            )
-          )
-        : undefined
     },
     timeSince() {
       return formatDistanceToNowStrict(new Date(this.post.createdAt))

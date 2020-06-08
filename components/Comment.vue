@@ -21,7 +21,7 @@
         class="caption font-weight-medium text--secondary"
         >{{ comment.post.title }}</nuxt-link
       >
-      <TextContent :content="textContents" class="body-2 comment" />
+      <TextContent :text-content="comment.textContent" class="body-2 comment" />
       <div class="text--secondary">
         <span v-if="isOp" class="overline font-weight-medium text--primary"
           >[OP]&nbsp;</span
@@ -113,15 +113,12 @@
 </template>
 
 <script>
-import marked from 'marked'
 import { formatDistanceToNowStrict } from 'date-fns'
-import xss from 'xss'
 import { mdiBookmark, mdiComment, mdiShareVariant, mdiStar } from '@mdi/js'
 import toggleCommentEndorsementGql from '../gql/toggleCommentEndorsement.graphql'
 import submitCommentGql from '../gql/submitComment.graphql'
 import postCommentsGql from '../gql/postComments.graphql'
 import recordPostViewGql from '../gql/recordPostView.graphql'
-import { escapeHtml } from '../util/escapeHtml'
 import currentUserGql from '../gql/currentUser.graphql'
 import Username from './Username'
 import TextEditor from './TextEditor'
@@ -175,18 +172,6 @@ export default {
     }
   },
   computed: {
-    textContents() {
-      return this.comment.textContent
-        ? xss(
-            marked(
-              escapeHtml(this.comment.textContent).replace(
-                /(@\S+)/gi,
-                `<a href="/user/$1">$1</a>`
-              )
-            )
-          )
-        : undefined
-    },
     timeSince() {
       return formatDistanceToNowStrict(new Date(this.comment.createdAt))
     },

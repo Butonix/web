@@ -3,11 +3,29 @@
 </template>
 
 <script>
+import xss from 'xss'
+import marked from 'marked'
+import { escapeHtml } from '../util/escapeHtml'
+
 export default {
   props: {
-    content: {
+    textContent: {
       type: String,
       required: true
+    }
+  },
+  computed: {
+    content() {
+      return xss(
+        marked(
+          escapeHtml(this.textContent)
+            .replace(/(@\S+)/gi, `<a href="/user/$1">$1</a>`)
+            .replace(
+              /\[([a-zA-Z0-9 ]*)*\]([^(]|$)/gi,
+              `<a href="/topic/$1">[$1]</a>`
+            )
+        )
+      )
     }
   },
   watch: {
@@ -36,9 +54,11 @@ export default {
       if (!(target instanceof HTMLAnchorElement)) {
         return
       }
-      const href = target.getAttribute('href')
+      let href = target.getAttribute('href')
       // Get link target, if local link, navigate with router link
       if (href && href[0] === '/') {
+        href = href.toLowerCase()
+        if (href.includes(' ')) href = href.replace(/ /g, '_')
         event.preventDefault()
         this.$router.push(href)
       }

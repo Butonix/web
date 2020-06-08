@@ -65,6 +65,9 @@ export default {
       fetchPolicy: 'network-only'
     })
 
+    if (!topicData.data.topic)
+      context.error({ statusCode: 404, message: 'Topic not found' })
+
     return {
       topic: topicData.data.topic
     }
