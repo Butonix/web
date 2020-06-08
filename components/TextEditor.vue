@@ -77,6 +77,7 @@
       :hide-details="!showDetails"
       :rows="rows"
       :disabled="!currentUser"
+      :error-messages="err"
       @input="updateTextContent"
       @focus="showButtons = true"
     />
@@ -114,6 +115,11 @@ export default {
     notLoggedInLabel: {
       type: String,
       default: 'Must log in to comment'
+    },
+    err: {
+      type: String,
+      required: false,
+      default: ''
     }
   },
   data: () => ({

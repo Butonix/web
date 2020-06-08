@@ -76,8 +76,11 @@
           </template>
         </v-combobox>
 
-        <v-row class="ma-0">
+        <v-row class="ma-0" align="end">
           <v-spacer />
+          <div v-if="submitPostErr" class="error--text mr-2">
+            {{ submitPostErr }}
+          </div>
           <v-btn
             depressed
             color="primary"
@@ -146,6 +149,7 @@ export default {
     previousTopic: null,
     topicSearchText: '',
     searchTopics: [],
+    submitPostErr: '',
     topicRules: [
       (topicNames) => {
         for (const topicName of topicNames) {
@@ -219,19 +223,23 @@ export default {
   methods: {
     async submitPost() {
       this.loading = true
-      await this.$apollo.mutate({
-        mutation: submitPostGql,
-        variables: {
-          title: this.title,
-          type: this.tab === 0 ? 'TEXT' : 'LINK',
-          link: this.link ? this.link : undefined,
-          textContent: this.textContent ? this.textContent : undefined,
-          topics: this.selectedTopics
-        },
-        update: (store, { data: { submitPost } }) => {
-          this.$router.push(`/post/${submitPost.id}/${this.urlName}`)
-        }
-      })
+      try {
+        await this.$apollo.mutate({
+          mutation: submitPostGql,
+          variables: {
+            title: this.title,
+            type: this.tab === 0 ? 'TEXT' : 'LINK',
+            link: this.link ? this.link : undefined,
+            textContent: this.textContent ? this.textContent : undefined,
+            topics: this.selectedTopics
+          },
+          update: (store, { data: { submitPost } }) => {
+            this.$router.push(`/post/${submitPost.id}/${this.urlName}`)
+          }
+        })
+      } catch (e) {
+        this.submitPostErr = e.message.split('GraphQL error: ')[1]
+      }
       this.loading = false
     },
     remove(item) {

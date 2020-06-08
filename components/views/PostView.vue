@@ -9,6 +9,8 @@
           :label="'Write your comment'"
           class="mt-2"
           :rows="3"
+          :err="submitCommentErr"
+          :show-details="submitCommentErr.length > 0"
         />
         <v-row>
           <v-spacer />
@@ -94,6 +96,7 @@ export default {
       post: null,
       commentWriteText: '',
       loading: false,
+      submitCommentErr: '',
       sort: {
         sort:
           this.$route.query.sort &&
@@ -180,39 +183,44 @@ export default {
   methods: {
     async submitComment() {
       this.loading = true
-      await this.$apollo.mutate({
-        mutation: submitCommentGql,
-        variables: {
-          postId: this.postId,
-          textContent: this.commentWriteText
-        },
-        update: (store, { data: { submitComment } }) => {
-          const data = store.readQuery({
-            query: postCommentsGql,
-            variables: {
-              postId: this.postId,
-              sort: this.sort.sort.toUpperCase()
-            }
-          })
-          data.postComments.unshift(submitComment)
-          store.writeQuery({
-            query: postCommentsGql,
-            variables: {
-              postId: this.postId,
-              sort: this.sort.sort.toUpperCase()
-            },
-            data
-          })
-        }
-      })
-      await this.$apollo.mutate({
-        mutation: recordPostViewGql,
-        variables: {
-          postId: this.postId
-        }
-      })
+      try {
+        await this.$apollo.mutate({
+          mutation: submitCommentGql,
+          variables: {
+            postId: this.postId,
+            textContent: this.commentWriteText
+          },
+          update: (store, { data: { submitComment } }) => {
+            const data = store.readQuery({
+              query: postCommentsGql,
+              variables: {
+                postId: this.postId,
+                sort: this.sort.sort.toUpperCase()
+              }
+            })
+            data.postComments.unshift(submitComment)
+            store.writeQuery({
+              query: postCommentsGql,
+              variables: {
+                postId: this.postId,
+                sort: this.sort.sort.toUpperCase()
+              },
+              data
+            })
+          }
+        })
+        this.commentWriteText = ''
+
+        await this.$apollo.mutate({
+          mutation: recordPostViewGql,
+          variables: {
+            postId: this.postId
+          }
+        })
+      } catch (e) {
+        this.submitCommentErr = e.message.split('GraphQL error: ')[1]
+      }
       this.loading = false
-      this.commentWriteText = ''
     }
   },
   head() {

@@ -82,6 +82,8 @@
         :label="'Write your reply'"
         class="mt-2"
         :rows="3"
+        :err="submitCommentErr"
+        :show-details="submitCommentErr.length > 0"
       />
       <v-row>
         <v-spacer />
@@ -161,6 +163,7 @@ export default {
       replyText: '',
       loading: false,
       currentUser: null,
+      submitCommentErr: '',
       icons: {
         share: mdiShareVariant,
         // dots: mdiDotsVertical,
@@ -206,40 +209,44 @@ export default {
   methods: {
     async submitReply() {
       this.loading = true
-      await this.$apollo.mutate({
-        mutation: submitCommentGql,
-        variables: {
-          textContent: this.replyText,
-          postId: this.comment.postId,
-          parentCommentId: this.comment.id
-        },
-        update: (store, { data: { submitComment } }) => {
-          const data = store.readQuery({
-            query: postCommentsGql,
-            variables: {
-              postId: this.comment.postId,
-              sort: this.sort.sort.toUpperCase()
-            }
-          })
-          data.postComments.unshift(submitComment)
-          store.writeQuery({
-            query: postCommentsGql,
-            variables: {
-              postId: this.comment.postId,
-              sort: this.sort.sort.toUpperCase()
-            },
-            data
-          })
-          this.replyText = ''
-          this.replying = false
-        }
-      })
-      await this.$apollo.mutate({
-        mutation: recordPostViewGql,
-        variables: {
-          postId: this.comment.postId
-        }
-      })
+      try {
+        await this.$apollo.mutate({
+          mutation: submitCommentGql,
+          variables: {
+            textContent: this.replyText,
+            postId: this.comment.postId,
+            parentCommentId: this.comment.id
+          },
+          update: (store, { data: { submitComment } }) => {
+            const data = store.readQuery({
+              query: postCommentsGql,
+              variables: {
+                postId: this.comment.postId,
+                sort: this.sort.sort.toUpperCase()
+              }
+            })
+            data.postComments.unshift(submitComment)
+            store.writeQuery({
+              query: postCommentsGql,
+              variables: {
+                postId: this.comment.postId,
+                sort: this.sort.sort.toUpperCase()
+              },
+              data
+            })
+            this.replyText = ''
+            this.replying = false
+          }
+        })
+        await this.$apollo.mutate({
+          mutation: recordPostViewGql,
+          variables: {
+            postId: this.comment.postId
+          }
+        })
+      } catch (e) {
+        this.submitCommentErr = e.message.split('GraphQL error: ')[1]
+      }
       this.loading = false
     },
     async toggleEndorsement() {
