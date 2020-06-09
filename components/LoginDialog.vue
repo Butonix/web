@@ -8,24 +8,6 @@
       $device.isDesktop ? 'dialog-transition' : 'dialog-bottom-transition'
     "
   >
-    <template v-slot:activator="{ on }">
-      <v-list-item
-        link
-        v-on="on"
-        @click="$store.commit('setRedirectLoginDialogToCompose', false)"
-      >
-        <v-list-item-icon>
-          <v-icon>{{ icons.accountCircle }}</v-icon>
-        </v-list-item-icon>
-
-        <v-list-item-content>
-          <v-list-item-title class="font-weight-regular"
-            >Login/Sign Up</v-list-item-title
-          >
-        </v-list-item-content>
-      </v-list-item>
-    </template>
-
     <v-card :tile="!$device.isDesktop">
       <v-toolbar v-if="!$device.isDesktop" dark color="primary">
         <v-btn icon dark @click="dialog = false">
@@ -177,7 +159,7 @@ export default {
         eye: mdiEye,
         eyeOff: mdiEyeOff
       },
-      tab: null,
+      tab: 0,
       username: '',
       password: '',
       confirmPassword: '',
@@ -191,7 +173,9 @@ export default {
           (v) => !!v || 'Username is required',
           (v) => v.length >= 3 || 'Username must be at least 3 characters',
           (v) => v.length <= 20 || 'Maximum username length is 20 characters',
-          (v) => v.match(/^[a-z0-9]+$/i) || 'Username must be alphanumeric'
+          (v) =>
+            (v.match(/^[a-z0-9]+$/i) && v.match(/^[a-z0-9]+$/i).length > 0) ||
+            'Username must be alphanumeric'
         ],
         loginUsernameRules: [(v) => !!v || 'Username is required'],
         signUpPasswordRules: [
@@ -217,9 +201,28 @@ export default {
     }
   },
   watch: {
-    dialog() {
-      this.$nextTick(() => {
-        if (!this.dialog) {
+    $route: {
+      handler() {
+        if (!this.$route.query.login) {
+          this.dialog = false
+        }
+      },
+      deep: true
+    },
+    async dialog() {
+      if (this.dialog) {
+        await this.$router.push({
+          path: this.$route.path,
+          query: { ...this.$route.query, login: '1' }
+        })
+        return
+      }
+
+      if (!this.dialog) {
+        const query = Object.assign({}, this.$route.query)
+        delete query.login
+
+        this.$nextTick(() => {
           this.username = ''
           this.password = ''
           this.confirmPassword = ''
@@ -231,8 +234,13 @@ export default {
           if (this.$refs.signUpForm) {
             this.$refs.signUpForm.resetValidation()
           }
-        }
-      })
+        })
+
+        await this.$router.push({
+          path: this.$route.path,
+          query
+        })
+      }
     }
   },
   methods: {

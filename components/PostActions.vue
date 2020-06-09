@@ -91,7 +91,7 @@
 
     <!--Hide-->
     <v-btn
-      v-if="!sticky"
+      v-if="!sticky && currentUser && $device.isDesktop"
       text
       x-small
       class="ml-1 font-weight-medium caption"
@@ -106,6 +106,65 @@
         hidden ? icons.eye : icons.eyeOff
       }}</v-icon>
     </v-btn>
+
+    <!--Report-->
+    <v-btn
+      v-if="!sticky && currentUser && $device.isDesktop"
+      text
+      x-small
+      class="ml-1 font-weight-medium caption"
+      style="text-transform: none; font-size: 12px"
+      :disabled="reported"
+      @click="reportPost"
+    >
+      <span
+        v-if="$device.isDesktop"
+        class="mr-1"
+        :class="reported ? '' : 'text--secondary'"
+      >
+        {{ reported ? 'Reported' : 'Report' }}
+      </span>
+
+      <v-icon x-small :class="reported ? '' : 'text--secondary'">{{
+        icons.report
+      }}</v-icon>
+    </v-btn>
+
+    <v-menu v-if="!$device.isDesktop && currentUser">
+      <template v-slot:activator="{ on }">
+        <v-btn
+          text
+          x-small
+          class="ml-1 font-weight-medium caption"
+          style="text-transform: none; font-size: 12px"
+          v-on="on"
+        >
+          <v-icon x-small :class="reported ? '' : 'text--secondary'">{{
+            icons.dots
+          }}</v-icon>
+        </v-btn>
+      </template>
+
+      <v-list dense>
+        <v-list-item @click="toggleHide">
+          <v-list-item-icon class="mr-3">
+            <v-icon>{{ hidden ? icons.eye : icons.eyeOff }}</v-icon>
+          </v-list-item-icon>
+          <v-list-item-title>{{
+            hidden ? 'Unhide' : 'Hide'
+          }}</v-list-item-title>
+        </v-list-item>
+
+        <v-list-item @click="reportPost">
+          <v-list-item-icon class="mr-3">
+            <v-icon>{{ icons.report }}</v-icon>
+          </v-list-item-icon>
+          <v-list-item-title>{{
+            reported ? 'Reported' : 'Report'
+          }}</v-list-item-title>
+        </v-list-item>
+      </v-list>
+    </v-menu>
   </span>
 </template>
 
@@ -117,13 +176,16 @@ import {
   mdiStar,
   mdiBookmark,
   mdiEyeOff,
-  mdiEye
+  mdiEye,
+  mdiAlert,
+  mdiDotsVertical
 } from '@mdi/js'
 import togglePostEndorsementGql from '../gql/togglePostEndorsement.graphql'
 import postGql from '../gql/post.graphql'
 import currentUserGql from '../gql/currentUser.graphql'
 import hidePostGql from '../gql/hidePost.graphql'
 import unhidePostGql from '../gql/unhidePost.graphql'
+import reportPostGql from '../gql/reportPost.graphql'
 import Username from './Username'
 
 export default {
@@ -143,13 +205,16 @@ export default {
     return {
       hidden: this.post.isHidden,
       currentUser: null,
+      reported: false,
       icons: {
         share: mdiShareVariant,
         comment: mdiComment,
         star: mdiStar,
         bookmark: mdiBookmark,
         eyeOff: mdiEyeOff,
-        eye: mdiEye
+        eye: mdiEye,
+        report: mdiAlert,
+        dots: mdiDotsVertical
       }
     }
   },
@@ -174,6 +239,13 @@ export default {
     }
   },
   methods: {
+    async reportPost() {
+      this.reported = true
+      await this.$apollo.mutate({
+        mutation: reportPostGql,
+        variables: { postId: this.post.id }
+      })
+    },
     async toggleEndorsement() {
       if (!this.currentUser) {
         this.$store.dispatch('showLoginDialog')

@@ -1,6 +1,12 @@
 <template>
   <v-row>
     <v-col>
+      <v-text-field
+        v-model="searchText"
+        :style="$device.isDesktop ? 'max-width: 35%' : ''"
+        filled
+        label="Search"
+      />
       <v-row class="mx-0 mb-2" align="center">
         <div class="title mr-2">
           Search: {{ $route.query.q ? $route.query.q : '' }}
@@ -50,6 +56,7 @@ export default {
   data() {
     return {
       searchPosts: [],
+      searchText: this.$route.query.q,
       hasMore: true,
       sort: {
         sort:
@@ -78,6 +85,19 @@ export default {
     }
   },
   watch: {
+    searchText() {
+      if (this.$route.query.q === this.searchText) return
+      this.$router.push({
+        path: this.$route.path,
+        query: { ...this.$route.query, q: this.searchText }
+      })
+    },
+    $route: {
+      handler() {
+        this.searchText = this.$route.query.q
+      },
+      deep: true
+    },
     sort: {
       handler(val) {
         let query
@@ -109,6 +129,7 @@ export default {
       skip() {
         return !this.$route.query.q
       },
+      debounce: 300,
       fetchPolicy: 'cache-and-network'
     }
   },

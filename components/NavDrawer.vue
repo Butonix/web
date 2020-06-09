@@ -22,7 +22,21 @@
         </v-list-item-content>
       </v-list-item>
 
-      <LoginDialog v-if="!currentUser" />
+      <v-list-item
+        v-if="!currentUser"
+        link
+        @click="$store.dispatch('showLoginDialog')"
+      >
+        <v-list-item-icon>
+          <v-icon>{{ icons.accountCircle }}</v-icon>
+        </v-list-item-icon>
+
+        <v-list-item-content>
+          <v-list-item-title class="font-weight-regular"
+            >Login/Sign Up</v-list-item-title
+          >
+        </v-list-item-content>
+      </v-list-item>
 
       <v-list-item v-else link nuxt :to="`/user/@${currentUser.username}`">
         <v-list-item-icon>
@@ -140,14 +154,13 @@ import {
   mdiBookmarkMultiple,
   mdiFilter,
   mdiLogout,
-  mdiHome
+  mdiHome,
+  mdiAccountCircle
 } from '@mdi/js'
 import currentUserGql from '../gql/currentUser.graphql'
-import LoginDialog from '../components/LoginDialog'
 
 export default {
   name: 'NavDrawer',
-  components: { LoginDialog },
   props: {
     value: {
       type: Boolean,
@@ -170,7 +183,8 @@ export default {
         bookmarkMultiple: mdiBookmarkMultiple,
         filter: mdiFilter,
         logout: mdiLogout,
-        home: mdiHome
+        home: mdiHome,
+        accountCircle: mdiAccountCircle
       }
     }
   },

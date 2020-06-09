@@ -73,7 +73,7 @@
       </template>
 
       <div v-else>
-        <v-btn icon dark>
+        <v-btn icon dark nuxt to="/search">
           <v-icon>{{ icons.magnify }}</v-icon>
         </v-btn>
 
@@ -93,6 +93,7 @@
     </v-app-bar>
 
     <v-content>
+      <LoginDialog />
       <v-container fluid>
         <nuxt />
       </v-container>
@@ -109,10 +110,11 @@ import { mdiPlus, mdiMagnify, mdiMenu } from '@mdi/js'
 import NavDrawer from '../components/NavDrawer'
 import currentUserGql from '../gql/currentUser.graphql'
 import Snackbar from '../components/Snackbar'
+import LoginDialog from '../components/LoginDialog'
 
 export default {
   name: 'Default',
-  components: { Snackbar, NavDrawer },
+  components: { LoginDialog, Snackbar, NavDrawer },
   data() {
     return {
       currentUser: null,
