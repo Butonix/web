@@ -1,8 +1,6 @@
 import colors from 'vuetify/lib/util/colors'
 import redirectSSL from 'redirect-ssl'
 
-process.env.VUE_APP_VERSION = require('./package.json').version
-
 export default {
   mode: 'universal',
   /*
@@ -65,6 +63,11 @@ export default {
       name: 'Comet',
       description: 'Create and browse posts and comments on Comet',
       theme_color: '#F44336'
+    },
+    meta: {
+      name: 'Comet',
+      description: 'Create and browse posts and comments on Comet',
+      theme_color: '#F44336'
     }
   },
 
@@ -74,14 +77,17 @@ export default {
    */
   apollo: {
     cookieAttributes: {
-      secure: process.env.NODE_ENV === 'production'
+      secure:
+        process.env.NODE_ENV === 'production' || process.env.STAGING === 'true'
     },
     // required
     clientConfigs: {
       default: {
         // required
         httpEndpoint:
-          process.env.NODE_ENV === 'production'
+          process.env.STAGING === 'true'
+            ? 'https://comet-server-staging.herokuapp.com/graphql'
+            : process.env.NODE_ENV === 'production'
             ? 'https://api.getcomet.net/graphql'
             : 'http://localhost:4000/graphql',
         // optional
@@ -162,7 +168,8 @@ export default {
 
   serverMiddleware: [
     redirectSSL.create({
-      enabled: process.env.NODE_ENV === 'production'
+      enabled:
+        process.env.NODE_ENV === 'production' || process.env.STAGING === 'true'
     })
   ]
 }
