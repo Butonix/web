@@ -13,6 +13,7 @@
         <v-tabs v-model="tab" class="mb-2" background-color="transparent">
           <v-tab>Text Post</v-tab>
           <v-tab>Link Post</v-tab>
+          <v-tab>Image Upload</v-tab>
         </v-tabs>
         <v-tabs-items v-model="tab" style="background-color: transparent">
           <v-tab-item class="pb-7">
@@ -30,6 +31,15 @@
               :label="currentUser ? 'Link URL' : 'Must log in to create a post'"
               :disabled="!currentUser"
               clearable
+            />
+          </v-tab-item>
+
+          <v-tab-item class="pb-7">
+            <v-file-input
+              ref="fileInput"
+              v-model="image"
+              label="Choose an image"
+              :rules="uploadRules"
             />
           </v-tab-item>
         </v-tabs-items>
@@ -92,7 +102,8 @@
               !title ||
                 selectedTopics.length <= 0 ||
                 !currentUser ||
-                !$refs.combobox.valid
+                !$refs.combobox.valid ||
+                !uploadValid
             "
             @click="submitPost"
             >Submit</v-btn
@@ -153,6 +164,14 @@ export default {
     topicSearchText: '',
     searchTopics: [],
     submitPostErr: '',
+    image: null,
+    uploadRules: [
+      (v) => !!v || 'Image is required',
+      (v) => (v && v.size < 4 * 1024 * 1024) || 'Image must be 4MB or less',
+      (v) =>
+        (v && (v.type === 'image/jpeg' || v.type === 'image/png')) ||
+        'Image must be PNG or JPEG'
+    ],
     topicRules: [
       (topicNames) => {
         for (const topicName of topicNames) {
@@ -175,6 +194,10 @@ export default {
     ]
   }),
   computed: {
+    uploadValid() {
+      if (!this.tab === 2) return true
+      return this.$refs.fileInput.valid
+    },
     markedText() {
       return this.textContent
         ? xss(marked(escapeHtml(this.textContent)))
@@ -226,14 +249,39 @@ export default {
   methods: {
     async submitPost() {
       this.loading = true
+
+      if (this.tab === 2) {
+        // IMAGE UPLOAD
+        const fd = new FormData()
+        fd.append('image', this.image)
+
+        try {
+          const response = await this.$axios.$post('/upload', fd, {
+            headers: {
+              authorization: `Bearer ${this.$apolloHelpers.getToken()}`
+            }
+          })
+
+          this.link = response.link
+        } catch {
+          this.submitPostErr = 'Please wait 2 minutes between posts'
+          this.loading = false
+          return
+        }
+      }
+
       try {
         await this.$apollo.mutate({
           mutation: submitPostGql,
           variables: {
             title: this.title,
-            type: this.tab === 0 ? 'TEXT' : 'LINK',
-            link: this.link ? this.link : undefined,
-            textContent: this.textContent ? this.textContent : undefined,
+            type: this.tab === 1 || this.tab === 2 ? 'LINK' : 'TEXT',
+            link:
+              this.link && (this.tab === 1 || this.tab === 2)
+                ? this.link
+                : undefined,
+            textContent:
+              this.textContent && this.tab === 0 ? this.textContent : undefined,
             topics: this.selectedTopics
           },
           update: (store, { data: { submitPost } }) => {
@@ -279,7 +327,7 @@ export default {
     },
     searchTopics: {
       query: searchTopicsGql,
-      debounce: 300,
+      debounce: 200,
       variables() {
         return {
           search: this.topicSearchText

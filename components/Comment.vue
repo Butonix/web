@@ -70,6 +70,13 @@
           @click="replying = !replying"
           >{{ replying ? 'Cancel reply' : 'Reply' }}</span
         >
+
+        <span
+          v-if="!profile"
+          class="caption font-weight-medium hoverable ml-3"
+          @click="childrenCollapsed = !childrenCollapsed"
+          >{{ childrenCollapsed ? 'Show replies' : 'Hide replies' }}</span
+        >
       </div>
     </v-card>
 
@@ -100,15 +107,17 @@
       </v-row>
     </div>
 
-    <Comment
-      v-for="c in comment.childComments"
-      :key="c.id"
-      :post="post"
-      :post-view="postView"
-      :comment="c"
-      :level="level + 1"
-      :sort="sort"
-    />
+    <div v-show="!childrenCollapsed">
+      <Comment
+        v-for="c in comment.childComments"
+        :key="c.id"
+        :post="post"
+        :post-view="postView"
+        :comment="c"
+        :level="level + 1"
+        :sort="sort"
+      />
+    </div>
   </div>
 </template>
 
@@ -162,6 +171,7 @@ export default {
       loading: false,
       currentUser: null,
       submitCommentErr: '',
+      childrenCollapsed: false,
       icons: {
         share: mdiShareVariant,
         // dots: mdiDotsVertical,

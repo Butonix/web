@@ -56,7 +56,15 @@ export default {
    ** Axios module configuration
    ** See https://axios.nuxtjs.org/options
    */
-  axios: {},
+  axios: {
+    progress: false,
+    baseURL:
+      process.env.STAGING === 'true'
+        ? 'https://comet-server-staging.herokuapp.com'
+        : process.env.NODE_ENV === 'production'
+        ? 'https://api.getcomet.net'
+        : 'http://localhost:4000'
+  },
 
   pwa: {
     manifest: {
