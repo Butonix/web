@@ -128,13 +128,14 @@ export default {
         })
         this.successMessage = 'Password changed successfully!'
         this.errMessage = ''
+        this.currentPassword = ''
+        this.newPassword = ''
+        this.newPasswordConfirm = ''
       } catch (e) {
         this.errMessage = e.message.split('GraphQL error: ')[1]
         this.successMessage = ''
+        this.currentPassword = ''
       }
-      this.currentPassword = ''
-      this.newPassword = ''
-      this.newPasswordConfirm = ''
       this.loading = false
       this.$refs.form.resetValidation()
     }
