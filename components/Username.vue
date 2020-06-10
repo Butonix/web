@@ -16,7 +16,7 @@
     </template>
 
     <v-list v-if="user" dense>
-      <v-list-item :disabled="user.isBlocking" @click="toggleFollow">
+      <!--<v-list-item :disabled="user.isBlocking" @click="toggleFollow">
         <v-list-item-icon class="mr-2">
           <v-icon>{{ icons.plusBox }}</v-icon>
         </v-list-item-icon>
@@ -33,7 +33,7 @@
         <v-list-item-action class="ma-0">
           <v-checkbox v-model="user.isFollowing" dense readonly />
         </v-list-item-action>
-      </v-list-item>
+      </v-list-item>-->
 
       <v-list-item @click="toggleBlock">
         <v-list-item-icon class="mr-2">
@@ -78,8 +78,8 @@ import gql from 'graphql-tag'
 import currentUserGql from '../gql/currentUser.graphql'
 import blockUserGql from '../gql/blockUser.graphql'
 import unblockUserGql from '../gql/unblockUser.graphql'
-import followUserGql from '../gql/followUser.graphql'
-import unfollowUserGql from '../gql/unfollowUser.graphql'
+// import followUserGql from '../gql/followUser.graphql'
+// import unfollowUserGql from '../gql/unfollowUser.graphql'
 
 export default {
   name: 'Username',
@@ -110,7 +110,6 @@ export default {
             username
             id
             isBlocking
-            isFollowing
           }
         }
       `,
@@ -125,7 +124,7 @@ export default {
     }
   },
   methods: {
-    toggleFollow() {
+    /* toggleFollow() {
       if (this.user.isFollowing) this.unfollowUser()
       else this.followUser()
     },
@@ -146,7 +145,7 @@ export default {
         },
         update: () => (this.user.isFollowing = false)
       })
-    },
+    }, */
     toggleBlock() {
       if (this.user.isBlocking) this.unblockUser()
       else this.blockUser()
@@ -159,7 +158,7 @@ export default {
         },
         update: () => {
           this.user.isBlocking = true
-          this.user.isFollowing = false
+          // this.user.isFollowing = false
         }
       })
     },

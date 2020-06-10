@@ -269,27 +269,6 @@ export default {
         mutation: toggleCommentEndorsementGql,
         variables: {
           commentId: this.comment.id
-        },
-        update: (store, { data: { toggleCommentEndorsement } }) => {
-          const data = store.readQuery({
-            query: postCommentsGql,
-            variables: {
-              postId: this.comment.postId,
-              sort: this.sort.sort.toUpperCase()
-            }
-          })
-          const index = data.postComments.findIndex(
-            (comment) => comment.id === this.comment.id
-          )
-          data.postComments[index].isEndorsed = toggleCommentEndorsement
-          store.writeQuery({
-            query: postCommentsGql,
-            variables: {
-              postId: this.comment.postId,
-              sort: this.sort.sort.toUpperCase()
-            },
-            data
-          })
         }
       })
     }

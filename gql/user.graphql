@@ -1,15 +1,13 @@
 query user($username: String!) {
   user(username: $username) {
+    id
     username
     commentCount
     postCount
     endorsementCount
-    followerCount
     createdAt
-    isFollowing
     isBlocking
     isBlocked
-    isFollowed
     isCurrentUser
   }
 }

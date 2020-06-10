@@ -196,7 +196,6 @@ import {
   mdiDotsVertical
 } from '@mdi/js'
 import togglePostEndorsementGql from '../gql/togglePostEndorsement.graphql'
-import postGql from '../gql/post.graphql'
 import currentUserGql from '../gql/currentUser.graphql'
 import hidePostGql from '../gql/hidePost.graphql'
 import unhidePostGql from '../gql/unhidePost.graphql'
@@ -278,20 +277,6 @@ export default {
         mutation: togglePostEndorsementGql,
         variables: {
           postId: this.post.id
-        },
-        update: (store, { data: { togglePostEndorsement } }) => {
-          try {
-            const data = store.readQuery({
-              query: postGql,
-              variables: { postId: this.postId }
-            })
-            data.post.isEndorsed = togglePostEndorsement
-            store.writeQuery({
-              query: postGql,
-              variables: { postId: this.postId },
-              data
-            })
-          } catch (e) {}
         }
       })
     },

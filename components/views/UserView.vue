@@ -1,17 +1,11 @@
 <template>
   <v-row>
     <v-col>
-      <div class="headline">
-        @{{ user.username }}
-        <v-btn v-if="!user.isCurrentUser" color="primary" depressed small
-          >Follow</v-btn
-        >
-      </div>
+      <div class="headline">@{{ user.username }}</div>
       <div class="subtitle-1">
         Joined on {{ joinDate }} &middot;
-        {{ user.endorsementCount }} endorsements &middot;
-        {{ user.followerCount }} follower{{
-          user.followerCount === 1 ? '' : 's'
+        {{ user.endorsementCount }} endorsement{{
+          user.endorsementCount === 1 ? '' : 's'
         }}
       </div>
 
