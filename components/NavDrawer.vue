@@ -129,6 +129,17 @@
           </v-list-item-content>
         </v-list-item>
 
+        <v-list-item v-if="currentUser" link nuxt to="/settings">
+          <v-list-item-icon>
+            <v-icon>{{ icons.settings }}</v-icon>
+          </v-list-item-icon>
+          <v-list-item-content>
+            <v-list-item-title class="font-weight-regular"
+              >Account Settings</v-list-item-title
+            >
+          </v-list-item-content>
+        </v-list-item>
+
         <v-list-item v-if="currentUser" link @click="logout">
           <v-list-item-icon>
             <v-icon>{{ icons.logout }}</v-icon>
@@ -155,7 +166,8 @@ import {
   mdiFilter,
   mdiLogout,
   mdiHome,
-  mdiAccountCircle
+  mdiAccountCircle,
+  mdiCog
 } from '@mdi/js'
 import currentUserGql from '../gql/currentUser.graphql'
 
@@ -184,7 +196,8 @@ export default {
         filter: mdiFilter,
         logout: mdiLogout,
         home: mdiHome,
-        accountCircle: mdiAccountCircle
+        accountCircle: mdiAccountCircle,
+        settings: mdiCog
       }
     }
   },

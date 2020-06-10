@@ -10,6 +10,7 @@ import ContentPolicyView from './components/views/ContentPolicyView'
 import PrivacyPolicy from './components/views/PrivacyPolicy'
 import TermsOfService from './components/views/TermsOfService'
 import SearchView from './components/views/SearchView'
+import SettingsView from './components/views/SettingsView'
 
 Vue.use(Router)
 
@@ -106,6 +107,11 @@ export function createRouter() {
         path: '/search',
         component: SearchView,
         name: 'Search'
+      },
+      {
+        path: '/settings',
+        component: SettingsView,
+        name: 'Settings'
       },
       {
         path: '/content-policy',

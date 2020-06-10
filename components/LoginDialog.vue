@@ -28,14 +28,14 @@
       </v-tabs>
       <v-tabs-items v-model="tab">
         <v-tab-item>
-          <v-card-title v-if="$device.isDesktop"
-            ><span v-if="!err">Login</span>
-            <span v-else class="error--text">{{
-              err.split('GraphQL error: ')[1]
-            }}</span></v-card-title
-          >
-          <v-card-text>
-            <v-form ref="loginForm" v-model="loginValid">
+          <v-form ref="loginForm" v-model="loginValid" @submit.prevent="login">
+            <v-card-title v-if="$device.isDesktop"
+              ><span v-if="!err">Login</span>
+              <span v-else class="error--text">{{
+                err.split('GraphQL error: ')[1]
+              }}</span></v-card-title
+            >
+            <v-card-text>
               <v-text-field
                 v-model="username"
                 label="Username"
@@ -48,36 +48,49 @@
                 label="Password"
                 filled
                 dense
-                :append-icon="showPassword ? icons.eye : icons.eyeOff"
                 :type="showPassword ? 'text' : 'password'"
                 :rules="rules.loginPasswordRules"
-                @click:append="showPassword = !showPassword"
-                @keydown.enter="login"
-              />
-            </v-form>
-          </v-card-text>
-          <v-card-actions>
-            <v-btn
-              color="primary"
-              depressed
-              block
-              :loading="loading"
-              :disabled="!loginValid"
-              @click="login"
-              >Login</v-btn
-            >
-          </v-card-actions>
+              >
+                <template v-slot:append>
+                  <div
+                    style="cursor: pointer"
+                    tabindex="-1"
+                    @click="showPassword = !showPassword"
+                  >
+                    <v-icon>{{
+                      showPassword ? icons.eye : icons.eyeOff
+                    }}</v-icon>
+                  </div>
+                </template>
+              </v-text-field>
+            </v-card-text>
+            <v-card-actions>
+              <v-btn
+                color="primary"
+                depressed
+                block
+                :loading="loading"
+                :disabled="!loginValid"
+                type="submit"
+                >Login</v-btn
+              >
+            </v-card-actions>
+          </v-form>
         </v-tab-item>
 
         <v-tab-item>
-          <v-card-title v-if="$device.isDesktop"
-            ><span v-if="!err">Sign Up</span>
-            <span v-else class="error--text">{{
-              err.split('GraphQL error: ')[1]
-            }}</span></v-card-title
+          <v-form
+            ref="signUpForm"
+            v-model="signupValid"
+            @submit.prevent="signUp"
           >
-          <v-card-text>
-            <v-form ref="signUpForm" v-model="signupValid">
+            <v-card-title v-if="$device.isDesktop"
+              ><span v-if="!err">Sign Up</span>
+              <span v-else class="error--text">{{
+                err.split('GraphQL error: ')[1]
+              }}</span></v-card-title
+            >
+            <v-card-text>
               <v-text-field
                 v-model="username"
                 label="Username"
@@ -88,26 +101,45 @@
               <v-text-field
                 v-model="password"
                 label="Password"
-                :append-icon="showPassword ? icons.eye : icons.eyeOff"
                 :type="showPassword ? 'text' : 'password'"
                 filled
                 dense
                 counter
                 :rules="rules.signUpPasswordRules"
-                @click:append="showPassword = !showPassword"
-              />
+              >
+                <template v-slot:append>
+                  <div
+                    style="cursor: pointer"
+                    tabindex="-1"
+                    @click="showPassword = !showPassword"
+                  >
+                    <v-icon>{{
+                      showPassword ? icons.eye : icons.eyeOff
+                    }}</v-icon>
+                  </div>
+                </template>
+              </v-text-field>
               <v-text-field
                 v-model="confirmPassword"
                 label="Confirm Password"
-                :append-icon="showPassword ? icons.eye : icons.eyeOff"
                 :type="showPassword ? 'text' : 'password'"
                 filled
                 dense
                 counter
                 :rules="rules.signUpConfirmPasswordRules"
-                @click:append="showPassword = !showPassword"
-                @keydown.enter="signUp"
-              />
+              >
+                <template v-slot:append>
+                  <div
+                    style="cursor: pointer"
+                    tabindex="-1"
+                    @click="showPassword = !showPassword"
+                  >
+                    <v-icon>{{
+                      showPassword ? icons.eye : icons.eyeOff
+                    }}</v-icon>
+                  </div>
+                </template>
+              </v-text-field>
               <v-row class="mx-0">
                 <v-spacer />
                 <div class="body-2">
@@ -115,29 +147,29 @@
                   memorable password.
                 </div>
               </v-row>
-            </v-form>
-          </v-card-text>
-          <v-card-actions>
-            <v-btn
-              color="primary"
-              depressed
-              block
-              :loading="loading"
-              :disabled="!signupValid"
-              @click="signUp"
-              >Sign Up</v-btn
-            >
-          </v-card-actions>
-          <div class="caption text-center pb-1">
-            By clicking Sign Up, you agree to our
-            <nuxt-link to="/terms-of-service" target="_blank"
-              >Terms of Service</nuxt-link
-            >
-            and
-            <nuxt-link to="/privacy-policy" target="_blank"
-              >Privacy Policy</nuxt-link
-            >.
-          </div>
+            </v-card-text>
+            <v-card-actions>
+              <v-btn
+                color="primary"
+                depressed
+                block
+                :loading="loading"
+                :disabled="!signupValid"
+                type="submit"
+                >Sign Up</v-btn
+              >
+            </v-card-actions>
+            <div class="caption text-center pb-1">
+              By clicking Sign Up, you agree to our
+              <nuxt-link to="/terms-of-service" target="_blank"
+                >Terms of Service</nuxt-link
+              >
+              and
+              <nuxt-link to="/privacy-policy" target="_blank"
+                >Privacy Policy</nuxt-link
+              >.
+            </div>
+          </v-form>
         </v-tab-item>
       </v-tabs-items>
     </v-card>

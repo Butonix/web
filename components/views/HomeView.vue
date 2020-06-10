@@ -3,6 +3,7 @@
     <v-col class="pt-0">
       <v-row class="mx-0 mb-2" align="center">
         <v-btn
+          v-if="currentUser"
           text
           small
           class="mr-1"
