@@ -38,6 +38,7 @@
             <v-file-input
               ref="fileInput"
               v-model="image"
+              class="mt-0"
               label="Choose an image"
               :rules="uploadRules"
             />
@@ -121,13 +122,16 @@
         </v-row>
       </v-col>
       <v-col v-if="$device.isDesktop">
-        <div v-if="tab === 0">
+        <div v-show="tab === 0">
           <div class="title mb-1">Preview</div>
           <v-card flat>
             <div class="pt-2 px-4">{{ title ? title : 'Title' }}</div>
             <v-divider class="mt-2 mb-1" />
             <div class="pb-1 pt-1 px-4 body-2" v-html="markedText" />
           </v-card>
+        </div>
+        <div v-show="tab === 2">
+          <img ref="imagePreview" style="max-height: 500px" />
         </div>
       </v-col>
     </v-row>
@@ -244,6 +248,15 @@ export default {
     },
     selectedTopics() {
       this.topicSearchText = ''
+    },
+    image() {
+      if (!this.image) {
+        this.$refs.imagePreview.src = ''
+        return
+      }
+      const reader = new FileReader()
+      reader.onload = (ev) => (this.$refs.imagePreview.src = ev.target.result)
+      reader.readAsDataURL(this.image)
     }
   },
   methods: {
@@ -255,19 +268,25 @@ export default {
         const fd = new FormData()
         fd.append('image', this.image)
 
-        try {
-          const response = await this.$axios.$post('/upload', fd, {
-            headers: {
-              authorization: `Bearer ${this.$apolloHelpers.getToken()}`
-            }
-          })
+        const response = await this.$axios.$post('/upload', fd, {
+          headers: {
+            authorization: `Bearer ${this.$apolloHelpers.getToken()}`
+          }
+        })
 
-          this.link = response.link
-        } catch {
-          this.submitPostErr = 'Please wait 2 minutes between posts'
+        if (response.error) {
+          this.submitPostErr = response.error
           this.loading = false
           return
         }
+
+        if (!response.link) {
+          this.submitPostErr = 'Upload failed'
+          this.loading = false
+          return
+        }
+
+        this.link = response.link
       }
 
       try {

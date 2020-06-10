@@ -219,8 +219,15 @@ export default {
       }
 
       if (!this.dialog) {
-        const query = Object.assign({}, this.$route.query)
-        delete query.login
+        if (!this.$store.state.redirectLoginDialogToCompose) {
+          const query = Object.assign({}, this.$route.query)
+          delete query.login
+
+          await this.$router.push({
+            path: this.$route.path,
+            query
+          })
+        }
 
         this.$nextTick(() => {
           this.username = ''
@@ -234,11 +241,6 @@ export default {
           if (this.$refs.signUpForm) {
             this.$refs.signUpForm.resetValidation()
           }
-        })
-
-        await this.$router.push({
-          path: this.$route.path,
-          query
         })
       }
     }
@@ -263,7 +265,7 @@ export default {
       }
       this.loading = false
       if (this.$store.state.redirectLoginDialogToCompose) {
-        this.$router.push('/new')
+        await this.$router.push('/new')
         this.$store.commit('setRedirectLoginDialogToCompose', false)
       }
     },
@@ -286,7 +288,7 @@ export default {
       }
       this.loading = false
       if (this.$store.state.redirectLoginDialogToCompose) {
-        this.$router.push('/new')
+        await this.$router.push('/new')
         this.$store.commit('setRedirectLoginDialogToCompose', false)
       }
     }

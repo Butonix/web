@@ -59,10 +59,8 @@ export default {
   axios: {
     progress: false,
     baseURL:
-      process.env.STAGING === 'true'
-        ? 'https://comet-server-staging.herokuapp.com'
-        : process.env.NODE_ENV === 'production'
-        ? 'https://api.getcomet.net'
+      process.env.NODE_ENV === 'production'
+        ? process.env.BASE_URL
         : 'http://localhost:4000'
   },
 
@@ -85,18 +83,15 @@ export default {
    */
   apollo: {
     cookieAttributes: {
-      secure:
-        process.env.NODE_ENV === 'production' || process.env.STAGING === 'true'
+      secure: process.env.NODE_ENV === 'production'
     },
     // required
     clientConfigs: {
       default: {
         // required
         httpEndpoint:
-          process.env.STAGING === 'true'
-            ? 'https://comet-server-staging.herokuapp.com/graphql'
-            : process.env.NODE_ENV === 'production'
-            ? 'https://api.getcomet.net/graphql'
+          process.env.NODE_ENV === 'production'
+            ? `${process.env.BASE_URL}/graphql`
             : 'http://localhost:4000/graphql',
         // optional
         // See https://www.apollographql.com/docs/link/links/http.html#options
@@ -176,8 +171,7 @@ export default {
 
   serverMiddleware: [
     redirectSSL.create({
-      enabled:
-        process.env.NODE_ENV === 'production' || process.env.STAGING === 'true'
+      enabled: process.env.NODE_ENV === 'production'
     })
   ]
 }

@@ -108,27 +108,42 @@
     </v-btn>
 
     <!--Report-->
-    <v-btn
-      v-if="!sticky && currentUser && $device.isDesktop"
-      text
-      x-small
-      class="ml-1 font-weight-medium caption"
-      style="text-transform: none; font-size: 12px"
-      :disabled="reported"
-      @click="reportPost"
-    >
-      <span
-        v-if="$device.isDesktop"
-        class="mr-1"
-        :class="reported ? '' : 'text--secondary'"
-      >
-        {{ reported ? 'Reported' : 'Report' }}
-      </span>
+    <v-menu v-if="!sticky && currentUser && $device.isDesktop">
+      <template v-slot:activator="{ on }">
+        <v-btn
+          text
+          x-small
+          class="ml-1 font-weight-medium caption"
+          style="text-transform: none; font-size: 12px"
+          :disabled="reported"
+          v-on="on"
+        >
+          <span class="mr-1" :class="reported ? '' : 'text--secondary'">
+            {{ reported ? 'Reported' : 'Report' }}
+          </span>
+          <v-icon x-small :class="reported ? '' : 'text--secondary'">{{
+            icons.report
+          }}</v-icon>
+        </v-btn>
+      </template>
 
-      <v-icon x-small :class="reported ? '' : 'text--secondary'">{{
-        icons.report
-      }}</v-icon>
-    </v-btn>
+      <v-list dense>
+        <v-subheader
+          >Please report only if this post violates our&nbsp;
+          <nuxt-link to="/content-policy" target="_blank"
+            >Content Policy</nuxt-link
+          ></v-subheader
+        >
+        <v-list-item @click="reportPost">
+          <v-list-item-icon class="mr-3">
+            <v-icon>{{ icons.report }}</v-icon>
+          </v-list-item-icon>
+          <v-list-item-title>{{
+            reported ? 'Reported' : 'Report'
+          }}</v-list-item-title>
+        </v-list-item>
+      </v-list>
+    </v-menu>
 
     <v-menu v-if="!$device.isDesktop && currentUser">
       <template v-slot:activator="{ on }">
