@@ -57,7 +57,6 @@ export default {
       let href = target.getAttribute('href')
       // Get link target, if local link, navigate with router link
       if (href && href[0] === '/') {
-        href = href.toLowerCase()
         if (href.includes(' ')) href = href.replace(/ /g, '_')
         event.preventDefault()
         this.$router.push(href)

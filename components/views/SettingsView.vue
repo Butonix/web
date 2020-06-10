@@ -119,7 +119,7 @@ export default {
     async changePassword() {
       this.loading = true
       try {
-        await this.$apollo.mutate({
+        const { data } = await this.$apollo.mutate({
           mutation: changePasswordGql,
           variables: {
             oldPassword: this.currentPassword,
@@ -131,6 +131,7 @@ export default {
         this.currentPassword = ''
         this.newPassword = ''
         this.newPasswordConfirm = ''
+        await this.$apolloHelpers.onLogin(data.changePassword.accessToken)
       } catch (e) {
         this.errMessage = e.message.split('GraphQL error: ')[1]
         this.successMessage = ''
