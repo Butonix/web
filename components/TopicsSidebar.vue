@@ -15,8 +15,9 @@
             @click="selected = 'Popular'"
             >Popular</span
           >
-          /
+          <span v-if="currentUser">/</span>
           <span
+            v-if="currentUser"
             class="hoverable"
             :class="{ 'font-weight-bold': selected === 'Following' }"
             @click="selected = 'Following'"
@@ -132,11 +133,13 @@ import { mdiEmoticonFrown, mdiMagnify } from '@mdi/js'
 import followedTopicsGql from '../gql/followedTopics.graphql'
 import popularTopicsGql from '../gql/popularTopics.graphql'
 import searchTopicsGql from '../gql/searchTopics.graphql'
+import currentUserGql from '../gql/currentUser.graphql'
 
 export default {
   name: 'TopicsSidebar',
   data() {
     return {
+      currentUser: null,
       followedTopics: [],
       popularTopics: [],
       searchTopics: [],
@@ -165,6 +168,9 @@ export default {
     }
   },
   apollo: {
+    currentUser: {
+      query: currentUserGql
+    },
     followedTopics: {
       query: followedTopicsGql
     },

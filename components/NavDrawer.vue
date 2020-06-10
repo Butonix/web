@@ -99,6 +99,18 @@
           >
         </v-list-item-content>
       </v-list-item>
+
+      <v-list-item v-if="!$device.isDesktop" link nuxt to="/topics">
+        <v-list-item-icon>
+          <v-icon>{{ icons.topics }}</v-icon>
+        </v-list-item-icon>
+
+        <v-list-item-content>
+          <v-list-item-title class="font-weight-regular"
+            >Topics</v-list-item-title
+          >
+        </v-list-item-content>
+      </v-list-item>
     </v-list>
 
     <template v-slot:append>
@@ -167,7 +179,8 @@ import {
   mdiLogout,
   mdiHome,
   mdiAccountCircle,
-  mdiCog
+  mdiCog,
+  mdiNewspaperVariant
 } from '@mdi/js'
 import currentUserGql from '../gql/currentUser.graphql'
 
@@ -197,7 +210,8 @@ export default {
         logout: mdiLogout,
         home: mdiHome,
         accountCircle: mdiAccountCircle,
-        settings: mdiCog
+        settings: mdiCog,
+        topics: mdiNewspaperVariant
       }
     }
   },

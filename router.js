@@ -11,6 +11,7 @@ import PrivacyPolicy from './components/views/PrivacyPolicy'
 import TermsOfService from './components/views/TermsOfService'
 import SearchView from './components/views/SearchView'
 import SettingsView from './components/views/SettingsView'
+import TopicsView from './components/views/TopicsView'
 
 Vue.use(Router)
 
@@ -92,6 +93,11 @@ export function createRouter() {
         path: '/topic/:topicName',
         component: TopicView,
         name: 'Topic'
+      },
+      {
+        path: '/topics',
+        component: TopicsView,
+        name: 'Topics'
       },
       {
         path: '/new',

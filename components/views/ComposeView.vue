@@ -154,7 +154,7 @@ export default {
   name: 'ComposeView',
   components: { TextEditor },
   data: () => ({
-    tab: null,
+    tab: 0,
     title: '',
     textContent: '',
     link: '',
@@ -199,7 +199,7 @@ export default {
   }),
   computed: {
     uploadValid() {
-      if (!this.tab === 2) return true
+      if (!this.tab === 2 || !this.$refs.fileInput) return true
       return this.$refs.fileInput.valid
     },
     markedText() {
