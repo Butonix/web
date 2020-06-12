@@ -4,6 +4,7 @@ query post($postId: ID!) {
         id
         username
         isCurrentUser
+        title
       }
       commentCount
       createdAt

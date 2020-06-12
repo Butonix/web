@@ -77,6 +77,41 @@
           @click="childrenCollapsed = !childrenCollapsed"
           >{{ childrenCollapsed ? 'Show replies' : 'Hide replies' }}</span
         >
+
+        <!--Delete-->
+        <v-menu v-if="currentUser && comment.author.id === currentUser.id">
+          <template v-slot:activator="{ on }">
+            <v-btn
+              text
+              x-small
+              class="ml-1 font-weight-medium caption"
+              style="text-transform: none; font-size: 12px"
+              :disabled="deleted"
+              v-on="on"
+            >
+              <span class="mr-1" :class="deleted ? '' : 'text--secondary'">
+                {{ deleted ? 'Deleted' : 'Delete' }}
+              </span>
+              <v-icon x-small :class="deleted ? '' : 'text--secondary'">{{
+                icons.delete
+              }}</v-icon>
+            </v-btn>
+          </template>
+
+          <v-list dense>
+            <v-subheader
+              >Are you sure you want to delete this comment?</v-subheader
+            >
+            <v-list-item @click="deleteComment">
+              <v-list-item-icon class="mr-3">
+                <v-icon>{{ icons.delete }}</v-icon>
+              </v-list-item-icon>
+              <v-list-item-title>{{
+                deleted ? 'Deleted' : 'Delete'
+              }}</v-list-item-title>
+            </v-list-item>
+          </v-list>
+        </v-menu>
       </div>
     </v-card>
 
@@ -123,12 +158,19 @@
 
 <script>
 import { formatDistanceToNowStrict } from 'date-fns'
-import { mdiBookmark, mdiComment, mdiShareVariant, mdiStar } from '@mdi/js'
+import {
+  mdiBookmark,
+  mdiComment,
+  mdiShareVariant,
+  mdiStar,
+  mdiTrashCan
+} from '@mdi/js'
 import toggleCommentEndorsementGql from '../gql/toggleCommentEndorsement.graphql'
 import submitCommentGql from '../gql/submitComment.graphql'
 import postCommentsGql from '../gql/postComments.graphql'
 import recordPostViewGql from '../gql/recordPostView.graphql'
 import currentUserGql from '../gql/currentUser.graphql'
+import deleteCommentGql from '../gql/deleteComment.graphql'
 import Username from './Username'
 import TextEditor from './TextEditor'
 import TextContent from './TextContent'
@@ -172,12 +214,14 @@ export default {
       currentUser: null,
       submitCommentErr: '',
       childrenCollapsed: false,
+      deleted: false,
       icons: {
         share: mdiShareVariant,
         // dots: mdiDotsVertical,
         comment: mdiComment,
         star: mdiStar,
-        bookmark: mdiBookmark
+        bookmark: mdiBookmark,
+        delete: mdiTrashCan
       }
     }
   },
@@ -210,6 +254,14 @@ export default {
     }
   },
   methods: {
+    async deleteComment() {
+      if (this.currentUser.id !== this.comment.author.id) return
+      this.deleted = true
+      await this.$apollo.mutate({
+        mutation: deleteCommentGql,
+        variables: { commentId: this.comment.id }
+      })
+    },
     async submitReply() {
       this.loading = true
       try {

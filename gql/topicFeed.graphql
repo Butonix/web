@@ -15,6 +15,7 @@ query topicFeed($topicName: String!, $page: Int, $sort: Sort, $time: Time, $type
       id
       username
       isCurrentUser
+      title
     }
     topics {
       capitalizedName

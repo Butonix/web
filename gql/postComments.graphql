@@ -11,6 +11,7 @@ query postComments($postId: ID!, $sort: Sort) {
       id
       username
       isCurrentUser
+      title
     }
   }
 }

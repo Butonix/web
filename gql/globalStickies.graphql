@@ -15,6 +15,7 @@ query globalStickies {
       id
       username
       isCurrentUser
+      title
     }
     topics {
       capitalizedName

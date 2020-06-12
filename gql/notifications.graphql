@@ -11,6 +11,7 @@ query notifications($unreadOnly: Boolean!) {
     fromUser {
       id
       username
+      title
     }
     post {
       id

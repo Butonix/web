@@ -6,11 +6,15 @@
     "
     :to="`/user/@${userData.username}`"
     class="caption font-weight-medium hoverable"
+    ><span v-if="userData.title" class="overline font-weight-bold"
+      >[{{ userData.title }}] </span
     >@{{ userData.username }}</nuxt-link
   >
   <v-menu v-else v-model="menu" :close-on-content-click="false" offset-x>
     <template v-slot:activator="{ on }">
       <a class="caption font-weight-medium hoverable" v-on="on"
+        ><span v-if="userData.title" class="overline font-weight-bold"
+          >[{{ userData.title }}] </span
         >@{{ userData.username }}</a
       >
     </template>

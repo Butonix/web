@@ -3,5 +3,6 @@ query blockedUsers {
     username
     id
     isBlocking
+    title
   }
 }

@@ -1,7 +1,13 @@
 <template>
   <v-row>
     <v-col>
-      <div class="headline">@{{ user.username }}</div>
+      <div class="headline">
+        <span
+          v-if="user.title"
+          class="subtitle-1 font-weight-bold primary--text"
+          >[{{ user.title }}] </span
+        >@{{ user.username }}
+      </div>
       <div class="subtitle-1">
         Joined on {{ joinDate }} &middot;
         {{ user.endorsementCount }} endorsement{{
@@ -21,7 +27,7 @@
         >
       </v-tabs>
 
-      <SortMenu v-model="sort" :hot-enabled="false" class="mb-1" />
+      <!--<SortMenu v-model="sort" :hot-enabled="false" class="mb-1" />-->
 
       <v-tabs-items v-model="currentTab" style="background-color: transparent">
         <v-tab-item>
@@ -63,13 +69,13 @@ import { format } from 'date-fns'
 import userGql from '../../gql/user.graphql'
 import userPostsGql from '../../gql/userPosts.graphql'
 import userCommentsGql from '../../gql/userComments.graphql'
-import SortMenu from '../SortMenu'
+// import SortMenu from '../SortMenu'
 import Comment from '../Comment'
 import Post from '../Post'
 
 export default {
   name: 'PostView',
-  components: { SortMenu, Comment, Post },
+  components: { /* SortMenu, */ Comment, Post },
   async asyncData(context) {
     const client = context.app.apolloProvider.defaultClient
 
@@ -110,11 +116,11 @@ export default {
       currentTab: null,
       user: null,
       userPosts: [],
-      userComments: [],
-      sort: {
+      userComments: []
+      /* sort: {
         sort: 'NEW',
         time: 'ALL'
-      }
+      } */
     }
   },
   computed: {

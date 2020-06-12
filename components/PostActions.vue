@@ -91,7 +91,12 @@
 
     <!--Hide-->
     <v-btn
-      v-if="!sticky && currentUser && $device.isDesktop"
+      v-if="
+        !sticky &&
+          currentUser &&
+          $device.isDesktop &&
+          post.author.id !== currentUser.id
+      "
       text
       x-small
       class="ml-1 font-weight-medium caption"
@@ -108,7 +113,14 @@
     </v-btn>
 
     <!--Report-->
-    <v-menu v-if="!sticky && currentUser && $device.isDesktop">
+    <v-menu
+      v-if="
+        !sticky &&
+          currentUser &&
+          $device.isDesktop &&
+          post.author.id !== currentUser.id
+      "
+    >
       <template v-slot:activator="{ on }">
         <v-btn
           text
@@ -145,7 +157,14 @@
       </v-list>
     </v-menu>
 
-    <v-menu v-if="!$device.isDesktop && currentUser">
+    <v-menu
+      v-if="
+        !sticky &&
+          currentUser &&
+          !$device.isDesktop &&
+          post.author.id !== currentUser.id
+      "
+    >
       <template v-slot:activator="{ on }">
         <v-btn
           text
@@ -180,6 +199,39 @@
         </v-list-item>
       </v-list>
     </v-menu>
+
+    <!--Delete-->
+    <v-menu v-if="!sticky && currentUser && post.author.id === currentUser.id">
+      <template v-slot:activator="{ on }">
+        <v-btn
+          text
+          x-small
+          class="ml-1 font-weight-medium caption"
+          style="text-transform: none; font-size: 12px"
+          :disabled="deleted"
+          v-on="on"
+        >
+          <span class="mr-1" :class="deleted ? '' : 'text--secondary'">
+            {{ deleted ? 'Deleted' : 'Delete' }}
+          </span>
+          <v-icon x-small :class="deleted ? '' : 'text--secondary'">{{
+            icons.delete
+          }}</v-icon>
+        </v-btn>
+      </template>
+
+      <v-list dense>
+        <v-subheader>Are you sure you want to delete this post?</v-subheader>
+        <v-list-item @click="deletePost">
+          <v-list-item-icon class="mr-3">
+            <v-icon>{{ icons.delete }}</v-icon>
+          </v-list-item-icon>
+          <v-list-item-title>{{
+            deleted ? 'Deleted' : 'Delete'
+          }}</v-list-item-title>
+        </v-list-item>
+      </v-list>
+    </v-menu>
   </span>
 </template>
 
@@ -193,13 +245,15 @@ import {
   mdiEyeOff,
   mdiEye,
   mdiAlert,
-  mdiDotsVertical
+  mdiDotsVertical,
+  mdiTrashCan
 } from '@mdi/js'
 import togglePostEndorsementGql from '../gql/togglePostEndorsement.graphql'
 import currentUserGql from '../gql/currentUser.graphql'
 import hidePostGql from '../gql/hidePost.graphql'
 import unhidePostGql from '../gql/unhidePost.graphql'
 import reportPostGql from '../gql/reportPost.graphql'
+import deletePostGql from '../gql/deletePost.graphql'
 import Username from './Username'
 
 export default {
@@ -220,6 +274,7 @@ export default {
       hidden: this.post.isHidden,
       currentUser: null,
       reported: false,
+      deleted: false,
       icons: {
         share: mdiShareVariant,
         comment: mdiComment,
@@ -228,7 +283,8 @@ export default {
         eyeOff: mdiEyeOff,
         eye: mdiEye,
         report: mdiAlert,
-        dots: mdiDotsVertical
+        dots: mdiDotsVertical,
+        delete: mdiTrashCan
       }
     }
   },
@@ -253,6 +309,14 @@ export default {
     }
   },
   methods: {
+    async deletePost() {
+      if (this.currentUser.id !== this.post.author.id) return
+      this.deleted = true
+      await this.$apollo.mutate({
+        mutation: deletePostGql,
+        variables: { postId: this.post.id }
+      })
+    },
     async reportPost() {
       this.reported = true
       await this.$apollo.mutate({

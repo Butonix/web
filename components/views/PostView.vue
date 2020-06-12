@@ -229,6 +229,12 @@ export default {
   head() {
     return {
       title: this.post.title,
+      link: [
+        {
+          rel: 'canonical',
+          href: `https://www.getcomet.net/post/${this.post.id}/${this.urlName}`
+        }
+      ],
       meta: [
         {
           hid: 'og:title',

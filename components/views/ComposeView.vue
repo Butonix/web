@@ -70,7 +70,6 @@
               v-bind="data.attrs"
               :input-value="data.selected"
               close
-              color="black"
               small
               label
               @click="data.select"
