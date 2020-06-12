@@ -50,11 +50,16 @@
         </v-list-item-content>
       </v-list-item>
 
-      <v-list-item v-if="currentUser" link>
+      <v-list-item v-if="currentUser" link nuxt to="/interactions">
         <v-list-item-icon>
-          <v-badge overlap :content="1">
+          <v-badge
+            v-if="notifications.length > 0"
+            overlap
+            :content="notifications.length"
+          >
             <v-icon>{{ icons.bell }}</v-icon>
           </v-badge>
+          <v-icon v-else>{{ icons.bell }}</v-icon>
         </v-list-item-icon>
 
         <v-list-item-content>
@@ -183,6 +188,7 @@ import {
   mdiNewspaperVariant
 } from '@mdi/js'
 import currentUserGql from '../gql/currentUser.graphql'
+import notificationsGql from '../gql/notifications.graphql'
 
 export default {
   name: 'NavDrawer',
@@ -196,6 +202,7 @@ export default {
     return {
       drawer: this.value,
       currentUser: null,
+      notifications: [],
       collapsed: process.client
         ? localStorage.getItem('collapsed') === 'true'
         : false,
@@ -218,6 +225,17 @@ export default {
   apollo: {
     currentUser: {
       query: currentUserGql
+    },
+    notifications: {
+      query: notificationsGql,
+      variables() {
+        return {
+          unreadOnly: true
+        }
+      },
+      skip() {
+        return !this.currentUser
+      }
     }
   },
   watch: {

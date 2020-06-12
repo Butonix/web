@@ -4,7 +4,7 @@
       <template v-slot:activator="{ on }">
         <v-btn text small v-on="on">
           <span class="mr-1"
-            >Sort: {{ sort.sort }}
+            ><span v-if="$device.isDesktop">Sort: </span>{{ sort.sort }}
             {{
               sort.sort === 'top' && timesEnabled ? `(${selectedTopTime})` : ''
             }}</span

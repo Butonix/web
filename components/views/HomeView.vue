@@ -23,7 +23,7 @@
           >Following Only</v-btn
         >
         <SortMenu v-model="sort" class="mr-1" />
-        <TypeMenu v-model="type" :class="$device.isDesktop ? '' : 'mt-2'" />
+        <TypeMenu v-model="type" />
       </v-row>
 
       <div v-if="filter === 'all'">

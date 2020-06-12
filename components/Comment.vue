@@ -72,7 +72,7 @@
         >
 
         <span
-          v-if="!profile"
+          v-if="!profile && comment.childComments.length > 0"
           class="caption font-weight-medium hoverable ml-3"
           @click="childrenCollapsed = !childrenCollapsed"
           >{{ childrenCollapsed ? 'Show replies' : 'Hide replies' }}</span

@@ -10,8 +10,8 @@
       <ul>
         <li>United States law requires your information</li>
         <li>
-          Your data may be exposed to our hosting services (Heroku and Amazon
-          Web Services)
+          Your data may be exposed to our hosting services (Heroku, Amazon Web
+          Services, and Cloudflare)
         </li>
         <li>
           There is good reason (at Comet's discretion) to share your information

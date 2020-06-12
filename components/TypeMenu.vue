@@ -3,7 +3,7 @@
     <v-menu v-model="menu" offset-y close-on-content-click>
       <template v-slot:activator="{ on }">
         <v-btn text small v-on="on">
-          <span class="mr-1">{{ computedName }}</span>
+          <span v-if="$device.isDesktop" class="mr-1">{{ computedName }}</span>
           <v-icon v-if="type === 'all'" small>{{ icons.all }}</v-icon>
           <v-icon v-if="type === 'text'" small>{{ icons.text }}</v-icon>
           <v-icon v-if="type === 'link'" small>{{ icons.link }}</v-icon>

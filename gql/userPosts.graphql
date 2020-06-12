@@ -1,21 +1,32 @@
 query userPosts($username: String!) {
   userPosts(username: $username) {
     __typename
-    textContent
-    link
-    type
-    title
-    domain
-    thumbnailUrl
+    commentCount
     createdAt
     endorsementCount
     id
     isEndorsed
-    commentCount
+    link
+    textContent
+    title
+    type
+    thumbnailUrl
+    domain
     author {
       id
       username
       isCurrentUser
+    }
+    topics {
+      capitalizedName
+      name
+    }
+    newCommentCount
+    postView {
+      lastCommentCount
+      postId
+      userId
+      createdAt
     }
   }
 }

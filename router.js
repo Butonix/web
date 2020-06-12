@@ -12,6 +12,7 @@ import TermsOfService from './components/views/TermsOfService'
 import SearchView from './components/views/SearchView'
 import SettingsView from './components/views/SettingsView'
 import TopicsView from './components/views/TopicsView'
+import NotificationsView from './components/views/NotificationsView'
 
 Vue.use(Router)
 
@@ -108,6 +109,11 @@ export function createRouter() {
         path: '/filters',
         component: FiltersView,
         name: 'Filters'
+      },
+      {
+        path: '/interactions',
+        component: NotificationsView,
+        name: 'Interactions'
       },
       {
         path: '/search',
