@@ -7,12 +7,11 @@
         <v-icon>{{ icons.menu }}</v-icon>
       </v-app-bar-nav-icon>
 
+      <nuxt-link :to="{ path: '/', query: $store.state.homeQuery }">
+        <v-img :src="cometLogo" width="128" />
+      </nuxt-link>
+
       <v-toolbar-title class="headline font-weight-medium">
-        <nuxt-link
-          :to="{ path: '/', query: $store.state.homeQuery }"
-          class="hoverable white--text"
-          >Comet</nuxt-link
-        >
         <span v-if="$device.isDesktop" class="caption ml-1 white--text">
           <a
             href="https://github.com/comet-app"
@@ -120,6 +119,7 @@ export default {
       currentUser: null,
       drawer: false,
       searchText: '',
+      cometLogo: require('~/assets/comet_logo.png'),
       icons: {
         plus: mdiPlus,
         magnify: mdiMagnify,
