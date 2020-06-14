@@ -2,6 +2,7 @@ query globalStickies {
   globalStickies {
     commentCount
     createdAt
+    editedAt
     endorsementCount
     id
     isEndorsed

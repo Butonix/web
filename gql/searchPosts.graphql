@@ -2,6 +2,7 @@ query searchPosts($search: String!, $page: Int, $pageSize: Int, $sort: Sort, $ti
   searchPosts(search: $search, page: $page, pageSize: $pageSize, sort: $sort, time: $time) {
     commentCount
     createdAt
+    editedAt
     endorsementCount
     id
     isEndorsed

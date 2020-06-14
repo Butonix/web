@@ -1,6 +1,7 @@
 query postComments($postId: ID!, $sort: Sort) {
   postComments(postId: $postId, sort: $sort) {
     createdAt
+    editedAt
     endorsementCount
     id
     isEndorsed

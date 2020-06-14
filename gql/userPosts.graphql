@@ -3,6 +3,7 @@ query userPosts($username: String!) {
     __typename
     commentCount
     createdAt
+    editedAt
     endorsementCount
     id
     isEndorsed

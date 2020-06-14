@@ -180,20 +180,42 @@
 
       <div v-else-if="post.type === 'TEXT'">
         <v-divider class="mb-3 mt-0" />
+        <div
+          v-if="post.author.isCurrentUser && !editing"
+          class="mx-4 body-2 primary--text"
+        >
+          <span class="hoverable" @click="editing = true">Edit post</span>
+        </div>
         <TextContent
+          v-if="!editing"
           :text-content="post.textContent"
           class="mx-4 body-2 pb-1"
         />
+        <div v-if="editing" class="mx-4">
+          <v-textarea v-model="newTextContent" hide-details filled />
+          <v-row class="mx-0 my-2">
+            <v-spacer />
+            <v-btn class="mr-1" small text @click="cancelEdit">Cancel</v-btn>
+            <v-btn
+              :loading="editBtnLoading"
+              small
+              text
+              :disabled="newTextContent.length === 0"
+              @click="editPost"
+              >Done Editing</v-btn
+            >
+          </v-row>
+        </div>
       </div>
     </div>
   </v-card>
 </template>
 
 <script>
-import { formatDistanceToNowStrict } from 'date-fns'
 import isImageUrl from 'is-image-url'
 import { Tweet } from 'vue-tweet-embed'
 import { mdiChevronUp, mdiChevronDown } from '@mdi/js'
+import editPostGql from '../gql/editPost.graphql'
 import TopicChip from './TopicChip'
 import PostActions from './PostActions'
 import TextContent from './TextContent'
@@ -217,6 +239,9 @@ export default {
   },
   data() {
     return {
+      newTextContent: this.post.textContent,
+      editBtnLoading: false,
+      editing: false,
       expanded: this.expand,
       icons: {
         down: mdiChevronDown,
@@ -231,9 +256,6 @@ export default {
         .toLowerCase()
         .replace(/ /g, '_')
         .replace(/\W/g, '')
-    },
-    timeSince() {
-      return formatDistanceToNowStrict(new Date(this.post.createdAt))
     },
     isImageUrl() {
       return this.post.type === 'LINK' && isImageUrl(this.post.link)
@@ -278,6 +300,24 @@ export default {
     if ($img && $link && $wrapper) this.addImgDrag($img, $link, $wrapper)
   },
   methods: {
+    cancelEdit() {
+      this.editing = false
+      this.newTextContent = this.post.textContent
+    },
+    async editPost() {
+      if (this.newTextContent.length === 0) return
+      this.editBtnLoading = true
+      await this.$apollo.mutate({
+        mutation: editPostGql,
+        variables: {
+          postId: this.post.id,
+          newTextContent: this.newTextContent
+        }
+      })
+      this.post.textContent = this.newTextContent
+      this.editing = false
+      this.editBtnLoading = false
+    },
     addImgDrag($img, $link, $wrapper) {
       if (!this.$device.isDesktop) if (!$img || !$link || !$wrapper) return
 

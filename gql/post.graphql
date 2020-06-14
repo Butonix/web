@@ -8,6 +8,7 @@ query post($postId: ID!) {
       }
       commentCount
       createdAt
+      editedAt
       domain
       endorsementCount
       id

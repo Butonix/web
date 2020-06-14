@@ -21,13 +21,42 @@
         class="caption font-weight-medium text--secondary"
         >{{ comment.post.title }}</nuxt-link
       >
-      <TextContent :text-content="comment.textContent" class="body-2 comment" />
+      <TextContent
+        v-if="!editing"
+        :text-content="comment.textContent"
+        class="body-2 comment"
+      />
+      <div v-if="editing">
+        <v-textarea
+          v-model="newTextContent"
+          rows="2"
+          hide-details
+          filled
+          class="mt-1"
+        />
+        <v-row class="mx-0 my-2">
+          <v-spacer />
+          <v-btn class="mr-1" small text @click="cancelEdit">Cancel</v-btn>
+          <v-btn
+            :loading="editBtnLoading"
+            small
+            text
+            :disabled="newTextContent.length === 0"
+            @click="editComment"
+            >Done Editing</v-btn
+          >
+        </v-row>
+      </div>
       <div class="text--secondary">
         <span v-if="isOp" class="overline font-weight-medium text--primary"
           >[OP]&nbsp;</span
         >
         <Username :user-data="comment.author" />
-        <span class="caption font-weight-medium ml-3">{{ timeSince }} ago</span>
+        <span
+          class="caption font-weight-medium ml-3"
+          :title="editedTimeSince ? `Edited ${editedTimeSince} ago` : ''"
+          >{{ timeSince }} ago{{ editedTimeSince ? '*' : '' }}</span
+        >
 
         <v-btn
           text
@@ -35,7 +64,7 @@
           class="ml-1 font-weight-medium caption"
           :style="comment.isEndorsed ? 'color: var(--v-primary-base)' : ''"
           style="text-transform: none; font-size: 12px"
-          :disabled="currentUser && comment.author.id === currentUser.id"
+          :disabled="currentUser && comment.author.isCurrentUser"
           @click="toggleEndorsement"
         >
           <span
@@ -44,7 +73,7 @@
             :class="
               comment.isEndorsed
                 ? ''
-                : currentUser && comment.author.id === currentUser.id
+                : currentUser && comment.author.isCurrentUser
                 ? ''
                 : 'text--secondary'
             "
@@ -79,7 +108,7 @@
         >
 
         <!--Delete-->
-        <v-menu v-if="currentUser && comment.author.id === currentUser.id">
+        <v-menu v-if="currentUser && comment.author.isCurrentUser">
           <template v-slot:activator="{ on }">
             <v-btn
               text
@@ -112,6 +141,13 @@
             </v-list-item>
           </v-list>
         </v-menu>
+
+        <!--Edit-->
+        <span
+          class="caption font-weight-medium ml-1 hoverable"
+          @click="editing = true"
+          >Edit</span
+        >
       </div>
     </v-card>
 
@@ -171,6 +207,7 @@ import postCommentsGql from '../gql/postComments.graphql'
 import recordPostViewGql from '../gql/recordPostView.graphql'
 import currentUserGql from '../gql/currentUser.graphql'
 import deleteCommentGql from '../gql/deleteComment.graphql'
+import editCommentGql from '../gql/editComment.graphql'
 import Username from './Username'
 import TextEditor from './TextEditor'
 import TextContent from './TextContent'
@@ -208,6 +245,9 @@ export default {
   },
   data() {
     return {
+      editing: false,
+      newTextContent: this.comment.textContent,
+      editBtnLoading: false,
       replying: false,
       replyText: '',
       loading: false,
@@ -228,6 +268,10 @@ export default {
   computed: {
     timeSince() {
       return formatDistanceToNowStrict(new Date(this.comment.createdAt))
+    },
+    editedTimeSince() {
+      if (!this.comment.editedAt) return ''
+      return formatDistanceToNowStrict(new Date(this.comment.editedAt))
     },
     urlName() {
       if (!this.comment.post) return ''
@@ -254,6 +298,24 @@ export default {
     }
   },
   methods: {
+    cancelEdit() {
+      this.editing = false
+      this.newTextContent = this.comment.textContent
+    },
+    async editComment() {
+      if (this.newTextContent.length === 0) return
+      this.editBtnLoading = true
+      await this.$apollo.mutate({
+        mutation: editCommentGql,
+        variables: {
+          commentId: this.comment.id,
+          newTextContent: this.newTextContent
+        }
+      })
+      this.comment.textContent = this.newTextContent
+      this.editing = false
+      this.editBtnLoading = false
+    },
     async deleteComment() {
       if (this.currentUser.id !== this.comment.author.id) return
       this.deleted = true

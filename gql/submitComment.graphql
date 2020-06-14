@@ -5,6 +5,7 @@ mutation submitComment($postId: ID!, $textContent: String!, $parentCommentId: ID
     parentCommentId: $parentCommentId
   ) {
     createdAt
+    editedAt
     endorsementCount
     id
     isEndorsed

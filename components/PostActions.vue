@@ -1,7 +1,11 @@
 <template>
   <span class="text--secondary">
     <Username :user-data="post.author" />
-    <span class="ml-3 caption font-weight-medium">{{ timeSince }} ago</span>
+    <span
+      class="ml-2 caption font-weight-medium"
+      :title="editedTimeSince ? `Edited ${editedTimeSince} ago` : ''"
+      >{{ timeSince }} ago{{ editedTimeSince ? '*' : '' }}</span
+    >
 
     <!--Comment-->
     <v-btn
@@ -34,7 +38,7 @@
       class="ml-1 font-weight-medium caption"
       :style="post.isEndorsed ? 'color: var(--v-primary-base)' : ''"
       style="text-transform: none; font-size: 12px"
-      :disabled="currentUser && post.author.id === currentUser.id"
+      :disabled="currentUser && post.author.isCurrentUser"
       @click="toggleEndorsement"
     >
       <span
@@ -43,7 +47,7 @@
         :class="
           post.isEndorsed
             ? ''
-            : currentUser && post.author.id === currentUser.id
+            : currentUser && post.author.isCurrentUser
             ? ''
             : 'text--secondary'
         "
@@ -58,7 +62,7 @@
         :class="
           post.isEndorsed
             ? ''
-            : currentUser && post.author.id === currentUser.id
+            : currentUser && post.author.isCurrentUser
             ? ''
             : 'text--secondary'
         "
@@ -173,9 +177,7 @@
           style="text-transform: none; font-size: 12px"
           v-on="on"
         >
-          <v-icon x-small :class="reported ? '' : 'text--secondary'">{{
-            icons.dots
-          }}</v-icon>
+          <v-icon x-small>{{ icons.dots }}</v-icon>
         </v-btn>
       </template>
 
@@ -189,7 +191,7 @@
           }}</v-list-item-title>
         </v-list-item>
 
-        <v-list-item @click="reportPost">
+        <v-list-item :disabled="reported" @click="reportPost">
           <v-list-item-icon class="mr-3">
             <v-icon>{{ icons.report }}</v-icon>
           </v-list-item-icon>
@@ -201,7 +203,11 @@
     </v-menu>
 
     <!--Delete-->
-    <v-menu v-if="!sticky && currentUser && post.author.id === currentUser.id">
+    <v-menu
+      v-if="
+        !sticky && currentUser && post.author.isCurrentUser && $device.isDesktop
+      "
+    >
       <template v-slot:activator="{ on }">
         <v-btn
           text
@@ -223,6 +229,38 @@
       <v-list dense>
         <v-subheader>Are you sure you want to delete this post?</v-subheader>
         <v-list-item @click="deletePost">
+          <v-list-item-icon class="mr-3">
+            <v-icon>{{ icons.delete }}</v-icon>
+          </v-list-item-icon>
+          <v-list-item-title>{{
+            deleted ? 'Deleted' : 'Delete'
+          }}</v-list-item-title>
+        </v-list-item>
+      </v-list>
+    </v-menu>
+
+    <v-menu
+      v-if="
+        !sticky &&
+          currentUser &&
+          !$device.isDesktop &&
+          post.author.isCurrentUser
+      "
+    >
+      <template v-slot:activator="{ on }">
+        <v-btn
+          text
+          x-small
+          class="ml-1 font-weight-medium caption"
+          style="text-transform: none; font-size: 12px"
+          v-on="on"
+        >
+          <v-icon x-small>{{ icons.dots }}</v-icon>
+        </v-btn>
+      </template>
+
+      <v-list dense>
+        <v-list-item :disabled="deleted" @click="deletePost">
           <v-list-item-icon class="mr-3">
             <v-icon>{{ icons.delete }}</v-icon>
           </v-list-item-icon>
@@ -297,6 +335,10 @@ export default {
     },
     timeSince() {
       return formatDistanceToNowStrict(new Date(this.post.createdAt))
+    },
+    editedTimeSince() {
+      if (!this.post.editedAt) return ''
+      return formatDistanceToNowStrict(new Date(this.post.editedAt))
     },
     newCommentsCount() {
       if (!this.post.postView) return 0

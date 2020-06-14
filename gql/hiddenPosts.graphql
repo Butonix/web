@@ -8,6 +8,7 @@ query hiddenPosts {
       }
       commentCount
       createdAt
+      editedAt
       domain
       endorsementCount
       id

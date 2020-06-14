@@ -3,6 +3,7 @@ query userComments($username: String!) {
     __typename
     textContent
     createdAt
+    editedAt
     endorsementCount
     id
     isEndorsed

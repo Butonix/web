@@ -250,12 +250,11 @@ export default {
   },
   methods: {
     async logout() {
-      this.currentUser = null
-      await this.$apolloHelpers.onLogout()
       await this.$apollo.provider.defaultClient.cache.writeQuery({
         query: currentUserGql,
         data: { currentUser: null }
       })
+      await this.$apolloHelpers.onLogout()
     },
     toggleDark() {
       this.$vuetify.theme.dark = !this.$vuetify.theme.dark
