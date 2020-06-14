@@ -154,8 +154,8 @@
 
           <!--Edit-->
           <span
-            v-if="!deleted"
-            class="caption font-weight-medium hoverable"
+            v-if="!deleted && currentUser && comment.author.isCurrentUser"
+            class="ml-1 caption font-weight-medium hoverable"
             @click="editing = true"
             >Edit</span
           >
