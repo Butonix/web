@@ -53,15 +53,16 @@
         >
         <Username :user-data="comment.author" />
         <span
-          class="caption font-weight-medium ml-3"
+          class="caption font-weight-medium ml-1"
           :title="editedTimeSince ? `Edited ${editedTimeSince} ago` : ''"
-          >{{ timeSince }} ago{{ editedTimeSince ? '*' : '' }}</span
+          >{{ timeSince }}{{ $device.isDesktop ? ' ago' : ''
+          }}{{ editedTimeSince ? '*' : '' }}</span
         >
 
         <v-btn
           text
           x-small
-          class="ml-1 font-weight-medium caption"
+          class="font-weight-medium caption"
           :style="comment.isEndorsed ? 'color: var(--v-primary-base)' : ''"
           style="text-transform: none; font-size: 12px"
           :disabled="currentUser && comment.author.isCurrentUser"
@@ -95,59 +96,104 @@
 
         <span
           v-if="!profile"
-          class="caption font-weight-medium hoverable ml-3"
+          class="caption font-weight-medium hoverable"
           @click="replying = !replying"
           >{{ replying ? 'Cancel reply' : 'Reply' }}</span
         >
 
         <span
           v-if="!profile && comment.childComments.length > 0"
-          class="caption font-weight-medium hoverable ml-3"
+          class="ml-1 caption font-weight-medium hoverable"
           @click="childrenCollapsed = !childrenCollapsed"
-          >{{ childrenCollapsed ? 'Show replies' : 'Hide replies' }}</span
+          >{{
+            $device.isDesktop
+              ? childrenCollapsed
+                ? 'Show replies'
+                : 'Hide replies'
+              : childrenCollapsed
+              ? 'Expand'
+              : 'Collapse'
+          }}</span
         >
 
-        <!--Delete-->
-        <v-menu v-if="currentUser && comment.author.isCurrentUser">
-          <template v-slot:activator="{ on }">
-            <v-btn
-              text
-              x-small
-              class="ml-1 font-weight-medium caption"
-              style="text-transform: none; font-size: 12px"
-              :disabled="deleted"
-              v-on="on"
-            >
-              <span class="mr-1" :class="deleted ? '' : 'text--secondary'">
-                {{ deleted ? 'Deleted' : 'Delete' }}
-              </span>
-              <v-icon x-small :class="deleted ? '' : 'text--secondary'">{{
-                icons.delete
-              }}</v-icon>
-            </v-btn>
-          </template>
+        <span v-if="$device.isDesktop">
+          <!--Delete-->
+          <v-menu v-if="currentUser && comment.author.isCurrentUser">
+            <template v-slot:activator="{ on }">
+              <v-btn
+                text
+                x-small
+                class="font-weight-medium caption"
+                style="text-transform: none; font-size: 12px"
+                :disabled="deleted"
+                v-on="on"
+              >
+                <span class="mr-1" :class="deleted ? '' : 'text--secondary'">
+                  {{ deleted ? 'Deleted' : 'Delete' }}
+                </span>
+                <v-icon x-small :class="deleted ? '' : 'text--secondary'">{{
+                  icons.delete
+                }}</v-icon>
+              </v-btn>
+            </template>
 
-          <v-list dense>
-            <v-subheader
-              >Are you sure you want to delete this comment?</v-subheader
-            >
-            <v-list-item @click="deleteComment">
-              <v-list-item-icon class="mr-3">
-                <v-icon>{{ icons.delete }}</v-icon>
-              </v-list-item-icon>
-              <v-list-item-title>{{
-                deleted ? 'Deleted' : 'Delete'
-              }}</v-list-item-title>
-            </v-list-item>
-          </v-list>
-        </v-menu>
+            <v-list dense>
+              <v-subheader
+                >Are you sure you want to delete this comment?</v-subheader
+              >
+              <v-list-item @click="deleteComment">
+                <v-list-item-icon class="mr-3">
+                  <v-icon>{{ icons.delete }}</v-icon>
+                </v-list-item-icon>
+                <v-list-item-title>{{
+                  deleted ? 'Deleted' : 'Delete'
+                }}</v-list-item-title>
+              </v-list-item>
+            </v-list>
+          </v-menu>
 
-        <!--Edit-->
-        <span
-          class="caption font-weight-medium ml-1 hoverable"
-          @click="editing = true"
-          >Edit</span
-        >
+          <!--Edit-->
+          <span
+            v-if="!deleted"
+            class="caption font-weight-medium hoverable"
+            @click="editing = true"
+            >Edit</span
+          >
+        </span>
+
+        <span v-else>
+          <v-menu v-if="currentUser && post.author.isCurrentUser">
+            <template v-slot:activator="{ on }">
+              <v-btn
+                text
+                x-small
+                class="font-weight-medium caption"
+                style="text-transform: none; font-size: 12px"
+                v-on="on"
+              >
+                <v-icon x-small>{{ icons.dots }}</v-icon>
+              </v-btn>
+            </template>
+
+            <v-list dense>
+              <v-list-item :disabled="deleted" @click="deleteComment">
+                <v-list-item-icon class="mr-3">
+                  <v-icon>{{ icons.delete }}</v-icon>
+                </v-list-item-icon>
+                <v-list-item-title>{{
+                  deleted ? 'Deleted' : 'Delete'
+                }}</v-list-item-title>
+              </v-list-item>
+
+              <v-list-item :disabled="deleted" @click="editing = true">
+                <v-list-item-icon class="mr-3">
+                  <v-icon>{{ icons.edit }}</v-icon>
+                </v-list-item-icon>
+                <v-list-item-title>Edit</v-list-item-title>
+              </v-list-item>
+            </v-list>
+          </v-menu>
+        </span>
       </div>
     </v-card>
 
@@ -197,9 +243,12 @@ import { formatDistanceToNowStrict } from 'date-fns'
 import {
   mdiBookmark,
   mdiComment,
+  mdiDotsVertical,
   mdiShareVariant,
   mdiStar,
-  mdiTrashCan
+  mdiTrashCan,
+  mdiPencil,
+  mdiChevronLeft
 } from '@mdi/js'
 import toggleCommentEndorsementGql from '../gql/toggleCommentEndorsement.graphql'
 import submitCommentGql from '../gql/submitComment.graphql'
@@ -257,11 +306,13 @@ export default {
       deleted: false,
       icons: {
         share: mdiShareVariant,
-        // dots: mdiDotsVertical,
         comment: mdiComment,
         star: mdiStar,
         bookmark: mdiBookmark,
-        delete: mdiTrashCan
+        delete: mdiTrashCan,
+        dots: mdiDotsVertical,
+        edit: mdiPencil,
+        cancelDelete: mdiChevronLeft
       }
     }
   },
@@ -318,6 +369,15 @@ export default {
     },
     async deleteComment() {
       if (this.currentUser.id !== this.comment.author.id) return
+
+      if (!this.$device.isDesktop) {
+        if (!process.client) return
+        const confirmed = window.confirm(
+          'Are you sure you want to delete this comment?'
+        )
+        if (!confirmed) return
+      }
+
       this.deleted = true
       await this.$apollo.mutate({
         mutation: deleteCommentGql,

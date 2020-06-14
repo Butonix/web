@@ -2,9 +2,10 @@
   <span class="text--secondary">
     <Username :user-data="post.author" />
     <span
-      class="ml-2 caption font-weight-medium"
+      class="ml-1 caption font-weight-medium"
       :title="editedTimeSince ? `Edited ${editedTimeSince} ago` : ''"
-      >{{ timeSince }} ago{{ editedTimeSince ? '*' : '' }}</span
+      >{{ timeSince }}{{ $device.isDesktop ? ' ago' : ''
+      }}{{ editedTimeSince ? '*' : '' }}</span
     >
 
     <!--Comment-->
@@ -13,7 +14,7 @@
       nuxt
       text
       x-small
-      class="ml-1 font-weight-medium caption text--secondary"
+      class="font-weight-medium caption text--secondary"
       style="text-transform: none; font-size: 12px"
     >
       <span v-if="$device.isDesktop" class="mr-1 text--secondary">
@@ -35,7 +36,7 @@
     <v-btn
       text
       x-small
-      class="ml-1 font-weight-medium caption"
+      class="font-weight-medium caption"
       :style="post.isEndorsed ? 'color: var(--v-primary-base)' : ''"
       style="text-transform: none; font-size: 12px"
       :disabled="currentUser && post.author.isCurrentUser"
@@ -82,7 +83,7 @@
     <v-btn
       text
       x-small
-      class="ml-1 font-weight-medium caption"
+      class="font-weight-medium caption"
       style="text-transform: none; font-size: 12px"
       @click.prevent="sharePost"
     >
@@ -93,183 +94,157 @@
       <v-icon x-small class="text--secondary">{{ icons.share }}</v-icon>
     </v-btn>
 
-    <!--Hide-->
-    <v-btn
-      v-if="
-        !sticky &&
-          currentUser &&
-          $device.isDesktop &&
-          post.author.id !== currentUser.id
-      "
-      text
-      x-small
-      class="ml-1 font-weight-medium caption"
-      style="text-transform: none; font-size: 12px"
-      @click="toggleHide"
-    >
-      <span v-if="$device.isDesktop" class="mr-1 text--secondary">
-        {{ hidden ? 'Unhide' : 'Hide' }}
-      </span>
+    <span v-if="$device.isDesktop">
+      <!--Hide-->
+      <v-btn
+        v-if="!sticky && currentUser && !post.author.isCurrentUser"
+        text
+        x-small
+        class="font-weight-medium caption"
+        style="text-transform: none; font-size: 12px"
+        @click="toggleHide"
+      >
+        <span v-if="$device.isDesktop" class="mr-1 text--secondary">
+          {{ hidden ? 'Unhide' : 'Hide' }}
+        </span>
 
-      <v-icon x-small class="text--secondary">{{
-        hidden ? icons.eye : icons.eyeOff
-      }}</v-icon>
-    </v-btn>
+        <v-icon x-small class="text--secondary">{{
+          hidden ? icons.eye : icons.eyeOff
+        }}</v-icon>
+      </v-btn>
 
-    <!--Report-->
-    <v-menu
-      v-if="
-        !sticky &&
-          currentUser &&
-          $device.isDesktop &&
-          post.author.id !== currentUser.id
-      "
-    >
-      <template v-slot:activator="{ on }">
-        <v-btn
-          text
-          x-small
-          class="ml-1 font-weight-medium caption"
-          style="text-transform: none; font-size: 12px"
-          :disabled="reported"
-          v-on="on"
-        >
-          <span class="mr-1" :class="reported ? '' : 'text--secondary'">
-            {{ reported ? 'Reported' : 'Report' }}
-          </span>
-          <v-icon x-small :class="reported ? '' : 'text--secondary'">{{
-            icons.report
-          }}</v-icon>
-        </v-btn>
-      </template>
+      <!--Report-->
+      <v-menu v-if="!sticky && currentUser && !post.author.isCurrentUser">
+        <template v-slot:activator="{ on }">
+          <v-btn
+            text
+            x-small
+            class="font-weight-medium caption"
+            style="text-transform: none; font-size: 12px"
+            :disabled="reported"
+            v-on="on"
+          >
+            <span class="mr-1" :class="reported ? '' : 'text--secondary'">
+              {{ reported ? 'Reported' : 'Report' }}
+            </span>
+            <v-icon x-small :class="reported ? '' : 'text--secondary'">{{
+              icons.report
+            }}</v-icon>
+          </v-btn>
+        </template>
 
-      <v-list dense>
-        <v-subheader
-          >Please report only if this post violates our&nbsp;
-          <nuxt-link to="/content-policy" target="_blank"
-            >Content Policy</nuxt-link
-          ></v-subheader
-        >
-        <v-list-item @click="reportPost">
-          <v-list-item-icon class="mr-3">
-            <v-icon>{{ icons.report }}</v-icon>
-          </v-list-item-icon>
-          <v-list-item-title>{{
-            reported ? 'Reported' : 'Report'
-          }}</v-list-item-title>
-        </v-list-item>
-      </v-list>
-    </v-menu>
+        <v-list dense>
+          <v-subheader
+            >Please report only if this post violates our&nbsp;
+            <nuxt-link to="/content-policy" target="_blank"
+              >Content Policy</nuxt-link
+            ></v-subheader
+          >
+          <v-list-item @click="reportPost">
+            <v-list-item-icon class="mr-3">
+              <v-icon>{{ icons.report }}</v-icon>
+            </v-list-item-icon>
+            <v-list-item-title>{{
+              reported ? 'Reported' : 'Report'
+            }}</v-list-item-title>
+          </v-list-item>
+        </v-list>
+      </v-menu>
 
-    <v-menu
-      v-if="
-        !sticky &&
-          currentUser &&
-          !$device.isDesktop &&
-          post.author.id !== currentUser.id
-      "
-    >
-      <template v-slot:activator="{ on }">
-        <v-btn
-          text
-          x-small
-          class="ml-1 font-weight-medium caption"
-          style="text-transform: none; font-size: 12px"
-          v-on="on"
-        >
-          <v-icon x-small>{{ icons.dots }}</v-icon>
-        </v-btn>
-      </template>
+      <!--Delete-->
+      <v-menu v-if="!sticky && currentUser && post.author.isCurrentUser">
+        <template v-slot:activator="{ on }">
+          <v-btn
+            text
+            x-small
+            class="font-weight-medium caption"
+            style="text-transform: none; font-size: 12px"
+            :disabled="deleted"
+            v-on="on"
+          >
+            <span class="mr-1" :class="deleted ? '' : 'text--secondary'">
+              {{ deleted ? 'Deleted' : 'Delete' }}
+            </span>
+            <v-icon x-small :class="deleted ? '' : 'text--secondary'">{{
+              icons.delete
+            }}</v-icon>
+          </v-btn>
+        </template>
 
-      <v-list dense>
-        <v-list-item @click="toggleHide">
-          <v-list-item-icon class="mr-3">
-            <v-icon>{{ hidden ? icons.eye : icons.eyeOff }}</v-icon>
-          </v-list-item-icon>
-          <v-list-item-title>{{
-            hidden ? 'Unhide' : 'Hide'
-          }}</v-list-item-title>
-        </v-list-item>
+        <v-list dense>
+          <v-subheader>Are you sure you want to delete this post?</v-subheader>
+          <v-list-item @click="deletePost">
+            <v-list-item-icon class="mr-3">
+              <v-icon>{{ icons.delete }}</v-icon>
+            </v-list-item-icon>
+            <v-list-item-title>{{
+              deleted ? 'Deleted' : 'Delete'
+            }}</v-list-item-title>
+          </v-list-item>
+        </v-list>
+      </v-menu>
+    </span>
 
-        <v-list-item :disabled="reported" @click="reportPost">
-          <v-list-item-icon class="mr-3">
-            <v-icon>{{ icons.report }}</v-icon>
-          </v-list-item-icon>
-          <v-list-item-title>{{
-            reported ? 'Reported' : 'Report'
-          }}</v-list-item-title>
-        </v-list-item>
-      </v-list>
-    </v-menu>
+    <span v-else>
+      <v-menu v-if="!sticky && currentUser && !post.author.isCurrentUser">
+        <template v-slot:activator="{ on }">
+          <v-btn
+            text
+            x-small
+            class="font-weight-medium caption"
+            style="text-transform: none; font-size: 12px"
+            v-on="on"
+          >
+            <v-icon x-small>{{ icons.dots }}</v-icon>
+          </v-btn>
+        </template>
 
-    <!--Delete-->
-    <v-menu
-      v-if="
-        !sticky && currentUser && post.author.isCurrentUser && $device.isDesktop
-      "
-    >
-      <template v-slot:activator="{ on }">
-        <v-btn
-          text
-          x-small
-          class="ml-1 font-weight-medium caption"
-          style="text-transform: none; font-size: 12px"
-          :disabled="deleted"
-          v-on="on"
-        >
-          <span class="mr-1" :class="deleted ? '' : 'text--secondary'">
-            {{ deleted ? 'Deleted' : 'Delete' }}
-          </span>
-          <v-icon x-small :class="deleted ? '' : 'text--secondary'">{{
-            icons.delete
-          }}</v-icon>
-        </v-btn>
-      </template>
+        <v-list dense>
+          <v-list-item @click="toggleHide">
+            <v-list-item-icon class="mr-3">
+              <v-icon>{{ hidden ? icons.eye : icons.eyeOff }}</v-icon>
+            </v-list-item-icon>
+            <v-list-item-title>{{
+              hidden ? 'Unhide' : 'Hide'
+            }}</v-list-item-title>
+          </v-list-item>
 
-      <v-list dense>
-        <v-subheader>Are you sure you want to delete this post?</v-subheader>
-        <v-list-item @click="deletePost">
-          <v-list-item-icon class="mr-3">
-            <v-icon>{{ icons.delete }}</v-icon>
-          </v-list-item-icon>
-          <v-list-item-title>{{
-            deleted ? 'Deleted' : 'Delete'
-          }}</v-list-item-title>
-        </v-list-item>
-      </v-list>
-    </v-menu>
+          <v-list-item :disabled="reported" @click="reportPost">
+            <v-list-item-icon class="mr-3">
+              <v-icon>{{ icons.report }}</v-icon>
+            </v-list-item-icon>
+            <v-list-item-title>{{
+              reported ? 'Reported' : 'Report'
+            }}</v-list-item-title>
+          </v-list-item>
+        </v-list>
+      </v-menu>
 
-    <v-menu
-      v-if="
-        !sticky &&
-          currentUser &&
-          !$device.isDesktop &&
-          post.author.isCurrentUser
-      "
-    >
-      <template v-slot:activator="{ on }">
-        <v-btn
-          text
-          x-small
-          class="ml-1 font-weight-medium caption"
-          style="text-transform: none; font-size: 12px"
-          v-on="on"
-        >
-          <v-icon x-small>{{ icons.dots }}</v-icon>
-        </v-btn>
-      </template>
+      <v-menu v-if="!sticky && currentUser && post.author.isCurrentUser">
+        <template v-slot:activator="{ on }">
+          <v-btn
+            text
+            x-small
+            class="font-weight-medium caption"
+            style="text-transform: none; font-size: 12px"
+            v-on="on"
+          >
+            <v-icon x-small>{{ icons.dots }}</v-icon>
+          </v-btn>
+        </template>
 
-      <v-list dense>
-        <v-list-item :disabled="deleted" @click="deletePost">
-          <v-list-item-icon class="mr-3">
-            <v-icon>{{ icons.delete }}</v-icon>
-          </v-list-item-icon>
-          <v-list-item-title>{{
-            deleted ? 'Deleted' : 'Delete'
-          }}</v-list-item-title>
-        </v-list-item>
-      </v-list>
-    </v-menu>
+        <v-list dense>
+          <v-list-item :disabled="deleted" @click="deletePost">
+            <v-list-item-icon class="mr-3">
+              <v-icon>{{ icons.delete }}</v-icon>
+            </v-list-item-icon>
+            <v-list-item-title>{{
+              deleted ? 'Deleted' : 'Delete'
+            }}</v-list-item-title>
+          </v-list-item>
+        </v-list>
+      </v-menu>
+    </span>
   </span>
 </template>
 
@@ -360,6 +335,14 @@ export default {
       })
     },
     async reportPost() {
+      if (!this.$device.isDesktop) {
+        if (!process.client) return
+        const confirmed = window.confirm(
+          "Please report this post only if it violates Comet's content policy."
+        )
+        if (!confirmed) return
+      }
+
       this.reported = true
       await this.$apollo.mutate({
         mutation: reportPostGql,
