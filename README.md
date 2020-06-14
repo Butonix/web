@@ -1,22 +1,7 @@
-# web-nuxt
+# Comet Website
 
-> My bee&#39;s knees Nuxt.js project
+Participate on Comet at [https://www.getcomet.net](https://www.getcomet.net)
 
-## Build Setup
+[Join the Comet Discord server](https://discord.gg/NPCMGSm)
 
-```bash
-# install dependencies
-$ npm install
-
-# serve with hot reload at localhost:3000
-$ npm run dev
-
-# build for production and launch server
-$ npm run build
-$ npm run start
-
-# generate static project
-$ npm run generate
-```
-
-For detailed explanation on how things work, check out [Nuxt.js docs](https://nuxtjs.org).
+Run dev environment with hot reload: `npm run dev`
