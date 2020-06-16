@@ -84,7 +84,18 @@
             }}
           </span>
 
-          <span v-else> {{ comment.endorsementCount }}&nbsp; </span>
+          <span
+            v-else
+            :class="
+              comment.isEndorsed
+                ? ''
+                : currentUser && comment.author.isCurrentUser
+                ? ''
+                : 'text--secondary'
+            "
+          >
+            {{ comment.endorsementCount }}&nbsp;
+          </span>
 
           <v-icon
             x-small
