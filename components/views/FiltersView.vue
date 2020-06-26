@@ -1,88 +1,85 @@
 <template>
-  <v-row v-if="currentUser">
-    <v-col :cols="$device.isDesktop ? 6 : 12">
-      <v-tabs v-model="tab" background-color="transparent">
-        <v-tab>Blocked Users</v-tab>
-        <v-tab>Hidden Topics</v-tab>
-        <v-tab>Hidden Posts</v-tab>
-      </v-tabs>
+  <v-container fluid>
+    <v-row v-if="currentUser">
+      <v-col :cols="$device.isDesktop ? 6 : 12">
+        <v-tabs v-model="tab" background-color="transparent">
+          <v-tab>Blocked Users</v-tab>
+          <v-tab>Hidden Topics</v-tab>
+          <v-tab>Hidden Posts</v-tab>
+        </v-tabs>
 
-      <v-tabs-items
-        v-model="tab"
-        class="mt-2"
-        style="background-color: transparent"
-      >
-        <v-tab-item>
-          <v-list v-if="blockedUsers.length > 0">
-            <v-list-item v-for="user in blockedUsers" :key="user.id">
-              <v-list-item-content>
-                <v-list-item-title>@{{ user.username }}</v-list-item-title>
-              </v-list-item-content>
-              <v-list-item-action>
-                <v-btn text @click="toggleBlock(user)">{{
-                  user.isBlocking ? 'Unblock' : 'Block'
-                }}</v-btn>
-              </v-list-item-action>
-            </v-list-item>
-          </v-list>
-          <v-list v-else>
-            <v-list-item>
-              <v-list-item-content>
-                <v-list-item-title>Not blocking any users.</v-list-item-title>
-              </v-list-item-content>
-            </v-list-item>
-          </v-list>
-        </v-tab-item>
+        <v-tabs-items
+          v-model="tab"
+          class="mt-2"
+          style="background-color: transparent"
+        >
+          <v-tab-item>
+            <v-list v-if="blockedUsers.length > 0">
+              <v-list-item v-for="user in blockedUsers" :key="user.id">
+                <v-list-item-content>
+                  <v-list-item-title>@{{ user.username }}</v-list-item-title>
+                </v-list-item-content>
+                <v-list-item-action>
+                  <v-btn text @click="toggleBlock(user)">{{
+                    user.isBlocking ? 'Unblock' : 'Block'
+                  }}</v-btn>
+                </v-list-item-action>
+              </v-list-item>
+            </v-list>
+            <v-list v-else>
+              <v-list-item>
+                <v-list-item-content>
+                  <v-list-item-title>Not blocking any users.</v-list-item-title>
+                </v-list-item-content>
+              </v-list-item>
+            </v-list>
+          </v-tab-item>
 
-        <v-tab-item>
-          <v-list v-if="hiddenTopics.length > 0">
-            <v-list-item v-for="topic in hiddenTopics" :key="topic.name">
-              <v-list-item-content>
-                <v-list-item-title>{{
-                  topic.capitalizedName
-                }}</v-list-item-title>
-              </v-list-item-content>
-              <v-list-item-action>
-                <v-btn text @click="toggleHide(topic)">{{
-                  topic.isHidden ? 'Unhide' : 'Hide'
-                }}</v-btn>
-              </v-list-item-action>
-            </v-list-item>
-          </v-list>
-          <v-list v-else>
-            <v-list-item>
-              <v-list-item-content>
-                <v-list-item-title>Not hiding any topics.</v-list-item-title>
-              </v-list-item-content>
-            </v-list-item>
-          </v-list>
-        </v-tab-item>
+          <v-tab-item>
+            <v-list v-if="hiddenTopics.length > 0">
+              <v-list-item v-for="topic in hiddenTopics" :key="topic.name">
+                <v-list-item-content>
+                  <v-list-item-title>{{
+                    topic.capitalizedName
+                  }}</v-list-item-title>
+                </v-list-item-content>
+                <v-list-item-action>
+                  <v-btn text @click="toggleHide(topic)">{{
+                    topic.isHidden ? 'Unhide' : 'Hide'
+                  }}</v-btn>
+                </v-list-item-action>
+              </v-list-item>
+            </v-list>
+            <v-list v-else>
+              <v-list-item>
+                <v-list-item-content>
+                  <v-list-item-title>Not hiding any topics.</v-list-item-title>
+                </v-list-item-content>
+              </v-list-item>
+            </v-list>
+          </v-tab-item>
 
-        <v-tab-item>
-          <div v-if="hiddenPosts.length > 0">
-            <Post
-              v-for="post in hiddenPosts"
-              :key="post.id"
-              class="mb-1"
-              :post="post"
-            />
-          </div>
-          <v-list v-else>
-            <v-list-item>
-              <v-list-item-content>
-                <v-list-item-title>Not hiding any posts.</v-list-item-title>
-              </v-list-item-content>
-            </v-list-item>
-          </v-list>
-        </v-tab-item>
-      </v-tabs-items>
-    </v-col>
-  </v-row>
-  <v-row v-else>
-    <v-col>
-      <div class="headline">Must log in to access this page</div>
-    </v-col>
-  </v-row>
+          <v-tab-item>
+            <div v-if="hiddenPosts.length > 0">
+              <Post v-for="post in hiddenPosts" :key="post.id" :post="post" />
+            </div>
+            <v-list v-else>
+              <v-list-item>
+                <v-list-item-content>
+                  <v-list-item-title>Not hiding any posts.</v-list-item-title>
+                </v-list-item-content>
+              </v-list-item>
+            </v-list>
+          </v-tab-item>
+        </v-tabs-items>
+      </v-col>
+    </v-row>
+    <v-row v-else>
+      <v-col>
+        <div class="headline">Must log in to access this page</div>
+      </v-col>
+    </v-row>
+  </v-container>
 </template>
 
 <script>

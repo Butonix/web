@@ -1,82 +1,88 @@
 <template>
-  <v-row v-if="currentUser">
-    <v-col :cols="$device.isDesktop ? 6 : 12">
-      <v-form ref="form" v-model="valid" @submit.prevent="changePassword">
-        <div class="title mb-2">Change password</div>
-        <v-text-field
-          v-model="currentPassword"
-          :rules="rules.oldPasswordRules"
-          label="Current Password"
-          filled
-          :type="showPasswordOld ? 'text' : 'password'"
-        >
-          <template v-slot:append>
-            <div
-              style="cursor: pointer"
-              tabindex="-1"
-              @click="showPasswordOld = !showPasswordOld"
-            >
-              <v-icon>{{ showPasswordOld ? icons.eye : icons.eyeOff }}</v-icon>
-            </div>
-          </template>
-        </v-text-field>
-        <v-text-field
-          v-model="newPassword"
-          :rules="rules.newPasswordRules"
-          label="New Password"
-          filled
-          :type="showPassword ? 'text' : 'password'"
-        >
-          <template v-slot:append>
-            <div
-              style="cursor: pointer"
-              tabindex="-1"
-              @click="showPassword = !showPassword"
-            >
-              <v-icon>{{ showPassword ? icons.eye : icons.eyeOff }}</v-icon>
-            </div>
-          </template>
-        </v-text-field>
-        <v-text-field
-          v-model="newPasswordConfirm"
-          :rules="rules.newPasswordConfirmRules"
-          label="Confirm New Password"
-          filled
-          :type="showPassword ? 'text' : 'password'"
-        >
-          <template v-slot:append>
-            <div
-              style="cursor: pointer"
-              tabindex="-1"
-              @click="showPassword = !showPassword"
-            >
-              <v-icon>{{ showPassword ? icons.eye : icons.eyeOff }}</v-icon>
-            </div>
-          </template>
-        </v-text-field>
-        <v-row class="mx-0" align="center">
-          <v-spacer />
-          <div v-if="errMessage" class="mr-2 error--text">{{ errMessage }}</div>
-          <div v-if="successMessage" class="mr-2 success--text">
-            {{ successMessage }}
-          </div>
-          <v-btn
-            :loading="loading"
-            color="primary"
-            :disabled="!valid"
-            type="submit"
-            >Change Password</v-btn
+  <v-container fluid>
+    <v-row v-if="currentUser">
+      <v-col :cols="$device.isDesktop ? 6 : 12">
+        <v-form ref="form" v-model="valid" @submit.prevent="changePassword">
+          <div class="title mb-2">Change password</div>
+          <v-text-field
+            v-model="currentPassword"
+            :rules="rules.oldPasswordRules"
+            label="Current Password"
+            filled
+            :type="showPasswordOld ? 'text' : 'password'"
           >
-        </v-row>
-      </v-form>
-    </v-col>
-  </v-row>
+            <template v-slot:append>
+              <div
+                style="cursor: pointer"
+                tabindex="-1"
+                @click="showPasswordOld = !showPasswordOld"
+              >
+                <v-icon>{{
+                  showPasswordOld ? icons.eye : icons.eyeOff
+                }}</v-icon>
+              </div>
+            </template>
+          </v-text-field>
+          <v-text-field
+            v-model="newPassword"
+            :rules="rules.newPasswordRules"
+            label="New Password"
+            filled
+            :type="showPassword ? 'text' : 'password'"
+          >
+            <template v-slot:append>
+              <div
+                style="cursor: pointer"
+                tabindex="-1"
+                @click="showPassword = !showPassword"
+              >
+                <v-icon>{{ showPassword ? icons.eye : icons.eyeOff }}</v-icon>
+              </div>
+            </template>
+          </v-text-field>
+          <v-text-field
+            v-model="newPasswordConfirm"
+            :rules="rules.newPasswordConfirmRules"
+            label="Confirm New Password"
+            filled
+            :type="showPassword ? 'text' : 'password'"
+          >
+            <template v-slot:append>
+              <div
+                style="cursor: pointer"
+                tabindex="-1"
+                @click="showPassword = !showPassword"
+              >
+                <v-icon>{{ showPassword ? icons.eye : icons.eyeOff }}</v-icon>
+              </div>
+            </template>
+          </v-text-field>
+          <v-row class="mx-0" align="center">
+            <v-spacer />
+            <div v-if="errMessage" class="mr-2 error--text">
+              {{ errMessage }}
+            </div>
+            <div v-if="successMessage" class="mr-2 success--text">
+              {{ successMessage }}
+            </div>
+            <v-btn
+              :loading="loading"
+              color="primary"
+              :disabled="!valid"
+              type="submit"
+              >Change Password</v-btn
+            >
+          </v-row>
+        </v-form>
+      </v-col>
+    </v-row>
 
-  <v-row v-else>
-    <v-col>
-      <div class="headline">Must be logged in to access this page</div>
-    </v-col>
-  </v-row>
+    <v-row v-else>
+      <v-col>
+        <div class="headline">Must be logged in to access this page</div>
+      </v-col>
+    </v-row>
+  </v-container>
 </template>
 
 <script>

@@ -1,44 +1,47 @@
 <template>
-  <v-row>
-    <v-col>
-      <div class="px-2">
-        <div class="overline">Topic</div>
-        <div class="headline">
-          <span>{{ topic.capitalizedName }}</span>
-          <v-btn small class="ml-1" @click="toggleFollow">{{
-            topic.isFollowing ? 'Unfollow' : 'Follow'
-          }}</v-btn>
+  <v-container fluid>
+    <v-row>
+      <v-col>
+        <div class="px-2">
+          <div class="overline">Topic</div>
+          <div class="headline">
+            <span>{{ topic.capitalizedName }}</span>
+            <v-btn small class="ml-1" @click="toggleFollow">{{
+              topic.isFollowing ? 'Unfollow' : 'Follow'
+            }}</v-btn>
+          </div>
         </div>
-      </div>
-      <v-divider class="my-1" />
-      <v-row class="mb-1 mx-0">
-        <SortMenu v-model="sort" class="mr-1" />
-        <TypeMenu v-model="type" />
-      </v-row>
+        <v-divider class="my-1" />
+        <v-row class="mb-1 mx-0">
+          <SortMenu v-model="sort" class="mr-1" />
+          <TypeMenu v-model="type" />
+        </v-row>
 
-      <Post
-        v-for="post in topicFeed.slice(0, topicFeed.length - 1)"
-        :key="post.id"
-        :post="post"
-        class="mb-1"
-      />
-      <Post
-        v-for="post in topicFeed.slice(topicFeed.length - 1, topicFeed.length)"
-        :key="post.id"
-        v-intersect.quiet="showMore"
-        :post="post"
-        class="mb-1"
-      />
+        <Post
+          v-for="post in topicFeed.slice(0, topicFeed.length - 1)"
+          :key="post.id"
+          :post="post"
+        />
+        <Post
+          v-for="post in topicFeed.slice(
+            topicFeed.length - 1,
+            topicFeed.length
+          )"
+          :key="post.id"
+          v-intersect.quiet="showMore"
+          :post="post"
+        />
 
-      <v-progress-linear
-        v-show="$apollo.queries.topicFeed.loading"
-        indeterminate
-      />
-    </v-col>
-    <v-col v-if="$device.isDesktop" cols="2">
-      <TopicsSidebar />
-    </v-col>
-  </v-row>
+        <v-progress-linear
+          v-show="$apollo.queries.topicFeed.loading"
+          indeterminate
+        />
+      </v-col>
+      <v-col v-if="$device.isDesktop" cols="2">
+        <TopicsSidebar />
+      </v-col>
+    </v-row>
+  </v-container>
 </template>
 
 <script>

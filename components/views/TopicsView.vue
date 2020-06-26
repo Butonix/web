@@ -1,9 +1,11 @@
 <template>
-  <v-row>
-    <v-col>
-      <TopicsSidebar />
-    </v-col>
-  </v-row>
+  <v-container fluid>
+    <v-row>
+      <v-col>
+        <TopicsSidebar />
+      </v-col>
+    </v-row>
+  </v-container>
 </template>
 
 <script>

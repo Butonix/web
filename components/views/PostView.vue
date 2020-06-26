@@ -1,67 +1,77 @@
 <template>
-  <v-row>
-    <v-col>
-      <Post :post="post" :expand="true" />
-
-      <div :style="$device.isDesktop ? 'width: 40%' : 'width: 100%'">
-        <TextEditor
-          v-model="commentWriteText"
-          :label="'Write your comment'"
-          class="mt-2"
-          :rows="3"
-          :err="submitCommentErr"
-          :show-details="submitCommentErr.length > 0"
-        />
-        <v-row>
-          <v-spacer />
-          <v-btn
-            depressed
-            small
-            class="mt-1"
-            text
-            :loading="loading"
-            :disabled="!commentWriteText"
-            @click="submitComment"
-            >Submit Comment</v-btn
-          >
-        </v-row>
-      </div>
-
-      <div v-if="threadedComments.length === 0 && post.commentCount !== 0">
-        <v-row class="ma-0">
-          <div class="title mr-6">Loading Comments...</div>
-          <v-progress-circular size="24" indeterminate />
-        </v-row>
-      </div>
-
-      <div v-else>
-        <v-row class="mb-1 mx-0 mt-0" align="center">
-          <span class="title mr-2"
-            >{{ postComments.length }} Comment{{
-              postComments.length === 1 ? '' : 's'
-            }}</span
-          >
-          <SortMenu
-            v-model="sort"
-            :hot-enabled="false"
-            :times-enabled="false"
-          />
-        </v-row>
-
-        <Comment
-          v-for="comment in threadedComments"
-          :key="comment.id"
-          :comment="comment"
+  <v-container fluid :class="$device.isDesktop ? '' : 'pa-0'">
+    <v-row :class="$device.isDesktop ? '' : 'ma-0'">
+      <v-col :class="$device.isDesktop ? '' : 'pa-0'">
+        <Post
+          v-if="$device.isDesktop"
           :post="post"
-          :post-view="postView"
-          :sort="sort"
-          class="mb-1"
+          :expand="true"
+          :is-post-view="true"
         />
+        <MobilePost v-else :post="post" :expand="true" :is-post-view="true" />
 
-        <div v-if="threadedComments.length > 0" style="height: 500px" />
-      </div>
-    </v-col>
-  </v-row>
+        <div>
+          <div :style="$device.isDesktop ? 'width: 40%' : 'width: 100%'">
+            <TextEditor
+              v-model="commentWriteText"
+              :label="'Write your comment'"
+              class="mt-2"
+              :rows="$device.isDesktop ? 3 : 1"
+              :err="submitCommentErr"
+              :show-details="submitCommentErr.length > 0"
+            />
+            <v-row>
+              <v-spacer />
+              <v-btn
+                depressed
+                small
+                class="mt-1"
+                text
+                :loading="loading"
+                :disabled="!commentWriteText"
+                @click="submitComment"
+                >Submit Comment</v-btn
+              >
+            </v-row>
+          </div>
+
+          <div v-if="threadedComments.length === 0 && post.commentCount !== 0">
+            <v-row class="ma-0">
+              <div class="title mr-6">Loading Comments...</div>
+              <v-progress-circular size="24" indeterminate />
+            </v-row>
+          </div>
+
+          <div v-else>
+            <v-row class="mb-1 mx-0 mt-0" align="center">
+              <span class="title mr-2"
+                >{{ postComments.length }} Comment{{
+                  postComments.length === 1 ? '' : 's'
+                }}</span
+              >
+              <SortMenu
+                v-model="sort"
+                :hot-enabled="false"
+                :times-enabled="false"
+              />
+            </v-row>
+
+            <Comment
+              v-for="comment in threadedComments"
+              :key="comment.id"
+              :comment="comment"
+              :post="post"
+              :post-view="postView"
+              :sort="sort"
+              class="mb-1"
+            />
+
+            <div v-if="threadedComments.length > 0" style="height: 500px" />
+          </div>
+        </div>
+      </v-col>
+    </v-row>
+  </v-container>
 </template>
 
 <script>
@@ -73,10 +83,11 @@ import recordPostViewGql from '../../gql/recordPostView.graphql'
 import TextEditor from '../TextEditor'
 import Comment from '../Comment'
 import SortMenu from '../SortMenu'
+import MobilePost from '../MobilePost'
 
 export default {
   name: 'PostView',
-  components: { SortMenu, Comment, TextEditor, Post },
+  components: { MobilePost, SortMenu, Comment, TextEditor, Post },
   async asyncData(context) {
     const client = context.app.apolloProvider.defaultClient
     const postData = await client.query({

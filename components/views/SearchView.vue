@@ -1,48 +1,48 @@
 <template>
-  <v-row>
-    <v-col>
-      <v-text-field
-        v-model="searchText"
-        :style="$device.isDesktop ? 'max-width: 35%' : ''"
-        filled
-        label="Search"
-      />
-      <v-row class="mx-0 mb-2" align="center">
-        <div class="title mr-2">
-          Search: {{ $route.query.q ? $route.query.q : '' }}
-        </div>
-
-        <SortMenu
-          v-model="sort"
-          :hot-enabled="false"
-          :new-enabled="false"
-          relevance-enabled
+  <v-container fluid>
+    <v-row>
+      <v-col>
+        <v-text-field
+          v-model="searchText"
+          :style="$device.isDesktop ? 'max-width: 35%' : ''"
+          filled
+          label="Search"
         />
-      </v-row>
+        <v-row class="mx-0 mb-2" align="center">
+          <div class="title mr-2">
+            Search: {{ $route.query.q ? $route.query.q : '' }}
+          </div>
 
-      <Post
-        v-for="post in searchPosts.slice(0, searchPosts.length - 1)"
-        :key="post.id"
-        :post="post"
-        class="mb-1"
-      />
-      <Post
-        v-for="post in searchPosts.slice(
-          searchPosts.length - 1,
-          searchPosts.length
-        )"
-        :key="post.id"
-        v-intersect.quiet="showMore"
-        :post="post"
-        class="mb-1"
-      />
+          <SortMenu
+            v-model="sort"
+            :hot-enabled="false"
+            :new-enabled="false"
+            relevance-enabled
+          />
+        </v-row>
 
-      <v-progress-linear
-        v-show="$apollo.queries.searchPosts.loading"
-        indeterminate
-      />
-    </v-col>
-  </v-row>
+        <Post
+          v-for="post in searchPosts.slice(0, searchPosts.length - 1)"
+          :key="post.id"
+          :post="post"
+        />
+        <Post
+          v-for="post in searchPosts.slice(
+            searchPosts.length - 1,
+            searchPosts.length
+          )"
+          :key="post.id"
+          v-intersect.quiet="showMore"
+          :post="post"
+        />
+
+        <v-progress-linear
+          v-show="$apollo.queries.searchPosts.loading"
+          indeterminate
+        />
+      </v-col>
+    </v-row>
+  </v-container>
 </template>
 
 <script>

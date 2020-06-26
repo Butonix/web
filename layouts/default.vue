@@ -93,9 +93,7 @@
 
     <v-content>
       <LoginDialog />
-      <v-container fluid>
-        <nuxt />
-      </v-container>
+      <nuxt />
       <Snackbar />
     </v-content>
     <!--<v-footer :fixed="fixed" app>

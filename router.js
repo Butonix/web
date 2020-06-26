@@ -64,9 +64,9 @@ export function createRouter() {
                 position = { selector: hash }
               }
             } catch (e) {
-              console.warn(
+              /* console.warn(
                 'Failed to save scroll position. Please add CSS.escape() polyfill (https://github.com/mathiasbynens/CSS.escape).'
-              )
+              ) */
             }
           }
           resolve(position)

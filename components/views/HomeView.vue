@@ -1,64 +1,63 @@
 <template>
-  <v-row>
-    <v-col class="pt-0">
-      <v-row class="mx-0 mb-2" align="center">
-        <v-btn
-          v-if="currentUser"
-          text
-          small
-          class="mr-1"
-          :class="filter === 'all' ? '' : 'text--secondary'"
-          :outlined="filter === 'all'"
-          @click="filter = 'all'"
-          >All</v-btn
-        >
-        <v-btn
-          v-if="currentUser"
-          text
-          small
-          class="mr-1"
-          :class="filter === 'following' ? '' : 'text--secondary'"
-          :outlined="filter === 'following'"
-          @click="filter = 'following'"
-          >Following Only</v-btn
-        >
-        <SortMenu v-model="sort" class="mr-1" />
-        <TypeMenu v-model="type" />
-      </v-row>
+  <v-container fluid>
+    <v-row>
+      <v-col class="pt-0">
+        <v-row class="mx-0 mb-2" align="center">
+          <v-btn
+            v-if="currentUser"
+            text
+            small
+            class="mr-1"
+            :class="filter === 'all' ? '' : 'text--secondary'"
+            :outlined="filter === 'all'"
+            @click="filter = 'all'"
+            >All</v-btn
+          >
+          <v-btn
+            v-if="currentUser"
+            text
+            small
+            class="mr-1"
+            :class="filter === 'following' ? '' : 'text--secondary'"
+            :outlined="filter === 'following'"
+            @click="filter = 'following'"
+            >Following Only</v-btn
+          >
+          <SortMenu v-model="sort" class="mr-1" />
+          <TypeMenu v-model="type" />
+        </v-row>
 
-      <div v-if="filter === 'all'">
+        <div v-if="filter === 'all'">
+          <Post
+            v-for="post in globalStickies"
+            :key="post.id"
+            :post="post"
+            sticky
+          />
+        </div>
+
         <Post
-          v-for="post in globalStickies"
+          v-for="post in homeFeed.slice(0, homeFeed.length - 1)"
           :key="post.id"
           :post="post"
-          sticky
-          class="mb-1"
         />
-      </div>
+        <Post
+          v-for="post in homeFeed.slice(homeFeed.length - 1, homeFeed.length)"
+          :key="post.id"
+          v-intersect.quiet="showMore"
+          :post="post"
+        />
 
-      <Post
-        v-for="post in homeFeed.slice(0, homeFeed.length - 1)"
-        :key="post.id"
-        :post="post"
-        class="mb-1"
-      />
-      <Post
-        v-for="post in homeFeed.slice(homeFeed.length - 1, homeFeed.length)"
-        :key="post.id"
-        v-intersect.quiet="showMore"
-        :post="post"
-        class="mb-1"
-      />
-
-      <v-progress-linear
-        v-show="$apollo.queries.homeFeed.loading"
-        indeterminate
-      />
-    </v-col>
-    <v-col v-if="$device.isDesktop" cols="2">
-      <TopicsSidebar />
-    </v-col>
-  </v-row>
+        <v-progress-linear
+          v-show="$apollo.queries.homeFeed.loading"
+          indeterminate
+        />
+      </v-col>
+      <v-col v-if="$device.isDesktop" cols="2">
+        <TopicsSidebar />
+      </v-col>
+    </v-row>
+  </v-container>
 </template>
 
 <script>
