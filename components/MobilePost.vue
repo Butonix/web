@@ -27,13 +27,10 @@
         <nuxt-link
           :to="`/post/${post.id}/${urlName}`"
           class="text--primary font-weight-light"
-          style="display: block; line-height: normal"
+          style="display: block; line-height: normal; font-size: 1.25rem"
           >{{ post.title }}</nuxt-link
         >
-        <div
-          class="font-weight-light text--secondary"
-          style="font-size: .6875rem"
-        >
+        <div class="text--secondary" style="font-size: .875rem">
           @{{ post.author.username }}
           <span class="font-weight-bold">&middot;</span>
           {{ timeSince }} ago
@@ -44,7 +41,6 @@
             v-for="topic in post.topics.slice(0, 3)"
             :key="topic.name"
             class="font-weight-medium"
-            style="font-size: .75rem"
           >
             [{{ topic.capitalizedName }}]
           </span>
@@ -105,8 +101,8 @@
     <v-card-actions class="pt-1">
       <v-row class="mx-0" align="center">
         <div
-          class="font-weight-light text--secondary"
-          style="font-size: .6875rem; line-height: normal"
+          class="text--secondary"
+          style="font-size: .875rem; line-height: normal"
         >
           <div>
             {{ post.endorsementCount }} endorsement{{
