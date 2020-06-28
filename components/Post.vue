@@ -13,7 +13,7 @@
     :expand="expand"
     :sticky="sticky"
     :is-post-view="isPostView"
-    :class="isPostView ? '' : 'mb-2'"
+    :class="isPostView ? '' : 'mb-3'"
   />
 </template>
 

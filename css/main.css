@@ -16,6 +16,12 @@
   -ms-overflow-style: none;
 }
 
+.betterbutton {
+  text-transform: none;
+  font-weight: 400;
+  letter-spacing: normal;
+}
+
 a {
   text-decoration: none;
 }

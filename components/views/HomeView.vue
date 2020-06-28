@@ -2,31 +2,6 @@
   <v-container fluid>
     <v-row>
       <v-col class="pt-0">
-        <v-row class="mx-0 mb-2" align="center">
-          <v-btn
-            v-if="currentUser"
-            text
-            small
-            class="mr-1"
-            :class="filter === 'all' ? '' : 'text--secondary'"
-            :outlined="filter === 'all'"
-            @click="filter = 'all'"
-            >All</v-btn
-          >
-          <v-btn
-            v-if="currentUser"
-            text
-            small
-            class="mr-1"
-            :class="filter === 'following' ? '' : 'text--secondary'"
-            :outlined="filter === 'following'"
-            @click="filter = 'following'"
-            >Following Only</v-btn
-          >
-          <SortMenu v-model="sort" class="mr-1" />
-          <TypeMenu v-model="type" />
-        </v-row>
-
         <div v-if="filter === 'all'">
           <Post
             v-for="post in globalStickies"
@@ -64,14 +39,12 @@
 import homeFeedGql from '../../gql/homeFeed.graphql'
 import globalStickiesGql from '../../gql/globalStickies.graphql'
 import TopicsSidebar from '../TopicsSidebar'
-import SortMenu from '../SortMenu'
 import Post from '../Post'
 import currentUserGql from '../../gql/currentUser.graphql'
-import TypeMenu from '../TypeMenu'
 
 export default {
   name: 'HomeView',
-  components: { TypeMenu, Post, SortMenu, TopicsSidebar },
+  components: { Post, TopicsSidebar },
   data() {
     return {
       homeFeed: [],

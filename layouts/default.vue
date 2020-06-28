@@ -1,99 +1,154 @@
 <template>
   <v-app>
-    <NavDrawer v-model="drawer" />
+    <!--<NavDrawer v-model="drawer" />-->
 
-    <v-app-bar app color="primary" clipped-left flat dense>
-      <v-app-bar-nav-icon v-if="!$device.isDesktop" @click="drawer = !drawer">
-        <v-icon>{{ icons.menu }}</v-icon>
-      </v-app-bar-nav-icon>
+    <v-app-bar app bottom hide-on-scroll class="bottomappbar">
+      <v-bottom-navigation
+        grow
+        :background-color="$vuetify.theme.dark ? 'grey darken-4' : ''"
+        color="primary"
+      >
+        <v-btn to="/" class="font-weight-light">
+          <span>Home</span>
+          <v-icon>{{ icons.home }}</v-icon>
+        </v-btn>
 
-      <nuxt-link :to="{ path: '/', query: $store.state.homeQuery }">
-        <v-img :src="cometLogo" width="128" />
-      </nuxt-link>
-
-      <v-toolbar-title class="headline font-weight-medium">
-        <span v-if="$device.isDesktop" class="caption ml-1 white--text">
-          <a
-            href="https://github.com/comet-app"
-            target="_blank"
-            rel="noopener"
-            class="hoverable white--text"
+        <v-btn to="/interactions" class="font-weight-light">
+          <span>Interactions</span>
+          <v-badge
+            v-if="notifications.length > 0"
+            overlap
+            :content="notifications.length"
           >
-            alpha v0.0.1</a
-          >
-          &middot;
-          <a
-            href="https://discord.gg/NPCMGSm"
-            target="_blank"
-            rel="noopener"
-            class="hoverable white--text"
-            >join the Discord</a
-          >
-        </span>
-      </v-toolbar-title>
+            <v-icon>{{ icons.interactions }}</v-icon>
+          </v-badge>
+          <v-icon v-else>{{ icons.interactions }}</v-icon>
+        </v-btn>
 
-      <v-spacer />
+        <v-btn to="/search" class="font-weight-light">
+          <span>Search</span>
+          <v-icon>{{ icons.search }}</v-icon>
+        </v-btn>
 
-      <template v-if="$device.isDesktop">
-        <v-btn v-if="currentUser" text dark nuxt to="/new" class="mr-6">
-          <span class="mr-2">New Post</span>
-          <v-icon>{{ icons.plus }}</v-icon>
+        <v-btn to="/new" class="font-weight-light">
+          <span>Submit</span>
+          <v-icon>{{ icons.newPost }}</v-icon>
+        </v-btn>
+      </v-bottom-navigation>
+    </v-app-bar>
+
+    <v-app-bar
+      app
+      flat
+      :color="$vuetify.theme.dark ? '#121212' : '#FFFFFF'"
+      clipped-left
+      hide-on-scroll
+    >
+      <!--<v-app-bar-nav-icon v-if="!$device.isDesktop" @click="drawer = !drawer">
+        <v-icon color="white">{{ icons.menu }}</v-icon>
+      </v-app-bar-nav-icon>-->
+
+      <v-row class="ma-0" align="center">
+        <nuxt-link :to="{ path: '/', query: $store.state.homeQuery }">
+          <v-img :src="cometLogo" width="96" />
+        </nuxt-link>
+        <v-spacer />
+        <v-btn
+          class="betterbutton mr-2"
+          outlined
+          rounded
+          :style="
+            $vuetify.theme.dark
+              ? 'border-color: rgba(255, 255, 255, 0.12);'
+              : 'border-color: rgba(0, 0, 0, 0.12);'
+          "
+        >
+          <v-icon class="mr-2">{{ icons.hot }}</v-icon>
+          All
         </v-btn>
 
         <v-btn
-          v-else
-          text
-          dark
-          class="mr-6"
-          @click="$store.dispatch('showLoginDialogCompose')"
+          class="betterbutton mr-1"
+          outlined
+          rounded
+          :style="
+            $vuetify.theme.dark
+              ? 'border-color: rgba(255, 255, 255, 0.12);'
+              : 'border-color: rgba(0, 0, 0, 0.12);'
+          "
         >
-          <span class="mr-2">New Post</span>
-          <v-icon>{{ icons.plus }}</v-icon>
+          <v-icon class="mr-2">{{ icons.hot }}</v-icon>
+          Hot
         </v-btn>
+        <v-menu left>
+          <template v-slot:activator="{ on }">
+            <v-btn icon v-on="on">
+              <v-icon>{{ icons.profile }}</v-icon>
+            </v-btn>
+          </template>
 
-        <div style="width: 20%">
-          <v-text-field
-            v-model="searchText"
-            solo-inverted
-            dark
-            flat
-            dense
-            hide-details
-            label="Search Posts"
-            :append-icon="icons.magnify"
-            @click:append="
-              $router.push({ path: '/search', query: { q: searchText } })
-            "
-            @keydown.enter="
-              $router.push({ path: '/search', query: { q: searchText } })
-            "
-          />
-        </div>
-      </template>
+          <v-list class="py-0">
+            <v-list-item
+              v-if="currentUser"
+              :to="`/user/@${currentUser.username}`"
+            >
+              <v-list-item-avatar color="grey darken-3">
+                <v-icon small>{{ icons.profile }}</v-icon>
+              </v-list-item-avatar>
+              <v-list-item-content>
+                <v-list-item-title>{{
+                  currentUser.username
+                }}</v-list-item-title>
+              </v-list-item-content>
+            </v-list-item>
 
-      <div v-else>
-        <v-btn icon dark nuxt to="/search">
-          <v-icon>{{ icons.magnify }}</v-icon>
-        </v-btn>
+            <v-list-item v-if="!currentUser" to="/login">
+              <v-list-item-icon>
+                <v-icon>{{ icons.login }}</v-icon>
+              </v-list-item-icon>
+              <v-list-item-content>
+                <v-list-item-title>Log in</v-list-item-title>
+              </v-list-item-content>
+            </v-list-item>
 
-        <v-btn v-if="currentUser" icon dark nuxt to="/new">
-          <v-icon>{{ icons.plus }}</v-icon>
-        </v-btn>
+            <v-list-item v-if="currentUser" to="/settings">
+              <v-list-item-icon>
+                <v-icon>{{ icons.settings }}</v-icon>
+              </v-list-item-icon>
+              <v-list-item-content>
+                <v-list-item-title>Settings</v-list-item-title>
+              </v-list-item-content>
+            </v-list-item>
 
-        <v-btn
-          v-else
-          icon
-          dark
-          @click="$store.dispatch('showLoginDialogCompose')"
-        >
-          <v-icon>{{ icons.plus }}</v-icon>
-        </v-btn>
-      </div>
+            <v-list-item @click="toggleDark">
+              <v-list-item-icon>
+                <v-icon>{{ icons.dark }}</v-icon>
+              </v-list-item-icon>
+              <v-list-item-content>
+                <v-list-item-title>Dark mode</v-list-item-title>
+              </v-list-item-content>
+              <v-list-item-action>
+                <v-switch v-model="$vuetify.theme.dark" readonly />
+              </v-list-item-action>
+            </v-list-item>
+
+            <v-list-item v-if="currentUser" @click="logout">
+              <v-list-item-icon>
+                <v-icon>{{ icons.logout }}</v-icon>
+              </v-list-item-icon>
+              <v-list-item-content>
+                <v-list-item-title>Log out</v-list-item-title>
+              </v-list-item-content>
+            </v-list-item>
+          </v-list>
+        </v-menu>
+      </v-row>
     </v-app-bar>
 
     <v-content>
-      <LoginDialog />
-      <nuxt />
+      <v-fade-transition mode="out-in">
+        <nuxt />
+      </v-fade-transition>
       <Snackbar />
     </v-content>
     <!--<v-footer :fixed="fixed" app>
@@ -103,31 +158,65 @@
 </template>
 
 <script>
-import { mdiPlus, mdiMagnify, mdiMenu } from '@mdi/js'
-import NavDrawer from '../components/NavDrawer'
+import {
+  mdiPlus,
+  mdiMagnify,
+  mdiMenu,
+  mdiHome,
+  mdiAccountOutline,
+  mdiEmail,
+  mdiPencil,
+  mdiFire,
+  mdiCogOutline,
+  mdiWeatherNight,
+  mdiLogout,
+  mdiLogin
+} from '@mdi/js'
 import currentUserGql from '../gql/currentUser.graphql'
 import Snackbar from '../components/Snackbar'
-import LoginDialog from '../components/LoginDialog'
+import notificationsGql from '../gql/notifications.graphql'
 
 export default {
   name: 'Default',
-  components: { LoginDialog, Snackbar, NavDrawer },
+  components: { Snackbar },
   data() {
     return {
       currentUser: null,
       drawer: false,
       searchText: '',
       cometLogo: require('~/assets/comet_logo.png'),
+      notifications: [],
       icons: {
         plus: mdiPlus,
         magnify: mdiMagnify,
-        menu: mdiMenu
+        menu: mdiMenu,
+        home: mdiHome,
+        profile: mdiAccountOutline,
+        interactions: mdiEmail,
+        search: mdiMagnify,
+        newPost: mdiPencil,
+        hot: mdiFire,
+        settings: mdiCogOutline,
+        dark: mdiWeatherNight,
+        logout: mdiLogout,
+        login: mdiLogin
       }
     }
   },
   apollo: {
     currentUser: {
       query: currentUserGql
+    },
+    notifications: {
+      query: notificationsGql,
+      variables() {
+        return {
+          unreadOnly: true
+        }
+      },
+      skip() {
+        return !this.currentUser
+      }
     }
   },
   mounted() {
@@ -150,6 +239,28 @@ export default {
     })
 
     this.drawer = this.$device.isDesktop
+  },
+  methods: {
+    toggleDark() {
+      this.$vuetify.theme.dark = !this.$vuetify.theme.dark
+      if (process.client) {
+        localStorage.setItem('dark', this.$vuetify.theme.dark.toString())
+      }
+    },
+    async logout() {
+      await this.$apollo.provider.defaultClient.cache.writeQuery({
+        query: currentUserGql,
+        data: { currentUser: null }
+      })
+      await this.$apolloHelpers.onLogout()
+    }
   }
 }
 </script>
+
+<style scoped>
+.bottomappbar >>> .v-toolbar__content {
+  padding: 0;
+  margin: 0;
+}
+</style>

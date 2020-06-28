@@ -1,15 +1,54 @@
 <template>
-  <v-container fluid :class="$device.isDesktop ? '' : 'pa-0'">
-    <v-row :class="$device.isDesktop ? '' : 'ma-0'">
-      <v-col :class="$device.isDesktop ? '' : 'pa-0'">
-        <Post
-          v-if="$device.isDesktop"
-          :post="post"
-          :expand="true"
-          :is-post-view="true"
-        />
-        <MobilePost v-else :post="post" :expand="true" :is-post-view="true" />
+  <div v-if="!$device.isDesktop">
+    <Post :post="post" :expand="true" :is-post-view="true" />
+    <v-divider class="mt-1 mb-4" />
+    <v-row class="my-0 mx-4">
+      <v-btn
+        class="mr-4 flex-grow-1 betterbutton"
+        :style="
+          $vuetify.theme.dark
+            ? 'border-color: rgba(255, 255, 255, 0.12);'
+            : 'border-color: rgba(0, 0, 0, 0.12);'
+        "
+        small
+        rounded
+        depressed
+        style="justify-content: start"
+      >
+        <v-icon small class="mr-2">{{ icons.comment }}</v-icon>
+        <span class="mr-4">New comment</span>
+      </v-btn>
+      <v-btn
+        class="betterbutton"
+        :style="
+          $vuetify.theme.dark
+            ? 'border-color: rgba(255, 255, 255, 0.12);'
+            : 'border-color: rgba(0, 0, 0, 0.12);'
+        "
+        rounded
+        outlined
+        small
+      >
+        <v-icon small class="mr-2">{{ icons.sort }}</v-icon>
+        <span>Hot</span>
+      </v-btn>
+    </v-row>
+    <v-divider class="mb-2 mt-4" />
+    <Comment
+      v-for="comment in threadedComments"
+      :key="comment.id"
+      :comment="comment"
+      :post="post"
+      :post-view="postView"
+      :sort="sort"
+      class="mb-1"
+    />
+  </div>
 
+  <v-container v-else fluid>
+    <v-row>
+      <v-col>
+        <Post :post="post" :expand="true" :is-post-view="true" />
         <div>
           <div :style="$device.isDesktop ? 'width: 40%' : 'width: 100%'">
             <TextEditor
@@ -75,6 +114,7 @@
 </template>
 
 <script>
+import { mdiSortVariant, mdiPencil } from '@mdi/js'
 import Post from '../Post.vue'
 import submitCommentGql from '../../gql/submitComment.graphql'
 import postGql from '../../gql/post.graphql'
@@ -83,11 +123,10 @@ import recordPostViewGql from '../../gql/recordPostView.graphql'
 import TextEditor from '../TextEditor'
 import Comment from '../Comment'
 import SortMenu from '../SortMenu'
-import MobilePost from '../MobilePost'
 
 export default {
   name: 'PostView',
-  components: { MobilePost, SortMenu, Comment, TextEditor, Post },
+  components: { SortMenu, Comment, TextEditor, Post },
   async asyncData(context) {
     const client = context.app.apolloProvider.defaultClient
     const postData = await client.query({
@@ -111,6 +150,10 @@ export default {
       commentWriteText: '',
       loading: false,
       submitCommentErr: '',
+      icons: {
+        sort: mdiSortVariant,
+        comment: mdiPencil
+      },
       sort: {
         sort:
           this.$route.query.sort &&

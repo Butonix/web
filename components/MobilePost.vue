@@ -1,27 +1,16 @@
 <template>
   <v-card
     v-show="!post.hidden || $route.name.startsWith('Post')"
+    flat
+    :outlined="!isPostView"
+    style="background-color: transparent"
     :tile="isPostView"
     :to="isPostView ? '' : `/post/${post.id}/${urlName}`"
+    :ripple="false"
+    :class="isPostView ? 'pb-2 px-3 pt-3' : 'pa-2'"
   >
-    <div v-if="expanded && post.type === 'LINK'">
-      <youtube
-        v-if="isYoutubeLink"
-        :width="'100%'"
-        height="170"
-        :video-id="$youtube.getIdFromUrl(post.link)"
-      />
-      <Tweet
-        v-else-if="isTwitterLink"
-        :id="post.link.split('status/')[1].split('?')[0]"
-      />
-      <a v-if="isImageUrl" :href="post.link" target="_blank" rel="noopener">
-        <v-img :src="post.link" height="170" />
-      </a>
-    </div>
-
-    <v-list-item style="min-height: 0; align-items: start" class="px-2 pb-0">
-      <div class="mt-2">
+    <v-list-item style="min-height: 0; align-items: start" class="pa-0">
+      <div>
         <div v-if="sticky" class="overline text--secondary">Announcement</div>
 
         <nuxt-link
@@ -31,54 +20,57 @@
           >{{ post.title }}</nuxt-link
         >
         <div class="text--secondary" style="font-size: .875rem">
-          @{{ post.author.username }}
+          {{ post.author.username }}
           <span class="font-weight-bold">&middot;</span>
-          {{ timeSince }} ago
-          <span class="font-weight-bold">&middot;</span>
-          {{ post.domain ? post.domain : 'text' }}
+          {{ timeSince }}
           <span class="font-weight-bold">&middot;</span>
           <span
-            v-for="topic in post.topics.slice(0, 3)"
+            v-for="topic in post.topics"
             :key="topic.name"
-            class="font-weight-medium"
+            class="font-weight-medium primary--text"
           >
             [{{ topic.capitalizedName }}]
           </span>
-          <span v-if="post.topics.length > 3"
-            >+{{ post.topics.length - 3 }} more</span
+          <span v-if="post.domain"
+            >({{ post.domain ? post.domain : 'text' }})</span
           >
         </div>
       </div>
 
       <v-list-item-avatar
-        v-if="
-          !expanded &&
-            post.type === 'LINK' &&
-            (post.thumbnailUrl || isTwitterLink)
-        "
+        v-if="post.type === 'LINK'"
         tile
-        size="48"
-        class="mb-0 ml-auto"
+        :color="
+          isTwitterLink || post.thumbnailUrl
+            ? ''
+            : `${$vuetify.theme.dark ? '#212121' : 'grey lighten-3'}`
+        "
+        style="border-radius: 12px"
+        size="64"
+        class="my-0 ml-auto"
+        @click.prevent="openLink"
       >
         <a :href="post.link" rel="noopener" target="_blank">
           <v-img
-            max-width="48"
-            height="48"
+            v-if="post.thumbnailUrl || isTwitterLink"
+            max-width="64"
+            height="64"
             :src="isTwitterLink ? twitterbird : post.thumbnailUrl"
           />
+          <v-icon v-else large>{{ icons.link }}</v-icon>
         </a>
       </v-list-item-avatar>
     </v-list-item>
 
     <v-card-text
       v-if="expanded && !isTitleOnlyTextPost && post.type === 'TEXT'"
-      class="px-2 py-0"
+      class="pa-0"
     >
-      <div>
+      <div class="pt-3">
         <TextContent
           v-if="!editing"
           :text-content="post.textContent"
-          class="body-2"
+          class="body-2 text--primary"
         />
         <div v-if="editing">
           <v-textarea v-model="newTextContent" hide-details filled />
@@ -98,10 +90,10 @@
       </div>
     </v-card-text>
 
-    <v-card-actions class="pt-1">
+    <v-card-actions class="pt-3 pb-0 px-0">
       <v-row class="mx-0" align="center">
-        <div
-          class="text--secondary"
+        <!--<div
+          class="text&#45;&#45;secondary"
           style="font-size: .875rem; line-height: normal"
         >
           <div>
@@ -114,17 +106,97 @@
             {{ `comment${post.commentCount === 1 ? '' : 's'}` }}
             {{ newCommentsCount > 0 ? `(${newCommentsCount} new)` : '' }}
           </div>
-        </div>
+        </div>-->
+
+        <v-btn
+          small
+          outlined
+          rounded
+          class="betterbutton"
+          :style="
+            $vuetify.theme.dark
+              ? 'border-color: rgba(255, 255, 255, 0.12);'
+              : 'border-color: rgba(0, 0, 0, 0.12);'
+          "
+        >
+          <v-icon small class="mr-2">{{ icons.endorse }}</v-icon>
+          {{ post.endorsementCount }}
+        </v-btn>
+
+        <v-btn
+          small
+          outlined
+          rounded
+          class="betterbutton ml-2"
+          :style="
+            $vuetify.theme.dark
+              ? 'border-color: rgba(255, 255, 255, 0.12);'
+              : 'border-color: rgba(0, 0, 0, 0.12);'
+          "
+        >
+          <v-icon small class="mr-2">{{ icons.comment }}</v-icon>
+          {{ post.commentCount }}
+          {{ newCommentsCount > 0 ? `(+${newCommentsCount})` : '' }}
+        </v-btn>
 
         <v-spacer />
 
-        <v-btn icon x-small tile class="pa-3 mr-3" @click.prevent="doNothing">
-          <v-icon class="text--secondary">{{ icons.endorse }}</v-icon>
-        </v-btn>
+        <v-menu bottom>
+          <template v-slot:activator="{ on }">
+            <v-btn icon small v-on="on" @click.stop.prevent="doNothing">
+              <v-icon class="text--secondary">{{ icons.dots }}</v-icon>
+            </v-btn>
+          </template>
 
-        <v-btn icon x-small tile class="pa-3" @click.prevent="doNothing">
-          <v-icon class="text--secondary">{{ icons.dots }}</v-icon>
-        </v-btn>
+          <v-list class="py-0">
+            <v-list-item v-if="canShare" @click="share">
+              <v-list-item-icon class="my-2">
+                <v-icon>{{ icons.share }}</v-icon>
+              </v-list-item-icon>
+              <v-list-item-content class="py-2">
+                <v-list-item-title>Share</v-list-item-title>
+              </v-list-item-content>
+            </v-list-item>
+
+            <v-list-item v-else @click="copyLink">
+              <v-list-item-icon class="my-2">
+                <v-icon>{{ icons.copy }}</v-icon>
+              </v-list-item-icon>
+              <v-list-item-content class="py-2">
+                <v-list-item-title>Copy Link</v-list-item-title>
+              </v-list-item-content>
+            </v-list-item>
+
+            <v-list-item>
+              <v-list-item-icon class="my-2">
+                <v-icon>{{ icons.report }}</v-icon>
+              </v-list-item-icon>
+              <v-list-item-content class="py-2">
+                <v-list-item-title>Report</v-list-item-title>
+              </v-list-item-content>
+            </v-list-item>
+
+            <v-list-item>
+              <v-list-item-icon class="my-2">
+                <v-icon>{{ icons.topics }}</v-icon>
+              </v-list-item-icon>
+              <v-list-item-content class="py-2">
+                <v-list-item-title>Topics</v-list-item-title>
+              </v-list-item-content>
+            </v-list-item>
+
+            <v-list-item :to="`/user/@${post.author.username}`">
+              <v-list-item-icon class="my-2">
+                <v-icon>{{ icons.profile }}</v-icon>
+              </v-list-item-icon>
+              <v-list-item-content class="py-2">
+                <v-list-item-title
+                  >{{ post.author.username }}'s profile</v-list-item-title
+                >
+              </v-list-item-content>
+            </v-list-item>
+          </v-list>
+        </v-menu>
       </v-row>
     </v-card-actions>
   </v-card>
@@ -132,20 +204,26 @@
 
 <script>
 import isImageUrl from 'is-image-url'
-import { Tweet } from 'vue-tweet-embed'
 import {
   mdiChevronUp,
   mdiChevronDown,
   mdiRocket,
-  mdiDotsVertical
+  mdiDotsVertical,
+  mdiWeb,
+  mdiCommentOutline,
+  mdiShareOutline,
+  mdiNewspaper,
+  mdiAlertOctagonOutline,
+  mdiAccountOutline
 } from '@mdi/js'
 import { formatDistanceToNowStrict } from 'date-fns'
 import editPostGql from '../gql/editPost.graphql'
+import { timeSince } from '../util/timeSince'
 import TextContent from './TextContent'
 
 export default {
   name: 'MobilePost',
-  components: { TextContent, Tweet },
+  components: { TextContent },
   props: {
     post: {
       type: Object,
@@ -174,12 +252,21 @@ export default {
         down: mdiChevronDown,
         up: mdiChevronUp,
         endorse: mdiRocket,
-        dots: mdiDotsVertical
+        dots: mdiDotsVertical,
+        link: mdiWeb,
+        comment: mdiCommentOutline,
+        share: mdiShareOutline,
+        topics: mdiNewspaper,
+        report: mdiAlertOctagonOutline,
+        profile: mdiAccountOutline
       },
       twitterbird: require('~/assets/twitterbird.jpg')
     }
   },
   computed: {
+    canShare() {
+      return process.client && navigator.share
+    },
     urlName() {
       return this.post.title
         .toLowerCase()
@@ -187,7 +274,7 @@ export default {
         .replace(/\W/g, '')
     },
     timeSince() {
-      return formatDistanceToNowStrict(new Date(this.post.createdAt))
+      return timeSince(new Date(this.post.createdAt))
     },
     editedTimeSince() {
       if (!this.post.editedAt) return ''
@@ -220,6 +307,23 @@ export default {
   },
   methods: {
     doNothing() {},
+    share() {
+      if (!this.canShare) return
+      const url = `https://getcomet.net/post/${this.post.id}/${this.urlName}`
+      navigator.share({
+        title: `"${this.post.title}" on Comet`,
+        text: `"${this.post.title}" on Comet`,
+        url
+      })
+    },
+    copyLink() {
+      const url = `https://getcomet.net/post/${this.post.id}/${this.urlName}`
+      this.$copyText(url)
+      this.$store.dispatch('displaySnackbar', 'Copied post link')
+    },
+    openLink() {
+      window.open(this.post.link, '_blank')
+    },
     cancelEdit() {
       this.editing = false
       this.newTextContent = this.post.textContent

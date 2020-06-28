@@ -1,6 +1,4 @@
 export const state = () => ({
-  loginDialog: false,
-  redirectLoginDialogToCompose: false,
   homeFeedPage: 0,
   topicFeedPage: {},
   topicSidebarSelected: 'Popular',
@@ -8,18 +6,16 @@ export const state = () => ({
   snackbarEnabled: false,
   snackbarMessage: '',
   searchPage: 0,
-  homeQuery: {}
+  homeQuery: {},
+  expandedCommentId: ''
 })
 
 export const mutations = {
+  setExpandedCommentId(state, commentId) {
+    state.expandedCommentId = commentId
+  },
   setHomeQuery(state, query) {
     state.homeQuery = query
-  },
-  setLoginDialog(state, open) {
-    state.loginDialog = open
-  },
-  setRedirectLoginDialogToCompose(state, redirect) {
-    state.redirectLoginDialogToCompose = redirect
   },
   setHomeFeedPage(state, page) {
     state.homeFeedPage = page
@@ -45,14 +41,6 @@ export const mutations = {
 }
 
 export const actions = {
-  showLoginDialog({ commit }) {
-    commit('setLoginDialog', true)
-    commit('setRedirectLoginDialogToCompose', false)
-  },
-  showLoginDialogCompose({ commit }) {
-    commit('setLoginDialog', true)
-    commit('setRedirectLoginDialogToCompose', true)
-  },
   displaySnackbar({ commit }, message) {
     commit('setSnackbarMessage', message)
     commit('setSnackbarEnabled', true)

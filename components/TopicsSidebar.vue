@@ -114,7 +114,7 @@
       </v-list>
     </v-card>
 
-    <div class="caption mt-2 mx-2 secondary--text">
+    <div class="caption mt-2 mx-2 text--secondary">
       <a href="https://discord.gg/NPCMGSm" target="_blank">Discord</a>
       <span class="mx-1">&middot;</span>
       <a href="https://github.com/comet-app" target="_blank">GitHub</a>

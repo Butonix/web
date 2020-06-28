@@ -13,6 +13,7 @@ import SearchView from './components/views/SearchView'
 import SettingsView from './components/views/SettingsView'
 import TopicsView from './components/views/TopicsView'
 import NotificationsView from './components/views/NotificationsView'
+import LoginView from './components/views/LoginView'
 
 Vue.use(Router)
 
@@ -124,6 +125,11 @@ export function createRouter() {
         path: '/settings',
         component: SettingsView,
         name: 'Settings'
+      },
+      {
+        path: '/login',
+        component: LoginView,
+        name: 'Login'
       },
       {
         path: '/content-policy',
