@@ -7,7 +7,7 @@
     :tile="isPostView"
     :to="isPostView ? '' : `/post/${post.id}/${urlName}`"
     :ripple="false"
-    :class="isPostView ? 'pb-2 px-3 pt-3' : 'pa-2'"
+    :class="isPostView ? 'pb-0 px-4 pt-3' : 'pa-2'"
   >
     <v-list-item style="min-height: 0; align-items: start" class="pa-0">
       <div>
@@ -92,56 +92,28 @@
 
     <v-card-actions class="pt-3 pb-0 px-0">
       <v-row class="mx-0" align="center">
-        <!--<div
-          class="text&#45;&#45;secondary"
-          style="font-size: .875rem; line-height: normal"
-        >
-          <div>
-            {{ post.endorsementCount }} endorsement{{
-              post.endorsementCount === 1 ? '' : 's'
-            }}
-          </div>
-          <div>
-            {{ post.commentCount }}
-            {{ `comment${post.commentCount === 1 ? '' : 's'}` }}
-            {{ newCommentsCount > 0 ? `(${newCommentsCount} new)` : '' }}
-          </div>
-        </div>-->
-
-        <v-btn
-          small
+        <v-chip
           outlined
-          rounded
-          class="betterbutton"
-          :style="
-            $vuetify.theme.dark
-              ? 'border-color: rgba(255, 255, 255, 0.12);'
-              : 'border-color: rgba(0, 0, 0, 0.12);'
-          "
+          :color="post.isEndorsed ? 'primary' : ''"
+          @click.prevent="toggleEndorsement"
         >
-          <v-icon small class="mr-2">{{ icons.endorse }}</v-icon>
+          <v-avatar left class="mr-1">
+            <v-icon small>{{ icons.endorse }}</v-icon>
+          </v-avatar>
           {{ post.endorsementCount }}
-        </v-btn>
+        </v-chip>
 
-        <v-btn
-          small
-          outlined
-          rounded
-          class="betterbutton ml-2"
-          :style="
-            $vuetify.theme.dark
-              ? 'border-color: rgba(255, 255, 255, 0.12);'
-              : 'border-color: rgba(0, 0, 0, 0.12);'
-          "
-        >
-          <v-icon small class="mr-2">{{ icons.comment }}</v-icon>
+        <v-chip outlined class="ml-2" @click="doNothing">
+          <v-avatar left class="mr-1">
+            <v-icon small>{{ icons.comment }}</v-icon>
+          </v-avatar>
           {{ post.commentCount }}
           {{ newCommentsCount > 0 ? `(+${newCommentsCount})` : '' }}
-        </v-btn>
+        </v-chip>
 
         <v-spacer />
 
-        <v-menu bottom>
+        <v-bottom-sheet v-model="menu">
           <template v-slot:activator="{ on }">
             <v-btn icon small v-on="on" @click.stop.prevent="doNothing">
               <v-icon class="text--secondary">{{ icons.dots }}</v-icon>
@@ -149,54 +121,63 @@
           </template>
 
           <v-list class="py-0">
-            <v-list-item v-if="canShare" @click="share">
-              <v-list-item-icon class="my-2">
-                <v-icon>{{ icons.share }}</v-icon>
-              </v-list-item-icon>
-              <v-list-item-content class="py-2">
-                <v-list-item-title>Share</v-list-item-title>
-              </v-list-item-content>
-            </v-list-item>
-
-            <v-list-item v-else @click="copyLink">
-              <v-list-item-icon class="my-2">
-                <v-icon>{{ icons.copy }}</v-icon>
-              </v-list-item-icon>
-              <v-list-item-content class="py-2">
-                <v-list-item-title>Copy Link</v-list-item-title>
-              </v-list-item-content>
-            </v-list-item>
-
-            <v-list-item>
-              <v-list-item-icon class="my-2">
-                <v-icon>{{ icons.report }}</v-icon>
-              </v-list-item-icon>
-              <v-list-item-content class="py-2">
-                <v-list-item-title>Report</v-list-item-title>
-              </v-list-item-content>
-            </v-list-item>
-
-            <v-list-item>
-              <v-list-item-icon class="my-2">
-                <v-icon>{{ icons.topics }}</v-icon>
-              </v-list-item-icon>
-              <v-list-item-content class="py-2">
-                <v-list-item-title>Topics</v-list-item-title>
-              </v-list-item-content>
-            </v-list-item>
-
             <v-list-item :to="`/user/@${post.author.username}`">
-              <v-list-item-icon class="my-2">
+              <v-list-item-icon>
                 <v-icon>{{ icons.profile }}</v-icon>
               </v-list-item-icon>
-              <v-list-item-content class="py-2">
+              <v-list-item-content>
                 <v-list-item-title
                   >{{ post.author.username }}'s profile</v-list-item-title
                 >
               </v-list-item-content>
             </v-list-item>
+
+            <v-list-item>
+              <v-list-item-icon>
+                <v-icon>{{ icons.topics }}</v-icon>
+              </v-list-item-icon>
+              <v-list-item-content>
+                <v-list-item-title>Topics</v-list-item-title>
+              </v-list-item-content>
+            </v-list-item>
+
+            <v-list-item v-if="canShare" @click="share">
+              <v-list-item-icon>
+                <v-icon>{{ icons.share }}</v-icon>
+              </v-list-item-icon>
+              <v-list-item-content>
+                <v-list-item-title>Share</v-list-item-title>
+              </v-list-item-content>
+            </v-list-item>
+
+            <v-list-item v-else @click="copyLink">
+              <v-list-item-icon>
+                <v-icon>{{ icons.copy }}</v-icon>
+              </v-list-item-icon>
+              <v-list-item-content>
+                <v-list-item-title>Copy Link</v-list-item-title>
+              </v-list-item-content>
+            </v-list-item>
+
+            <v-list-item>
+              <v-list-item-icon>
+                <v-icon>{{ icons.hide }}</v-icon>
+              </v-list-item-icon>
+              <v-list-item-content>
+                <v-list-item-title>Hide</v-list-item-title>
+              </v-list-item-content>
+            </v-list-item>
+
+            <v-list-item>
+              <v-list-item-icon>
+                <v-icon>{{ icons.report }}</v-icon>
+              </v-list-item-icon>
+              <v-list-item-content>
+                <v-list-item-title>Report</v-list-item-title>
+              </v-list-item-content>
+            </v-list-item>
           </v-list>
-        </v-menu>
+        </v-bottom-sheet>
       </v-row>
     </v-card-actions>
   </v-card>
@@ -214,11 +195,14 @@ import {
   mdiShareOutline,
   mdiNewspaper,
   mdiAlertOctagonOutline,
-  mdiAccountOutline
+  mdiAccountOutline,
+  mdiEyeOff
 } from '@mdi/js'
 import { formatDistanceToNowStrict } from 'date-fns'
 import editPostGql from '../gql/editPost.graphql'
 import { timeSince } from '../util/timeSince'
+import togglePostEndorsementGql from '../gql/togglePostEndorsement.graphql'
+import currentUserGql from '../gql/currentUser.graphql'
 import TextContent from './TextContent'
 
 export default {
@@ -248,6 +232,8 @@ export default {
       editBtnLoading: false,
       editing: false,
       expanded: this.expand,
+      currentUser: null,
+      menu: false,
       icons: {
         down: mdiChevronDown,
         up: mdiChevronUp,
@@ -258,7 +244,8 @@ export default {
         share: mdiShareOutline,
         topics: mdiNewspaper,
         report: mdiAlertOctagonOutline,
-        profile: mdiAccountOutline
+        profile: mdiAccountOutline,
+        hide: mdiEyeOff
       },
       twitterbird: require('~/assets/twitterbird.jpg')
     }
@@ -305,6 +292,11 @@ export default {
       return this.post.type === 'TEXT' && !this.post.textContent
     }
   },
+  apollo: {
+    currentUser: {
+      query: currentUserGql
+    }
+  },
   methods: {
     doNothing() {},
     share() {
@@ -341,6 +333,34 @@ export default {
       this.post.textContent = this.newTextContent
       this.editing = false
       this.editBtnLoading = false
+    },
+    async toggleEndorsement() {
+      if (!this.currentUser) {
+        this.$store.dispatch(
+          'displaySnackbar',
+          'Must log in to rocket this post'
+        )
+        return
+      }
+
+      if (this.post.author.isCurrentUser) {
+        this.$store.dispatch('displaySnackbar', 'Cannot rocket your own post')
+        return
+      }
+
+      if (this.post.isEndorsed) {
+        this.post.isEndorsed = false
+        this.post.endorsementCount--
+      } else {
+        this.post.isEndorsed = true
+        this.post.endorsementCount++
+      }
+      await this.$apollo.mutate({
+        mutation: togglePostEndorsementGql,
+        variables: {
+          postId: this.post.id
+        }
+      })
     }
   }
 }

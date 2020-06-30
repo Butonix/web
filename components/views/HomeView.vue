@@ -1,8 +1,21 @@
 <template>
   <v-container fluid>
     <v-row>
+      <!--<v-col v-if="$device.isDesktop" cols="2" class="pt-0">
+        <v-card outlined style="background-color: transparent">
+          <v-list-item>
+            <v-list-item-avatar color="grey darken-3">
+              <v-icon small>{{ icons.profile }}</v-icon>
+            </v-list-item-avatar>
+
+            <v-list-item-content>
+              <v-list-item-title>{{ currentUser.username }}</v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
+        </v-card>
+      </v-col>-->
       <v-col class="pt-0">
-        <div v-if="filter === 'all'">
+        <div v-if="!$route.query.feed">
           <Post
             v-for="post in globalStickies"
             :key="post.id"
@@ -28,7 +41,7 @@
           indeterminate
         />
       </v-col>
-      <v-col v-if="$device.isDesktop" cols="2">
+      <v-col v-if="$device.isDesktop" cols="2" class="pt-0">
         <TopicsSidebar />
       </v-col>
     </v-row>
@@ -36,6 +49,7 @@
 </template>
 
 <script>
+import { mdiAccountOutline } from '@mdi/js'
 import homeFeedGql from '../../gql/homeFeed.graphql'
 import globalStickiesGql from '../../gql/globalStickies.graphql'
 import TopicsSidebar from '../TopicsSidebar'
@@ -51,30 +65,9 @@ export default {
       globalStickies: [],
       hasMore: true,
       currentUser: null,
-      sort: {
-        sort:
-          this.$route.query.s &&
-          ['new', 'top', 'hot'].includes(this.$route.query.s)
-            ? this.$route.query.s
-            : 'hot',
-        time:
-          this.$route.query.t &&
-          ['hour', 'day', 'week', 'month', 'year', 'all'].includes(
-            this.$route.query.t
-          )
-            ? this.$route.query.t
-            : 'all'
-      },
-      filter:
-        this.$route.query.f &&
-        ['all', 'following'].includes(this.$route.query.f)
-          ? this.$route.query.f
-          : 'all',
-      type:
-        this.$route.query.type &&
-        ['all', 'text', 'link'].includes(this.$route.query.type)
-          ? this.$route.query.type
-          : 'all'
+      icons: {
+        profile: mdiAccountOutline
+      }
     }
   },
   computed: {
@@ -85,32 +78,30 @@ export default {
       set(val) {
         this.$store.commit('setHomeFeedPage', val)
       }
+    },
+    vars() {
+      return {
+        sort: this.$route.query.sort
+          ? this.$route.query.sort.toUpperCase()
+          : 'HOT',
+        time: this.$route.query.time
+          ? this.$route.query.time.toUpperCase()
+          : 'ALL',
+        filter: this.$route.query.feed
+          ? this.$route.query.feed.toUpperCase()
+          : 'ALL',
+        types: this.$route.query.types ? this.$route.query.types.split('-') : []
+      }
     }
   },
   watch: {
-    async type(type) {
-      await this.$router.push({
-        path: '/',
-        query: { ...this.$route.query, type }
-      })
-      this.$store.commit('setHomeQuery', this.$route.query)
-    },
-    async filter(filter) {
-      await this.$router.push({
-        path: '/',
-        query: { ...this.$route.query, f: filter }
-      })
-      this.$store.commit('setHomeQuery', this.$route.query)
-    },
-    sort: {
-      async handler(sort) {
-        await this.$router.push({
-          path: '/',
-          query: { ...this.$route.query, s: sort.sort, t: sort.time }
-        })
-        this.$store.commit('setHomeQuery', this.$route.query)
-      },
-      deep: true
+    watch: {
+      $route: {
+        deep: true,
+        handler() {
+          this.$store.commit('setHomeQuery', this.$route.query)
+        }
+      }
     }
   },
   apollo: {
@@ -121,10 +112,7 @@ export default {
       query: homeFeedGql,
       variables() {
         return {
-          sort: this.sort.sort.toUpperCase(),
-          time: this.sort.time.toUpperCase(),
-          filter: this.currentUser ? this.filter.toUpperCase() : 'ALL',
-          type: this.type.toUpperCase()
+          ...this.vars
         }
       },
       fetchPolicy: 'cache-and-network'
@@ -142,10 +130,7 @@ export default {
         query: homeFeedGql,
         variables: {
           page: this.page,
-          sort: this.sort.sort.toUpperCase(),
-          time: this.sort.time.toUpperCase(),
-          filter: this.filter.toUpperCase(),
-          type: this.type.toUpperCase()
+          ...this.vars
         },
         updateQuery: (previousResult, { fetchMoreResult }) => {
           const newPosts = fetchMoreResult.homeFeed

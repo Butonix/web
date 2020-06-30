@@ -236,7 +236,7 @@
     </div>
 
     <div v-show="!childrenCollapsed">
-      <Comment
+      <DesktopComment
         v-for="c in comment.childComments"
         :key="c.id"
         :post="post"

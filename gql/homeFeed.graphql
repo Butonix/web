@@ -1,5 +1,5 @@
-query homeFeed($page: Int, $sort: Sort, $time: Time, $filter: Filter, $type: Type) {
-  homeFeed(page: $page, sort: $sort, time: $time, filter: $filter, type: $type) {
+query homeFeed($page: Int, $sort: Sort, $time: Time, $filter: Filter, $types: [Type!]) {
+  homeFeed(page: $page, sort: $sort, time: $time, filter: $filter, types: $types) {
     commentCount
     createdAt
     editedAt

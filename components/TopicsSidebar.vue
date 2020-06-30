@@ -93,6 +93,14 @@
         </div>
 
         <div v-else-if="selected === 'Popular'">
+          <v-list-item v-if="popularTopics.length === 0">
+            <v-list-item-content>
+              <v-list-item-title
+                >No popular topics today.
+                <v-icon small>{{ icons.frown }}</v-icon></v-list-item-title
+              >
+            </v-list-item-content>
+          </v-list-item>
           <v-list-item
             v-for="(topic, index) in popularTopics"
             :key="index"

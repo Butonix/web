@@ -12,7 +12,14 @@
   </v-chip>
   <v-menu v-else v-model="menu" :close-on-content-click="false" offset-x>
     <template v-slot:activator="{ on }">
-      <v-chip outlined label small class="mr-1 px-2" v-on="on">
+      <v-chip
+        outlined
+        label
+        small
+        class="mr-1 px-2"
+        v-on="on"
+        @click.prevent="menu = true"
+      >
         <span>{{ topic.capitalizedName }}</span>
       </v-chip>
     </template>

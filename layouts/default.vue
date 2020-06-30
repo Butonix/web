@@ -2,18 +2,14 @@
   <v-app>
     <!--<NavDrawer v-model="drawer" />-->
 
-    <v-app-bar app bottom hide-on-scroll class="bottomappbar">
-      <v-bottom-navigation
-        grow
-        :background-color="$vuetify.theme.dark ? 'grey darken-4' : ''"
-        color="primary"
-      >
-        <v-btn to="/" class="font-weight-light">
+    <v-app-bar app bottom hide-on-scroll class="bottomappbar" height="56">
+      <v-bottom-navigation grow color="primary">
+        <v-btn to="/" class="font-weight-regular">
           <span>Home</span>
           <v-icon>{{ icons.home }}</v-icon>
         </v-btn>
 
-        <v-btn to="/interactions" class="font-weight-light">
+        <v-btn to="/interactions" class="font-weight-regular">
           <span>Interactions</span>
           <v-badge
             v-if="notifications.length > 0"
@@ -25,12 +21,17 @@
           <v-icon v-else>{{ icons.interactions }}</v-icon>
         </v-btn>
 
-        <v-btn to="/search" class="font-weight-light">
+        <v-btn to="/search" class="font-weight-regular">
           <span>Search</span>
           <v-icon>{{ icons.search }}</v-icon>
         </v-btn>
 
-        <v-btn to="/new" class="font-weight-light">
+        <v-btn to="/topics" class="font-weight-regular">
+          <span>Topics</span>
+          <v-icon>{{ icons.topics }}</v-icon>
+        </v-btn>
+
+        <v-btn to="/new" class="font-weight-regular">
           <span>Submit</span>
           <v-icon>{{ icons.newPost }}</v-icon>
         </v-btn>
@@ -40,108 +41,62 @@
     <v-app-bar
       app
       flat
-      :color="$vuetify.theme.dark ? '#121212' : '#FFFFFF'"
-      clipped-left
-      hide-on-scroll
+      :color="$vuetify.theme.dark ? '#202124' : '#FFFFFF'"
+      :style="
+        $vuetify.theme.dark
+          ? 'border-bottom: 1px solid rgba(255, 255, 255, .12)'
+          : 'border-bottom: 1px solid rgba(0, 0, 0, .12)'
+      "
     >
-      <!--<v-app-bar-nav-icon v-if="!$device.isDesktop" @click="drawer = !drawer">
-        <v-icon color="white">{{ icons.menu }}</v-icon>
-      </v-app-bar-nav-icon>-->
-
       <v-row class="ma-0" align="center">
         <nuxt-link :to="{ path: '/', query: $store.state.homeQuery }">
-          <v-img :src="cometLogo" width="96" />
+          <v-img :src="cometLogo" width="96" contain />
         </nuxt-link>
+
+        <div
+          v-if="
+            $device.isDesktop &&
+              $store.state.currentPostTitle &&
+              $route.name === 'Post'
+          "
+          class="ml-4"
+          style="line-height: normal"
+        >
+          <div class="title">{{ $store.state.currentPostTitle }}</div>
+          <div>22 Comments</div>
+        </div>
+
+        <div v-if="$device.isDesktop && $route.name === 'Post'" class="ml-4">
+          <CommentSortMenu />
+        </div>
+
+        <div
+          v-if="
+            $device.isDesktop &&
+              ($route.name === 'Home' || $route.name === 'Topic')
+          "
+          class="ml-4"
+        >
+          <TypeMenu />
+          <SortMenu />
+        </div>
+
         <v-spacer />
-        <v-btn
-          class="betterbutton mr-2"
-          outlined
-          rounded
-          :style="
-            $vuetify.theme.dark
-              ? 'border-color: rgba(255, 255, 255, 0.12);'
-              : 'border-color: rgba(0, 0, 0, 0.12);'
+
+        <TypeMenu
+          v-if="
+            !$device.isDesktop &&
+              ($route.name === 'Home' || $route.name === 'Topic')
           "
-        >
-          <v-icon class="mr-2">{{ icons.hot }}</v-icon>
-          All
-        </v-btn>
-
-        <v-btn
-          class="betterbutton mr-1"
-          outlined
-          rounded
-          :style="
-            $vuetify.theme.dark
-              ? 'border-color: rgba(255, 255, 255, 0.12);'
-              : 'border-color: rgba(0, 0, 0, 0.12);'
+        />
+        <SortMenu
+          v-if="
+            !$device.isDesktop &&
+              ($route.name === 'Home' || $route.name === 'Topic')
           "
-        >
-          <v-icon class="mr-2">{{ icons.hot }}</v-icon>
-          Hot
-        </v-btn>
-        <v-menu left>
-          <template v-slot:activator="{ on }">
-            <v-btn icon v-on="on">
-              <v-icon>{{ icons.profile }}</v-icon>
-            </v-btn>
-          </template>
+        />
 
-          <v-list class="py-0">
-            <v-list-item
-              v-if="currentUser"
-              :to="`/user/@${currentUser.username}`"
-            >
-              <v-list-item-avatar color="grey darken-3">
-                <v-icon small>{{ icons.profile }}</v-icon>
-              </v-list-item-avatar>
-              <v-list-item-content>
-                <v-list-item-title>{{
-                  currentUser.username
-                }}</v-list-item-title>
-              </v-list-item-content>
-            </v-list-item>
-
-            <v-list-item v-if="!currentUser" to="/login">
-              <v-list-item-icon>
-                <v-icon>{{ icons.login }}</v-icon>
-              </v-list-item-icon>
-              <v-list-item-content>
-                <v-list-item-title>Log in</v-list-item-title>
-              </v-list-item-content>
-            </v-list-item>
-
-            <v-list-item v-if="currentUser" to="/settings">
-              <v-list-item-icon>
-                <v-icon>{{ icons.settings }}</v-icon>
-              </v-list-item-icon>
-              <v-list-item-content>
-                <v-list-item-title>Settings</v-list-item-title>
-              </v-list-item-content>
-            </v-list-item>
-
-            <v-list-item @click="toggleDark">
-              <v-list-item-icon>
-                <v-icon>{{ icons.dark }}</v-icon>
-              </v-list-item-icon>
-              <v-list-item-content>
-                <v-list-item-title>Dark mode</v-list-item-title>
-              </v-list-item-content>
-              <v-list-item-action>
-                <v-switch v-model="$vuetify.theme.dark" readonly />
-              </v-list-item-action>
-            </v-list-item>
-
-            <v-list-item v-if="currentUser" @click="logout">
-              <v-list-item-icon>
-                <v-icon>{{ icons.logout }}</v-icon>
-              </v-list-item-icon>
-              <v-list-item-content>
-                <v-list-item-title>Log out</v-list-item-title>
-              </v-list-item-content>
-            </v-list-item>
-          </v-list>
-        </v-menu>
+        <ProfileMenu />
       </v-row>
     </v-app-bar>
 
@@ -170,21 +125,27 @@ import {
   mdiCogOutline,
   mdiWeatherNight,
   mdiLogout,
-  mdiLogin
+  mdiLogin,
+  mdiNewspaper,
+  mdiInfinity
 } from '@mdi/js'
 import currentUserGql from '../gql/currentUser.graphql'
 import Snackbar from '../components/Snackbar'
 import notificationsGql from '../gql/notifications.graphql'
+import TypeMenu from '../components/TypeMenu'
+import SortMenu from '../components/SortMenu'
+import ProfileMenu from '../components/ProfileMenu'
+import CommentSortMenu from '../components/CommentSortMenu'
 
 export default {
   name: 'Default',
-  components: { Snackbar },
+  components: { CommentSortMenu, ProfileMenu, SortMenu, TypeMenu, Snackbar },
   data() {
     return {
       currentUser: null,
       drawer: false,
       searchText: '',
-      cometLogo: require('~/assets/comet_logo.png'),
+      cometLogo: require('~/assets/comet_logo2.png'),
       notifications: [],
       icons: {
         plus: mdiPlus,
@@ -194,8 +155,11 @@ export default {
         profile: mdiAccountOutline,
         interactions: mdiEmail,
         search: mdiMagnify,
+        topics: mdiNewspaper,
         newPost: mdiPencil,
         hot: mdiFire,
+        all: mdiInfinity,
+        myFeed: mdiNewspaper,
         settings: mdiCogOutline,
         dark: mdiWeatherNight,
         logout: mdiLogout,

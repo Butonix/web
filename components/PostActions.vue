@@ -351,7 +351,10 @@ export default {
     },
     async toggleEndorsement() {
       if (!this.currentUser) {
-        this.$store.dispatch('showLoginDialog')
+        this.$store.dispatch(
+          'displaySnackbar',
+          'Must log in to rocket this post'
+        )
         return
       }
 

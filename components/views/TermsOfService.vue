@@ -16,8 +16,8 @@
         </p>
         <p class="title">Your Account</p>
         <p>
-          To use certain features of our Services, you may be required to create
-          a Comet account (an "Account") and provide us with a username and
+          To use certain features of Comet, you may be required to create a
+          Comet account (an "Account") and provide us with a username and
           password. By creating an account, you agree to these Terms and our
           <nuxt-link to="/privacy-policy" target="_blank"
             >Privacy Policy</nuxt-link
@@ -38,11 +38,11 @@
           Your Content
         </p>
         <p>
-          The Services may contain information, text, links, graphics, photos,
-          videos, or other materials (“Content”), including Content created with
-          or submitted to the Services by you or through your Account (“Your
-          Content”). We take no responsibility for and we do not expressly or
-          implicitly endorse any of Your Content.
+          Comet may contain information, text, links, graphics, photos, videos,
+          or other materials (“Content”), including Content created with or
+          submitted to Comet by you or through your Account (“Your Content”). We
+          take no responsibility for and we do not expressly or implicitly
+          endorse any of Your Content.
         </p>
         <p>
           By submitting Your Content to Comet, you represent and warrant that
@@ -182,17 +182,17 @@
         </p>
         <p class="title">Disclaimers</p>
         <p>
-          THE SERVICES ARE PROVIDED "AS IS" AND "AS AVAILABLE" WITHOUT
-          WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED, INCLUDING, BUT NOT
-          LIMITED TO, IMPLIED WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
-          PARTICULAR PURPOSE, AND NON-INFRINGEMENT. COMET, ITS LICENSORS, AND
-          ITS THIRD PARTY SERVICE PROVIDERS DO NOT WARRANT THAT THE SERVICES ARE
-          ACCURATE, COMPLETE, RELIABLE, CURRENT, OR ERROR FREE. COMET DOES NOT
-          CONTROL, ENDORSE, OR TAKE RESPONSIBILITY FOR ANY CONTENT AVAILABLE ON
-          OR LINKED TO THE SERVICES OR THE ACTIONS OF ANY THIRD PARTY OR USER.
-          WHILE COMET ATTEMPTS TO MAKE YOUR ACCESS TO AND USE OF OUR SERVICES
-          SAFE, WE DO NOT REPRESENT OR WARRANT THAT OUR SERVICES OR SERVERS ARE
-          FREE OF VIRUSES OR OTHER HARMFUL COMPONENTS.
+          COMET IS PROVIDED "AS IS" AND "AS AVAILABLE" WITHOUT WARRANTIES OF ANY
+          KIND, EITHER EXPRESS OR IMPLIED, INCLUDING, BUT NOT LIMITED TO,
+          IMPLIED WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR
+          PURPOSE, AND NON-INFRINGEMENT. COMET, ITS LICENSORS, AND ITS THIRD
+          PARTY SERVICE PROVIDERS DO NOT WARRANT THAT COMET IS ACCURATE,
+          COMPLETE, RELIABLE, CURRENT, OR ERROR FREE. COMET DOES NOT CONTROL,
+          ENDORSE, OR TAKE RESPONSIBILITY FOR ANY CONTENT AVAILABLE ON OR LINKED
+          TO COMET OR THE ACTIONS OF ANY THIRD PARTY OR USER. WHILE COMET
+          ATTEMPTS TO MAKE YOUR ACCESS TO AND USE OF COMET SAFE, WE DO NOT
+          REPRESENT OR WARRANT THAT COMET OR ITS SERVERS ARE FREE OF VIRUSES OR
+          OTHER HARMFUL COMPONENTS.
         </p>
         <p class="title">Limitation of Liability</p>
         <p>
@@ -200,31 +200,31 @@
           TORT, NEGLIGENCE, STRICT LIABILITY, WARRANTY, OR OTHERWISE, WILL COMET
           BE LIABLE TO YOU FOR ANY INDIRECT, CONSEQUENTIAL, EXEMPLARY,
           INCIDENTAL, SPECIAL, OR PUNITIVE DAMAGES, OR LOST PROFITS ARISING FROM
-          OR RELATING TO THESE TERMS OR THE SERVICES, INCLUDING THOSE ARISING
-          FROM OR RELATING TO CONTENT MADE AVAILABLE ON THE SERVICES THAT IS
-          ALLEGED TO BE DEFAMATORY, OFFENSIVE, OR ILLEGAL. ACCESS TO, AND USE
-          OF, THE SERVICES IS AT YOUR OWN DISCRETION AND RISK, AND YOU WILL BE
-          SOLELY RESPONSIBLE FOR ANY DAMAGE TO YOUR DEVICE OR COMPUTER SYSTEM,
-          OR LOSS OF DATA RESULTING THEREFROM. IN NO EVENT WILL THE AGGREGATE
-          LIABILITY OF THE COMET ENTITIES EXCEED THE GREATER OF ONE HUNDRED U.S.
-          DOLLARS ($100) OR ANY AMOUNT YOU PAID COMET IN THE PREVIOUS SIX MONTHS
-          FOR THE SERVICES GIVING RISE TO THE CLAIM. THE LIMITATIONS OF THIS
-          SECTION WILL APPLY TO ANY THEORY OF LIABILITY, INCLUDING THOSE BASED
-          ON WARRANTY, CONTRACT, STATUTE, TORT (INCLUDING NEGLIGENCE) OR
-          OTHERWISE, AND EVEN IF COMET HAS BEEN ADVISED OF THE POSSIBILITY OF
-          ANY SUCH DAMAGE, AND EVEN IF ANY REMEDY SET FORTH HEREIN IS FOUND TO
-          HAVE FAILED ITS ESSENTIAL PURPOSE. THE FOREGOING LIMITATION OF
-          LIABILITY WILL APPLY TO THE FULLEST EXTENT PERMITTED BY LAW IN THE
-          APPLICABLE JURISDICTION.
+          OR RELATING TO THESE TERMS OR COMET, INCLUDING THOSE ARISING FROM OR
+          RELATING TO CONTENT MADE AVAILABLE ON COMET THAT IS ALLEGED TO BE
+          DEFAMATORY, OFFENSIVE, OR ILLEGAL. ACCESS TO, AND USE OF, COMET IS AT
+          YOUR OWN DISCRETION AND RISK, AND YOU WILL BE SOLELY RESPONSIBLE FOR
+          ANY DAMAGE TO YOUR DEVICE OR COMPUTER SYSTEM, OR LOSS OF DATA
+          RESULTING THEREFROM. IN NO EVENT WILL THE AGGREGATE LIABILITY OF THE
+          COMET ENTITIES EXCEED THE GREATER OF ONE HUNDRED U.S. DOLLARS ($100)
+          OR ANY AMOUNT YOU PAID COMET IN THE PREVIOUS SIX MONTHS FOR THE
+          SERVICES GIVING RISE TO THE CLAIM. THE LIMITATIONS OF THIS SECTION
+          WILL APPLY TO ANY THEORY OF LIABILITY, INCLUDING THOSE BASED ON
+          WARRANTY, CONTRACT, STATUTE, TORT (INCLUDING NEGLIGENCE) OR OTHERWISE,
+          AND EVEN IF COMET HAS BEEN ADVISED OF THE POSSIBILITY OF ANY SUCH
+          DAMAGE, AND EVEN IF ANY REMEDY SET FORTH HEREIN IS FOUND TO HAVE
+          FAILED ITS ESSENTIAL PURPOSE. THE FOREGOING LIMITATION OF LIABILITY
+          WILL APPLY TO THE FULLEST EXTENT PERMITTED BY LAW IN THE APPLICABLE
+          JURISDICTION.
         </p>
         <p class="title">Governing Law and Venue</p>
         <p>
           Except for the government entities listed below: any claims arising
-          out of or relating to these Terms or the Services will be governed by
-          the laws of New Jersey, other than its conflict of laws rules; all
-          disputes related to these Terms or the Services will be brought solely
-          in the federal or state courts located in Morristown, New Jersey; and
-          you consent to personal jurisdiction in these courts.
+          out of or relating to these Terms or Comet will be governed by the
+          laws of New Jersey, other than its conflict of laws rules; all
+          disputes related to these Terms or Comet will be brought solely in the
+          federal or state courts located in Morristown, New Jersey; and you
+          consent to personal jurisdiction in these courts.
         </p>
         <p class="font-weight-bold">Government Entities</p>
         <p>
@@ -233,13 +233,13 @@
         </p>
         <p>
           If you are a U.S. federal government entity: any claims arising out of
-          or relating to these Terms or the Services will be governed by the
-          laws of the United States of America without reference to conflict of
-          laws. To the extent permitted by federal law, the laws of New Jersey
-          (other than its conflict of law rules) will apply in the absence of
-          applicable federal law. All disputes related to these Terms or the
-          Services will be brought solely in the federal or state courts located
-          in Morristown, New Jersey.
+          or relating to these Terms or Comet will be governed by the laws of
+          the United States of America without reference to conflict of laws. To
+          the extent permitted by federal law, the laws of New Jersey (other
+          than its conflict of law rules) will apply in the absence of
+          applicable federal law. All disputes related to these Terms or Comet
+          will be brought solely in the federal or state courts located in
+          Morristown, New Jersey.
         </p>
         <p class="title">Changes to these Terms</p>
         <p>

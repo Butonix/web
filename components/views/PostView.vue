@@ -1,7 +1,7 @@
 <template>
   <div v-if="!$device.isDesktop">
     <Post :post="post" :expand="true" :is-post-view="true" />
-    <v-divider class="mt-1 mb-4" />
+    <v-divider class="my-4" />
     <v-row class="my-0 mx-4">
       <v-btn
         class="mr-4 flex-grow-1 betterbutton"
@@ -10,30 +10,16 @@
             ? 'border-color: rgba(255, 255, 255, 0.12);'
             : 'border-color: rgba(0, 0, 0, 0.12);'
         "
-        small
         rounded
         depressed
         style="justify-content: start"
       >
-        <v-icon small class="mr-2">{{ icons.comment }}</v-icon>
+        <v-icon class="mr-2">{{ icons.comment }}</v-icon>
         <span class="mr-4">New comment</span>
       </v-btn>
-      <v-btn
-        class="betterbutton"
-        :style="
-          $vuetify.theme.dark
-            ? 'border-color: rgba(255, 255, 255, 0.12);'
-            : 'border-color: rgba(0, 0, 0, 0.12);'
-        "
-        rounded
-        outlined
-        small
-      >
-        <v-icon small class="mr-2">{{ icons.sort }}</v-icon>
-        <span>Hot</span>
-      </v-btn>
+      <CommentSortMenu />
     </v-row>
-    <v-divider class="mb-2 mt-4" />
+    <v-divider class="mb-0 mt-4" />
     <Comment
       v-for="comment in threadedComments"
       :key="comment.id"
@@ -88,11 +74,6 @@
                   postComments.length === 1 ? '' : 's'
                 }}</span
               >
-              <SortMenu
-                v-model="sort"
-                :hot-enabled="false"
-                :times-enabled="false"
-              />
             </v-row>
 
             <Comment
@@ -122,11 +103,11 @@ import postCommentsGql from '../../gql/postComments.graphql'
 import recordPostViewGql from '../../gql/recordPostView.graphql'
 import TextEditor from '../TextEditor'
 import Comment from '../Comment'
-import SortMenu from '../SortMenu'
+import CommentSortMenu from '../CommentSortMenu'
 
 export default {
   name: 'PostView',
-  components: { SortMenu, Comment, TextEditor, Post },
+  components: { CommentSortMenu, Comment, TextEditor, Post },
   async asyncData(context) {
     const client = context.app.apolloProvider.defaultClient
     const postData = await client.query({
@@ -208,6 +189,8 @@ export default {
     }
   },
   async mounted() {
+    this.$store.commit('setCurrentPostTitle', this.post.title)
+
     if (
       this.$route.query.sort &&
       !['new', 'top'].includes(this.$route.query.sort)
@@ -231,7 +214,9 @@ export default {
       variables() {
         return {
           postId: this.postId,
-          sort: this.sort.sort.toUpperCase()
+          sort: this.$route.query.sort
+            ? this.$route.query.sort.toUpperCase()
+            : 'TOP'
         }
       },
       fetchPolicy: 'cache-and-network'

@@ -2,3 +2,22 @@
 //
 // The variables you want to modify
 // $font-size-root: 20px;
+
+$material-dark: (
+  'background': #202124,
+  'surface': #202124,
+  'bottom-navigation': #313235,
+  'cards': #313235,
+  'text': (
+    'secondary': #8D8D8D
+  )
+);
+
+$material-light: (
+  'text': (
+    'primary': #000000,
+    'secondary': #8D8D8D
+  )
+);
+
+@import '~vuetify/src/styles/styles.sass';

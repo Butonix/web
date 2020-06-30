@@ -1,7 +1,7 @@
 <template>
   <v-container fluid>
-    <v-row>
-      <v-col>
+    <v-row justify="center">
+      <v-col :cols="$device.isDesktop ? 6 : 12">
         <v-tabs v-model="tab" grow>
           <v-tab>Login</v-tab>
           <v-tab>Sign Up</v-tab>
@@ -13,12 +13,6 @@
               v-model="loginValid"
               @submit.prevent="login"
             >
-              <v-card-title v-if="$device.isDesktop"
-                ><span v-if="!err">Login</span>
-                <span v-else class="error--text">{{
-                  err.split('GraphQL error: ')[1]
-                }}</span></v-card-title
-              >
               <v-card-text>
                 <v-text-field
                   v-model="username"
@@ -68,12 +62,6 @@
               v-model="signupValid"
               @submit.prevent="signUp"
             >
-              <v-card-title v-if="$device.isDesktop"
-                ><span v-if="!err">Sign Up</span>
-                <span v-else class="error--text">{{
-                  err.split('GraphQL error: ')[1]
-                }}</span></v-card-title
-              >
               <v-card-text>
                 <v-text-field
                   v-model="username"
@@ -207,61 +195,6 @@ export default {
       }
     }
   },
-  computed: {
-    dialog: {
-      get() {
-        return this.$store.state.loginDialog
-      },
-      set(val) {
-        this.$store.commit('setLoginDialog', val)
-      }
-    }
-  },
-  watch: {
-    $route: {
-      handler() {
-        if (!this.$route.query.login) {
-          this.dialog = false
-        }
-      },
-      deep: true
-    },
-    async dialog() {
-      if (this.dialog) {
-        await this.$router.push({
-          path: this.$route.path,
-          query: { ...this.$route.query, login: '1' }
-        })
-        return
-      }
-
-      if (!this.dialog) {
-        if (!this.$store.state.redirectLoginDialogToCompose) {
-          const query = Object.assign({}, this.$route.query)
-          delete query.login
-
-          await this.$router.push({
-            path: this.$route.path,
-            query
-          })
-        }
-
-        this.$nextTick(() => {
-          this.username = ''
-          this.password = ''
-          this.confirmPassword = ''
-          this.err = ''
-          this.tab = 0
-          if (this.$refs.loginForm) {
-            this.$refs.loginForm.resetValidation()
-          }
-          if (this.$refs.signUpForm) {
-            this.$refs.signUpForm.resetValidation()
-          }
-        })
-      }
-    }
-  },
   methods: {
     async signUp() {
       this.loading = true
@@ -276,15 +209,15 @@ export default {
           })
           .then(({ data }) => data && data.signUp)
         await this.$apolloHelpers.onLogin(res.accessToken)
-        this.dialog = false
+        await this.$router.push('/')
       } catch (e) {
         this.err = e.message
+        this.$store.dispatch(
+          'displaySnackbar',
+          this.err.split('GraphQL error: ')[1]
+        )
       }
       this.loading = false
-      if (this.$store.state.redirectLoginDialogToCompose) {
-        await this.$router.push('/new')
-        this.$store.commit('setRedirectLoginDialogToCompose', false)
-      }
     },
     async login() {
       this.loading = true
@@ -299,15 +232,15 @@ export default {
           })
           .then(({ data }) => data && data.login)
         await this.$apolloHelpers.onLogin(res.accessToken)
-        this.dialog = false
+        await this.$router.push('/')
       } catch (e) {
         this.err = e.message
+        this.$store.dispatch(
+          'displaySnackbar',
+          this.err.split('GraphQL error: ')[1]
+        )
       }
       this.loading = false
-      if (this.$store.state.redirectLoginDialogToCompose) {
-        await this.$router.push('/new')
-        this.$store.commit('setRedirectLoginDialogToCompose', false)
-      }
     }
   }
 }

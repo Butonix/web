@@ -1,7 +1,7 @@
 <template>
   <v-snackbar
     v-model="snackbarEnabled"
-    style="position: fixed"
+    style="position: fixed; bottom: 64px"
     bottom
     color="primary"
     >{{ snackbarMessage }}</v-snackbar

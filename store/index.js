@@ -7,10 +7,14 @@ export const state = () => ({
   snackbarMessage: '',
   searchPage: 0,
   homeQuery: {},
-  expandedCommentId: ''
+  expandedCommentId: '',
+  currentPostTitle: ''
 })
 
 export const mutations = {
+  setCurrentPostTitle(state, title) {
+    state.currentPostTitle = title
+  },
   setExpandedCommentId(state, commentId) {
     state.expandedCommentId = commentId
   },

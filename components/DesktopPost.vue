@@ -1,16 +1,12 @@
 <template>
   <v-card
     v-show="!post.hidden || $route.name.startsWith('Post')"
-    :outlined="!isPostView"
-    :tile="isPostView"
+    outlined
+    style="background-color: transparent"
   >
     <v-row align="center" class="ma-0">
       <a
-        v-if="
-          post.type === 'LINK' &&
-            (post.thumbnailUrl || isTwitterLink) &&
-            $device.isDesktop
-        "
+        v-if="post.type === 'LINK' && (post.thumbnailUrl || isTwitterLink)"
         :href="post.link"
         rel="noopener"
         target="_blank"
@@ -23,42 +19,7 @@
         />
       </a>
 
-      <v-list-item
-        v-if="!$device.isDesktop"
-        style="min-height: 0"
-        class="px-2 pb-0"
-      >
-        <div class="mt-2">
-          <div v-if="sticky" class="overline text--secondary">Announcement</div>
-
-          <nuxt-link
-            :to="`/post/${post.id}/${urlName}`"
-            class="mr-2 text--primary"
-            >{{ post.title }}</nuxt-link
-          >
-          <TopicChip
-            v-for="topic in post.topics"
-            :key="topic.name"
-            :topic-data="topic"
-          />
-        </div>
-
-        <v-list-item-avatar
-          v-if="post.type === 'LINK' && (post.thumbnailUrl || isTwitterLink)"
-          tile
-          size="64"
-          class="mb-0 ml-auto"
-        >
-          <a :href="post.link" rel="noopener" target="_blank">
-            <v-img
-              max-width="64"
-              height="64"
-              :src="isTwitterLink ? twitterbird : post.thumbnailUrl"
-            />
-          </a>
-        </v-list-item-avatar>
-      </v-list-item>
-      <div v-else class="px-3 pt-2 pb-1">
+      <v-col class="px-3 pt-2 pb-1">
         <div v-if="sticky" class="overline text--secondary ml-8">
           Announcement
         </div>
@@ -69,11 +30,11 @@
           :class="isTitleOnlyTextPost ? 'mb-1' : ''"
         >
           <v-btn
-            v-if="!isTitleOnlyTextPost && $device.isDesktop"
+            v-if="!isTitleOnlyTextPost"
             small
             icon
             class="mr-1"
-            @click="expanded = !expanded"
+            @click.prevent="expanded = !expanded"
           >
             <v-icon>{{ expanded ? icons.up : icons.down }}</v-icon>
           </v-btn>
@@ -126,15 +87,53 @@
           </span>
         </v-row>
 
-        <div>
-          <PostActions :post="post" :sticky="sticky" />
-        </div>
-      </div>
-    </v-row>
+        <v-row class="my-1 mx-0">
+          <v-chip
+            small
+            outlined
+            :color="post.isEndorsed ? 'primary' : ''"
+            :to="`/user/@${post.author.username}`"
+          >
+            <v-avatar left class="mr-1">
+              <v-icon small>{{ icons.profile }}</v-icon>
+            </v-avatar>
+            {{ post.author.username }}
+          </v-chip>
 
-    <v-card-actions v-if="!$device.isDesktop" class="pt-0 pb-1">
-      <PostActions :post="post" :sticky="sticky" />
-    </v-card-actions>
+          <v-chip
+            small
+            outlined
+            class="ml-2"
+            :color="post.isEndorsed ? 'primary' : ''"
+            @click.prevent="toggleEndorsement"
+          >
+            <v-avatar left class="mr-1">
+              <v-icon small>{{ icons.endorse }}</v-icon>
+            </v-avatar>
+            {{ post.endorsementCount }}
+          </v-chip>
+
+          <v-chip
+            small
+            outlined
+            class="ml-2"
+            :to="`/post/${post.id}/${urlName}`"
+          >
+            <v-avatar left class="mr-1">
+              <v-icon small>{{ icons.comment }}</v-icon>
+            </v-avatar>
+            {{ post.commentCount }}
+            {{ newCommentsCount > 0 ? `(+${newCommentsCount})` : '' }}
+          </v-chip>
+
+          <v-spacer />
+
+          <v-btn small icon class="ml-2" @click.prevent="doNothing">
+            <v-icon class="text--secondary">{{ icons.share }}</v-icon>
+          </v-btn>
+        </v-row>
+      </v-col>
+    </v-row>
 
     <!--Expand-->
     <div v-if="expanded && !isTitleOnlyTextPost">
@@ -142,10 +141,7 @@
         <v-divider class="mb-2 mt-0" />
 
         <div v-if="isYoutubeLink" class="px-4">
-          <youtube
-            :width="$device.isDesktop ? '640' : '100%'"
-            :video-id="$youtube.getIdFromUrl(post.link)"
-          />
+          <youtube width="640" :video-id="$youtube.getIdFromUrl(post.link)" />
         </div>
 
         <div v-if="isTwitterLink" class="px-4">
@@ -164,18 +160,7 @@
           <div class="mx-4 body-2 pb-1">
             <div ref="wrapper" style="max-width: none">
               <a ref="link" :href="post.link" rel="noopener" target="_blank">
-                <img
-                  v-if="$device.isDesktop"
-                  ref="img"
-                  :src="post.link"
-                  style="max-width: 500px"
-                />
-                <img
-                  v-else
-                  ref="img"
-                  :src="post.link"
-                  style="max-width: 100%"
-                />
+                <img ref="img" :src="post.link" style="max-width: 250px" />
               </a>
             </div>
           </div>
@@ -218,15 +203,21 @@
 <script>
 import isImageUrl from 'is-image-url'
 import { Tweet } from 'vue-tweet-embed'
-import { mdiChevronUp, mdiChevronDown } from '@mdi/js'
+import {
+  mdiChevronUp,
+  mdiChevronDown,
+  mdiRocket,
+  mdiCommentOutline,
+  mdiAccountOutline,
+  mdiShareOutline
+} from '@mdi/js'
 import editPostGql from '../gql/editPost.graphql'
 import TopicChip from './TopicChip'
-import PostActions from './PostActions'
 import TextContent from './TextContent'
 
 export default {
   name: 'DesktopPost',
-  components: { TextContent, PostActions, TopicChip, Tweet },
+  components: { TextContent, TopicChip, Tweet },
   props: {
     post: {
       type: Object,
@@ -253,7 +244,11 @@ export default {
       expanded: this.expand,
       icons: {
         down: mdiChevronDown,
-        up: mdiChevronUp
+        up: mdiChevronUp,
+        endorse: mdiRocket,
+        comment: mdiCommentOutline,
+        profile: mdiAccountOutline,
+        share: mdiShareOutline
       },
       twitterbird: require('~/assets/twitterbird.jpg')
     }
@@ -308,6 +303,7 @@ export default {
     if ($img && $link && $wrapper) this.addImgDrag($img, $link, $wrapper)
   },
   methods: {
+    doNothing() {},
     cancelEdit() {
       this.editing = false
       this.newTextContent = this.post.textContent
@@ -327,7 +323,7 @@ export default {
       this.editBtnLoading = false
     },
     addImgDrag($img, $link, $wrapper) {
-      if (!this.$device.isDesktop) if (!$img || !$link || !$wrapper) return
+      if (!$img || !$link || !$wrapper) return
 
       const threshold = 3
 
