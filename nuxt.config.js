@@ -72,6 +72,7 @@ export default {
   pwa: {
     manifest: {
       name: 'Comet',
+      short_name: 'Comet',
       description: 'Create and browse posts and comments on Comet',
       theme_color: '#F44336'
     },
