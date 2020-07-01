@@ -1,24 +1,24 @@
 <template>
   <v-card
-    v-show="!post.hidden || $route.name.startsWith('Post')"
     flat
     :outlined="!isPostView"
-    style="background-color: transparent"
+    style="background-color: transparent; border-width: 1px; border-radius: 10px"
     :tile="isPostView"
-    :to="isPostView ? '' : `/post/${post.id}/${urlName}`"
     :ripple="false"
     :class="isPostView ? 'pb-0 px-4 pt-3' : 'pa-2'"
+    @click="attemptNavigation"
   >
     <v-list-item style="min-height: 0; align-items: start" class="pa-0">
       <div>
         <div v-if="sticky" class="overline text--secondary">Announcement</div>
 
-        <nuxt-link
-          :to="`/post/${post.id}/${urlName}`"
+        <div
           class="text--primary font-weight-light"
           style="display: block; line-height: normal; font-size: 1.25rem"
-          >{{ post.title }}</nuxt-link
+          @click="followLink"
         >
+          {{ post.title }}
+        </div>
         <div class="text--secondary" style="font-size: .875rem">
           {{ post.author.username }}
           <span class="font-weight-bold">&middot;</span>
@@ -38,17 +38,17 @@
       </div>
 
       <v-list-item-avatar
-        v-if="post.type === 'LINK'"
+        v-if="post.type === 'LINK' || post.type === 'IMAGE'"
         tile
         :color="
           isTwitterLink || post.thumbnailUrl
             ? ''
-            : `${$vuetify.theme.dark ? '#212121' : 'grey lighten-3'}`
+            : `${$vuetify.theme.dark ? '#313235' : 'grey lighten-3'}`
         "
         style="border-radius: 12px"
         size="64"
         class="my-0 ml-auto"
-        @click.prevent="openLink"
+        @click.prevent.stop="openLink"
       >
         <a :href="post.link" rel="noopener" target="_blank">
           <v-img
@@ -95,7 +95,8 @@
         <v-chip
           outlined
           :color="post.isEndorsed ? 'primary' : ''"
-          @click.prevent="toggleEndorsement"
+          style="border-width: 1px"
+          @click.prevent.stop="toggleEndorsement"
         >
           <v-avatar left class="mr-1">
             <v-icon small>{{ icons.endorse }}</v-icon>
@@ -103,7 +104,12 @@
           {{ post.endorsementCount }}
         </v-chip>
 
-        <v-chip outlined class="ml-2" @click="doNothing">
+        <v-chip
+          outlined
+          style="border-width: 1px"
+          class="ml-2"
+          @click="doNothing"
+        >
           <v-avatar left class="mr-1">
             <v-icon small>{{ icons.comment }}</v-icon>
           </v-avatar>
@@ -121,7 +127,7 @@
           </template>
 
           <v-list class="py-0">
-            <v-list-item :to="`/user/@${post.author.username}`">
+            <v-list-item nuxt :to="`/u/${post.author.username}`">
               <v-list-item-icon>
                 <v-icon>{{ icons.profile }}</v-icon>
               </v-list-item-icon>
@@ -184,7 +190,6 @@
 </template>
 
 <script>
-import isImageUrl from 'is-image-url'
 import {
   mdiChevronUp,
   mdiChevronDown,
@@ -196,7 +201,8 @@ import {
   mdiNewspaper,
   mdiAlertOctagonOutline,
   mdiAccountOutline,
-  mdiEyeOff
+  mdiEyeOff,
+  mdiContentCopy
 } from '@mdi/js'
 import { formatDistanceToNowStrict } from 'date-fns'
 import editPostGql from '../gql/editPost.graphql'
@@ -245,7 +251,8 @@ export default {
         topics: mdiNewspaper,
         report: mdiAlertOctagonOutline,
         profile: mdiAccountOutline,
-        hide: mdiEyeOff
+        hide: mdiEyeOff,
+        copy: mdiContentCopy
       },
       twitterbird: require('~/assets/twitterbird.jpg')
     }
@@ -270,9 +277,6 @@ export default {
     newCommentsCount() {
       if (!this.post.postView) return 0
       return this.post.commentCount - this.post.postView.lastCommentCount
-    },
-    isImageUrl() {
-      return this.post.type === 'LINK' && isImageUrl(this.post.link)
     },
     isYoutubeLink() {
       return (
@@ -299,6 +303,15 @@ export default {
   },
   methods: {
     doNothing() {},
+    followLink() {
+      if (!this.isPostView || this.post.type === 'TEXT') return
+      window.open(this.post.link, '_blank')
+    },
+    attemptNavigation() {
+      if (this.$route.name !== 'Post') {
+        this.$router.push(`/post/${this.post.id}/${this.urlName}`)
+      }
+    },
     share() {
       if (!this.canShare) return
       const url = `https://getcomet.net/post/${this.post.id}/${this.urlName}`
@@ -309,9 +322,13 @@ export default {
       })
     },
     copyLink() {
+      this.menu = false
       const url = `https://getcomet.net/post/${this.post.id}/${this.urlName}`
       this.$copyText(url)
-      this.$store.dispatch('displaySnackbar', 'Copied post link')
+      this.$store.dispatch('displaySnackbar', {
+        message: 'Copied post link',
+        success: true
+      })
     },
     openLink() {
       window.open(this.post.link, '_blank')
@@ -336,15 +353,16 @@ export default {
     },
     async toggleEndorsement() {
       if (!this.currentUser) {
-        this.$store.dispatch(
-          'displaySnackbar',
-          'Must log in to rocket this post'
-        )
+        this.$store.dispatch('displaySnackbar', {
+          message: 'Must log in to rocket this post'
+        })
         return
       }
 
       if (this.post.author.isCurrentUser) {
-        this.$store.dispatch('displaySnackbar', 'Cannot rocket your own post')
+        this.$store.dispatch('displaySnackbar', {
+          message: 'Cannot rocket your own post'
+        })
         return
       }
 

@@ -2,36 +2,65 @@
   <v-app>
     <!--<NavDrawer v-model="drawer" />-->
 
-    <v-app-bar app bottom hide-on-scroll class="bottomappbar" height="56">
+    <v-app-bar
+      app
+      bottom
+      :hide-on-scroll="!$device.isIos"
+      class="bottomappbar"
+      height="56"
+    >
       <v-bottom-navigation grow color="primary">
-        <v-btn to="/" class="font-weight-regular">
+        <v-btn
+          :to="{ path: '/', query: $store.state.homeQuery }"
+          nuxt
+          class="font-weight-regular"
+          style="letter-spacing: normal"
+        >
           <span>Home</span>
           <v-icon>{{ icons.home }}</v-icon>
         </v-btn>
 
-        <v-btn to="/interactions" class="font-weight-regular">
-          <span>Interactions</span>
+        <v-btn
+          class="font-weight-regular"
+          style="letter-spacing: normal"
+          @click="openNotifications"
+        >
+          <span>Notifications</span>
           <v-badge
             v-if="notifications.length > 0"
             overlap
             :content="notifications.length"
           >
-            <v-icon>{{ icons.interactions }}</v-icon>
+            <v-icon>{{ icons.notifications }}</v-icon>
           </v-badge>
-          <v-icon v-else>{{ icons.interactions }}</v-icon>
+          <v-icon v-else>{{ icons.notifications }}</v-icon>
         </v-btn>
 
-        <v-btn to="/search" class="font-weight-regular">
+        <v-btn
+          to="/search"
+          nuxt
+          class="font-weight-regular"
+          style="letter-spacing: normal"
+        >
           <span>Search</span>
           <v-icon>{{ icons.search }}</v-icon>
         </v-btn>
 
-        <v-btn to="/topics" class="font-weight-regular">
+        <v-btn
+          to="/topics"
+          nuxt
+          class="font-weight-regular"
+          style="letter-spacing: normal"
+        >
           <span>Topics</span>
           <v-icon>{{ icons.topics }}</v-icon>
         </v-btn>
 
-        <v-btn to="/new" class="font-weight-regular">
+        <v-btn
+          class="font-weight-regular"
+          style="letter-spacing: normal"
+          @click="openCompose"
+        >
           <span>Submit</span>
           <v-icon>{{ icons.newPost }}</v-icon>
         </v-btn>
@@ -63,10 +92,14 @@
           style="line-height: normal"
         >
           <div class="title">{{ $store.state.currentPostTitle }}</div>
-          <div>22 Comments</div>
+          <div>
+            {{ $store.state.currentPostComments }} Comment{{
+              $store.state.currentPostComments === 1 ? '' : 's'
+            }}
+          </div>
         </div>
 
-        <div v-if="$device.isDesktop && $route.name === 'Post'" class="ml-4">
+        <div v-if="$route.name === 'Post'" class="ml-4">
           <CommentSortMenu />
         </div>
 
@@ -78,23 +111,39 @@
           class="ml-4"
         >
           <TypeMenu />
+        </div>
+
+        <div
+          v-if="
+            $device.isDesktop &&
+              ($route.name === 'Home' || $route.name === 'Topic')
+          "
+          class="ml-2"
+        >
           <SortMenu />
         </div>
 
         <v-spacer />
 
-        <TypeMenu
+        <div
           v-if="
             !$device.isDesktop &&
               ($route.name === 'Home' || $route.name === 'Topic')
           "
-        />
-        <SortMenu
+          class="mr-1"
+        >
+          <TypeMenu />
+        </div>
+
+        <div
           v-if="
             !$device.isDesktop &&
               ($route.name === 'Home' || $route.name === 'Topic')
           "
-        />
+          class="mr-1"
+        >
+          <SortMenu />
+        </div>
 
         <ProfileMenu />
       </v-row>
@@ -119,7 +168,7 @@ import {
   mdiMenu,
   mdiHome,
   mdiAccountOutline,
-  mdiEmail,
+  mdiBellOutline,
   mdiPencil,
   mdiFire,
   mdiCogOutline,
@@ -132,10 +181,10 @@ import {
 import currentUserGql from '../gql/currentUser.graphql'
 import Snackbar from '../components/Snackbar'
 import notificationsGql from '../gql/notifications.graphql'
-import TypeMenu from '../components/TypeMenu'
-import SortMenu from '../components/SortMenu'
-import ProfileMenu from '../components/ProfileMenu'
-import CommentSortMenu from '../components/CommentSortMenu'
+import TypeMenu from '../components/buttons/TypeMenu'
+import SortMenu from '../components/buttons/SortMenu'
+import ProfileMenu from '../components/buttons/ProfileMenu'
+import CommentSortMenu from '../components/buttons/CommentSortMenu'
 
 export default {
   name: 'Default',
@@ -153,7 +202,7 @@ export default {
         menu: mdiMenu,
         home: mdiHome,
         profile: mdiAccountOutline,
-        interactions: mdiEmail,
+        notifications: mdiBellOutline,
         search: mdiMagnify,
         topics: mdiNewspaper,
         newPost: mdiPencil,
@@ -217,6 +266,24 @@ export default {
         data: { currentUser: null }
       })
       await this.$apolloHelpers.onLogout()
+    },
+    openNotifications() {
+      if (this.currentUser) {
+        this.$router.push('/notifications')
+      } else {
+        this.$store.dispatch('displaySnackbar', {
+          message: 'Must log in to view notifications'
+        })
+      }
+    },
+    openCompose() {
+      if (this.currentUser) {
+        this.$router.push('/new')
+      } else {
+        this.$store.dispatch('displaySnackbar', {
+          message: 'Must log in to submit a post'
+        })
+      }
     }
   }
 }

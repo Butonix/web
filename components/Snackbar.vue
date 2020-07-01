@@ -3,7 +3,7 @@
     v-model="snackbarEnabled"
     style="position: fixed; bottom: 64px"
     bottom
-    color="primary"
+    :color="snackbarSuccess ? 'success' : 'error'"
     >{{ snackbarMessage }}</v-snackbar
   >
 </template>
@@ -17,6 +17,9 @@ export default {
     },
     snackbarMessage() {
       return this.$store.state.snackbarMessage
+    },
+    snackbarSuccess() {
+      return this.$store.state.snackbarSuccess
     }
   }
 }

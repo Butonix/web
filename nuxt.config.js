@@ -35,7 +35,9 @@ export default {
   plugins: [
     '~/plugins/vue-youtube',
     '~/plugins/vue-clipboard2',
-    '~/plugins/marked'
+    '~/plugins/marked',
+    '~/plugins/vue-friendly-iframe',
+    '~/plugins/vue-virtual-scroller'
   ],
   /*
    ** Nuxt.js dev-modules
@@ -63,10 +65,9 @@ export default {
    */
   axios: {
     progress: false,
-    baseURL:
-      process.env.NODE_ENV === 'production'
-        ? process.env.BASE_URL
-        : 'http://localhost:4000'
+    baseURL: process.env.BASE_URL
+      ? process.env.BASE_URL
+      : 'http://localhost:4000'
   },
 
   pwa: {
@@ -95,10 +96,9 @@ export default {
     clientConfigs: {
       default: {
         // required
-        httpEndpoint:
-          process.env.NODE_ENV === 'production'
-            ? `${process.env.BASE_URL}/graphql`
-            : 'http://localhost:4000/graphql',
+        httpEndpoint: process.env.BASE_URL
+          ? `${process.env.BASE_URL}/graphql`
+          : 'http://localhost:4000',
         // optional
         // See https://www.apollographql.com/docs/link/links/http.html#options
         httpLinkOptions: {
@@ -145,12 +145,12 @@ export default {
       dark: true,
       themes: {
         dark: {
-          primary: colors.red.base,
+          primary: colors.red.lighten1,
           accent: colors.grey.darken3,
           secondary: colors.amber.darken3,
           info: colors.teal.lighten1,
           warning: colors.amber.base,
-          error: colors.deepOrange.accent4,
+          error: colors.red.base,
           success: colors.green.accent3
         },
         light: {
@@ -159,7 +159,7 @@ export default {
           secondary: colors.amber.darken3,
           info: colors.teal.lighten1,
           warning: colors.amber.base,
-          error: colors.deepOrange.accent4,
+          error: colors.red.base,
           success: colors.green.accent3
         }
       }

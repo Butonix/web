@@ -7,8 +7,8 @@ import TopicView from './components/views/TopicView'
 import ComposeView from './components/views/ComposeView'
 import FiltersView from './components/views/FiltersView'
 import ContentPolicyView from './components/views/ContentPolicyView'
-import PrivacyPolicy from './components/views/PrivacyPolicy'
-import TermsOfService from './components/views/TermsOfService'
+import PrivacyPolicyView from './components/views/PrivacyPolicyView'
+import TermsOfServiceView from './components/views/TermsOfServiceView'
 import SearchView from './components/views/SearchView'
 import SettingsView from './components/views/SettingsView'
 import TopicsView from './components/views/TopicsView'
@@ -82,7 +82,7 @@ export function createRouter() {
         name: 'Home'
       },
       {
-        path: '/user/:username',
+        path: '/u/:username',
         component: UserView,
         name: 'User'
       },
@@ -112,9 +112,9 @@ export function createRouter() {
         name: 'Filters'
       },
       {
-        path: '/interactions',
+        path: '/notifications',
         component: NotificationsView,
-        name: 'Interactions'
+        name: 'Notifications'
       },
       {
         path: '/search',
@@ -138,12 +138,12 @@ export function createRouter() {
       },
       {
         path: '/privacy-policy',
-        component: PrivacyPolicy,
+        component: PrivacyPolicyView,
         name: 'Privacy Policy'
       },
       {
         path: '/terms-of-service',
-        component: TermsOfService,
+        component: TermsOfServiceView,
         name: 'Terms of Service'
       }
     ]

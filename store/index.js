@@ -5,15 +5,20 @@ export const state = () => ({
   topicSidebarSearchText: '',
   snackbarEnabled: false,
   snackbarMessage: '',
+  snackbarSuccess: false,
   searchPage: 0,
   homeQuery: {},
   expandedCommentId: '',
-  currentPostTitle: ''
+  currentPostTitle: '',
+  currentPostComments: 0
 })
 
 export const mutations = {
   setCurrentPostTitle(state, title) {
     state.currentPostTitle = title
+  },
+  setCurrentPostComments(state, comments) {
+    state.currentPostComments = comments
   },
   setExpandedCommentId(state, commentId) {
     state.expandedCommentId = commentId
@@ -39,18 +44,21 @@ export const mutations = {
   setSnackbarMessage(state, message) {
     state.snackbarMessage = message
   },
+  setSnackbarSuccess(state, success) {
+    state.snackbarSuccess = success
+  },
   setSearchPage(state, page) {
     state.searchPage = page
   }
 }
 
 export const actions = {
-  displaySnackbar({ commit }, message) {
+  displaySnackbar({ commit }, { message, success = false }) {
     commit('setSnackbarMessage', message)
     commit('setSnackbarEnabled', true)
+    commit('setSnackbarSuccess', success)
     setTimeout(() => {
       commit('setSnackbarEnabled', false)
-      commit('setSnackbarMessage', '')
     }, 5000)
   }
 }

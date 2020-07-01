@@ -202,7 +202,7 @@ export default {
   }),
   computed: {
     uploadValid() {
-      if (!this.tab === 2 || !this.$refs.fileInput) return true
+      if (this.tab !== 2 || !this.$refs.fileInput) return true
       return this.$refs.fileInput.valid
     },
     markedText() {
@@ -293,11 +293,15 @@ export default {
       }
 
       try {
+        let type = 'TEXT'
+        if (this.tab === 0) type = 'TEXT'
+        else if (this.tab === 1) type = 'LINK'
+        else if (this.tab === 2) type = 'IMAGE'
         await this.$apollo.mutate({
           mutation: submitPostGql,
           variables: {
             title: this.title,
-            type: this.tab === 1 || this.tab === 2 ? 'LINK' : 'TEXT',
+            type,
             link:
               this.link && (this.tab === 1 || this.tab === 2)
                 ? this.link

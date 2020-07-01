@@ -351,10 +351,9 @@ export default {
     },
     async toggleEndorsement() {
       if (!this.currentUser) {
-        this.$store.dispatch(
-          'displaySnackbar',
-          'Must log in to rocket this post'
-        )
+        this.$store.dispatch('displaySnackbar', {
+          message: 'Must log in to rocket this post'
+        })
         return
       }
 
@@ -405,7 +404,7 @@ export default {
         })
       } else {
         this.$copyText(url)
-        this.$store.dispatch('displaySnackbar', 'Copied post link')
+        this.$store.dispatch('displaySnackbar', { message: 'Copied post link' })
       }
     }
   }

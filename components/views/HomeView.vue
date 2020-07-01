@@ -14,6 +14,7 @@
           </v-list-item>
         </v-card>
       </v-col>-->
+
       <v-col class="pt-0">
         <div v-if="!$route.query.feed">
           <Post
@@ -40,37 +41,95 @@
           v-show="$apollo.queries.homeFeed.loading"
           indeterminate
         />
+
+        <div
+          v-if="
+            !$apollo.queries.homeFeed.loading &&
+              !$apollo.queries.globalStickies.loading &&
+              homeFeed.length === 0 &&
+              globalStickies.length === 0
+          "
+          style="text-align: center"
+          class="title"
+        >
+          No posts <v-icon>{{ icons.frown }}</v-icon>
+        </div>
       </v-col>
       <v-col v-if="$device.isDesktop" cols="2" class="pt-0">
-        <TopicsSidebar />
+        <client-only>
+          <div v-if="!discordHidden">
+            <vue-friendly-iframe
+              class="friendlyframe"
+              :src="
+                `https://discordapp.com/widget?id=653652395959648314${
+                  $vuetify.theme.dark ? '&theme=dark' : '&theme=light'
+                }${currentUser ? `&username=${currentUser.username}` : ''}`
+              "
+            />
+            <div style="text-align: right" class="mb-4">
+              <span
+                class="text--secondary hoverable"
+                style="font-size: .625rem"
+                @click="hideDiscordWidget"
+              >
+                Hide Discord widget
+              </span>
+            </div>
+          </div>
+        </client-only>
+
+        <div class="sticky">
+          <TopicsSidebar />
+          <InfoLinks class="mt-2" />
+          <client-only>
+            <div v-if="discordHidden" style="text-align: right">
+              <span
+                class="text--secondary hoverable"
+                style="font-size: .625rem"
+                @click="showDiscordWidget"
+              >
+                Show Discord widget
+              </span>
+            </div>
+          </client-only>
+        </div>
       </v-col>
     </v-row>
   </v-container>
 </template>
 
 <script>
-import { mdiAccountOutline } from '@mdi/js'
+import { mdiAccountOutline, mdiEmoticonFrown } from '@mdi/js'
 import homeFeedGql from '../../gql/homeFeed.graphql'
 import globalStickiesGql from '../../gql/globalStickies.graphql'
 import TopicsSidebar from '../TopicsSidebar'
 import Post from '../Post'
 import currentUserGql from '../../gql/currentUser.graphql'
+import InfoLinks from '../InfoLinks'
 
 export default {
   name: 'HomeView',
-  components: { Post, TopicsSidebar },
+  components: { InfoLinks, Post, TopicsSidebar },
   data() {
     return {
+      discordHidden: process.client
+        ? !!localStorage.getItem('discordHidden')
+        : true,
       homeFeed: [],
       globalStickies: [],
       hasMore: true,
       currentUser: null,
       icons: {
-        profile: mdiAccountOutline
+        profile: mdiAccountOutline,
+        frown: mdiEmoticonFrown
       }
     }
   },
   computed: {
+    windowHeight() {
+      if (process.client) return window.innerHeight
+      else return 1920
+    },
     page: {
       get() {
         return this.$store.state.homeFeedPage
@@ -90,17 +149,18 @@ export default {
         filter: this.$route.query.feed
           ? this.$route.query.feed.toUpperCase()
           : 'ALL',
-        types: this.$route.query.types ? this.$route.query.types.split('-') : []
+        types: this.$route.query.types
+          ? this.$route.query.types.split('-').map((t) => t.toUpperCase())
+          : []
       }
     }
   },
   watch: {
-    watch: {
-      $route: {
-        deep: true,
-        handler() {
-          this.$store.commit('setHomeQuery', this.$route.query)
-        }
+    $route: {
+      deep: true,
+      handler() {
+        this.$store.commit('setHomeQuery', this.$route.query)
+        this.$vuetify.goTo(0)
       }
     }
   },
@@ -123,6 +183,16 @@ export default {
     }
   },
   methods: {
+    hideDiscordWidget() {
+      if (!process.client) return
+      localStorage.setItem('discordHidden', 'true')
+      this.discordHidden = true
+    },
+    showDiscordWidget() {
+      if (!process.client) return
+      localStorage.removeItem('discordHidden')
+      this.discordHidden = false
+    },
     showMore() {
       if (!this.hasMore) return
       this.page++
@@ -147,3 +217,15 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+.sticky {
+  position: -webkit-sticky; /* Safari */
+  position: sticky;
+  top: 76px;
+}
+.friendlyframe >>> iframe {
+  width: 100%;
+  height: 400px;
+}
+</style>

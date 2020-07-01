@@ -1,10 +1,22 @@
 <template>
   <div v-if="!$device.isDesktop">
-    <Post :post="post" :expand="true" :is-post-view="true" />
-    <v-divider class="my-4" />
+    <v-fade-transition>
+      <div v-show="post">
+        <Post
+          v-if="post"
+          :post="post"
+          :expand="true"
+          :is-post-view="true"
+          class="mb-4"
+        />
+        <v-divider v-if="post" class="mb-4 mt-0" />
+      </div>
+    </v-fade-transition>
+    <v-progress-linear v-show="!post" class="mb-4" indeterminate />
     <v-row class="my-0 mx-4">
       <v-btn
-        class="mr-4 flex-grow-1 betterbutton"
+        color="#424346"
+        class="flex-grow-1 betterbutton"
         :style="
           $vuetify.theme.dark
             ? 'border-color: rgba(255, 255, 255, 0.12);'
@@ -17,17 +29,43 @@
         <v-icon class="mr-2">{{ icons.comment }}</v-icon>
         <span class="mr-4">New comment</span>
       </v-btn>
-      <CommentSortMenu />
     </v-row>
-    <v-divider class="mb-0 mt-4" />
-    <Comment
-      v-for="comment in threadedComments"
-      :key="comment.id"
-      :comment="comment"
-      :post="post"
-      :post-view="postView"
-      :sort="sort"
-      class="mb-1"
+    <v-fade-transition>
+      <div
+        v-show="
+          !$apollo.queries.postComments.loading && postComments.length === 0
+        "
+      >
+        <v-divider class="mb-0 mt-4" />
+        <div class="mt-4 text--secondary" style="text-align: center">
+          No comments yet. Will you be the first?
+        </div>
+      </div>
+    </v-fade-transition>
+    <v-fade-transition>
+      <div
+        v-show="
+          !$apollo.queries.postComments.loading && threadedComments.length > 0
+        "
+      >
+        <v-divider class="mb-0 mt-4" />
+        <Comment
+          v-for="comment in threadedComments"
+          :key="comment.id"
+          :comment="comment"
+          :post="post"
+          :post-view="postView"
+          :sort="sort"
+        />
+      </div>
+    </v-fade-transition>
+    <v-progress-linear
+      v-show="
+        $apollo.queries.postComments.loading ||
+          (postComments.length > 0 && threadedComments.length === 0)
+      "
+      indeterminate
+      class="mb-0 mt-4"
     />
   </div>
 
@@ -103,26 +141,10 @@ import postCommentsGql from '../../gql/postComments.graphql'
 import recordPostViewGql from '../../gql/recordPostView.graphql'
 import TextEditor from '../TextEditor'
 import Comment from '../Comment'
-import CommentSortMenu from '../CommentSortMenu'
 
 export default {
   name: 'PostView',
-  components: { CommentSortMenu, Comment, TextEditor, Post },
-  async asyncData(context) {
-    const client = context.app.apolloProvider.defaultClient
-    const postData = await client.query({
-      query: postGql,
-      variables: { postId: context.params.postId },
-      fetchPolicy: 'network-only'
-    })
-
-    if (!postData.data.post)
-      context.error({ statusCode: 404, message: 'Post not found' })
-
-    return {
-      post: postData.data.post
-    }
-  },
+  components: { Comment, TextEditor, Post },
   data() {
     return {
       postComments: [],
@@ -149,6 +171,7 @@ export default {
       return this.$route.params.postId
     },
     urlName() {
+      if (!this.post) return ''
       return this.post.title
         .toLowerCase()
         .replace(/ /g, '_')
@@ -170,6 +193,11 @@ export default {
     }
   },
   watch: {
+    post() {
+      if (!this.post) return
+      this.$store.commit('setCurrentPostTitle', this.post.title)
+      this.$store.commit('setCurrentPostComments', this.post.commentCount)
+    },
     postComments() {
       if (this.post) {
         this.post.commentCount = this.postComments.length
@@ -189,8 +217,6 @@ export default {
     }
   },
   async mounted() {
-    this.$store.commit('setCurrentPostTitle', this.post.title)
-
     if (
       this.$route.query.sort &&
       !['new', 'top'].includes(this.$route.query.sort)
@@ -218,6 +244,13 @@ export default {
             ? this.$route.query.sort.toUpperCase()
             : 'TOP'
         }
+      },
+      fetchPolicy: 'cache-and-network'
+    },
+    post: {
+      query: postGql,
+      variables() {
+        return { postId: this.postId }
       },
       fetchPolicy: 'cache-and-network'
     }
@@ -266,48 +299,50 @@ export default {
     }
   },
   head() {
-    return {
-      title: this.post.title,
-      link: [
-        {
-          rel: 'canonical',
-          href: `https://www.getcomet.net/post/${this.post.id}/${this.urlName}`
-        }
-      ],
-      meta: [
-        {
-          hid: 'og:title',
-          property: 'og:title',
-          content: `${this.post.title}`
-        },
-        {
-          hid: 'og:site_name',
-          property: 'og:site_name',
-          content: `Comet - ${this.post.commentCount} Comment${
-            this.post.commentCount === 1 ? '' : 's'
-          } / ${this.post.endorsementCount} Endorsement${
-            this.post.endorsementCount === 1 ? '' : 's'
-          }`
-        },
-        {
-          hid: 'og:description',
-          property: 'og:description',
-          content:
-            this.post.type === 'TEXT'
-              ? this.post.textContent
-                ? `${this.post.textContent.substring(0, 100)}${
-                    this.post.textContent.length >= 100 ? '...' : ''
-                  }`
-                : this.post.title
-              : this.post.link
-        },
-        {
-          hid: 'og:image',
-          property: 'og:image',
-          content: this.post.thumbnailUrl ? this.post.thumbnailUrl : ''
-        }
-      ]
-    }
+    if (!this.post) return { title: 'Post' }
+    else
+      return {
+        title: this.post.title,
+        link: [
+          {
+            rel: 'canonical',
+            href: `https://www.getcomet.net/post/${this.post.id}/${this.urlName}`
+          }
+        ],
+        meta: [
+          {
+            hid: 'og:title',
+            property: 'og:title',
+            content: `${this.post.title}`
+          },
+          {
+            hid: 'og:site_name',
+            property: 'og:site_name',
+            content: `Comet - ${this.post.commentCount} Comment${
+              this.post.commentCount === 1 ? '' : 's'
+            } / ${this.post.endorsementCount} Endorsement${
+              this.post.endorsementCount === 1 ? '' : 's'
+            }`
+          },
+          {
+            hid: 'og:description',
+            property: 'og:description',
+            content:
+              this.post.type === 'TEXT'
+                ? this.post.textContent
+                  ? `${this.post.textContent.substring(0, 100)}${
+                      this.post.textContent.length >= 100 ? '...' : ''
+                    }`
+                  : this.post.title
+                : this.post.link
+          },
+          {
+            hid: 'og:image',
+            property: 'og:image',
+            content: this.post.thumbnailUrl ? this.post.thumbnailUrl : ''
+          }
+        ]
+      }
   }
 }
 </script>

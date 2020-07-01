@@ -38,7 +38,7 @@
         </v-list-item-content>
       </v-list-item>
 
-      <v-list-item v-else link nuxt :to="`/user/@${currentUser.username}`">
+      <v-list-item v-else link nuxt :to="`/u/${currentUser.username}`">
         <v-list-item-icon>
           <v-icon>{{ icons.account }}</v-icon>
         </v-list-item-icon>
@@ -50,7 +50,7 @@
         </v-list-item-content>
       </v-list-item>
 
-      <v-list-item v-if="currentUser" link nuxt to="/interactions">
+      <v-list-item v-if="currentUser" link nuxt to="/notifications">
         <v-list-item-icon>
           <v-badge
             v-if="notifications.length > 0"
@@ -64,7 +64,7 @@
 
         <v-list-item-content>
           <v-list-item-title class="font-weight-regular"
-            >Interactions</v-list-item-title
+            >Notifications</v-list-item-title
           >
         </v-list-item-content>
       </v-list-item>
@@ -76,7 +76,7 @@
 
         <v-list-item-content>
           <v-list-item-title class="font-weight-regular"
-            >Interactions</v-list-item-title
+            >Notifications</v-list-item-title
           >
         </v-list-item-content>
       </v-list-item>

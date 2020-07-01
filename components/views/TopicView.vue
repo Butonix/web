@@ -45,7 +45,7 @@
 </template>
 
 <script>
-import SortMenu from '../SortMenu'
+import SortMenu from '../buttons/SortMenu'
 import TopicsSidebar from '../TopicsSidebar'
 import followedTopicsGql from '../../gql/followedTopics.graphql'
 import followTopicGql from '../../gql/followTopic.graphql'
@@ -53,7 +53,7 @@ import unfollowTopicGql from '../../gql/unfollowTopic.graphql'
 import topicGql from '../../gql/topic.graphql'
 import topicFeedGql from '../../gql/topicFeed.graphql'
 import Post from '../Post'
-import TypeMenu from '../TypeMenu'
+import TypeMenu from '../buttons/TypeMenu'
 
 export default {
   name: 'TopicView',

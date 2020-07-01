@@ -7,7 +7,7 @@
             v-if="user.title"
             class="subtitle-1 font-weight-bold primary--text"
             >[{{ user.title }}] </span
-          >@{{ user.username }}
+          >{{ user.username }}
         </div>
         <div class="subtitle-1">
           Joined on {{ joinDate }} &middot;
@@ -75,20 +75,16 @@ import { format } from 'date-fns'
 import userGql from '../../gql/user.graphql'
 import userPostsGql from '../../gql/userPosts.graphql'
 import userCommentsGql from '../../gql/userComments.graphql'
-// import SortMenu from '../SortMenu'
 import Comment from '../Comment'
 import Post from '../Post'
 
 export default {
   name: 'PostView',
-  components: { /* SortMenu, */ Comment, Post },
+  components: { Comment, Post },
   async asyncData(context) {
     const client = context.app.apolloProvider.defaultClient
 
-    if (!context.params.username.startsWith('@'))
-      context.error({ statusCode: 404, message: 'User not found' })
-
-    const username = context.params.username.substring(1)
+    const username = context.params.username
 
     const userData = await client.query({
       query: userGql,

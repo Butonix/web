@@ -1,34 +1,39 @@
 <template>
   <v-card
-    v-show="!post.hidden || $route.name.startsWith('Post')"
     outlined
-    style="background-color: transparent"
+    style="background-color: transparent; border-width: 1px; border-radius: 10px"
   >
-    <v-row align="center" class="ma-0">
+    <v-row align="start" class="ma-0">
       <a
-        v-if="post.type === 'LINK' && (post.thumbnailUrl || isTwitterLink)"
+        v-if="
+          (post.type === 'LINK' || post.type === 'IMAGE') &&
+            (post.thumbnailUrl || isTwitterLink)
+        "
         :href="post.link"
         rel="noopener"
         target="_blank"
-        style="height: 72px"
+        style="height: 80px"
       >
-        <v-img
-          :max-width="isYoutubeLink ? 128 : 72"
-          height="72"
-          :src="isTwitterLink ? twitterbird : post.thumbnailUrl"
-        />
+        <v-avatar
+          tile
+          size="80"
+          :width="isYoutubeLink ? 128 : undefined"
+          style="border-radius: 10px"
+        >
+          <v-img
+            :max-width="isYoutubeLink ? 128 : 80"
+            height="80"
+            :src="isTwitterLink ? twitterbird : post.thumbnailUrl"
+          />
+        </v-avatar>
       </a>
 
-      <v-col class="px-3 pt-2 pb-1">
+      <v-col class="px-3 pt-2 pb-0">
         <div v-if="sticky" class="overline text--secondary ml-8">
           Announcement
         </div>
 
-        <v-row
-          align="center"
-          class="mx-0"
-          :class="isTitleOnlyTextPost ? 'mb-1' : ''"
-        >
+        <v-row align="center" class="mx-0">
           <v-btn
             v-if="!isTitleOnlyTextPost"
             small
@@ -87,12 +92,13 @@
           </span>
         </v-row>
 
-        <v-row class="my-1 mx-0">
+        <v-row class="mb-1 mt-2 mx-0">
           <v-chip
             small
             outlined
             :color="post.isEndorsed ? 'primary' : ''"
-            :to="`/user/@${post.author.username}`"
+            :to="`/u/${post.author.username}`"
+            nuxt
           >
             <v-avatar left class="mr-1">
               <v-icon small>{{ icons.profile }}</v-icon>
@@ -118,6 +124,7 @@
             outlined
             class="ml-2"
             :to="`/post/${post.id}/${urlName}`"
+            nuxt
           >
             <v-avatar left class="mr-1">
               <v-icon small>{{ icons.comment }}</v-icon>
@@ -137,18 +144,18 @@
 
     <!--Expand-->
     <div v-if="expanded && !isTitleOnlyTextPost">
-      <div v-if="post.type === 'LINK'">
+      <div v-if="post.type === 'LINK' || post.type === 'IMAGE'">
         <v-divider class="mb-2 mt-0" />
 
         <div v-if="isYoutubeLink" class="px-4">
           <youtube width="640" :video-id="$youtube.getIdFromUrl(post.link)" />
         </div>
 
-        <div v-if="isTwitterLink" class="px-4">
+        <div v-else-if="isTwitterLink" class="px-4">
           <Tweet :id="post.link.split('status/')[1].split('?')[0]" />
         </div>
 
-        <div v-else-if="!isImageUrl">
+        <div v-else-if="post.type === 'LINK'">
           <div class="mx-4 body-2 pb-1">
             <a :href="post.link" rel="noopener" target="_blank">{{
               post.link
@@ -156,7 +163,7 @@
           </div>
         </div>
 
-        <div v-else-if="isImageUrl">
+        <div v-else-if="post.type === 'IMAGE'">
           <div class="mx-4 body-2 pb-1">
             <div ref="wrapper" style="max-width: none">
               <a ref="link" :href="post.link" rel="noopener" target="_blank">
@@ -201,7 +208,6 @@
 </template>
 
 <script>
-import isImageUrl from 'is-image-url'
 import { Tweet } from 'vue-tweet-embed'
 import {
   mdiChevronUp,
@@ -260,9 +266,6 @@ export default {
         .replace(/ /g, '_')
         .replace(/\W/g, '')
     },
-    isImageUrl() {
-      return this.post.type === 'LINK' && isImageUrl(this.post.link)
-    },
     isYoutubeLink() {
       return (
         this.post.type === 'LINK' &&
@@ -279,6 +282,10 @@ export default {
     },
     isTitleOnlyTextPost() {
       return this.post.type === 'TEXT' && !this.post.textContent
+    },
+    newCommentsCount() {
+      if (!this.post.postView) return 0
+      return this.post.commentCount - this.post.postView.lastCommentCount
     }
   },
   watch: {

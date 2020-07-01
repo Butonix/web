@@ -19,7 +19,7 @@ export default {
       return xss(
         marked(
           escapeHtml(this.textContent)
-            .replace(/(@\S+)/gi, `<a href="/user/$1">$1</a>`)
+            .replace(/(\/u\/\S+)/gi, `<a href="$1">$1</a>`)
             .replace(
               /\[([a-zA-Z0-9 ]*)*\]([^(]|$)/gi,
               `<a href="/topic/$1">[$1]</a>`

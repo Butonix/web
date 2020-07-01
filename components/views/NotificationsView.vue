@@ -3,7 +3,7 @@
     <v-row v-if="currentUser">
       <v-col>
         <div class="headline">
-          Interactions
+          Notifications
         </div>
         <v-row class="mx-0 my-2">
           <v-btn
@@ -40,7 +40,7 @@
           class="mb-1"
         />
         <div v-if="notifications.length === 0" class="title">
-          No {{ unreadOnly ? 'new ' : '' }}interactions
+          No {{ unreadOnly ? 'new ' : '' }}notifications
         </div>
       </v-col>
     </v-row>

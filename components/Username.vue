@@ -4,7 +4,7 @@
       !currentUser ||
         (currentUser && currentUser.username === userData.username)
     "
-    :to="`/user/@${userData.username}`"
+    :to="`/u/${userData.username}`"
     class="caption font-weight-medium hoverable"
     ><span v-if="userData.title" class="overline font-weight-bold"
       >[{{ userData.title }}] </span
@@ -62,7 +62,7 @@
         &nbsp;will be hidden upon refresh</v-subheader
       >
 
-      <v-list-item link nuxt :to="`/user/@${userData.username}`">
+      <v-list-item link nuxt :to="`/u/${userData.username}`">
         <v-list-item-icon class="mr-2">
           <v-icon>{{ icons.openInNew }}</v-icon>
         </v-list-item-icon>

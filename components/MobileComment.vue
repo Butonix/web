@@ -61,7 +61,7 @@
       />
     </div>
 
-    <v-divider v-if="level === 0" class="mb-2 mt-0" />
+    <v-divider v-if="level === 0" class="my-0" />
   </div>
 </template>
 

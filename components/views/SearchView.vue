@@ -48,7 +48,7 @@
 <script>
 import searchPostsGql from '../../gql/searchPosts.graphql'
 import Post from '../Post'
-import SortMenu from '../SortMenu'
+import SortMenu from '../buttons/SortMenu'
 
 export default {
   name: 'SearchView',

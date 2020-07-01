@@ -212,10 +212,9 @@ export default {
         await this.$router.push('/')
       } catch (e) {
         this.err = e.message
-        this.$store.dispatch(
-          'displaySnackbar',
-          this.err.split('GraphQL error: ')[1]
-        )
+        this.$store.dispatch('displaySnackbar', {
+          message: this.err.split('GraphQL error: ')[1]
+        })
       }
       this.loading = false
     },
@@ -235,10 +234,9 @@ export default {
         await this.$router.push('/')
       } catch (e) {
         this.err = e.message
-        this.$store.dispatch(
-          'displaySnackbar',
-          this.err.split('GraphQL error: ')[1]
-        )
+        this.$store.dispatch('displaySnackbar', {
+          message: this.err.split('GraphQL error: ')[1]
+        })
       }
       this.loading = false
     }
