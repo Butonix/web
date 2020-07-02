@@ -2,7 +2,7 @@
   <v-list class="py-0">
     <v-list-item @click="chooseAll">
       <v-list-item-icon>
-        <v-icon>{{ $vuetify.icons.values.mdiAllInclusive }}</v-icon>
+        <v-icon>mdi-cog-outlineAllInclusive }}</v-icon>
       </v-list-item-icon>
       <v-list-item-content>
         <v-list-item-title :class="!$route.query.feed ? 'font-weight-bold' : ''"
@@ -13,7 +13,7 @@
 
     <v-list-item @click="chooseMyTopics">
       <v-list-item-icon>
-        <v-icon>{{ $vuetify.icons.values.mdiNewspaper }}</v-icon>
+        <v-icon>mdi-newspaper</v-icon>
       </v-list-item-icon>
       <v-list-item-content>
         <v-list-item-title
@@ -31,9 +31,7 @@
       </v-list-item-action>
       <v-list-item-content>
         <v-list-item-title
-          >Text<v-icon small class="ml-3">{{
-            $vuetify.icons.values.mdiText
-          }}</v-icon></v-list-item-title
+          >Text<v-icon small class="ml-3">mdi-text</v-icon></v-list-item-title
         >
       </v-list-item-content>
     </v-list-item>
@@ -44,9 +42,7 @@
       </v-list-item-action>
       <v-list-item-content>
         <v-list-item-title
-          >Links<v-icon small class="ml-3">{{
-            $vuetify.icons.values.mdiLink
-          }}</v-icon></v-list-item-title
+          >Links<v-icon small class="ml-3">mdi-link</v-icon></v-list-item-title
         >
       </v-list-item-content>
     </v-list-item>
@@ -57,9 +53,9 @@
       </v-list-item-action>
       <v-list-item-content>
         <v-list-item-title
-          >Images<v-icon small class="ml-3">{{
-            $vuetify.icons.values.mdiImage
-          }}</v-icon></v-list-item-title
+          >Images<v-icon small class="ml-3"
+            >mdi-image</v-icon
+          ></v-list-item-title
         >
       </v-list-item-content>
     </v-list-item>

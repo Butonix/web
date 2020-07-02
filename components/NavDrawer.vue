@@ -12,7 +12,7 @@
     <v-list nav dense>
       <v-list-item link nuxt :to="{ path: '/', query: $store.state.homeQuery }">
         <v-list-item-icon>
-          <v-icon>{{ $vuetify.icons.values.mdiHome }}</v-icon>
+          <v-icon>mdi-home</v-icon>
         </v-list-item-icon>
 
         <v-list-item-content>
@@ -28,7 +28,7 @@
         @click="$store.dispatch('showLoginDialog')"
       >
         <v-list-item-icon>
-          <v-icon>{{ $vuetify.icons.values.mdiAccountOutline }}</v-icon>
+          <v-icon>mdi-account-outline</v-icon>
         </v-list-item-icon>
 
         <v-list-item-content>
@@ -40,7 +40,7 @@
 
       <v-list-item v-else link nuxt :to="`/u/${currentUser.username}`">
         <v-list-item-icon>
-          <v-icon>{{ $vuetify.icons.values.mdiAccountOutline }}</v-icon>
+          <v-icon>mdi-account-outline</v-icon>
         </v-list-item-icon>
 
         <v-list-item-content>
@@ -57,9 +57,9 @@
             overlap
             :content="notifications.length"
           >
-            <v-icon>{{ $vuetify.icons.values.mdiBellOutline }}</v-icon>
+            <v-icon>mdi-bell-outline</v-icon>
           </v-badge>
-          <v-icon v-else>{{ $vuetify.icons.values.mdiBellOutline }}</v-icon>
+          <v-icon v-else>mdi-bell-outline</v-icon>
         </v-list-item-icon>
 
         <v-list-item-content>
@@ -71,7 +71,7 @@
 
       <v-list-item v-else link @click="$store.dispatch('showLoginDialog')">
         <v-list-item-icon>
-          <v-icon>{{ $vuetify.icons.values.mdiBellOutline }}</v-icon>
+          <v-icon>mdi-bell-outline</v-icon>
         </v-list-item-icon>
 
         <v-list-item-content>
@@ -83,7 +83,7 @@
 
       <v-list-item v-if="currentUser" link nuxt to="/filters">
         <v-list-item-icon>
-          <v-icon>{{ $vuetify.icons.values.mdiFilterVariant }}</v-icon>
+          <v-icon>mdi-filter-variant</v-icon>
         </v-list-item-icon>
 
         <v-list-item-content>
@@ -95,7 +95,7 @@
 
       <v-list-item v-else link @click="$store.dispatch('showLoginDialog')">
         <v-list-item-icon>
-          <v-icon>{{ $vuetify.icons.values.mdiFilterVariant }}</v-icon>
+          <v-icon>mdi-filter-variant</v-icon>
         </v-list-item-icon>
 
         <v-list-item-content>
@@ -107,7 +107,7 @@
 
       <v-list-item v-if="!$device.isDesktop" link nuxt to="/topics">
         <v-list-item-icon>
-          <v-icon>{{ $vuetify.icons.values.mdiNewspaper }}</v-icon>
+          <v-icon>mdi-newspaper</v-icon>
         </v-list-item-icon>
 
         <v-list-item-content>
@@ -123,7 +123,7 @@
       <v-list nav dense>
         <v-list-item link @click="toggleDark">
           <v-list-item-icon>
-            <v-icon>{{ $vuetify.icons.values.mdiWeatherNight }}</v-icon>
+            <v-icon>mdi-weather-night</v-icon>
           </v-list-item-icon>
           <v-list-item-content>
             <v-list-item-title class="font-weight-regular"
@@ -138,9 +138,7 @@
         <v-list-item link @click="collapsed = !collapsed">
           <v-list-item-icon>
             <v-icon>{{
-              collapsed
-                ? $vuetify.icons.values.mdiChevronRight
-                : $vuetify.icons.values.mdiChevronLeft
+              collapsed ? 'mdi-chevron-right' : 'mdi-chevron-left'
             }}</v-icon>
           </v-list-item-icon>
           <v-list-item-content>
@@ -152,7 +150,7 @@
 
         <v-list-item v-if="currentUser" link nuxt to="/settings">
           <v-list-item-icon>
-            <v-icon>{{ $vuetify.icons.values.mdiCogOutline }}</v-icon>
+            <v-icon>mdi-cog-outline</v-icon>
           </v-list-item-icon>
           <v-list-item-content>
             <v-list-item-title class="font-weight-regular"
@@ -163,7 +161,7 @@
 
         <v-list-item v-if="currentUser" link @click="logout">
           <v-list-item-icon>
-            <v-icon>{{ $vuetify.icons.values.mdiLogout }}</v-icon>
+            <v-icon>mdi-logout</v-icon>
           </v-list-item-icon>
           <v-list-item-content>
             <v-list-item-title class="font-weight-regular"

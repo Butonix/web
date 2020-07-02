@@ -22,7 +22,7 @@
     <v-list v-if="user" dense>
       <!--<v-list-item :disabled="u.isBlocking" @click="toggleFollow">
         <v-list-item-icon class="mr-2">
-          <v-icon>{{ $vuetify.icons.values.mdiPlusBox }}</v-icon>
+          <v-icon>mdi-plus-box</v-icon>
         </v-list-item-icon>
 
         <v-list-item-content>
@@ -41,7 +41,7 @@
 
       <v-list-item @click="toggleBlock">
         <v-list-item-icon class="mr-2">
-          <v-icon>{{ $vuetify.icons.values.mdiEyeOff }}</v-icon>
+          <v-icon>mdi-eye-off</v-icon>
         </v-list-item-icon>
 
         <v-list-item-title class="pr-3 font-weight-regular"
@@ -64,7 +64,7 @@
 
       <v-list-item link nuxt :to="`/u/${userData.username}`">
         <v-list-item-icon class="mr-2">
-          <v-icon>{{ $vuetify.icons.values.mdiOpenInNew }}</v-icon>
+          <v-icon>mdi-open-in-new</v-icon>
         </v-list-item-icon>
 
         <v-list-item-title class="pr-3 font-weight-regular"

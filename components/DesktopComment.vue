@@ -101,7 +101,7 @@
             x-small
             :style="comment.isEndorsed ? 'color: var(--v-primary-base)' : ''"
             :class="comment.isEndorsed ? '' : 'text--secondary'"
-            >{{ $vuetify.icons.values.mdiRocket }}</v-icon
+            >mdi-rocket</v-icon
           >
         </v-btn>
 
@@ -142,9 +142,9 @@
                 <span class="mr-1" :class="deleted ? '' : 'text--secondary'">
                   {{ deleted ? 'Deleted' : 'Delete' }}
                 </span>
-                <v-icon x-small :class="deleted ? '' : 'text--secondary'">{{
-                  $vuetify.icons.values.mdiTrashCan
-                }}</v-icon>
+                <v-icon x-small :class="deleted ? '' : 'text--secondary'"
+                  >mdi-trash-can</v-icon
+                >
               </v-btn>
             </template>
 
@@ -154,7 +154,7 @@
               >
               <v-list-item @click="deleteComment">
                 <v-list-item-icon class="mr-3">
-                  <v-icon>{{ $vuetify.icons.values.mdiTrashCan }}</v-icon>
+                  <v-icon>mdi-trash-can</v-icon>
                 </v-list-item-icon>
                 <v-list-item-title>{{
                   deleted ? 'Deleted' : 'Delete'
@@ -182,16 +182,14 @@
                 style="text-transform: none; font-size: 12px"
                 v-on="on"
               >
-                <v-icon x-small>{{
-                  $vuetify.icons.values.mdiDotsVertical
-                }}</v-icon>
+                <v-icon x-small>mdi-dots-vertical</v-icon>
               </v-btn>
             </template>
 
             <v-list dense>
               <v-list-item :disabled="deleted" @click="deleteComment">
                 <v-list-item-icon class="mr-3">
-                  <v-icon>{{ $vuetify.icons.values.mdiTrashCan }}</v-icon>
+                  <v-icon>mdi-trash-can</v-icon>
                 </v-list-item-icon>
                 <v-list-item-title>{{
                   deleted ? 'Deleted' : 'Delete'
@@ -200,7 +198,7 @@
 
               <v-list-item :disabled="deleted" @click="editing = true">
                 <v-list-item-icon class="mr-3">
-                  <v-icon>{{ $vuetify.icons.values.mdiPencil }}</v-icon>
+                  <v-icon>mdi-pencil</v-icon>
                 </v-list-item-icon>
                 <v-list-item-title>Edit</v-list-item-title>
               </v-list-item>

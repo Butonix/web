@@ -30,7 +30,7 @@
       flat
       label="Find topics"
       hide-details
-      :append-icon="$vuetify.icons.values.mdiMagnify"
+      append-icon="mdi-magnify"
       class="mb-2 mx-2"
     />
 
@@ -46,9 +46,7 @@
         <v-list-item-content>
           <v-list-item-title
             >No topics matching {{ topicSearchText }} found.
-            <v-icon small>{{
-              $vuetify.icons.values.mdiEmoticonFrown
-            }}</v-icon></v-list-item-title
+            <v-icon small>mdi-emoticon-frown</v-icon></v-list-item-title
           >
         </v-list-item-content>
       </v-list-item>
@@ -75,9 +73,7 @@
         <v-list-item-content>
           <v-list-item-title
             >Not following any topics.
-            <v-icon small>{{
-              $vuetify.icons.values.mdiEmoticonFrown
-            }}</v-icon></v-list-item-title
+            <v-icon small>mdi-emoticon-frown</v-icon></v-list-item-title
           >
         </v-list-item-content>
       </v-list-item>
@@ -110,9 +106,7 @@
         <v-list-item-content>
           <v-list-item-title
             >No popular topics today.
-            <v-icon small>{{
-              $vuetify.icons.values.mdiEmoticonFrown
-            }}</v-icon></v-list-item-title
+            <v-icon small>mdi-emoticon-frown</v-icon></v-list-item-title
           >
         </v-list-item-content>
       </v-list-item>

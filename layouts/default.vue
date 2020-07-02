@@ -17,7 +17,7 @@
           style="letter-spacing: normal"
         >
           <span>Home</span>
-          <v-icon>{{ $vuetify.icons.values.mdiHome }}</v-icon>
+          <v-icon>mdi-home</v-icon>
         </v-btn>
 
         <v-btn
@@ -31,9 +31,9 @@
             overlap
             :content="notifications.length"
           >
-            <v-icon>{{ $vuetify.icons.values.mdiBellOutline }}</v-icon>
+            <v-icon>mdi-bell-outline</v-icon>
           </v-badge>
-          <v-icon v-else>{{ $vuetify.icons.values.mdiBellOutline }}</v-icon>
+          <v-icon v-else>mdi-bell-outline</v-icon>
         </v-btn>
 
         <v-btn
@@ -43,7 +43,7 @@
           style="letter-spacing: normal"
         >
           <span>Search</span>
-          <v-icon>{{ $vuetify.icons.values.mdiMagnify }}</v-icon>
+          <v-icon>mdi-magnify</v-icon>
         </v-btn>
 
         <v-btn
@@ -53,7 +53,7 @@
           style="letter-spacing: normal"
         >
           <span>Topics</span>
-          <v-icon>{{ $vuetify.icons.values.mdiNewspaper }}</v-icon>
+          <v-icon>mdi-newspaper</v-icon>
         </v-btn>
 
         <v-btn
@@ -62,7 +62,7 @@
           @click="openCompose"
         >
           <span>Submit</span>
-          <v-icon>{{ $vuetify.icons.values.mdiPencil }}</v-icon>
+          <v-icon>mdi-pencil</v-icon>
         </v-btn>
       </v-bottom-navigation>
     </v-app-bar>

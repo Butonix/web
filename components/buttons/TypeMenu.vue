@@ -14,9 +14,7 @@
         v-on="on"
       >
         <v-icon class="mr-2">{{
-          $route.query.feed === 'mytopics'
-            ? $vuetify.icons.values.mdiNewspaper
-            : $vuetify.icons.values.mdiInfinity
+          $route.query.feed === 'mytopics' ? 'mdi-newspaper' : 'mdi-infinity'
         }}</v-icon>
         {{ $route.query.feed === 'mytopics' ? 'My Topics' : 'All' }}
       </v-btn>
@@ -47,9 +45,7 @@
         v-on="on"
       >
         <v-icon class="mr-2">{{
-          $route.query.feed === 'mytopics'
-            ? $vuetify.icons.values.mdiNewspaper
-            : $vuetify.icons.values.mdiInfinity
+          $route.query.feed === 'mytopics' ? 'mdi-newspaper' : 'mdi-infinity'
         }}</v-icon>
         {{ $route.query.feed === 'mytopics' ? 'My Topics' : 'All' }}
       </v-btn>

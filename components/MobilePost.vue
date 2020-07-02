@@ -57,7 +57,7 @@
             height="64"
             :src="isTwitterLink ? twitterbird : post.thumbnailUrl"
           />
-          <v-icon v-else large>{{ $vuetify.icons.values.mdiLink }}</v-icon>
+          <v-icon v-else large>mdi-link</v-icon>
         </a>
       </v-list-item-avatar>
     </v-list-item>
@@ -99,7 +99,7 @@
           @click.prevent.stop="toggleEndorsement"
         >
           <v-avatar left class="mr-1">
-            <v-icon small>{{ $vuetify.icons.values.mdiRocket }}</v-icon>
+            <v-icon small>mdi-rocket</v-icon>
           </v-avatar>
           {{ post.endorsementCount }}
         </v-chip>
@@ -111,7 +111,7 @@
           @click="doNothing"
         >
           <v-avatar left class="mr-1">
-            <v-icon small>{{ $vuetify.icons.values.mdiCommentOutline }}</v-icon>
+            <v-icon small>mdi-comment-outline</v-icon>
           </v-avatar>
           {{ post.commentCount }}
           {{ newCommentsCount > 0 ? `(+${newCommentsCount})` : '' }}
@@ -122,16 +122,14 @@
         <v-bottom-sheet v-model="menu">
           <template v-slot:activator="{ on }">
             <v-btn icon small v-on="on" @click.stop.prevent="doNothing">
-              <v-icon class="text--secondary">{{
-                $vuetify.icons.values.mdiDotsVertical
-              }}</v-icon>
+              <v-icon class="text--secondary">mdi-dots-vertical</v-icon>
             </v-btn>
           </template>
 
           <v-list class="py-0">
             <v-list-item nuxt :to="`/u/${post.author.username}`">
               <v-list-item-icon>
-                <v-icon>{{ $vuetify.icons.values.mdiAccountOutline }}</v-icon>
+                <v-icon>mdi-account-outline</v-icon>
               </v-list-item-icon>
               <v-list-item-content>
                 <v-list-item-title
@@ -142,7 +140,7 @@
 
             <v-list-item>
               <v-list-item-icon>
-                <v-icon>{{ $vuetify.icons.values.mdiNewspaper }}</v-icon>
+                <v-icon>mdi-newspaper</v-icon>
               </v-list-item-icon>
               <v-list-item-content>
                 <v-list-item-title>Topics</v-list-item-title>
@@ -151,7 +149,7 @@
 
             <v-list-item v-if="canShare" @click="share">
               <v-list-item-icon>
-                <v-icon>{{ $vuetify.icons.values.mdiShare }}</v-icon>
+                <v-icon>mdi-share</v-icon>
               </v-list-item-icon>
               <v-list-item-content>
                 <v-list-item-title>Share</v-list-item-title>
@@ -160,7 +158,7 @@
 
             <v-list-item v-else @click="copyLink">
               <v-list-item-icon>
-                <v-icon>{{ $vuetify.icons.values.mdiContentCopy }}</v-icon>
+                <v-icon>mdi-content-copy</v-icon>
               </v-list-item-icon>
               <v-list-item-content>
                 <v-list-item-title>Copy Link</v-list-item-title>
@@ -169,7 +167,7 @@
 
             <v-list-item>
               <v-list-item-icon>
-                <v-icon>{{ $vuetify.icons.values.mdiEyeOff }}</v-icon>
+                <v-icon>mdi-eye-off</v-icon>
               </v-list-item-icon>
               <v-list-item-content>
                 <v-list-item-title>Hide</v-list-item-title>
@@ -178,9 +176,7 @@
 
             <v-list-item>
               <v-list-item-icon>
-                <v-icon>{{
-                  $vuetify.icons.values.mdiAlertOctagonOutline
-                }}</v-icon>
+                <v-icon>mdi-alert-octagon-outline</v-icon>
               </v-list-item-icon>
               <v-list-item-content>
                 <v-list-item-title>Report</v-list-item-title>

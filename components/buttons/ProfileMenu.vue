@@ -2,13 +2,11 @@
   <v-bottom-sheet v-if="!$device.isDesktop" v-model="menu">
     <template v-slot:activator="{ on }">
       <v-btn v-if="!$device.isDesktop" icon v-on="on">
-        <v-icon>{{ $vuetify.icons.values.mdiAccountOutline }}</v-icon>
+        <v-icon>mdi-account-outline</v-icon>
       </v-btn>
 
       <v-btn v-else text rounded class="betterbutton" v-on="on">
-        <v-icon class="mr-2">{{
-          $vuetify.icons.values.mdiAccountOutline
-        }}</v-icon>
+        <v-icon class="mr-2">mdi-account-outline</v-icon>
         {{ currentUser ? currentUser.username : 'Not logged in' }}
       </v-btn>
     </template>
@@ -19,13 +17,11 @@
   <v-menu v-else v-model="menu" bottom offset-y transition="slide-y-transition">
     <template v-slot:activator="{ on }">
       <v-btn v-if="!$device.isDesktop" icon v-on="on">
-        <v-icon>{{ $vuetify.icons.values.mdiAccountOutline }}</v-icon>
+        <v-icon>mdi-account-outline</v-icon>
       </v-btn>
 
       <v-btn v-else text rounded class="betterbutton" v-on="on">
-        <v-icon class="mr-2">{{
-          $vuetify.icons.values.mdiAccountOutline
-        }}</v-icon>
+        <v-icon class="mr-2">mdi-account-outline</v-icon>
         {{ currentUser ? currentUser.username : 'Not logged in' }}
       </v-btn>
     </template>

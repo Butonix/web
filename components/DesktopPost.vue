@@ -1,8 +1,7 @@
 <template>
   <v-card
     outlined
-    style="background-color: transparent; border-width: 1px; border-radius: 10px"
-    min-height="80"
+    style="background-color: transparent; border-width: 1px; border-radius: 10px; min-height: 80px"
   >
     <v-row align="start" class="ma-0">
       <a
@@ -29,7 +28,7 @@
           />-->
           <img
             :src="isTwitterLink ? twitterbird : post.thumbnailUrl"
-            style="height: 80px"
+            style="height: 80px; border-radius: 10px"
             :style="{ 'max-width': isYoutubeLink ? '128px' : '80px' }"
           />
         </v-avatar>
@@ -49,9 +48,7 @@
             @click.prevent="expanded = !expanded"
           >
             <v-icon>{{
-              expanded
-                ? $vuetify.icons.values.mdiChevronUp
-                : $vuetify.icons.values.mdiChevronDown
+              expanded ? 'mdi-chevron-up' : 'mdi-chevron-down'
             }}</v-icon>
           </v-btn>
 
@@ -112,9 +109,7 @@
             nuxt
           >
             <v-avatar left class="mr-1">
-              <v-icon small>{{
-                $vuetify.icons.values.mdiAccountOutline
-              }}</v-icon>
+              <v-icon small>mdi-account-outline</v-icon>
             </v-avatar>
             {{ post.author.username }}
           </v-chip>
@@ -127,7 +122,7 @@
             @click.prevent="toggleEndorsement"
           >
             <v-avatar left class="mr-1">
-              <v-icon small>{{ $vuetify.icons.values.mdiRocket }}</v-icon>
+              <v-icon small>mdi-rocket</v-icon>
             </v-avatar>
             {{ post.endorsementCount }}
           </v-chip>
@@ -140,9 +135,7 @@
             nuxt
           >
             <v-avatar left class="mr-1">
-              <v-icon small>{{
-                $vuetify.icons.values.mdiCommentOutline
-              }}</v-icon>
+              <v-icon small>mdi-comment-outline</v-icon>
             </v-avatar>
             {{ post.commentCount }}
             {{ newCommentsCount > 0 ? `(+${newCommentsCount})` : '' }}
@@ -151,9 +144,7 @@
           <v-spacer />
 
           <v-btn small icon class="ml-2" @click.prevent="doNothing">
-            <v-icon class="text--secondary">{{
-              $vuetify.icons.values.mdiShareOutline
-            }}</v-icon>
+            <v-icon class="text--secondary">mdi-share-outline</v-icon>
           </v-btn>
         </v-row>
       </v-col>

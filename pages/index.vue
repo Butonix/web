@@ -2,16 +2,26 @@
   <v-container fluid>
     <v-row>
       <v-col class="pt-0">
-        <virtual-list
-          :data-key="'id'"
-          :data-sources="homeFeed"
-          :data-component="postComponent"
-          :estimate-size="80"
-          page-mode
-          @tobottom="showMore"
+        <DynamicScroller
+          :items="homeFeed"
+          :min-item-size="80"
+          :page-mode="true"
+          :buffer="1000"
         >
-          <v-progress-linear slot="footer" indeterminate />
-        </virtual-list>
+          <template v-slot="{ item, index, active }">
+            <DynamicScrollerItem
+              v-intersect.quiet="showMore(index)"
+              :item="item"
+              :active="active"
+              :size-dependencies="[item.title]"
+              :index="index"
+            >
+              <div class="pb-3">
+                <Post :key="item.id" :source="item" />
+              </div>
+            </DynamicScrollerItem>
+          </template>
+        </DynamicScroller>
       </v-col>
       <v-col v-if="$device.isDesktop" cols="2" class="pt-0">
         <client-only>
@@ -57,17 +67,27 @@
 </template>
 
 <script>
-import VirtualList from 'vue-virtual-scroll-list'
-import homeFeedGql from '../gql/homeFeed.graphql'
-import globalStickiesGql from '../gql/globalStickies.graphql'
 import TopicsSidebar from '../components/TopicsSidebar'
 import Post from '../components/Post'
-import currentUserGql from '../gql/currentUser.graphql'
 import InfoLinks from '../components/InfoLinks'
+import homeFeedGql from '../gql/homeFeed.graphql'
+// import globalStickiesGql from '../gql/globalStickies.graphql'
+import currentUserGql from '../gql/currentUser.graphql'
 
 export default {
   scrollToTop: false,
-  components: { InfoLinks, TopicsSidebar, 'virtual-list': VirtualList },
+  components: { Post, InfoLinks, TopicsSidebar },
+  async asyncData(context) {
+    const client = context.app.apolloProvider.defaultClient
+    const homeFeedData = await client.query({
+      query: homeFeedGql,
+      fetchPolicy: 'cache-first'
+    })
+
+    return {
+      homeFeed: homeFeedData.data.homeFeed
+    }
+  },
   data() {
     return {
       discordHidden: process.client
@@ -122,8 +142,8 @@ export default {
   apollo: {
     currentUser: {
       query: currentUserGql
-    },
-    homeFeed: {
+    }
+    /* homeFeed: {
       query: homeFeedGql,
       variables() {
         return {
@@ -135,7 +155,7 @@ export default {
     globalStickies: {
       query: globalStickiesGql,
       fetchPolicy: 'cache-and-network'
-    }
+    } */
   },
   methods: {
     hideDiscordWidget() {
@@ -148,8 +168,11 @@ export default {
       localStorage.removeItem('discordHidden')
       this.discordHidden = false
     },
-    showMore() {
+    showMore(index) {
+      if (index !== this.homeFeed.length - 1) return
+      if (this.$apollo.queries.homeFeed.loading) return
       console.log('showMore')
+      console.log(index)
       if (this.$apollo.queries.homeFeed.loading) return
       if (!this.hasMore) return
       this.page++

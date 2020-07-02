@@ -1,18 +1,13 @@
 <template>
   <div v-if="!$device.isDesktop">
-    <v-fade-transition>
-      <div v-show="post">
-        <Post
-          v-if="post"
-          :source="post"
-          :expand="true"
-          :is-post-view="true"
-          class="mb-4"
-        />
-        <v-divider v-if="post" class="mb-4 mt-0" />
-      </div>
-    </v-fade-transition>
-    <v-progress-linear v-show="!post" class="mb-4" indeterminate />
+    <Post
+      v-if="post"
+      :source="post"
+      :expand="true"
+      :is-post-view="true"
+      class="mb-4"
+    />
+    <v-divider class="mb-4 mt-0" />
     <v-row class="my-0 mx-4">
       <v-btn
         color="#424346"
@@ -26,31 +21,65 @@
         depressed
         style="justify-content: start"
       >
-        <v-icon class="mr-2">{{
-          $vuetify.icons.values.mdiCommentOutline
-        }}</v-icon>
+        <v-icon class="mr-2">mdi-comment-outline</v-icon>
         <span class="mr-4">New comment</span>
       </v-btn>
     </v-row>
-    <v-fade-transition>
-      <div
-        v-show="
-          !$apollo.queries.postComments.loading && postComments.length === 0
-        "
-      >
-        <v-divider class="mb-0 mt-4" />
-        <div class="mt-4 text--secondary" style="text-align: center">
-          No comments yet. Will you be the first?
+    <v-divider class="mb-0 mt-4" />
+    <div
+      v-if="postComments.length === 0"
+      class="mt-4 text--secondary"
+      style="text-align: center"
+    >
+      No comments yet. Will you be the first?
+    </div>
+    <Comment
+      v-for="comment in threadedComments"
+      v-else
+      :key="comment.id"
+      :comment="comment"
+      :post="post"
+      :post-view="postView"
+      :sort="sort"
+    />
+  </div>
+
+  <v-container v-else fluid>
+    <v-row>
+      <v-col>
+        <Post v-if="post" :source="post" :expand="true" :is-post-view="true" />
+        <div :style="$device.isDesktop ? 'width: 40%' : 'width: 100%'">
+          <TextEditor
+            v-model="commentWriteText"
+            :label="'Write your comment'"
+            class="mt-2"
+            :rows="$device.isDesktop ? 3 : 1"
+            :err="submitCommentErr"
+            :show-details="submitCommentErr.length > 0"
+          />
+          <v-row>
+            <v-spacer />
+            <v-btn
+              depressed
+              small
+              class="mt-1"
+              text
+              :loading="loading"
+              :disabled="!commentWriteText"
+              @click="submitComment"
+              >Submit Comment</v-btn
+            >
+          </v-row>
         </div>
-      </div>
-    </v-fade-transition>
-    <v-fade-transition>
-      <div
-        v-show="
-          !$apollo.queries.postComments.loading && threadedComments.length > 0
-        "
-      >
-        <v-divider class="mb-0 mt-4" />
+
+        <v-row class="mb-1 mx-0 mt-0" align="center">
+          <span class="title mr-2"
+            >{{ postComments.length }} Comment{{
+              postComments.length === 1 ? '' : 's'
+            }}</span
+          >
+        </v-row>
+
         <Comment
           v-for="comment in threadedComments"
           :key="comment.id"
@@ -58,89 +87,10 @@
           :post="post"
           :post-view="postView"
           :sort="sort"
+          class="mb-1"
         />
-      </div>
-    </v-fade-transition>
-    <v-progress-linear
-      v-show="
-        $apollo.queries.postComments.loading ||
-          (postComments.length > 0 && threadedComments.length === 0)
-      "
-      indeterminate
-      class="mb-0 mt-4"
-    />
-  </div>
 
-  <v-container v-else fluid>
-    <v-row>
-      <v-col>
-        <v-fade-transition v-show="post">
-          <Post
-            v-if="post"
-            :source="post"
-            :expand="true"
-            :is-post-view="true"
-          />
-        </v-fade-transition>
-        <v-progress-linear v-show="!post" indeterminate />
-        <v-fade-transition v-show="post">
-          <div v-if="post">
-            <div :style="$device.isDesktop ? 'width: 40%' : 'width: 100%'">
-              <TextEditor
-                v-model="commentWriteText"
-                :label="'Write your comment'"
-                class="mt-2"
-                :rows="$device.isDesktop ? 3 : 1"
-                :err="submitCommentErr"
-                :show-details="submitCommentErr.length > 0"
-              />
-              <v-row>
-                <v-spacer />
-                <v-btn
-                  depressed
-                  small
-                  class="mt-1"
-                  text
-                  :loading="loading"
-                  :disabled="!commentWriteText"
-                  @click="submitComment"
-                  >Submit Comment</v-btn
-                >
-              </v-row>
-            </div>
-
-            <div
-              v-if="threadedComments.length === 0 && post.commentCount !== 0"
-            >
-              <v-row class="ma-0">
-                <div class="title mr-6">Loading Comments...</div>
-                <v-progress-circular size="24" indeterminate />
-              </v-row>
-            </div>
-
-            <div v-else>
-              <v-row class="mb-1 mx-0 mt-0" align="center">
-                <span class="title mr-2"
-                  >{{ postComments.length }} Comment{{
-                    postComments.length === 1 ? '' : 's'
-                  }}</span
-                >
-              </v-row>
-
-              <Comment
-                v-for="comment in threadedComments"
-                :key="comment.id"
-                :comment="comment"
-                :post="post"
-                :post-view="postView"
-                :sort="sort"
-                class="mb-1"
-              />
-
-              <div v-if="threadedComments.length > 0" style="height: 500px" />
-            </div>
-          </div>
-        </v-fade-transition>
+        <div v-if="threadedComments.length > 0" style="height: 500px" />
       </v-col>
     </v-row>
   </v-container>
@@ -160,6 +110,27 @@ export default {
     return params.postId !== undefined
   },
   components: { Comment, TextEditor, Post },
+  async asyncData(context) {
+    const client = context.app.apolloProvider.defaultClient
+    const postData = await client.query({
+      query: postGql,
+      variables: { postId: context.params.postId },
+      fetchPolicy: 'network-only'
+    })
+    if (!postData.data.post)
+      context.error({ statusCode: 404, message: 'Post not found' })
+
+    const postCommentsData = await client.query({
+      query: postCommentsGql,
+      variables: { postId: context.params.postId },
+      fetchPolicy: 'network-only'
+    })
+
+    return {
+      post: postData.data.post,
+      postComments: postCommentsData.data.postComments
+    }
+  },
   data() {
     return {
       postComments: [],
@@ -245,7 +216,7 @@ export default {
     })
     this.postView = data.recordPostView
   },
-  apollo: {
+  /* apollo: {
     postComments: {
       query: postCommentsGql,
       variables() {
@@ -271,7 +242,7 @@ export default {
         return !this.postId
       }
     }
-  },
+  }, */
   methods: {
     async submitComment() {
       this.loading = true

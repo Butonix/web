@@ -36,9 +36,7 @@
                       @click="showPassword = !showPassword"
                     >
                       <v-icon>{{
-                        showPassword
-                          ? $vuetify.icons.values.mdiEye
-                          : $vuetify.icons.values.mdiEyeOff
+                        showPassword ? 'mdi-eye' : 'mdi-eye-off'
                       }}</v-icon>
                     </div>
                   </template>
@@ -88,9 +86,7 @@
                       @click="showPassword = !showPassword"
                     >
                       <v-icon>{{
-                        showPassword
-                          ? $vuetify.icons.values.mdiEye
-                          : $vuetify.icons.values.mdiEyeOff
+                        showPassword ? 'mdi-eye' : 'mdi-eye-off'
                       }}</v-icon>
                     </div>
                   </template>
@@ -111,9 +107,7 @@
                       @click="showPassword = !showPassword"
                     >
                       <v-icon>{{
-                        showPassword
-                          ? $vuetify.icons.values.mdiEye
-                          : $vuetify.icons.values.mdiEyeOff
+                        showPassword ? 'mdi-eye' : 'mdi-eye-off'
                       }}</v-icon>
                     </div>
                   </template>

@@ -2,7 +2,7 @@
   <div>
     <v-row v-if="showButtons" class="ma-0 pb-1">
       <v-btn x-small icon depressed color="primary" class="mr-2" @click="bold">
-        <v-icon>{{ $vuetify.icons.values.mdiFormatBold }}</v-icon>
+        <v-icon>mdi-format-bold</v-icon>
       </v-btn>
 
       <v-btn
@@ -13,7 +13,7 @@
         class="mr-2"
         @click="italic"
       >
-        <v-icon>{{ $vuetify.icons.values.mdiFormatItalic }}</v-icon>
+        <v-icon>mdi-format-italic</v-icon>
       </v-btn>
 
       <v-btn
@@ -24,7 +24,7 @@
         class="mr-2"
         @click="strikethrough"
       >
-        <v-icon>{{ $vuetify.icons.values.mdiFormatStrikethrough }}</v-icon>
+        <v-icon>mdi-format-strikethrough</v-icon>
       </v-btn>
 
       <v-btn
@@ -35,15 +35,15 @@
         class="mr-2"
         @click="linkPrompt"
       >
-        <v-icon>{{ $vuetify.icons.values.mdiLink }}</v-icon>
+        <v-icon>mdi-link</v-icon>
       </v-btn>
 
       <v-btn x-small icon depressed color="primary" class="mr-2" @click="quote">
-        <v-icon>{{ $vuetify.icons.values.mdiFormatQuoteClose }}</v-icon>
+        <v-icon>mdi-format-quote-close</v-icon>
       </v-btn>
 
       <v-btn x-small icon depressed color="primary" class="mr-2" @click="code">
-        <v-icon>{{ $vuetify.icons.values.mdiCodeTags }}</v-icon>
+        <v-icon>mdi-code-tags</v-icon>
       </v-btn>
 
       <v-btn
@@ -54,7 +54,7 @@
         class="mr-2"
         @click="unorderedList"
       >
-        <v-icon>{{ $vuetify.icons.values.mdiFormatListBulleted }}</v-icon>
+        <v-icon>mdi-format-list-bulleted</v-icon>
       </v-btn>
 
       <v-btn
@@ -65,7 +65,7 @@
         class="mr-2"
         @click="orderedList"
       >
-        <v-icon>{{ $vuetify.icons.values.mdiFormatListNumbered }}</v-icon>
+        <v-icon>mdi-format-list-numbered</v-icon>
       </v-btn>
     </v-row>
 

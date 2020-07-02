@@ -37,13 +37,13 @@
       <div v-if="expanded && $store.state.expandedCommentId === comment.id">
         <v-row class="ma-0">
           <v-btn tile icon class="flex-grow-1">
-            <v-icon>{{ $vuetify.icons.values.mdiRocket }}</v-icon>
+            <v-icon>mdi-rocket</v-icon>
           </v-btn>
           <v-btn tile icon class="flex-grow-1">
-            <v-icon>{{ $vuetify.icons.values.mdiReplyOutline }}</v-icon>
+            <v-icon>mdi-reply</v-icon>
           </v-btn>
           <v-btn tile icon class="flex-grow-1">
-            <v-icon>{{ $vuetify.icons.values.mdiAccountOutline }}</v-icon>
+            <v-icon>mdi-account-outline</v-icon>
           </v-btn>
         </v-row>
       </div>

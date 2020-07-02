@@ -27,7 +27,7 @@
     <v-list dense>
       <v-list-item :disabled="topic.isHidden" @click="toggleFollow">
         <v-list-item-icon class="mr-2">
-          <v-icon>{{ $vuetify.icons.values.mdiPlusBox }}</v-icon>
+          <v-icon>mdi-plus-box</v-icon>
         </v-list-item-icon>
 
         <v-list-item-content>
@@ -46,7 +46,7 @@
 
       <v-list-item @click="toggleHide">
         <v-list-item-icon class="mr-2">
-          <v-icon>{{ $vuetify.icons.values.mdiEyeOff }}</v-icon>
+          <v-icon>mdi-eye-off</v-icon>
         </v-list-item-icon>
 
         <v-list-item-title class="pr-3 font-weight-regular"
@@ -69,7 +69,7 @@
 
       <v-list-item link nuxt :to="`/topic/${topic.name}`">
         <v-list-item-icon class="mr-2">
-          <v-icon>{{ $vuetify.icons.values.mdiOpenInNew }}</v-icon>
+          <v-icon>mdi-open-in-new</v-icon>
         </v-list-item-icon>
 
         <v-list-item-title class="pr-3 font-weight-regular"

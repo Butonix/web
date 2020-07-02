@@ -5,7 +5,6 @@
     :expand="expand"
     :sticky="sticky"
     :is-post-view="isPostView"
-    :class="isPostView ? '' : 'mb-2'"
   />
   <MobilePost
     v-else
@@ -13,7 +12,6 @@
     :expand="expand"
     :sticky="sticky"
     :is-post-view="isPostView"
-    :class="isPostView ? '' : 'mb-3'"
   />
 </template>
 

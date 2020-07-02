@@ -13,12 +13,12 @@
         "
         v-on="on"
       >
-        <v-icon v-if="!$route.query.sort" class="mr-2">{{
-          $vuetify.icons.values.mdiFormatListNumbered
-        }}</v-icon>
-        <v-icon v-else-if="$route.query.sort === 'new'" class="mr-2">{{
-          $vuetify.icons.values.mdiClockTimeOneOutline
-        }}</v-icon>
+        <v-icon v-if="!$route.query.sort" class="mr-2"
+          >mdi-format-list-numbered</v-icon
+        >
+        <v-icon v-else-if="$route.query.sort === 'new'" class="mr-2"
+          >mdi-clock-time-one-outline</v-icon
+        >
 
         <span v-if="!$route.query.sort">Top</span>
         <span v-else-if="$route.query.sort === 'new'">New</span>
@@ -42,12 +42,12 @@
         "
         v-on="on"
       >
-        <v-icon v-if="!$route.query.sort" class="mr-2">{{
-          $vuetify.icons.values.mdiFormatListNumbered
-        }}</v-icon>
-        <v-icon v-else-if="$route.query.sort === 'new'" class="mr-2">{{
-          $vuetify.icons.values.mdiClockTimeOneOutline
-        }}</v-icon>
+        <v-icon v-if="!$route.query.sort" class="mr-2"
+          >mdi-format-list-numbered</v-icon
+        >
+        <v-icon v-else-if="$route.query.sort === 'new'" class="mr-2"
+          >mdi-clock-time-one-outline</v-icon
+        >
 
         <span v-if="!$route.query.sort">Top</span>
         <span v-else-if="$route.query.sort === 'new'">New</span>
