@@ -20,7 +20,7 @@
         <Post
           v-for="post in topicFeed.slice(0, topicFeed.length - 1)"
           :key="post.id"
-          :post="post"
+          :source="post"
         />
         <Post
           v-for="post in topicFeed.slice(
@@ -29,7 +29,7 @@
           )"
           :key="post.id"
           v-intersect.quiet="showMore"
-          :post="post"
+          :source="post"
         />
 
         <v-progress-linear
@@ -45,18 +45,17 @@
 </template>
 
 <script>
-import SortMenu from '../buttons/SortMenu'
-import TopicsSidebar from '../TopicsSidebar'
+import SortMenu from '../../components/buttons/SortMenu'
+import TopicsSidebar from '../../components/TopicsSidebar'
 import followedTopicsGql from '../../gql/followedTopics.graphql'
 import followTopicGql from '../../gql/followTopic.graphql'
 import unfollowTopicGql from '../../gql/unfollowTopic.graphql'
 import topicGql from '../../gql/topic.graphql'
 import topicFeedGql from '../../gql/topicFeed.graphql'
-import Post from '../Post'
-import TypeMenu from '../buttons/TypeMenu'
+import Post from '../../components/Post'
+import TypeMenu from '../../components/buttons/TypeMenu'
 
 export default {
-  name: 'TopicView',
   components: { TypeMenu, Post, TopicsSidebar, SortMenu },
   async asyncData(context) {
     const client = context.app.apolloProvider.defaultClient

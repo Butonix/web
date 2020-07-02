@@ -1,7 +1,7 @@
 <template>
   <DesktopPost
     v-if="$device.isDesktop"
-    :post="post"
+    :post="source"
     :expand="expand"
     :sticky="sticky"
     :is-post-view="isPostView"
@@ -9,7 +9,7 @@
   />
   <MobilePost
     v-else
-    :post="post"
+    :post="source"
     :expand="expand"
     :sticky="sticky"
     :is-post-view="isPostView"
@@ -24,7 +24,11 @@ export default {
   name: 'Post',
   components: { MobilePost, DesktopPost },
   props: {
-    post: {
+    index: {
+      type: Number,
+      default: -1
+    },
+    source: {
       type: Object,
       required: true
     },

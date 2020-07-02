@@ -17,7 +17,7 @@
           style="letter-spacing: normal"
         >
           <span>Home</span>
-          <v-icon>{{ icons.home }}</v-icon>
+          <v-icon>{{ $vuetify.icons.values.mdiHome }}</v-icon>
         </v-btn>
 
         <v-btn
@@ -31,9 +31,9 @@
             overlap
             :content="notifications.length"
           >
-            <v-icon>{{ icons.notifications }}</v-icon>
+            <v-icon>{{ $vuetify.icons.values.mdiBellOutline }}</v-icon>
           </v-badge>
-          <v-icon v-else>{{ icons.notifications }}</v-icon>
+          <v-icon v-else>{{ $vuetify.icons.values.mdiBellOutline }}</v-icon>
         </v-btn>
 
         <v-btn
@@ -43,7 +43,7 @@
           style="letter-spacing: normal"
         >
           <span>Search</span>
-          <v-icon>{{ icons.search }}</v-icon>
+          <v-icon>{{ $vuetify.icons.values.mdiMagnify }}</v-icon>
         </v-btn>
 
         <v-btn
@@ -53,7 +53,7 @@
           style="letter-spacing: normal"
         >
           <span>Topics</span>
-          <v-icon>{{ icons.topics }}</v-icon>
+          <v-icon>{{ $vuetify.icons.values.mdiNewspaper }}</v-icon>
         </v-btn>
 
         <v-btn
@@ -62,7 +62,7 @@
           @click="openCompose"
         >
           <span>Submit</span>
-          <v-icon>{{ icons.newPost }}</v-icon>
+          <v-icon>{{ $vuetify.icons.values.mdiPencil }}</v-icon>
         </v-btn>
       </v-bottom-navigation>
     </v-app-bar>
@@ -86,7 +86,7 @@
           v-if="
             $device.isDesktop &&
               $store.state.currentPostTitle &&
-              $route.name === 'Post'
+              $route.name.startsWith('post')
           "
           class="ml-4"
           style="line-height: normal"
@@ -99,14 +99,14 @@
           </div>
         </div>
 
-        <div v-if="$route.name === 'Post'" class="ml-4">
+        <div v-if="$route.name.startsWith('post')" class="ml-4">
           <CommentSortMenu />
         </div>
 
         <div
           v-if="
             $device.isDesktop &&
-              ($route.name === 'Home' || $route.name === 'Topic')
+              ($route.path === '/' || $route.name.startsWith('topic-'))
           "
           class="ml-4"
         >
@@ -116,7 +116,7 @@
         <div
           v-if="
             $device.isDesktop &&
-              ($route.name === 'Home' || $route.name === 'Topic')
+              ($route.path === '/' || $route.name.startsWith('topic-'))
           "
           class="ml-2"
         >
@@ -128,7 +128,7 @@
         <div
           v-if="
             !$device.isDesktop &&
-              ($route.name === 'Home' || $route.name === 'Topic')
+              ($route.path === '/' || $route.name.startsWith('topic-'))
           "
           class="mr-1"
         >
@@ -138,7 +138,7 @@
         <div
           v-if="
             !$device.isDesktop &&
-              ($route.name === 'Home' || $route.name === 'Topic')
+              ($route.path === '/' || $route.name.startsWith('topic-'))
           "
           class="mr-1"
         >
@@ -149,12 +149,10 @@
       </v-row>
     </v-app-bar>
 
-    <v-content>
-      <v-fade-transition mode="out-in">
-        <nuxt />
-      </v-fade-transition>
+    <v-main>
+      <nuxt keep-alive />
       <Snackbar />
-    </v-content>
+    </v-main>
     <!--<v-footer :fixed="fixed" app>
       <span>&copy; {{ new Date().getFullYear() }}</span>
     </v-footer>-->
@@ -162,22 +160,6 @@
 </template>
 
 <script>
-import {
-  mdiPlus,
-  mdiMagnify,
-  mdiMenu,
-  mdiHome,
-  mdiAccountOutline,
-  mdiBellOutline,
-  mdiPencil,
-  mdiFire,
-  mdiCogOutline,
-  mdiWeatherNight,
-  mdiLogout,
-  mdiLogin,
-  mdiNewspaper,
-  mdiInfinity
-} from '@mdi/js'
 import currentUserGql from '../gql/currentUser.graphql'
 import Snackbar from '../components/Snackbar'
 import notificationsGql from '../gql/notifications.graphql'
@@ -195,25 +177,7 @@ export default {
       drawer: false,
       searchText: '',
       cometLogo: require('~/assets/comet_logo2.png'),
-      notifications: [],
-      icons: {
-        plus: mdiPlus,
-        magnify: mdiMagnify,
-        menu: mdiMenu,
-        home: mdiHome,
-        profile: mdiAccountOutline,
-        notifications: mdiBellOutline,
-        search: mdiMagnify,
-        topics: mdiNewspaper,
-        newPost: mdiPencil,
-        hot: mdiFire,
-        all: mdiInfinity,
-        myFeed: mdiNewspaper,
-        settings: mdiCogOutline,
-        dark: mdiWeatherNight,
-        logout: mdiLogout,
-        login: mdiLogin
-      }
+      notifications: []
     }
   },
   apollo: {

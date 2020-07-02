@@ -61,7 +61,7 @@
 
           <v-tab-item>
             <div v-if="hiddenPosts.length > 0">
-              <Post v-for="post in hiddenPosts" :key="post.id" :post="post" />
+              <Post v-for="post in hiddenPosts" :key="post.id" :source="post" />
             </div>
             <v-list v-else>
               <v-list-item>
@@ -91,10 +91,9 @@ import hideTopicGql from '../../gql/hideTopic.graphql'
 import unhideTopicGql from '../../gql/unhideTopic.graphql'
 import currentUserGql from '../../gql/currentUser.graphql'
 import hiddenPostsGql from '../../gql/hiddenPosts.graphql'
-import Post from '../Post'
+import Post from '../../components/Post'
 
 export default {
-  name: 'FiltersView',
   components: { Post },
   async asyncData(context) {
     const client = context.app.apolloProvider.defaultClient

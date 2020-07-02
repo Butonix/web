@@ -2,7 +2,7 @@
   <v-list class="py-0">
     <v-list-item @click="chooseAll">
       <v-list-item-icon>
-        <v-icon>{{ icons.all }}</v-icon>
+        <v-icon>{{ $vuetify.icons.values.mdiAllInclusive }}</v-icon>
       </v-list-item-icon>
       <v-list-item-content>
         <v-list-item-title :class="!$route.query.feed ? 'font-weight-bold' : ''"
@@ -13,7 +13,7 @@
 
     <v-list-item @click="chooseMyTopics">
       <v-list-item-icon>
-        <v-icon>{{ icons.myTopics }}</v-icon>
+        <v-icon>{{ $vuetify.icons.values.mdiNewspaper }}</v-icon>
       </v-list-item-icon>
       <v-list-item-content>
         <v-list-item-title
@@ -32,7 +32,7 @@
       <v-list-item-content>
         <v-list-item-title
           >Text<v-icon small class="ml-3">{{
-            icons.text
+            $vuetify.icons.values.mdiText
           }}</v-icon></v-list-item-title
         >
       </v-list-item-content>
@@ -45,7 +45,7 @@
       <v-list-item-content>
         <v-list-item-title
           >Links<v-icon small class="ml-3">{{
-            icons.links
+            $vuetify.icons.values.mdiLink
           }}</v-icon></v-list-item-title
         >
       </v-list-item-content>
@@ -58,7 +58,7 @@
       <v-list-item-content>
         <v-list-item-title
           >Images<v-icon small class="ml-3">{{
-            icons.images
+            $vuetify.icons.values.mdiImage
           }}</v-icon></v-list-item-title
         >
       </v-list-item-content>
@@ -67,26 +67,11 @@
 </template>
 
 <script>
-import {
-  mdiAllInclusive,
-  mdiImage,
-  mdiLink,
-  mdiNewspaper,
-  mdiText
-} from '@mdi/js'
-
 export default {
   name: 'TypeMenuContent',
   data() {
     return {
-      menu: false,
-      icons: {
-        all: mdiAllInclusive,
-        myTopics: mdiNewspaper,
-        images: mdiImage,
-        links: mdiLink,
-        text: mdiText
-      }
+      menu: false
     }
   },
   computed: {

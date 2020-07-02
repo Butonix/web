@@ -271,9 +271,7 @@
 </template>
 
 <script>
-export default {
-  name: 'TermsOfService'
-}
+export default {}
 </script>
 
 <style scoped></style>

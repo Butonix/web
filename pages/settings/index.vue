@@ -18,7 +18,9 @@
                 @click="showPasswordOld = !showPasswordOld"
               >
                 <v-icon>{{
-                  showPasswordOld ? icons.eye : icons.eyeOff
+                  showPasswordOld
+                    ? $vuetify.icons.values.mdiEye
+                    : $vuetify.icons.values.mdiEyeOff
                 }}</v-icon>
               </div>
             </template>
@@ -36,7 +38,11 @@
                 tabindex="-1"
                 @click="showPassword = !showPassword"
               >
-                <v-icon>{{ showPassword ? icons.eye : icons.eyeOff }}</v-icon>
+                <v-icon>{{
+                  showPassword
+                    ? $vuetify.icons.values.mdiEye
+                    : $vuetify.icons.values.mdiEyeOff
+                }}</v-icon>
               </div>
             </template>
           </v-text-field>
@@ -53,7 +59,11 @@
                 tabindex="-1"
                 @click="showPassword = !showPassword"
               >
-                <v-icon>{{ showPassword ? icons.eye : icons.eyeOff }}</v-icon>
+                <v-icon>{{
+                  showPassword
+                    ? $vuetify.icons.values.mdiEye
+                    : $vuetify.icons.values.mdiEyeOff
+                }}</v-icon>
               </div>
             </template>
           </v-text-field>
@@ -86,12 +96,10 @@
 </template>
 
 <script>
-import { mdiEye, mdiEyeOff } from '@mdi/js'
 import currentUserGql from '../../gql/currentUser.graphql'
 import changePasswordGql from '../../gql/changePassword.graphql'
 
 export default {
-  name: 'SettingsView',
   data() {
     return {
       currentPassword: '',
@@ -104,10 +112,6 @@ export default {
       valid: false,
       showPassword: false,
       showPasswordOld: false,
-      icons: {
-        eye: mdiEye,
-        eyeOff: mdiEyeOff
-      },
       rules: {
         oldPasswordRules: [(v) => !!v || 'Current password is required'],
         newPasswordRules: [

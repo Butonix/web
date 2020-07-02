@@ -13,9 +13,11 @@
         "
         v-on="on"
       >
-        <v-icon v-if="!$route.query.sort" class="mr-2">{{ icons.top }}</v-icon>
+        <v-icon v-if="!$route.query.sort" class="mr-2">{{
+          $vuetify.icons.values.mdiFormatListNumbered
+        }}</v-icon>
         <v-icon v-else-if="$route.query.sort === 'new'" class="mr-2">{{
-          icons.new
+          $vuetify.icons.values.mdiClockTimeOneOutline
         }}</v-icon>
 
         <span v-if="!$route.query.sort">Top</span>
@@ -40,9 +42,11 @@
         "
         v-on="on"
       >
-        <v-icon v-if="!$route.query.sort" class="mr-2">{{ icons.top }}</v-icon>
+        <v-icon v-if="!$route.query.sort" class="mr-2">{{
+          $vuetify.icons.values.mdiFormatListNumbered
+        }}</v-icon>
         <v-icon v-else-if="$route.query.sort === 'new'" class="mr-2">{{
-          icons.new
+          $vuetify.icons.values.mdiClockTimeOneOutline
         }}</v-icon>
 
         <span v-if="!$route.query.sort">Top</span>
@@ -55,7 +59,6 @@
 </template>
 
 <script>
-import { mdiFormatListNumbered, mdiClockTimeOneOutline } from '@mdi/js'
 import CommentSortMenuContent from './CommentSortMenuContent'
 
 export default {
@@ -63,11 +66,7 @@ export default {
   components: { CommentSortMenuContent },
   data() {
     return {
-      menu: false,
-      icons: {
-        new: mdiClockTimeOneOutline,
-        top: mdiFormatListNumbered
-      }
+      menu: false
     }
   }
 }

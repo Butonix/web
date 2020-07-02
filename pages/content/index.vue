@@ -69,9 +69,7 @@
 </template>
 
 <script>
-export default {
-  name: 'ContentPolicyView'
-}
+export default {}
 </script>
 
 <style scoped></style>

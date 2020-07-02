@@ -9,9 +9,8 @@
 </template>
 
 <script>
-import TopicsSidebar from '../TopicsSidebar'
+import TopicsSidebar from '../../components/TopicsSidebar'
 export default {
-  name: 'TopicsView',
   components: { TopicsSidebar }
 }
 </script>

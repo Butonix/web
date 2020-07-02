@@ -20,9 +20,9 @@
     </template>
 
     <v-list v-if="user" dense>
-      <!--<v-list-item :disabled="user.isBlocking" @click="toggleFollow">
+      <!--<v-list-item :disabled="u.isBlocking" @click="toggleFollow">
         <v-list-item-icon class="mr-2">
-          <v-icon>{{ icons.plusBox }}</v-icon>
+          <v-icon>{{ $vuetify.icons.values.mdiPlusBox }}</v-icon>
         </v-list-item-icon>
 
         <v-list-item-content>
@@ -35,13 +35,13 @@
         </v-list-item-content>
 
         <v-list-item-action class="ma-0">
-          <v-checkbox v-model="user.isFollowing" dense readonly />
+          <v-checkbox v-model="u.isFollowing" dense readonly />
         </v-list-item-action>
       </v-list-item>-->
 
       <v-list-item @click="toggleBlock">
         <v-list-item-icon class="mr-2">
-          <v-icon>{{ icons.eyeOff }}</v-icon>
+          <v-icon>{{ $vuetify.icons.values.mdiEyeOff }}</v-icon>
         </v-list-item-icon>
 
         <v-list-item-title class="pr-3 font-weight-regular"
@@ -64,7 +64,7 @@
 
       <v-list-item link nuxt :to="`/u/${userData.username}`">
         <v-list-item-icon class="mr-2">
-          <v-icon>{{ icons.openInNew }}</v-icon>
+          <v-icon>{{ $vuetify.icons.values.mdiOpenInNew }}</v-icon>
         </v-list-item-icon>
 
         <v-list-item-title class="pr-3 font-weight-regular"
@@ -77,7 +77,6 @@
 </template>
 
 <script>
-import { mdiPlusBox, mdiEyeOff, mdiOpenInNew } from '@mdi/js'
 import gql from 'graphql-tag'
 import currentUserGql from '../gql/currentUser.graphql'
 import blockUserGql from '../gql/blockUser.graphql'
@@ -96,12 +95,7 @@ export default {
   data: () => ({
     menu: false,
     currentUser: null,
-    user: null,
-    icons: {
-      plusBox: mdiPlusBox,
-      eyeOff: mdiEyeOff,
-      openInNew: mdiOpenInNew
-    }
+    user: null
   }),
   apollo: {
     currentUser: {
@@ -129,25 +123,25 @@ export default {
   },
   methods: {
     /* toggleFollow() {
-      if (this.user.isFollowing) this.unfollowUser()
+      if (this.u.isFollowing) this.unfollowUser()
       else this.followUser()
     },
     followUser() {
       this.$apollo.mutate({
         mutation: followUserGql,
         variables: {
-          followedId: this.user.id
+          followedId: this.u.id
         },
-        update: () => (this.user.isFollowing = true)
+        update: () => (this.u.isFollowing = true)
       })
     },
     unfollowUser() {
       this.$apollo.mutate({
         mutation: unfollowUserGql,
         variables: {
-          followedId: this.user.id
+          followedId: this.u.id
         },
-        update: () => (this.user.isFollowing = false)
+        update: () => (this.u.isFollowing = false)
       })
     }, */
     toggleBlock() {
@@ -162,7 +156,7 @@ export default {
         },
         update: () => {
           this.user.isBlocking = true
-          // this.user.isFollowing = false
+          // this.u.isFollowing = false
         }
       })
     },

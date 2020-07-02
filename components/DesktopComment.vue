@@ -101,7 +101,7 @@
             x-small
             :style="comment.isEndorsed ? 'color: var(--v-primary-base)' : ''"
             :class="comment.isEndorsed ? '' : 'text--secondary'"
-            >{{ icons.star }}</v-icon
+            >{{ $vuetify.icons.values.mdiRocket }}</v-icon
           >
         </v-btn>
 
@@ -143,7 +143,7 @@
                   {{ deleted ? 'Deleted' : 'Delete' }}
                 </span>
                 <v-icon x-small :class="deleted ? '' : 'text--secondary'">{{
-                  icons.delete
+                  $vuetify.icons.values.mdiTrashCan
                 }}</v-icon>
               </v-btn>
             </template>
@@ -154,7 +154,7 @@
               >
               <v-list-item @click="deleteComment">
                 <v-list-item-icon class="mr-3">
-                  <v-icon>{{ icons.delete }}</v-icon>
+                  <v-icon>{{ $vuetify.icons.values.mdiTrashCan }}</v-icon>
                 </v-list-item-icon>
                 <v-list-item-title>{{
                   deleted ? 'Deleted' : 'Delete'
@@ -182,14 +182,16 @@
                 style="text-transform: none; font-size: 12px"
                 v-on="on"
               >
-                <v-icon x-small>{{ icons.dots }}</v-icon>
+                <v-icon x-small>{{
+                  $vuetify.icons.values.mdiDotsVertical
+                }}</v-icon>
               </v-btn>
             </template>
 
             <v-list dense>
               <v-list-item :disabled="deleted" @click="deleteComment">
                 <v-list-item-icon class="mr-3">
-                  <v-icon>{{ icons.delete }}</v-icon>
+                  <v-icon>{{ $vuetify.icons.values.mdiTrashCan }}</v-icon>
                 </v-list-item-icon>
                 <v-list-item-title>{{
                   deleted ? 'Deleted' : 'Delete'
@@ -198,7 +200,7 @@
 
               <v-list-item :disabled="deleted" @click="editing = true">
                 <v-list-item-icon class="mr-3">
-                  <v-icon>{{ icons.edit }}</v-icon>
+                  <v-icon>{{ $vuetify.icons.values.mdiPencil }}</v-icon>
                 </v-list-item-icon>
                 <v-list-item-title>Edit</v-list-item-title>
               </v-list-item>
@@ -251,16 +253,6 @@
 
 <script>
 import { formatDistanceToNowStrict } from 'date-fns'
-import {
-  mdiBookmark,
-  mdiComment,
-  mdiDotsVertical,
-  mdiShareVariant,
-  mdiStar,
-  mdiTrashCan,
-  mdiPencil,
-  mdiChevronLeft
-} from '@mdi/js'
 import toggleCommentEndorsementGql from '../gql/toggleCommentEndorsement.graphql'
 import submitCommentGql from '../gql/submitComment.graphql'
 import postCommentsGql from '../gql/postComments.graphql'
@@ -314,17 +306,7 @@ export default {
       currentUser: null,
       submitCommentErr: '',
       childrenCollapsed: false,
-      deleted: false,
-      icons: {
-        share: mdiShareVariant,
-        comment: mdiComment,
-        star: mdiStar,
-        bookmark: mdiBookmark,
-        delete: mdiTrashCan,
-        dots: mdiDotsVertical,
-        edit: mdiPencil,
-        cancelDelete: mdiChevronLeft
-      }
+      deleted: false
     }
   },
   computed: {

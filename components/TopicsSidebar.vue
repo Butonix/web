@@ -30,7 +30,7 @@
       flat
       label="Find topics"
       hide-details
-      :append-icon="icons.magnify"
+      :append-icon="$vuetify.icons.values.mdiMagnify"
       class="mb-2 mx-2"
     />
 
@@ -46,7 +46,9 @@
         <v-list-item-content>
           <v-list-item-title
             >No topics matching {{ topicSearchText }} found.
-            <v-icon small>{{ icons.frown }}</v-icon></v-list-item-title
+            <v-icon small>{{
+              $vuetify.icons.values.mdiEmoticonFrown
+            }}</v-icon></v-list-item-title
           >
         </v-list-item-content>
       </v-list-item>
@@ -73,7 +75,9 @@
         <v-list-item-content>
           <v-list-item-title
             >Not following any topics.
-            <v-icon small>{{ icons.frown }}</v-icon></v-list-item-title
+            <v-icon small>{{
+              $vuetify.icons.values.mdiEmoticonFrown
+            }}</v-icon></v-list-item-title
           >
         </v-list-item-content>
       </v-list-item>
@@ -106,7 +110,9 @@
         <v-list-item-content>
           <v-list-item-title
             >No popular topics today.
-            <v-icon small>{{ icons.frown }}</v-icon></v-list-item-title
+            <v-icon small>{{
+              $vuetify.icons.values.mdiEmoticonFrown
+            }}</v-icon></v-list-item-title
           >
         </v-list-item-content>
       </v-list-item>
@@ -132,7 +138,6 @@
 </template>
 
 <script>
-import { mdiEmoticonFrown, mdiMagnify } from '@mdi/js'
 import followedTopicsGql from '../gql/followedTopics.graphql'
 import popularTopicsGql from '../gql/popularTopics.graphql'
 import searchTopicsGql from '../gql/searchTopics.graphql'
@@ -145,11 +150,7 @@ export default {
       currentUser: null,
       followedTopics: [],
       popularTopics: [],
-      searchTopics: [],
-      icons: {
-        frown: mdiEmoticonFrown,
-        magnify: mdiMagnify
-      }
+      searchTopics: []
     }
   },
   computed: {

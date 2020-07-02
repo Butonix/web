@@ -25,9 +25,7 @@
 </template>
 
 <script>
-export default {
-  name: 'PrivacyPolicy'
-}
+export default {}
 </script>
 
 <style scoped></style>

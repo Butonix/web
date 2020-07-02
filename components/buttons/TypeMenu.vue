@@ -14,7 +14,9 @@
         v-on="on"
       >
         <v-icon class="mr-2">{{
-          $route.query.feed === 'mytopics' ? icons.myTopics : icons.all
+          $route.query.feed === 'mytopics'
+            ? $vuetify.icons.values.mdiNewspaper
+            : $vuetify.icons.values.mdiInfinity
         }}</v-icon>
         {{ $route.query.feed === 'mytopics' ? 'My Topics' : 'All' }}
       </v-btn>
@@ -45,7 +47,9 @@
         v-on="on"
       >
         <v-icon class="mr-2">{{
-          $route.query.feed === 'mytopics' ? icons.myTopics : icons.all
+          $route.query.feed === 'mytopics'
+            ? $vuetify.icons.values.mdiNewspaper
+            : $vuetify.icons.values.mdiInfinity
         }}</v-icon>
         {{ $route.query.feed === 'mytopics' ? 'My Topics' : 'All' }}
       </v-btn>
@@ -56,7 +60,6 @@
 </template>
 
 <script>
-import { mdiAllInclusive, mdiNewspaper } from '@mdi/js'
 import TypeMenuContent from './TypeMenuContent'
 
 export default {
@@ -64,11 +67,7 @@ export default {
   components: { TypeMenuContent },
   data() {
     return {
-      menu: false,
-      icons: {
-        all: mdiAllInclusive,
-        myTopics: mdiNewspaper
-      }
+      menu: false
     }
   }
 }

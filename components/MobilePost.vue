@@ -57,7 +57,7 @@
             height="64"
             :src="isTwitterLink ? twitterbird : post.thumbnailUrl"
           />
-          <v-icon v-else large>{{ icons.link }}</v-icon>
+          <v-icon v-else large>{{ $vuetify.icons.values.mdiLink }}</v-icon>
         </a>
       </v-list-item-avatar>
     </v-list-item>
@@ -99,7 +99,7 @@
           @click.prevent.stop="toggleEndorsement"
         >
           <v-avatar left class="mr-1">
-            <v-icon small>{{ icons.endorse }}</v-icon>
+            <v-icon small>{{ $vuetify.icons.values.mdiRocket }}</v-icon>
           </v-avatar>
           {{ post.endorsementCount }}
         </v-chip>
@@ -111,7 +111,7 @@
           @click="doNothing"
         >
           <v-avatar left class="mr-1">
-            <v-icon small>{{ icons.comment }}</v-icon>
+            <v-icon small>{{ $vuetify.icons.values.mdiCommentOutline }}</v-icon>
           </v-avatar>
           {{ post.commentCount }}
           {{ newCommentsCount > 0 ? `(+${newCommentsCount})` : '' }}
@@ -122,14 +122,16 @@
         <v-bottom-sheet v-model="menu">
           <template v-slot:activator="{ on }">
             <v-btn icon small v-on="on" @click.stop.prevent="doNothing">
-              <v-icon class="text--secondary">{{ icons.dots }}</v-icon>
+              <v-icon class="text--secondary">{{
+                $vuetify.icons.values.mdiDotsVertical
+              }}</v-icon>
             </v-btn>
           </template>
 
           <v-list class="py-0">
             <v-list-item nuxt :to="`/u/${post.author.username}`">
               <v-list-item-icon>
-                <v-icon>{{ icons.profile }}</v-icon>
+                <v-icon>{{ $vuetify.icons.values.mdiAccountOutline }}</v-icon>
               </v-list-item-icon>
               <v-list-item-content>
                 <v-list-item-title
@@ -140,7 +142,7 @@
 
             <v-list-item>
               <v-list-item-icon>
-                <v-icon>{{ icons.topics }}</v-icon>
+                <v-icon>{{ $vuetify.icons.values.mdiNewspaper }}</v-icon>
               </v-list-item-icon>
               <v-list-item-content>
                 <v-list-item-title>Topics</v-list-item-title>
@@ -149,7 +151,7 @@
 
             <v-list-item v-if="canShare" @click="share">
               <v-list-item-icon>
-                <v-icon>{{ icons.share }}</v-icon>
+                <v-icon>{{ $vuetify.icons.values.mdiShare }}</v-icon>
               </v-list-item-icon>
               <v-list-item-content>
                 <v-list-item-title>Share</v-list-item-title>
@@ -158,7 +160,7 @@
 
             <v-list-item v-else @click="copyLink">
               <v-list-item-icon>
-                <v-icon>{{ icons.copy }}</v-icon>
+                <v-icon>{{ $vuetify.icons.values.mdiContentCopy }}</v-icon>
               </v-list-item-icon>
               <v-list-item-content>
                 <v-list-item-title>Copy Link</v-list-item-title>
@@ -167,7 +169,7 @@
 
             <v-list-item>
               <v-list-item-icon>
-                <v-icon>{{ icons.hide }}</v-icon>
+                <v-icon>{{ $vuetify.icons.values.mdiEyeOff }}</v-icon>
               </v-list-item-icon>
               <v-list-item-content>
                 <v-list-item-title>Hide</v-list-item-title>
@@ -176,7 +178,9 @@
 
             <v-list-item>
               <v-list-item-icon>
-                <v-icon>{{ icons.report }}</v-icon>
+                <v-icon>{{
+                  $vuetify.icons.values.mdiAlertOctagonOutline
+                }}</v-icon>
               </v-list-item-icon>
               <v-list-item-content>
                 <v-list-item-title>Report</v-list-item-title>
@@ -190,20 +194,6 @@
 </template>
 
 <script>
-import {
-  mdiChevronUp,
-  mdiChevronDown,
-  mdiRocket,
-  mdiDotsVertical,
-  mdiWeb,
-  mdiCommentOutline,
-  mdiShareOutline,
-  mdiNewspaper,
-  mdiAlertOctagonOutline,
-  mdiAccountOutline,
-  mdiEyeOff,
-  mdiContentCopy
-} from '@mdi/js'
 import { formatDistanceToNowStrict } from 'date-fns'
 import editPostGql from '../gql/editPost.graphql'
 import { timeSince } from '../util/timeSince'
@@ -240,20 +230,6 @@ export default {
       expanded: this.expand,
       currentUser: null,
       menu: false,
-      icons: {
-        down: mdiChevronDown,
-        up: mdiChevronUp,
-        endorse: mdiRocket,
-        dots: mdiDotsVertical,
-        link: mdiWeb,
-        comment: mdiCommentOutline,
-        share: mdiShareOutline,
-        topics: mdiNewspaper,
-        report: mdiAlertOctagonOutline,
-        profile: mdiAccountOutline,
-        hide: mdiEyeOff,
-        copy: mdiContentCopy
-      },
       twitterbird: require('~/assets/twitterbird.jpg')
     }
   },
@@ -308,7 +284,7 @@ export default {
       window.open(this.post.link, '_blank')
     },
     attemptNavigation() {
-      if (this.$route.name !== 'Post') {
+      if (!this.$route.name.startsWith('post')) {
         this.$router.push(`/post/${this.post.id}/${this.urlName}`)
       }
     },

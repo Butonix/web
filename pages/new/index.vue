@@ -146,7 +146,7 @@ import marked from 'marked'
 import gql from 'graphql-tag'
 import isUrl from 'is-url'
 import xss from 'xss'
-import TextEditor from '../TextEditor'
+import TextEditor from '../../components/TextEditor'
 import submitPostGql from '../../gql/submitPost.graphql'
 import currentUserGql from '../../gql/currentUser.graphql'
 import searchTopicsGql from '../../gql/searchTopics.graphql'
@@ -154,7 +154,6 @@ import topicGql from '../../gql/topic.graphql'
 import { escapeHtml } from '../../util/escapeHtml'
 
 export default {
-  name: 'ComposeView',
   components: { TextEditor },
   data: () => ({
     tab: 0,

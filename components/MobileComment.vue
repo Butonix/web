@@ -37,13 +37,13 @@
       <div v-if="expanded && $store.state.expandedCommentId === comment.id">
         <v-row class="ma-0">
           <v-btn tile icon class="flex-grow-1">
-            <v-icon>{{ icons.endorse }}</v-icon>
+            <v-icon>{{ $vuetify.icons.values.mdiRocket }}</v-icon>
           </v-btn>
           <v-btn tile icon class="flex-grow-1">
-            <v-icon>{{ icons.reply }}</v-icon>
+            <v-icon>{{ $vuetify.icons.values.mdiReplyOutline }}</v-icon>
           </v-btn>
           <v-btn tile icon class="flex-grow-1">
-            <v-icon>{{ icons.profile }}</v-icon>
+            <v-icon>{{ $vuetify.icons.values.mdiAccountOutline }}</v-icon>
           </v-btn>
         </v-row>
       </div>
@@ -67,19 +67,6 @@
 
 <script>
 import { formatDistanceToNowStrict } from 'date-fns'
-import {
-  mdiBookmark,
-  mdiComment,
-  mdiDotsVertical,
-  mdiShareVariant,
-  mdiStar,
-  mdiTrashCan,
-  mdiPencil,
-  mdiChevronLeft,
-  mdiAccountOutline,
-  mdiRocket,
-  mdiReply
-} from '@mdi/js'
 import toggleCommentEndorsementGql from '../gql/toggleCommentEndorsement.graphql'
 import submitCommentGql from '../gql/submitComment.graphql'
 import postCommentsGql from '../gql/postComments.graphql'
@@ -133,20 +120,7 @@ export default {
       currentUser: null,
       submitCommentErr: '',
       childrenCollapsed: false,
-      deleted: false,
-      icons: {
-        share: mdiShareVariant,
-        comment: mdiComment,
-        star: mdiStar,
-        bookmark: mdiBookmark,
-        delete: mdiTrashCan,
-        dots: mdiDotsVertical,
-        edit: mdiPencil,
-        cancelDelete: mdiChevronLeft,
-        profile: mdiAccountOutline,
-        endorse: mdiRocket,
-        reply: mdiReply
-      }
+      deleted: false
     }
   },
   computed: {

@@ -4,7 +4,7 @@
       <v-list v-show="!selectingTime" class="py-0">
         <v-list-item @click="chooseHot">
           <v-list-item-icon>
-            <v-icon>{{ icons.hot }}</v-icon>
+            <v-icon>{{ $vuetify.icons.values.mdiFire }}</v-icon>
           </v-list-item-icon>
           <v-list-item-content>
             <v-list-item-title
@@ -16,7 +16,7 @@
 
         <v-list-item @click="chooseTop">
           <v-list-item-icon>
-            <v-icon>{{ icons.top }}</v-icon>
+            <v-icon>{{ $vuetify.icons.values.mdiFormatListNumbered }}</v-icon>
           </v-list-item-icon>
           <v-list-item-content>
             <v-list-item-title
@@ -28,7 +28,7 @@
 
         <v-list-item @click="chooseNew">
           <v-list-item-icon>
-            <v-icon>{{ icons.new }}</v-icon>
+            <v-icon>{{ $vuetify.icons.values.mdiClockTimeOneOutline }}</v-icon>
           </v-list-item-icon>
           <v-list-item-content>
             <v-list-item-title
@@ -113,8 +113,6 @@
 </template>
 
 <script>
-import { mdiClockTimeOneOutline, mdiFire, mdiFormatListNumbered } from '@mdi/js'
-
 export default {
   name: 'SortMenuContent',
   props: {
@@ -125,11 +123,6 @@ export default {
   },
   data() {
     return {
-      icons: {
-        hot: mdiFire,
-        new: mdiClockTimeOneOutline,
-        top: mdiFormatListNumbered
-      },
       selectingTime: false
     }
   },

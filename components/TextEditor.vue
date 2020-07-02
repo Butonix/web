@@ -2,7 +2,7 @@
   <div>
     <v-row v-if="showButtons" class="ma-0 pb-1">
       <v-btn x-small icon depressed color="primary" class="mr-2" @click="bold">
-        <v-icon>{{ icons.bold }}</v-icon>
+        <v-icon>{{ $vuetify.icons.values.mdiFormatBold }}</v-icon>
       </v-btn>
 
       <v-btn
@@ -13,7 +13,7 @@
         class="mr-2"
         @click="italic"
       >
-        <v-icon>{{ icons.italic }}</v-icon>
+        <v-icon>{{ $vuetify.icons.values.mdiFormatItalic }}</v-icon>
       </v-btn>
 
       <v-btn
@@ -24,7 +24,7 @@
         class="mr-2"
         @click="strikethrough"
       >
-        <v-icon>{{ icons.strikethrough }}</v-icon>
+        <v-icon>{{ $vuetify.icons.values.mdiFormatStrikethrough }}</v-icon>
       </v-btn>
 
       <v-btn
@@ -35,15 +35,15 @@
         class="mr-2"
         @click="linkPrompt"
       >
-        <v-icon>{{ icons.link }}</v-icon>
+        <v-icon>{{ $vuetify.icons.values.mdiLink }}</v-icon>
       </v-btn>
 
       <v-btn x-small icon depressed color="primary" class="mr-2" @click="quote">
-        <v-icon>{{ icons.quote }}</v-icon>
+        <v-icon>{{ $vuetify.icons.values.mdiFormatQuoteClose }}</v-icon>
       </v-btn>
 
       <v-btn x-small icon depressed color="primary" class="mr-2" @click="code">
-        <v-icon>{{ icons.codeTags }}</v-icon>
+        <v-icon>{{ $vuetify.icons.values.mdiCodeTags }}</v-icon>
       </v-btn>
 
       <v-btn
@@ -54,7 +54,7 @@
         class="mr-2"
         @click="unorderedList"
       >
-        <v-icon>{{ icons.listBulleted }}</v-icon>
+        <v-icon>{{ $vuetify.icons.values.mdiFormatListBulleted }}</v-icon>
       </v-btn>
 
       <v-btn
@@ -65,7 +65,7 @@
         class="mr-2"
         @click="orderedList"
       >
-        <v-icon>{{ icons.listNumbered }}</v-icon>
+        <v-icon>{{ $vuetify.icons.values.mdiFormatListNumbered }}</v-icon>
       </v-btn>
     </v-row>
 
@@ -85,16 +85,6 @@
 </template>
 
 <script>
-import {
-  mdiFormatListNumbered,
-  mdiFormatListBulleted,
-  mdiCodeTags,
-  mdiFormatQuoteClose,
-  mdiLink,
-  mdiFormatStrikethrough,
-  mdiFormatItalic,
-  mdiFormatBold
-} from '@mdi/js'
 import currentUserGql from '../gql/currentUser.graphql'
 
 export default {
@@ -125,17 +115,7 @@ export default {
   data: () => ({
     textContent: '',
     currentUser: null,
-    showButtons: false,
-    icons: {
-      listNumbered: mdiFormatListNumbered,
-      listBulleted: mdiFormatListBulleted,
-      codeTags: mdiCodeTags,
-      quote: mdiFormatQuoteClose,
-      link: mdiLink,
-      strikethrough: mdiFormatStrikethrough,
-      italic: mdiFormatItalic,
-      bold: mdiFormatBold
-    }
+    showButtons: false
   }),
   apollo: {
     currentUser: {

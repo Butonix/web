@@ -29,7 +29,9 @@
         &nbsp;
       </span>
 
-      <v-icon x-small class="text--secondary">{{ icons.comment }}</v-icon>
+      <v-icon x-small class="text--secondary">{{
+        $vuetify.icons.values.mdiCommentOutline
+      }}</v-icon>
     </v-btn>
 
     <!--Endorse-->
@@ -75,7 +77,7 @@
         x-small
         :style="post.isEndorsed ? 'color: var(--v-primary-base)' : ''"
         :class="post.isEndorsed ? '' : 'text--secondary'"
-        >{{ icons.star }}</v-icon
+        >{{ $vuetify.icons.values.mdiRocket }}</v-icon
       >
     </v-btn>
 
@@ -91,7 +93,9 @@
         Share
       </span>
 
-      <v-icon x-small class="text--secondary">{{ icons.share }}</v-icon>
+      <v-icon x-small class="text--secondary">{{
+        $vuetify.icons.values.mdiShareOutline
+      }}</v-icon>
     </v-btn>
 
     <span v-if="$device.isDesktop">
@@ -109,7 +113,9 @@
         </span>
 
         <v-icon x-small class="text--secondary">{{
-          hidden ? icons.eye : icons.eyeOff
+          hidden
+            ? $vuetify.icons.values.mdiEye
+            : $vuetify.icons.values.mdiEyeOff
         }}</v-icon>
       </v-btn>
 
@@ -128,7 +134,7 @@
               {{ reported ? 'Reported' : 'Report' }}
             </span>
             <v-icon x-small :class="reported ? '' : 'text--secondary'">{{
-              icons.report
+              $vuetify.icons.values.mdiAlertOctagonOutline
             }}</v-icon>
           </v-btn>
         </template>
@@ -142,7 +148,9 @@
           >
           <v-list-item @click="reportPost">
             <v-list-item-icon class="mr-3">
-              <v-icon>{{ icons.report }}</v-icon>
+              <v-icon>{{
+                $vuetify.icons.values.mdiAlertOctagonOutline
+              }}</v-icon>
             </v-list-item-icon>
             <v-list-item-title>{{
               reported ? 'Reported' : 'Report'
@@ -166,7 +174,7 @@
               {{ deleted ? 'Deleted' : 'Delete' }}
             </span>
             <v-icon x-small :class="deleted ? '' : 'text--secondary'">{{
-              icons.delete
+              $vuetify.icons.values.mdiTrashCan
             }}</v-icon>
           </v-btn>
         </template>
@@ -175,7 +183,7 @@
           <v-subheader>Are you sure you want to delete this post?</v-subheader>
           <v-list-item @click="deletePost">
             <v-list-item-icon class="mr-3">
-              <v-icon>{{ icons.delete }}</v-icon>
+              <v-icon>{{ $vuetify.icons.values.mdiTrashCan }}</v-icon>
             </v-list-item-icon>
             <v-list-item-title>{{
               deleted ? 'Deleted' : 'Delete'
@@ -195,14 +203,18 @@
             style="text-transform: none; font-size: 12px"
             v-on="on"
           >
-            <v-icon x-small>{{ icons.dots }}</v-icon>
+            <v-icon x-small>{{ $vuetify.icons.values.mdiDotsVertical }}</v-icon>
           </v-btn>
         </template>
 
         <v-list dense>
           <v-list-item @click="toggleHide">
             <v-list-item-icon class="mr-3">
-              <v-icon>{{ hidden ? icons.eye : icons.eyeOff }}</v-icon>
+              <v-icon>{{
+                hidden
+                  ? $vuetify.icons.values.mdiEye
+                  : $vuetify.icons.values.mdiEyeOff
+              }}</v-icon>
             </v-list-item-icon>
             <v-list-item-title>{{
               hidden ? 'Unhide' : 'Hide'
@@ -211,7 +223,9 @@
 
           <v-list-item :disabled="reported" @click="reportPost">
             <v-list-item-icon class="mr-3">
-              <v-icon>{{ icons.report }}</v-icon>
+              <v-icon>{{
+                $vuetify.icons.values.mdiAlertOctagonOutline
+              }}</v-icon>
             </v-list-item-icon>
             <v-list-item-title>{{
               reported ? 'Reported' : 'Report'
@@ -229,14 +243,14 @@
             style="text-transform: none; font-size: 12px"
             v-on="on"
           >
-            <v-icon x-small>{{ icons.dots }}</v-icon>
+            <v-icon x-small>{{ $vuetify.icons.values.mdiDotsVertical }}</v-icon>
           </v-btn>
         </template>
 
         <v-list dense>
           <v-list-item :disabled="deleted" @click="deletePost">
             <v-list-item-icon class="mr-3">
-              <v-icon>{{ icons.delete }}</v-icon>
+              <v-icon>{{ $vuetify.icons.values.mdiTrashCan }}</v-icon>
             </v-list-item-icon>
             <v-list-item-title>{{
               deleted ? 'Deleted' : 'Delete'
@@ -250,17 +264,6 @@
 
 <script>
 import { formatDistanceToNowStrict } from 'date-fns'
-import {
-  mdiShareVariant,
-  mdiComment,
-  mdiStar,
-  mdiBookmark,
-  mdiEyeOff,
-  mdiEye,
-  mdiAlert,
-  mdiDotsVertical,
-  mdiTrashCan
-} from '@mdi/js'
 import togglePostEndorsementGql from '../gql/togglePostEndorsement.graphql'
 import currentUserGql from '../gql/currentUser.graphql'
 import hidePostGql from '../gql/hidePost.graphql'
@@ -287,18 +290,7 @@ export default {
       hidden: this.post.isHidden,
       currentUser: null,
       reported: false,
-      deleted: false,
-      icons: {
-        share: mdiShareVariant,
-        comment: mdiComment,
-        star: mdiStar,
-        bookmark: mdiBookmark,
-        eyeOff: mdiEyeOff,
-        eye: mdiEye,
-        report: mdiAlert,
-        dots: mdiDotsVertical,
-        delete: mdiTrashCan
-      }
+      deleted: false
     }
   },
   computed: {

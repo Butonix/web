@@ -1,59 +1,17 @@
 <template>
   <v-container fluid>
     <v-row>
-      <!--<v-col v-if="$device.isDesktop" cols="2" class="pt-0">
-        <v-card outlined style="background-color: transparent">
-          <v-list-item>
-            <v-list-item-avatar color="grey darken-3">
-              <v-icon small>{{ icons.profile }}</v-icon>
-            </v-list-item-avatar>
-
-            <v-list-item-content>
-              <v-list-item-title>{{ currentUser.username }}</v-list-item-title>
-            </v-list-item-content>
-          </v-list-item>
-        </v-card>
-      </v-col>-->
-
       <v-col class="pt-0">
-        <div v-if="!$route.query.feed">
-          <Post
-            v-for="post in globalStickies"
-            :key="post.id"
-            :post="post"
-            sticky
-          />
-        </div>
-
-        <Post
-          v-for="post in homeFeed.slice(0, homeFeed.length - 1)"
-          :key="post.id"
-          :post="post"
-        />
-        <Post
-          v-for="post in homeFeed.slice(homeFeed.length - 1, homeFeed.length)"
-          :key="post.id"
-          v-intersect.quiet="showMore"
-          :post="post"
-        />
-
-        <v-progress-linear
-          v-show="$apollo.queries.homeFeed.loading"
-          indeterminate
-        />
-
-        <div
-          v-if="
-            !$apollo.queries.homeFeed.loading &&
-              !$apollo.queries.globalStickies.loading &&
-              homeFeed.length === 0 &&
-              globalStickies.length === 0
-          "
-          style="text-align: center"
-          class="title"
+        <virtual-list
+          :data-key="'id'"
+          :data-sources="homeFeed"
+          :data-component="postComponent"
+          :estimate-size="80"
+          page-mode
+          @tobottom="showMore"
         >
-          No posts <v-icon>{{ icons.frown }}</v-icon>
-        </div>
+          <v-progress-linear slot="footer" indeterminate />
+        </virtual-list>
       </v-col>
       <v-col v-if="$device.isDesktop" cols="2" class="pt-0">
         <client-only>
@@ -99,17 +57,17 @@
 </template>
 
 <script>
-import { mdiAccountOutline, mdiEmoticonFrown } from '@mdi/js'
-import homeFeedGql from '../../gql/homeFeed.graphql'
-import globalStickiesGql from '../../gql/globalStickies.graphql'
-import TopicsSidebar from '../TopicsSidebar'
-import Post from '../Post'
-import currentUserGql from '../../gql/currentUser.graphql'
-import InfoLinks from '../InfoLinks'
+import VirtualList from 'vue-virtual-scroll-list'
+import homeFeedGql from '../gql/homeFeed.graphql'
+import globalStickiesGql from '../gql/globalStickies.graphql'
+import TopicsSidebar from '../components/TopicsSidebar'
+import Post from '../components/Post'
+import currentUserGql from '../gql/currentUser.graphql'
+import InfoLinks from '../components/InfoLinks'
 
 export default {
-  name: 'HomeView',
-  components: { InfoLinks, Post, TopicsSidebar },
+  scrollToTop: false,
+  components: { InfoLinks, TopicsSidebar, 'virtual-list': VirtualList },
   data() {
     return {
       discordHidden: process.client
@@ -119,10 +77,7 @@ export default {
       globalStickies: [],
       hasMore: true,
       currentUser: null,
-      icons: {
-        profile: mdiAccountOutline,
-        frown: mdiEmoticonFrown
-      }
+      postComponent: Post
     }
   },
   computed: {
@@ -175,7 +130,7 @@ export default {
           ...this.vars
         }
       },
-      fetchPolicy: 'cache-and-network'
+      fetchPolicy: 'cache-first'
     },
     globalStickies: {
       query: globalStickiesGql,
@@ -194,6 +149,8 @@ export default {
       this.discordHidden = false
     },
     showMore() {
+      console.log('showMore')
+      if (this.$apollo.queries.homeFeed.loading) return
       if (!this.hasMore) return
       this.page++
       this.$apollo.queries.homeFeed.fetchMore({

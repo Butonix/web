@@ -36,7 +36,9 @@
                       @click="showPassword = !showPassword"
                     >
                       <v-icon>{{
-                        showPassword ? icons.eye : icons.eyeOff
+                        showPassword
+                          ? $vuetify.icons.values.mdiEye
+                          : $vuetify.icons.values.mdiEyeOff
                       }}</v-icon>
                     </div>
                   </template>
@@ -86,7 +88,9 @@
                       @click="showPassword = !showPassword"
                     >
                       <v-icon>{{
-                        showPassword ? icons.eye : icons.eyeOff
+                        showPassword
+                          ? $vuetify.icons.values.mdiEye
+                          : $vuetify.icons.values.mdiEyeOff
                       }}</v-icon>
                     </div>
                   </template>
@@ -107,7 +111,9 @@
                       @click="showPassword = !showPassword"
                     >
                       <v-icon>{{
-                        showPassword ? icons.eye : icons.eyeOff
+                        showPassword
+                          ? $vuetify.icons.values.mdiEye
+                          : $vuetify.icons.values.mdiEyeOff
                       }}</v-icon>
                     </div>
                   </template>
@@ -150,20 +156,12 @@
 </template>
 
 <script>
-import { mdiAccountCircle, mdiClose, mdiEye, mdiEyeOff } from '@mdi/js'
 import signUpGql from '../../gql/signUp.graphql'
 import loginGql from '../../gql/login.graphql'
 
 export default {
-  name: 'LoginView',
   data() {
     return {
-      icons: {
-        accountCircle: mdiAccountCircle,
-        close: mdiClose,
-        eye: mdiEye,
-        eyeOff: mdiEyeOff
-      },
       tab: 0,
       username: '',
       password: '',

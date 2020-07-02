@@ -1,5 +1,57 @@
 import colors from 'vuetify/lib/util/colors'
 import redirectSSL from 'redirect-ssl'
+import {
+  mdiChevronDown,
+  mdiChevronUp,
+  mdiChevronLeft,
+  mdiChevronRight,
+  mdiAccountOutline,
+  mdiBellOutline,
+  mdiHome,
+  mdiMagnify,
+  mdiNewspaper,
+  mdiPencil,
+  mdiRocket,
+  mdiCommentOutline,
+  mdiShare,
+  mdiAlertOctagonOutline,
+  mdiEyeOff,
+  mdiEye,
+  mdiFire,
+  mdiAllInclusive,
+  mdiFormatListNumbered,
+  mdiText,
+  mdiLink,
+  mdiImage,
+  mdiClockTimeOneOutline,
+  mdiWeatherNight,
+  mdiCogOutline,
+  mdiLogout,
+  mdiLogin,
+  mdiEmoticonFrown,
+  mdiFormatListBulleted,
+  mdiCodeTags,
+  mdiFormatQuoteClose,
+  mdiFormatStrikethrough,
+  mdiFormatItalic,
+  mdiFormatBold,
+  mdiSortVariant,
+  mdiClose,
+  mdiShareVariant,
+  mdiComment,
+  mdiStar,
+  mdiBookmark,
+  mdiAlert,
+  mdiDotsVertical,
+  mdiTrashCan,
+  mdiInfinity,
+  mdiWeb,
+  mdiShareOutline,
+  mdiContentCopy,
+  mdiPlusBox,
+  mdiReplyOutline,
+  mdiOpenInNew
+} from '@mdi/js'
 
 export default {
   mode: 'universal',
@@ -36,8 +88,7 @@ export default {
     '~/plugins/vue-youtube',
     '~/plugins/vue-clipboard2',
     '~/plugins/marked',
-    '~/plugins/vue-friendly-iframe',
-    '~/plugins/vue-virtual-scroller'
+    '~/plugins/vue-friendly-iframe'
   ],
   /*
    ** Nuxt.js dev-modules
@@ -46,7 +97,6 @@ export default {
     // Doc: https://github.com/nuxt-community/eslint-module
     '@nuxtjs/eslint-module',
     '@nuxtjs/vuetify',
-    '@nuxtjs/router',
     '@nuxtjs/pwa'
   ],
   /*
@@ -81,6 +131,20 @@ export default {
       name: 'Comet',
       description: 'Create and browse posts and comments on Comet',
       theme_color: '#F44336'
+    },
+    workbox: {
+      runtimeCaching: [
+        {
+          urlPattern: 'https://i.getcomet.net/*',
+          handler: 'cacheFirst',
+          method: 'GET'
+        },
+        {
+          urlPattern: 'https://i.getcomet.net/thumbs/*',
+          handler: 'cacheFirst',
+          method: 'GET'
+        }
+      ]
     }
   },
 
@@ -135,7 +199,59 @@ export default {
     customVariables: ['~/assets/variables.scss'],
     defaultAssets: false,
     icons: {
-      iconfont: 'mdiSvg'
+      iconfont: 'mdiSvg',
+      values: {
+        mdiChevronDown,
+        mdiChevronUp,
+        mdiChevronLeft,
+        mdiChevronRight,
+        mdiAccountOutline,
+        mdiBellOutline,
+        mdiHome,
+        mdiMagnify,
+        mdiNewspaper,
+        mdiPencil,
+        mdiRocket,
+        mdiCommentOutline,
+        mdiShare,
+        mdiAlertOctagonOutline,
+        mdiEyeOff,
+        mdiEye,
+        mdiFire,
+        mdiAllInclusive,
+        mdiFormatListNumbered,
+        mdiText,
+        mdiLink,
+        mdiImage,
+        mdiClockTimeOneOutline,
+        mdiWeatherNight,
+        mdiCogOutline,
+        mdiLogout,
+        mdiLogin,
+        mdiEmoticonFrown,
+        mdiFormatListBulleted,
+        mdiCodeTags,
+        mdiFormatQuoteClose,
+        mdiFormatStrikethrough,
+        mdiFormatItalic,
+        mdiFormatBold,
+        mdiSortVariant,
+        mdiClose,
+        mdiShareVariant,
+        mdiComment,
+        mdiStar,
+        mdiBookmark,
+        mdiAlert,
+        mdiDotsVertical,
+        mdiTrashCan,
+        mdiInfinity,
+        mdiWeb,
+        mdiShareOutline,
+        mdiContentCopy,
+        mdiPlusBox,
+        mdiReplyOutline,
+        mdiOpenInNew
+      }
     },
     treeShake: true,
     theme: {

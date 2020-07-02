@@ -2,7 +2,7 @@
   <v-list class="py-0">
     <v-list-item @click="chooseTop">
       <v-list-item-icon>
-        <v-icon>{{ icons.top }}</v-icon>
+        <v-icon>{{ $vuetify.icons.values.mdiFormatListNumbered }}</v-icon>
       </v-list-item-icon>
       <v-list-item-content>
         <v-list-item-title :class="!$route.query.sort ? 'font-weight-bold' : ''"
@@ -13,7 +13,7 @@
 
     <v-list-item @click="chooseNew">
       <v-list-item-icon>
-        <v-icon>{{ icons.new }}</v-icon>
+        <v-icon>{{ $vuetify.icons.values.mdiClockTimeOneOutline }}</v-icon>
       </v-list-item-icon>
       <v-list-item-content>
         <v-list-item-title
@@ -26,17 +26,11 @@
 </template>
 
 <script>
-import { mdiClockTimeOneOutline, mdiFormatListNumbered } from '@mdi/js'
-
 export default {
   name: 'CommentSortMenuContent',
   data() {
     return {
-      menu: false,
-      icons: {
-        new: mdiClockTimeOneOutline,
-        top: mdiFormatListNumbered
-      }
+      menu: false
     }
   },
   methods: {

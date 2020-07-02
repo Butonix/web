@@ -24,7 +24,7 @@
         <Post
           v-for="post in searchPosts.slice(0, searchPosts.length - 1)"
           :key="post.id"
-          :post="post"
+          :source="post"
         />
         <Post
           v-for="post in searchPosts.slice(
@@ -33,7 +33,7 @@
           )"
           :key="post.id"
           v-intersect.quiet="showMore"
-          :post="post"
+          :source="post"
         />
 
         <v-progress-linear
@@ -47,11 +47,10 @@
 
 <script>
 import searchPostsGql from '../../gql/searchPosts.graphql'
-import Post from '../Post'
-import SortMenu from '../buttons/SortMenu'
+import Post from '../../components/Post'
+import SortMenu from '../../components/buttons/SortMenu'
 
 export default {
-  name: 'SearchView',
   components: { SortMenu, Post },
   data() {
     return {

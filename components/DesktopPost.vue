@@ -2,6 +2,7 @@
   <v-card
     outlined
     style="background-color: transparent; border-width: 1px; border-radius: 10px"
+    min-height="80"
   >
     <v-row align="start" class="ma-0">
       <a
@@ -20,10 +21,16 @@
           :width="isYoutubeLink ? 128 : undefined"
           style="border-radius: 10px"
         >
-          <v-img
+          <!--<v-img
             :max-width="isYoutubeLink ? 128 : 80"
             height="80"
             :src="isTwitterLink ? twitterbird : post.thumbnailUrl"
+            :transition="false"
+          />-->
+          <img
+            :src="isTwitterLink ? twitterbird : post.thumbnailUrl"
+            style="height: 80px"
+            :style="{ 'max-width': isYoutubeLink ? '128px' : '80px' }"
           />
         </v-avatar>
       </a>
@@ -41,12 +48,16 @@
             class="mr-1"
             @click.prevent="expanded = !expanded"
           >
-            <v-icon>{{ expanded ? icons.up : icons.down }}</v-icon>
+            <v-icon>{{
+              expanded
+                ? $vuetify.icons.values.mdiChevronUp
+                : $vuetify.icons.values.mdiChevronDown
+            }}</v-icon>
           </v-btn>
 
           <div>
             <a
-              v-if="$route.name.startsWith('Post') && post.type === 'LINK'"
+              v-if="$route.name.startsWith('post') && post.type === 'LINK'"
               :href="post.link"
               rel="noopener"
               target="_blank"
@@ -101,7 +112,9 @@
             nuxt
           >
             <v-avatar left class="mr-1">
-              <v-icon small>{{ icons.profile }}</v-icon>
+              <v-icon small>{{
+                $vuetify.icons.values.mdiAccountOutline
+              }}</v-icon>
             </v-avatar>
             {{ post.author.username }}
           </v-chip>
@@ -114,7 +127,7 @@
             @click.prevent="toggleEndorsement"
           >
             <v-avatar left class="mr-1">
-              <v-icon small>{{ icons.endorse }}</v-icon>
+              <v-icon small>{{ $vuetify.icons.values.mdiRocket }}</v-icon>
             </v-avatar>
             {{ post.endorsementCount }}
           </v-chip>
@@ -127,7 +140,9 @@
             nuxt
           >
             <v-avatar left class="mr-1">
-              <v-icon small>{{ icons.comment }}</v-icon>
+              <v-icon small>{{
+                $vuetify.icons.values.mdiCommentOutline
+              }}</v-icon>
             </v-avatar>
             {{ post.commentCount }}
             {{ newCommentsCount > 0 ? `(+${newCommentsCount})` : '' }}
@@ -136,7 +151,9 @@
           <v-spacer />
 
           <v-btn small icon class="ml-2" @click.prevent="doNothing">
-            <v-icon class="text--secondary">{{ icons.share }}</v-icon>
+            <v-icon class="text--secondary">{{
+              $vuetify.icons.values.mdiShareOutline
+            }}</v-icon>
           </v-btn>
         </v-row>
       </v-col>
@@ -209,14 +226,6 @@
 
 <script>
 import { Tweet } from 'vue-tweet-embed'
-import {
-  mdiChevronUp,
-  mdiChevronDown,
-  mdiRocket,
-  mdiCommentOutline,
-  mdiAccountOutline,
-  mdiShareOutline
-} from '@mdi/js'
 import editPostGql from '../gql/editPost.graphql'
 import TopicChip from './TopicChip'
 import TextContent from './TextContent'
@@ -248,14 +257,6 @@ export default {
       editBtnLoading: false,
       editing: false,
       expanded: this.expand,
-      icons: {
-        down: mdiChevronDown,
-        up: mdiChevronUp,
-        endorse: mdiRocket,
-        comment: mdiCommentOutline,
-        profile: mdiAccountOutline,
-        share: mdiShareOutline
-      },
       twitterbird: require('~/assets/twitterbird.jpg')
     }
   },

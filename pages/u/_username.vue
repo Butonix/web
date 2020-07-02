@@ -42,7 +42,7 @@
         >
           <v-tab-item>
             <div v-for="item in postsAndComments" :key="item.id" class="mb-1">
-              <Post v-if="item.__typename === 'Post'" :post="item" />
+              <Post v-if="item.__typename === 'Post'" :source="item" />
               <Comment
                 v-else-if="item.__typename === 'Comment'"
                 profile
@@ -52,7 +52,7 @@
           </v-tab-item>
 
           <v-tab-item>
-            <Post v-for="post in userPosts" :key="post.id" :post="post" />
+            <Post v-for="post in userPosts" :key="post.id" :source="post" />
           </v-tab-item>
 
           <v-tab-item>
@@ -75,11 +75,10 @@ import { format } from 'date-fns'
 import userGql from '../../gql/user.graphql'
 import userPostsGql from '../../gql/userPosts.graphql'
 import userCommentsGql from '../../gql/userComments.graphql'
-import Comment from '../Comment'
-import Post from '../Post'
+import Comment from '../../components/Comment'
+import Post from '../../components/Post'
 
 export default {
-  name: 'PostView',
   components: { Comment, Post },
   async asyncData(context) {
     const client = context.app.apolloProvider.defaultClient

@@ -55,11 +55,10 @@
 <script>
 import currentUserGql from '../../gql/currentUser.graphql'
 import notificationsGql from '../../gql/notifications.graphql'
-import Notification from '../Notification'
+import Notification from '../../components/Notification'
 import markAllNotificationsReadGql from '../../gql/markAllNotificationsRead.graphql'
 
 export default {
-  name: 'NotificationsView',
   components: { Notification },
   data() {
     return {
