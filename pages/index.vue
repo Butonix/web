@@ -3,7 +3,7 @@
     <v-row>
       <v-col class="pt-0">
         <DynamicScroller
-          :items="homeFeed"
+          :items="globalStickies.concat(homeFeed)"
           :min-item-size="80"
           :page-mode="true"
           :buffer="1000"
@@ -71,7 +71,7 @@ import TopicsSidebar from '../components/TopicsSidebar'
 import Post from '../components/Post'
 import InfoLinks from '../components/InfoLinks'
 import homeFeedGql from '../gql/homeFeed.graphql'
-// import globalStickiesGql from '../gql/globalStickies.graphql'
+import globalStickiesGql from '../gql/globalStickies.graphql'
 import currentUserGql from '../gql/currentUser.graphql'
 
 export default {
@@ -142,8 +142,8 @@ export default {
   apollo: {
     currentUser: {
       query: currentUserGql
-    }
-    /* homeFeed: {
+    },
+    homeFeed: {
       query: homeFeedGql,
       variables() {
         return {
@@ -155,7 +155,7 @@ export default {
     globalStickies: {
       query: globalStickiesGql,
       fetchPolicy: 'cache-and-network'
-    } */
+    }
   },
   methods: {
     hideDiscordWidget() {
@@ -169,7 +169,7 @@ export default {
       this.discordHidden = false
     },
     showMore(index) {
-      if (index !== this.homeFeed.length - 1) return
+      if (index !== this.globalStickies.concat(this.homeFeed).length - 1) return
       if (this.$apollo.queries.homeFeed.loading) return
       console.log('showMore')
       console.log(index)

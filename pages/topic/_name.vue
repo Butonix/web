@@ -62,7 +62,7 @@ export default {
     const topicData = await client.query({
       query: topicGql,
       variables: {
-        topicName: context.params.topicName
+        topicName: context.params.name
       },
       fetchPolicy: 'network-only'
     })
@@ -102,7 +102,7 @@ export default {
   },
   computed: {
     topicName() {
-      return this.$route.params.topicName
+      return this.$route.params.name
     },
     page: {
       get() {

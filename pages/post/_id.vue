@@ -107,14 +107,14 @@ import Comment from '../../components/Comment'
 
 export default {
   validate({ params }) {
-    return params.postId !== undefined
+    return params.id !== undefined
   },
   components: { Comment, TextEditor, Post },
   async asyncData(context) {
     const client = context.app.apolloProvider.defaultClient
     const postData = await client.query({
       query: postGql,
-      variables: { postId: context.params.postId },
+      variables: { postId: context.params.id },
       fetchPolicy: 'network-only'
     })
     if (!postData.data.post)
@@ -122,7 +122,7 @@ export default {
 
     const postCommentsData = await client.query({
       query: postCommentsGql,
-      variables: { postId: context.params.postId },
+      variables: { postId: context.params.id },
       fetchPolicy: 'network-only'
     })
 
@@ -150,7 +150,7 @@ export default {
   },
   computed: {
     postId() {
-      return this.$route.params.postId
+      return this.$route.params.id
     },
     urlName() {
       if (!this.post) return ''
