@@ -10,6 +10,7 @@
 
 <script>
 import TopicsSidebar from '../../components/TopicsSidebar'
+
 export default {
   components: { TopicsSidebar }
 }

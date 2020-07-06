@@ -2,6 +2,7 @@
   <v-bottom-sheet v-if="!$device.isDesktop" v-model="menu">
     <template v-slot:activator="{ on }">
       <v-btn
+        aria-label="Sort Comments"
         class="betterbutton"
         outlined
         rounded
@@ -13,12 +14,12 @@
         "
         v-on="on"
       >
-        <v-icon v-if="!$route.query.sort" class="mr-2"
-          >mdi-format-list-numbered</v-icon
-        >
-        <v-icon v-else-if="$route.query.sort === 'new'" class="mr-2"
-          >mdi-clock-time-one-outline</v-icon
-        >
+        <v-icon v-if="!$route.query.sort" class="mr-2">{{
+          $vuetify.icons.values.mdiFormatListNumbered
+        }}</v-icon>
+        <v-icon v-else-if="$route.query.sort === 'new'" class="mr-2">{{
+          $vuetify.icons.values.mdiClockTimeOneOutline
+        }}</v-icon>
 
         <span v-if="!$route.query.sort">Top</span>
         <span v-else-if="$route.query.sort === 'new'">New</span>
@@ -31,6 +32,7 @@
   <v-menu v-else v-model="menu" bottom offset-y transition="slide-y-transition">
     <template v-slot:activator="{ on }">
       <v-btn
+        aria-label="Sort Comments"
         class="betterbutton"
         outlined
         rounded
@@ -42,12 +44,12 @@
         "
         v-on="on"
       >
-        <v-icon v-if="!$route.query.sort" class="mr-2"
-          >mdi-format-list-numbered</v-icon
-        >
-        <v-icon v-else-if="$route.query.sort === 'new'" class="mr-2"
-          >mdi-clock-time-one-outline</v-icon
-        >
+        <v-icon v-if="!$route.query.sort" class="mr-2">{{
+          $vuetify.icons.values.mdiFormatListNumbered
+        }}</v-icon>
+        <v-icon v-else-if="$route.query.sort === 'new'" class="mr-2">{{
+          $vuetify.icons.values.mdiClockTimeOneOutline
+        }}</v-icon>
 
         <span v-if="!$route.query.sort">Top</span>
         <span v-else-if="$route.query.sort === 'new'">New</span>

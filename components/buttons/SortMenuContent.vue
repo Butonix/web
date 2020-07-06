@@ -4,7 +4,7 @@
       <v-list v-show="!selectingTime" class="py-0">
         <v-list-item @click="chooseHot">
           <v-list-item-icon>
-            <v-icon>mdi-fire</v-icon>
+            <v-icon>{{ $vuetify.icons.values.mdiFire }}</v-icon>
           </v-list-item-icon>
           <v-list-item-content>
             <v-list-item-title
@@ -16,7 +16,7 @@
 
         <v-list-item @click="chooseTop">
           <v-list-item-icon>
-            <v-icon>mdi-format-list-numbered</v-icon>
+            <v-icon>{{ $vuetify.icons.values.mdiFormatListNumbered }}</v-icon>
           </v-list-item-icon>
           <v-list-item-content>
             <v-list-item-title
@@ -28,7 +28,7 @@
 
         <v-list-item @click="chooseNew">
           <v-list-item-icon>
-            <v-icon>mdi-clock-time-one-outline</v-icon>
+            <v-icon>{{ $vuetify.icons.values.mdiClockTimeOneOutline }}</v-icon>
           </v-list-item-icon>
           <v-list-item-content>
             <v-list-item-title

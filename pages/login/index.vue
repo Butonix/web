@@ -36,7 +36,9 @@
                       @click="showPassword = !showPassword"
                     >
                       <v-icon>{{
-                        showPassword ? 'mdi-eye' : 'mdi-eye-off'
+                        showPassword
+                          ? $vuetify.icons.values.mdiEye
+                          : $vuetify.icons.values.mdiEyeOff
                       }}</v-icon>
                     </div>
                   </template>
@@ -44,6 +46,7 @@
               </v-card-text>
               <v-card-actions>
                 <v-btn
+                  aria-label="Login"
                   color="primary"
                   depressed
                   block
@@ -86,7 +89,9 @@
                       @click="showPassword = !showPassword"
                     >
                       <v-icon>{{
-                        showPassword ? 'mdi-eye' : 'mdi-eye-off'
+                        showPassword
+                          ? $vuetify.icons.values.mdiEye
+                          : $vuetify.icons.values.mdiEyeOff
                       }}</v-icon>
                     </div>
                   </template>
@@ -107,7 +112,9 @@
                       @click="showPassword = !showPassword"
                     >
                       <v-icon>{{
-                        showPassword ? 'mdi-eye' : 'mdi-eye-off'
+                        showPassword
+                          ? $vuetify.icons.values.mdiEye
+                          : $vuetify.icons.values.mdiEyeOff
                       }}</v-icon>
                     </div>
                   </template>
@@ -122,6 +129,7 @@
               </v-card-text>
               <v-card-actions>
                 <v-btn
+                  aria-label="Sign Up"
                   color="primary"
                   depressed
                   block

@@ -15,6 +15,7 @@
     "lint": "eslint --ext .js,.vue --ignore-path .gitignore ."
   },
   "dependencies": {
+    "@mdi/js": "^5.3.45",
     "@nuxtjs/apollo": "^4.0.1-rc.1",
     "@nuxtjs/axios": "^5.11.0",
     "@nuxtjs/device": "^1.2.7",
@@ -28,10 +29,8 @@
     "redirect-ssl": "^2.0.0",
     "vue-clipboard2": "^0.3.1",
     "vue-friendly-iframe": "^0.18.0",
-    "vue-list-scroller": "^1.0.3",
     "vue-tweet-embed": "^2.4.0",
     "vue-virtual-scroll-list": "^2.3.0",
-    "vue-virtual-scroller": "^1.0.10",
     "vue-youtube": "^1.4.0",
     "vuetify": "^2.3.3",
     "xss": "^1.0.7"

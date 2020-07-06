@@ -36,8 +36,16 @@
         />
         <v-row class="mx-0 my-2">
           <v-spacer />
-          <v-btn class="mr-1" small text @click="cancelEdit">Cancel</v-btn>
           <v-btn
+            aria-label="Cancel edit"
+            class="mr-1"
+            small
+            text
+            @click="cancelEdit"
+            >Cancel</v-btn
+          >
+          <v-btn
+            aria-label="Done editing"
             :loading="editBtnLoading"
             small
             text
@@ -51,7 +59,6 @@
         <span v-if="isOp" class="overline font-weight-medium text--primary"
           >[OP]&nbsp;</span
         >
-        <Username :user-data="comment.author" />
         <span
           class="caption font-weight-medium ml-1"
           :title="editedTimeSince ? `Edited ${editedTimeSince} ago` : ''"
@@ -60,6 +67,7 @@
         >
 
         <v-btn
+          aria-label="Endorse Comment"
           text
           x-small
           class="font-weight-medium caption"
@@ -101,7 +109,7 @@
             x-small
             :style="comment.isEndorsed ? 'color: var(--v-primary-base)' : ''"
             :class="comment.isEndorsed ? '' : 'text--secondary'"
-            >mdi-rocket</v-icon
+            >{{ $vuetify.icons.values.mdiRocket }}</v-icon
           >
         </v-btn>
 
@@ -132,6 +140,7 @@
           <v-menu v-if="currentUser && comment.author.isCurrentUser">
             <template v-slot:activator="{ on }">
               <v-btn
+                aria-label="Delete Comment"
                 text
                 x-small
                 class="font-weight-medium caption"
@@ -142,9 +151,9 @@
                 <span class="mr-1" :class="deleted ? '' : 'text--secondary'">
                   {{ deleted ? 'Deleted' : 'Delete' }}
                 </span>
-                <v-icon x-small :class="deleted ? '' : 'text--secondary'"
-                  >mdi-trash-can</v-icon
-                >
+                <v-icon x-small :class="deleted ? '' : 'text--secondary'">{{
+                  $vuetify.icons.values.mdiTrashCan
+                }}</v-icon>
               </v-btn>
             </template>
 
@@ -154,7 +163,7 @@
               >
               <v-list-item @click="deleteComment">
                 <v-list-item-icon class="mr-3">
-                  <v-icon>mdi-trash-can</v-icon>
+                  <v-icon>{{ $vuetify.icons.values.mdiTrashCan }}</v-icon>
                 </v-list-item-icon>
                 <v-list-item-title>{{
                   deleted ? 'Deleted' : 'Delete'
@@ -176,20 +185,23 @@
           <v-menu v-if="currentUser && post.author.isCurrentUser">
             <template v-slot:activator="{ on }">
               <v-btn
+                aria-label="More options"
                 text
                 x-small
                 class="font-weight-medium caption"
                 style="text-transform: none; font-size: 12px"
                 v-on="on"
               >
-                <v-icon x-small>mdi-dots-vertical</v-icon>
+                <v-icon x-small>{{
+                  $vuetify.icons.values.mdiDotsVertical
+                }}</v-icon>
               </v-btn>
             </template>
 
             <v-list dense>
               <v-list-item :disabled="deleted" @click="deleteComment">
                 <v-list-item-icon class="mr-3">
-                  <v-icon>mdi-trash-can</v-icon>
+                  <v-icon>{{ $vuetify.icons.values.mdiTrashCan }}</v-icon>
                 </v-list-item-icon>
                 <v-list-item-title>{{
                   deleted ? 'Deleted' : 'Delete'
@@ -198,7 +210,7 @@
 
               <v-list-item :disabled="deleted" @click="editing = true">
                 <v-list-item-icon class="mr-3">
-                  <v-icon>mdi-pencil</v-icon>
+                  <v-icon>{{ $vuetify.icons.values.mdiPencil }}</v-icon>
                 </v-list-item-icon>
                 <v-list-item-title>Edit</v-list-item-title>
               </v-list-item>
@@ -223,6 +235,7 @@
       <v-row>
         <v-spacer />
         <v-btn
+          aria-label="Submit Comment"
           depressed
           small
           class="mt-1"
@@ -258,13 +271,12 @@ import recordPostViewGql from '../gql/recordPostView.graphql'
 import currentUserGql from '../gql/currentUser.graphql'
 import deleteCommentGql from '../gql/deleteComment.graphql'
 import editCommentGql from '../gql/editComment.graphql'
-import Username from './Username'
 import TextEditor from './TextEditor'
 import TextContent from './TextContent'
 
 export default {
   name: 'DesktopComment',
-  components: { TextContent, Username, TextEditor },
+  components: { TextContent, TextEditor },
   props: {
     comment: {
       type: Object,

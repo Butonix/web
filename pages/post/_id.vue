@@ -10,6 +10,7 @@
     <v-divider class="mb-4 mt-0" />
     <v-row class="my-0 mx-4">
       <v-btn
+        aria-label="New Comment"
         color="#424346"
         class="flex-grow-1 betterbutton"
         :style="
@@ -21,7 +22,9 @@
         depressed
         style="justify-content: start"
       >
-        <v-icon class="mr-2">mdi-comment-outline</v-icon>
+        <v-icon class="mr-2">{{
+          $vuetify.icons.values.mdiCommentOutline
+        }}</v-icon>
         <span class="mr-4">New comment</span>
       </v-btn>
     </v-row>
@@ -60,6 +63,7 @@
           <v-row>
             <v-spacer />
             <v-btn
+              aria-label="Submit Comment"
               depressed
               small
               class="mt-1"

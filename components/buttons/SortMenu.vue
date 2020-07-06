@@ -2,6 +2,7 @@
   <v-bottom-sheet v-if="!$device.isDesktop" v-model="menu">
     <template v-slot:activator="{ on }">
       <v-btn
+        aria-label="Sort Posts"
         class="betterbutton"
         outlined
         rounded
@@ -16,14 +17,14 @@
         <v-icon
           v-if="$route.query.sort === 'hot' || !$route.query.sort"
           class="mr-2"
-          >mdi-fire</v-icon
+          >{{ $vuetify.icons.values.mdiFire }}</v-icon
         >
-        <v-icon v-else-if="$route.query.sort === 'top'" class="mr-2"
-          >mdi-format-list-numbered</v-icon
-        >
-        <v-icon v-else-if="$route.query.sort === 'new'" class="mr-2"
-          >mdi-clock-time-one-outline</v-icon
-        >
+        <v-icon v-else-if="$route.query.sort === 'top'" class="mr-2">{{
+          $vuetify.icons.values.mdiFormatListNumbered
+        }}</v-icon>
+        <v-icon v-else-if="$route.query.sort === 'new'" class="mr-2">{{
+          $vuetify.icons.values.mdiClockTimeOneOutline
+        }}</v-icon>
 
         <span v-if="$route.query.sort === 'hot' || !$route.query.sort"
           >Hot</span
@@ -45,6 +46,7 @@
   >
     <template v-slot:activator="{ on }">
       <v-btn
+        aria-label="Sort Posts"
         class="betterbutton"
         outlined
         rounded
@@ -59,14 +61,14 @@
         <v-icon
           v-if="$route.query.sort === 'hot' || !$route.query.sort"
           class="mr-2"
-          >mdi-fire</v-icon
+          >{{ $vuetify.icons.values.mdiFire }}</v-icon
         >
-        <v-icon v-else-if="$route.query.sort === 'top'" class="mr-2"
-          >mdi-format-list-numbered</v-icon
-        >
-        <v-icon v-else-if="$route.query.sort === 'new'" class="mr-2"
-          >mdi-clock-time-one-outline</v-icon
-        >
+        <v-icon v-else-if="$route.query.sort === 'top'" class="mr-2">{{
+          $vuetify.icons.values.mdiFormatListNumbered
+        }}</v-icon>
+        <v-icon v-else-if="$route.query.sort === 'new'" class="mr-2">{{
+          $vuetify.icons.values.mdiClockTimeOneOutline
+        }}</v-icon>
 
         <span v-if="$route.query.sort === 'hot' || !$route.query.sort"
           >Hot</span

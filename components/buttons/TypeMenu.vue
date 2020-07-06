@@ -2,6 +2,7 @@
   <v-bottom-sheet v-if="!$device.isDesktop" v-model="menu">
     <template v-slot:activator="{ on }">
       <v-btn
+        aria-label="Select Post Feed"
         class="betterbutton"
         outlined
         rounded
@@ -14,7 +15,9 @@
         v-on="on"
       >
         <v-icon class="mr-2">{{
-          $route.query.feed === 'mytopics' ? 'mdi-newspaper' : 'mdi-infinity'
+          $route.query.feed === 'mytopics'
+            ? $vuetify.icons.values.mdiNewspaper
+            : $vuetify.icons.values.mdiInfinity
         }}</v-icon>
         {{ $route.query.feed === 'mytopics' ? 'My Topics' : 'All' }}
       </v-btn>
@@ -33,6 +36,7 @@
   >
     <template v-slot:activator="{ on }">
       <v-btn
+        aria-label="Select Post Feed"
         class="betterbutton"
         outlined
         rounded
@@ -45,7 +49,9 @@
         v-on="on"
       >
         <v-icon class="mr-2">{{
-          $route.query.feed === 'mytopics' ? 'mdi-newspaper' : 'mdi-infinity'
+          $route.query.feed === 'mytopics'
+            ? $vuetify.icons.values.mdiNewspaper
+            : $vuetify.icons.values.mdiInfinity
         }}</v-icon>
         {{ $route.query.feed === 'mytopics' ? 'My Topics' : 'All' }}
       </v-btn>

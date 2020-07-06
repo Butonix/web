@@ -18,7 +18,9 @@
                 @click="showPasswordOld = !showPasswordOld"
               >
                 <v-icon>{{
-                  showPasswordOld ? 'mdi-eye' : 'mdi-eye-off'
+                  showPasswordOld
+                    ? $vuetify.icons.values.mdiEye
+                    : $vuetify.icons.values.mdiEyeOff
                 }}</v-icon>
               </div>
             </template>
@@ -36,7 +38,11 @@
                 tabindex="-1"
                 @click="showPassword = !showPassword"
               >
-                <v-icon>{{ showPassword ? 'mdi-eye' : 'mdi-eye-off' }}</v-icon>
+                <v-icon>{{
+                  showPassword
+                    ? $vuetify.icons.values.mdiEye
+                    : $vuetify.icons.values.mdiEyeOff
+                }}</v-icon>
               </div>
             </template>
           </v-text-field>
@@ -53,7 +59,11 @@
                 tabindex="-1"
                 @click="showPassword = !showPassword"
               >
-                <v-icon>{{ showPassword ? 'mdi-eye' : 'mdi-eye-off' }}</v-icon>
+                <v-icon>{{
+                  showPassword
+                    ? $vuetify.icons.values.mdiEye
+                    : $vuetify.icons.values.mdiEyeOff
+                }}</v-icon>
               </div>
             </template>
           </v-text-field>
@@ -66,6 +76,7 @@
               {{ successMessage }}
             </div>
             <v-btn
+              aria-label="Change Password"
               :loading="loading"
               color="primary"
               :disabled="!valid"

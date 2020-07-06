@@ -53,11 +53,12 @@
         <a :href="post.link" rel="noopener" target="_blank">
           <v-img
             v-if="post.thumbnailUrl || isTwitterLink"
+            alt="Thumbnail"
             max-width="64"
             height="64"
             :src="isTwitterLink ? twitterbird : post.thumbnailUrl"
           />
-          <v-icon v-else large>mdi-link</v-icon>
+          <v-icon v-else large>{{ $vuetify.icons.values.mdiLink }}</v-icon>
         </a>
       </v-list-item-avatar>
     </v-list-item>
@@ -76,8 +77,16 @@
           <v-textarea v-model="newTextContent" hide-details filled />
           <v-row class="mx-0 my-2">
             <v-spacer />
-            <v-btn class="mr-1" small text @click="cancelEdit">Cancel</v-btn>
             <v-btn
+              aria-label="Cancel edit"
+              class="mr-1"
+              small
+              text
+              @click="cancelEdit"
+              >Cancel</v-btn
+            >
+            <v-btn
+              aria-label="Done editing"
               :loading="editBtnLoading"
               small
               text
@@ -99,7 +108,7 @@
           @click.prevent.stop="toggleEndorsement"
         >
           <v-avatar left class="mr-1">
-            <v-icon small>mdi-rocket</v-icon>
+            <v-icon small>{{ $vuetify.icons.values.mdiRocket }}</v-icon>
           </v-avatar>
           {{ post.endorsementCount }}
         </v-chip>
@@ -111,7 +120,7 @@
           @click="doNothing"
         >
           <v-avatar left class="mr-1">
-            <v-icon small>mdi-comment-outline</v-icon>
+            <v-icon small>{{ $vuetify.icons.values.mdiCommentOutline }}</v-icon>
           </v-avatar>
           {{ post.commentCount }}
           {{ newCommentsCount > 0 ? `(+${newCommentsCount})` : '' }}
@@ -121,8 +130,16 @@
 
         <v-bottom-sheet v-model="menu">
           <template v-slot:activator="{ on }">
-            <v-btn icon small v-on="on" @click.stop.prevent="doNothing">
-              <v-icon class="text--secondary">mdi-dots-vertical</v-icon>
+            <v-btn
+              icon
+              small
+              aria-label="More options"
+              v-on="on"
+              @click.stop.prevent="doNothing"
+            >
+              <v-icon class="text--secondary">{{
+                $vuetify.icons.values.mdiDotsVertical
+              }}</v-icon>
             </v-btn>
           </template>
 
@@ -136,7 +153,7 @@
               style="border-top-left-radius: 24px; border-top-right-radius: 24px"
             >
               <v-list-item-icon>
-                <v-icon>mdi-account-outline</v-icon>
+                <v-icon>{{ $vuetify.icons.values.mdiAccountOutline }}</v-icon>
               </v-list-item-icon>
               <v-list-item-content>
                 <v-list-item-title
@@ -147,7 +164,7 @@
 
             <v-list-item>
               <v-list-item-icon>
-                <v-icon>mdi-newspaper</v-icon>
+                <v-icon>{{ $vuetify.icons.values.mdiNewspaper }}</v-icon>
               </v-list-item-icon>
               <v-list-item-content>
                 <v-list-item-title>Topics</v-list-item-title>
@@ -156,7 +173,7 @@
 
             <v-list-item v-if="canShare" @click="share">
               <v-list-item-icon>
-                <v-icon>mdi-share</v-icon>
+                <v-icon>{{ $vuetify.icons.values.mdiShare }}</v-icon>
               </v-list-item-icon>
               <v-list-item-content>
                 <v-list-item-title>Share</v-list-item-title>
@@ -165,7 +182,7 @@
 
             <v-list-item v-else @click="copyLink">
               <v-list-item-icon>
-                <v-icon>mdi-content-copy</v-icon>
+                <v-icon>{{ $vuetify.icons.values.mdiContentCopy }}</v-icon>
               </v-list-item-icon>
               <v-list-item-content>
                 <v-list-item-title>Copy Link</v-list-item-title>
@@ -174,7 +191,7 @@
 
             <v-list-item>
               <v-list-item-icon>
-                <v-icon>mdi-eye-off</v-icon>
+                <v-icon>{{ $vuetify.icons.values.mdiEyeOff }}</v-icon>
               </v-list-item-icon>
               <v-list-item-content>
                 <v-list-item-title>Hide</v-list-item-title>
@@ -183,7 +200,9 @@
 
             <v-list-item>
               <v-list-item-icon>
-                <v-icon>mdi-alert-octagon-outline</v-icon>
+                <v-icon>{{
+                  $vuetify.icons.values.mdiAlertOctagonOutline
+                }}</v-icon>
               </v-list-item-icon>
               <v-list-item-content>
                 <v-list-item-title>Report</v-list-item-title>

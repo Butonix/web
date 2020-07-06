@@ -99,6 +99,7 @@
               {{ submitPostErr }}
             </div>
             <v-btn
+              aria-label="Submit Post"
               depressed
               color="primary"
               :loading="loading"

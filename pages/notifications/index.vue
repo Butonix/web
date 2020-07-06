@@ -7,6 +7,7 @@
         </div>
         <v-row class="mx-0 my-2">
           <v-btn
+            aria-label="Unread Only"
             :ripple="false"
             text
             small
@@ -18,6 +19,7 @@
             {{ unreadOnly ? `(${notifications.length})` : '' }}</v-btn
           >
           <v-btn
+            aria-label="All Notifications"
             :ripple="false"
             text
             small
@@ -30,7 +32,9 @@
 
           <v-divider vertical />
 
-          <v-btn text small @click="markAllAsRead">Mark all as read</v-btn>
+          <v-btn aria-label="Mark all as read" text small @click="markAllAsRead"
+            >Mark all as read</v-btn
+          >
         </v-row>
         <Notification
           v-for="notification in notifications"

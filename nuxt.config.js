@@ -1,5 +1,54 @@
 import colors from 'vuetify/lib/util/colors'
 import redirectSSL from 'redirect-ssl'
+import {
+  mdiImage,
+  mdiImageOutline,
+  mdiTextBox,
+  mdiTextBoxOutline,
+  mdiLinkBox,
+  mdiLinkBoxOutline,
+  mdiChevronLeft,
+  mdiChevronRight,
+  mdiChevronUp,
+  mdiChevronDown,
+  mdiFormatBold,
+  mdiFormatItalic,
+  mdiFormatStrikethrough,
+  mdiFormatQuoteClose,
+  mdiFormatListNumbered,
+  mdiFormatListBulleted,
+  mdiClockTimeOneOutline,
+  mdiHome,
+  mdiAccountOutline,
+  mdiBellOutline,
+  mdiPencil,
+  mdiMagnify,
+  mdiNewspaper,
+  mdiFire,
+  mdiCommentOutline,
+  mdiRocket,
+  mdiPlusBox,
+  mdiShareOutline,
+  mdiDotsVertical,
+  mdiInfinity,
+  mdiText,
+  mdiLink,
+  mdiCodeTags,
+  mdiEmoticonFrown,
+  mdiWeatherNight,
+  mdiLogin,
+  mdiLogout,
+  mdiEye,
+  mdiEyeOff,
+  mdiTrashCan,
+  mdiAlertOctagonOutline,
+  mdiCogOutline,
+  mdiReply,
+  mdiFilterVariant,
+  mdiShare,
+  mdiContentCopy,
+  mdiOpenInNew
+} from '@mdi/js'
 
 export default {
   mode: 'universal',
@@ -36,8 +85,7 @@ export default {
     '~/plugins/vue-youtube',
     '~/plugins/vue-clipboard2',
     '~/plugins/marked',
-    '~/plugins/vue-friendly-iframe',
-    '~/plugins/vue-virtual-scroller'
+    '~/plugins/vue-friendly-iframe'
   ],
   /*
    ** Nuxt.js dev-modules
@@ -148,6 +196,59 @@ export default {
   vuetify: {
     customVariables: ['~/assets/variables.scss'],
     treeShake: true,
+    defaultAssets: false,
+    icons: {
+      iconfont: 'mdiSvg',
+      values: {
+        mdiImage,
+        mdiImageOutline,
+        mdiTextBox,
+        mdiTextBoxOutline,
+        mdiLinkBox,
+        mdiLinkBoxOutline,
+        mdiChevronLeft,
+        mdiChevronRight,
+        mdiChevronUp,
+        mdiChevronDown,
+        mdiFormatBold,
+        mdiFormatItalic,
+        mdiFormatStrikethrough,
+        mdiFormatQuoteClose,
+        mdiFormatListNumbered,
+        mdiFormatListBulleted,
+        mdiClockTimeOneOutline,
+        mdiHome,
+        mdiAccountOutline,
+        mdiBellOutline,
+        mdiPencil,
+        mdiMagnify,
+        mdiNewspaper,
+        mdiFire,
+        mdiCommentOutline,
+        mdiRocket,
+        mdiPlusBox,
+        mdiShareOutline,
+        mdiDotsVertical,
+        mdiInfinity,
+        mdiText,
+        mdiLink,
+        mdiCodeTags,
+        mdiEmoticonFrown,
+        mdiWeatherNight,
+        mdiLogin,
+        mdiLogout,
+        mdiEye,
+        mdiEyeOff,
+        mdiTrashCan,
+        mdiAlertOctagonOutline,
+        mdiCogOutline,
+        mdiReply,
+        mdiFilterVariant,
+        mdiShare,
+        mdiContentCopy,
+        mdiOpenInNew
+      }
+    },
     theme: {
       options: {
         customProperties: true
@@ -182,7 +283,8 @@ export default {
     /*
      ** You can extend webpack config here
      */
-    extend(config, ctx) {}
+    extend(config, ctx) {},
+    extractCSS: true
   },
 
   serverMiddleware: [

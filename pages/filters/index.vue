@@ -20,9 +20,12 @@
                   <v-list-item-title>@{{ user.username }}</v-list-item-title>
                 </v-list-item-content>
                 <v-list-item-action>
-                  <v-btn text @click="toggleBlock(user)">{{
-                    user.isBlocking ? 'Unblock' : 'Block'
-                  }}</v-btn>
+                  <v-btn
+                    aria-label="Unblock User"
+                    text
+                    @click="toggleBlock(user)"
+                    >{{ user.isBlocking ? 'Unblock' : 'Block' }}</v-btn
+                  >
                 </v-list-item-action>
               </v-list-item>
             </v-list>
@@ -44,9 +47,12 @@
                   }}</v-list-item-title>
                 </v-list-item-content>
                 <v-list-item-action>
-                  <v-btn text @click="toggleHide(topic)">{{
-                    topic.isHidden ? 'Unhide' : 'Hide'
-                  }}</v-btn>
+                  <v-btn
+                    aria-label="Unhide Topic"
+                    text
+                    @click="toggleHide(topic)"
+                    >{{ topic.isHidden ? 'Unhide' : 'Hide' }}</v-btn
+                  >
                 </v-list-item-action>
               </v-list-item>
             </v-list>

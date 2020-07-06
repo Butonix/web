@@ -11,16 +11,18 @@
     >
       <v-bottom-navigation grow color="primary">
         <v-btn
+          aria-label="Home"
           :to="{ path: '/', query: $store.state.homeQuery }"
           nuxt
           class="font-weight-regular"
           style="letter-spacing: normal"
         >
           <span>Home</span>
-          <v-icon>mdi-home</v-icon>
+          <v-icon>{{ $vuetify.icons.values.mdiHome }}</v-icon>
         </v-btn>
 
         <v-btn
+          aria-label="Notifications"
           class="font-weight-regular"
           style="letter-spacing: normal"
           @click="openNotifications"
@@ -31,38 +33,41 @@
             overlap
             :content="notifications.length"
           >
-            <v-icon>mdi-bell-outline</v-icon>
+            <v-icon>{{ $vuetify.icons.values.mdiBellOutline }}</v-icon>
           </v-badge>
-          <v-icon v-else>mdi-bell-outline</v-icon>
+          <v-icon v-else>{{ $vuetify.icons.values.mdiBellOutline }}</v-icon>
         </v-btn>
 
         <v-btn
+          aria-label="Search"
           to="/search"
           nuxt
           class="font-weight-regular"
           style="letter-spacing: normal"
         >
           <span>Search</span>
-          <v-icon>mdi-magnify</v-icon>
+          <v-icon>{{ $vuetify.icons.values.mdiMagnify }}</v-icon>
         </v-btn>
 
         <v-btn
+          aria-label="Topics"
           to="/topics"
           nuxt
           class="font-weight-regular"
           style="letter-spacing: normal"
         >
           <span>Topics</span>
-          <v-icon>mdi-newspaper</v-icon>
+          <v-icon>{{ $vuetify.icons.values.mdiNewspaper }}</v-icon>
         </v-btn>
 
         <v-btn
+          aria-label="Submit"
           class="font-weight-regular"
           style="letter-spacing: normal"
           @click="openCompose"
         >
           <span>Submit</span>
-          <v-icon>mdi-pencil</v-icon>
+          <v-icon>{{ $vuetify.icons.values.mdiPencil }}</v-icon>
         </v-btn>
       </v-bottom-navigation>
     </v-app-bar>
@@ -80,7 +85,7 @@
     >
       <v-row class="ma-0" align="center">
         <nuxt-link :to="{ path: '/', query: $store.state.homeQuery }">
-          <v-img :src="cometLogo" width="96" contain />
+          <v-img alt="Comet Logo" :src="cometLogo" width="96" contain />
         </nuxt-link>
 
         <div
@@ -133,7 +138,7 @@
     >
       <v-row class="ma-0" align="center">
         <nuxt-link :to="{ path: '/', query: $store.state.homeQuery }">
-          <v-img :src="cometLogo" width="96" contain />
+          <v-img alt="Comet Logo" :src="cometLogo" width="96" contain />
         </nuxt-link>
 
         <v-spacer />

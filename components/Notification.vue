@@ -25,7 +25,6 @@
       class="body-2 comment"
     />
     <div class="text--secondary">
-      <Username :user-data="notification.fromUser" />
       <span class="caption font-weight-medium ml-3">{{ timeSince }} ago</span>
       <span
         v-if="!read"
@@ -43,11 +42,10 @@ import { formatDistanceToNowStrict } from 'date-fns'
 import markNotificationReadGql from '../gql/markNotificationRead.graphql'
 import notificationsGql from '../gql/notifications.graphql'
 import TextContent from './TextContent'
-import Username from './Username'
 
 export default {
   name: 'Notification',
-  components: { Username, TextContent },
+  components: { TextContent },
   props: {
     notification: {
       type: Object,

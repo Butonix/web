@@ -35,10 +35,14 @@
           :data-component="postComponent"
           :estimate-size="92"
           page-mode
+          role="list"
           @tobottom="showMore"
         >
           <div slot="footer">
-            <v-progress-linear indeterminate />
+            <v-progress-linear
+              v-show="$apollo.queries.homeFeed.loading"
+              indeterminate
+            />
           </div>
         </virtual-list>
       </v-col>
@@ -96,7 +100,6 @@
 </template>
 
 <script>
-// import ListScroller from 'vue-list-scroller'
 import VirtualList from 'vue-virtual-scroll-list'
 import TopicsSidebar from '../components/TopicsSidebar'
 import Post from '../components/Post'
@@ -116,11 +119,7 @@ const vars = (query) => {
 
 export default {
   scrollToTop: false,
-  components: {
-    /* Post, */ InfoLinks,
-    TopicsSidebar /*, ListScroller */,
-    'virtual-list': VirtualList
-  },
+  components: { InfoLinks, TopicsSidebar, 'virtual-list': VirtualList },
   data() {
     return {
       discordHidden: process.client

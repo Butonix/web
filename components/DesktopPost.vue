@@ -27,6 +27,7 @@
             :transition="false"
           />-->
           <img
+            alt="Thumbnail"
             :src="isTwitterLink ? twitterbird : post.thumbnailUrl"
             style="height: 78px; border-radius: 10px"
             :style="{ 'max-width': isYoutubeLink ? '128px' : '78px' }"
@@ -47,21 +48,28 @@
                   ((post.type === 'LINK' || post.type === 'IMAGE') &&
                     post.link.startsWith('https://'))
               "
+              aria-label="View preview"
               small
               icon
               class="mr-1"
               @click.prevent="expanded = !expanded"
             >
               <v-icon v-if="post.type === 'TEXT'">{{
-                expanded ? 'mdi-text-box-outline' : 'mdi-text-box'
+                expanded
+                  ? $vuetify.icons.values.mdiTextBoxOutline
+                  : $vuetify.icons.values.mdiTextBox
               }}</v-icon>
 
               <v-icon v-else-if="post.type === 'LINK'">{{
-                expanded ? 'mdi-link-box-outline' : 'mdi-link-box'
+                expanded
+                  ? $vuetify.icons.values.mdiLinkBoxOutline
+                  : $vuetify.icons.values.mdiLinkBox
               }}</v-icon>
 
               <v-icon v-else-if="post.type === 'IMAGE'">{{
-                expanded ? 'mdi-image-outline' : 'mdi-image'
+                expanded
+                  ? $vuetify.icons.values.mdiImageOutline
+                  : $vuetify.icons.values.mdiImage
               }}</v-icon>
             </v-btn>
           </v-col>
@@ -124,7 +132,7 @@
             @click.prevent="toggleEndorsement"
           >
             <v-avatar left class="mr-1">
-              <v-icon small>mdi-rocket</v-icon>
+              <v-icon small>{{ $vuetify.icons.values.mdiRocket }}</v-icon>
             </v-avatar>
             {{ post.endorsementCount }}
           </v-chip>
@@ -137,7 +145,9 @@
             nuxt
           >
             <v-avatar left class="mr-1">
-              <v-icon small>mdi-comment-outline</v-icon>
+              <v-icon small>{{
+                $vuetify.icons.values.mdiCommentOutline
+              }}</v-icon>
             </v-avatar>
             {{ post.commentCount }}
             {{ newCommentsCount > 0 ? `(+${newCommentsCount})` : '' }}
@@ -151,7 +161,9 @@
             class="ml-2"
           >
             <v-avatar left class="mr-1">
-              <v-icon small>mdi-account-outline</v-icon>
+              <v-icon small>{{
+                $vuetify.icons.values.mdiAccountOutline
+              }}</v-icon>
             </v-avatar>
             {{ post.author.username }}
           </v-chip>
@@ -162,8 +174,16 @@
             timeSince
           }}</span>
 
-          <v-btn small icon class="ml-2" @click.prevent="doNothing">
-            <v-icon class="text--secondary">mdi-share-outline</v-icon>
+          <v-btn
+            aria-label="Share"
+            small
+            icon
+            class="ml-2"
+            @click.prevent="doNothing"
+          >
+            <v-icon class="text--secondary">{{
+              $vuetify.icons.values.mdiShareOutline
+            }}</v-icon>
           </v-btn>
         </v-row>
       </v-col>

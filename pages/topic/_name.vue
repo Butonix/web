@@ -6,9 +6,13 @@
           <div class="overline">Topic</div>
           <div class="headline">
             <span>{{ topic.capitalizedName }}</span>
-            <v-btn small class="ml-1" @click="toggleFollow">{{
-              topic.isFollowing ? 'Unfollow' : 'Follow'
-            }}</v-btn>
+            <v-btn
+              aria-label="Follow Topic"
+              small
+              class="ml-1"
+              @click="toggleFollow"
+              >{{ topic.isFollowing ? 'Unfollow' : 'Follow' }}</v-btn
+            >
           </div>
         </div>
         <v-divider class="my-1" />
