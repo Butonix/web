@@ -68,6 +68,7 @@
     </v-app-bar>
 
     <v-app-bar
+      v-if="$device.isDesktop"
       app
       flat
       :color="$vuetify.theme.dark ? '#202124' : '#FFFFFF'"
@@ -83,11 +84,7 @@
         </nuxt-link>
 
         <div
-          v-if="
-            $device.isDesktop &&
-              $store.state.currentPostTitle &&
-              $route.name.startsWith('post')
-          "
+          v-if="$store.state.currentPostTitle && $route.name.startsWith('post')"
           class="ml-4"
           style="line-height: normal"
         >
@@ -104,20 +101,14 @@
         </div>
 
         <div
-          v-if="
-            $device.isDesktop &&
-              ($route.path === '/' || $route.name.startsWith('topic-'))
-          "
+          v-if="$route.path === '/' || $route.name.startsWith('topic-')"
           class="ml-4"
         >
           <TypeMenu />
         </div>
 
         <div
-          v-if="
-            $device.isDesktop &&
-              ($route.path === '/' || $route.name.startsWith('topic-'))
-          "
+          v-if="$route.path === '/' || $route.name.startsWith('topic-')"
           class="ml-2"
         >
           <SortMenu />
@@ -125,22 +116,42 @@
 
         <v-spacer />
 
+        <ProfileMenu />
+      </v-row>
+    </v-app-bar>
+
+    <v-app-bar
+      v-else
+      app
+      flat
+      :color="$vuetify.theme.dark ? '#202124' : '#FFFFFF'"
+      :style="
+        $vuetify.theme.dark
+          ? 'border-bottom: 1px solid rgba(255, 255, 255, .12)'
+          : 'border-bottom: 1px solid rgba(0, 0, 0, .12)'
+      "
+    >
+      <v-row class="ma-0" align="center">
+        <nuxt-link :to="{ path: '/', query: $store.state.homeQuery }">
+          <v-img :src="cometLogo" width="96" contain />
+        </nuxt-link>
+
+        <v-spacer />
+
+        <div v-if="$route.name.startsWith('post')">
+          <CommentSortMenu />
+        </div>
+
         <div
-          v-if="
-            !$device.isDesktop &&
-              ($route.path === '/' || $route.name.startsWith('topic-'))
-          "
-          class="mr-1"
+          v-if="$route.path === '/' || $route.name.startsWith('topic-')"
+          class="ml-4"
         >
           <TypeMenu />
         </div>
 
         <div
-          v-if="
-            !$device.isDesktop &&
-              ($route.path === '/' || $route.name.startsWith('topic-'))
-          "
-          class="mr-1"
+          v-if="$route.path === '/' || $route.name.startsWith('topic-')"
+          class="ml-2"
         >
           <SortMenu />
         </div>
@@ -150,7 +161,10 @@
     </v-app-bar>
 
     <v-main>
-      <nuxt keep-alive />
+      <!--<v-fade-transition>
+        <nuxt />
+      </v-fade-transition>-->
+      <nuxt />
       <Snackbar />
     </v-main>
     <!--<v-footer :fixed="fixed" app>

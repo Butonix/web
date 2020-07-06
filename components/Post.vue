@@ -1,18 +1,20 @@
 <template>
-  <DesktopPost
-    v-if="$device.isDesktop"
-    :post="source"
-    :expand="expand"
-    :sticky="sticky"
-    :is-post-view="isPostView"
-  />
-  <MobilePost
-    v-else
-    :post="source"
-    :expand="expand"
-    :sticky="sticky"
-    :is-post-view="isPostView"
-  />
+  <div class="pb-3">
+    <DesktopPost
+      v-if="$device.isDesktop"
+      :post="source"
+      :expand="expand"
+      :sticky="sticky"
+      :is-post-view="isPostView"
+    />
+    <MobilePost
+      v-else
+      :post="source"
+      :expand="expand"
+      :sticky="sticky"
+      :is-post-view="isPostView"
+    />
+  </div>
 </template>
 
 <script>

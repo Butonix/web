@@ -10,6 +10,7 @@
             :disabled="!currentUser"
             clearable
             :loading="detectTitleLoading"
+            :rules="titleRules"
           />
           <v-tabs v-model="tab" class="mb-2" background-color="transparent">
             <v-tab>Text Post</v-tab>
@@ -106,7 +107,8 @@
                   selectedTopics.length <= 0 ||
                   !currentUser ||
                   !$refs.combobox.valid ||
-                  !uploadValid
+                  !uploadValid ||
+                  !valid
               "
               @click="submitPost"
               >Submit</v-btn
@@ -116,7 +118,7 @@
             <v-spacer />
             <div class="text--secondary">
               Please review our
-              <nuxt-link to="/content-policy" target="_blank"
+              <nuxt-link to="/content" target="_blank"
                 >Content Policy</nuxt-link
               >
               before posting
@@ -171,6 +173,10 @@ export default {
     searchTopics: [],
     submitPostErr: '',
     image: null,
+    titleRules: [
+      (v) => !!v || 'Title is required',
+      (v) => v.length <= 300 || 'Title must be 300 characters or less'
+    ],
     uploadRules: [
       (v) => !!v || 'Image is required',
       (v) => (v && v.size < 4 * 1024 * 1024) || 'Image must be 4MB or less',

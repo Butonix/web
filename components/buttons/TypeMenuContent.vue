@@ -2,7 +2,7 @@
   <v-list class="py-0">
     <v-list-item @click="chooseAll">
       <v-list-item-icon>
-        <v-icon>mdi-cog-outlineAllInclusive }}</v-icon>
+        <v-icon>mdi-infinity }}</v-icon>
       </v-list-item-icon>
       <v-list-item-content>
         <v-list-item-title :class="!$route.query.feed ? 'font-weight-bold' : ''"

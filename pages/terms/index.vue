@@ -19,9 +19,7 @@
           To use certain features of Comet, you may be required to create a
           Comet account (an "Account") and provide us with a username and
           password. By creating an account, you agree to these Terms and our
-          <nuxt-link to="/privacy-policy" target="_blank"
-            >Privacy Policy</nuxt-link
-          >.
+          <nuxt-link to="/privacy" target="_blank">Privacy Policy</nuxt-link>.
         </p>
         <p>
           You are solely responsible for the information associated with Your
@@ -97,9 +95,8 @@
         <p>
           When accessing or using Comet, you must respect others and their
           rights, including by following these Terms and the
-          <nuxt-link to="/content-policy" target="_blank"
-            >Content Policy</nuxt-link
-          >, so that we all may continue to use and enjoy Comet. We support the
+          <nuxt-link to="/content" target="_blank">Content Policy</nuxt-link>,
+          so that we all may continue to use and enjoy Comet. We support the
           responsible reporting of security vulnerabilities. To report a
           security issue, please send a direct message to Dan#7457 on
           <a href="https://discord.gg/NPCMGSm">Discord</a>.
@@ -110,9 +107,7 @@
         <ul>
           <li>
             Create or submit Content that violates our
-            <nuxt-link to="/content-policy" target="_blank"
-              >Content Policy</nuxt-link
-            >
+            <nuxt-link to="/content" target="_blank">Content Policy</nuxt-link>
             or attempt to circumvent any content-filtering techniques we use;
           </li>
           <li>
@@ -271,7 +266,9 @@
 </template>
 
 <script>
-export default {}
+export default {
+  scrollToTop: false
+}
 </script>
 
 <style scoped></style>

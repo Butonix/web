@@ -126,8 +126,15 @@
             </v-btn>
           </template>
 
-          <v-list class="py-0">
-            <v-list-item nuxt :to="`/u/${post.author.username}`">
+          <v-list
+            class="py-0"
+            style="border-top-left-radius: 24px; border-top-right-radius: 24px"
+          >
+            <v-list-item
+              nuxt
+              :to="`/u/${post.author.username}`"
+              style="border-top-left-radius: 24px; border-top-right-radius: 24px"
+            >
               <v-list-item-icon>
                 <v-icon>mdi-account-outline</v-icon>
               </v-list-item-icon>

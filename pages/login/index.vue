@@ -133,11 +133,11 @@
               </v-card-actions>
               <div class="caption text-center pb-1">
                 By clicking Sign Up, you agree to our
-                <nuxt-link to="/terms-of-service" target="_blank"
+                <nuxt-link to="/terms" target="_blank"
                   >Terms of Service</nuxt-link
                 >
                 and
-                <nuxt-link to="/privacy-policy" target="_blank"
+                <nuxt-link to="/privacy" target="_blank"
                   >Privacy Policy</nuxt-link
                 >.
               </div>

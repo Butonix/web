@@ -46,7 +46,7 @@
 
   <v-container v-else fluid>
     <v-row>
-      <v-col>
+      <v-col class="py-0">
         <Post v-if="post" :source="post" :expand="true" :is-post-view="true" />
         <div :style="$device.isDesktop ? 'width: 40%' : 'width: 100%'">
           <TextEditor
@@ -106,6 +106,7 @@ import TextEditor from '../../components/TextEditor'
 import Comment from '../../components/Comment'
 
 export default {
+  scrollToTop: true,
   validate({ params }) {
     return params.id !== undefined
   },

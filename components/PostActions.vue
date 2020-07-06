@@ -136,7 +136,7 @@
         <v-list dense>
           <v-subheader
             >Please report only if this post violates our&nbsp;
-            <nuxt-link to="/content-policy" target="_blank"
+            <nuxt-link to="/content" target="_blank"
               >Content Policy</nuxt-link
             ></v-subheader
           >

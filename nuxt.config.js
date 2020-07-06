@@ -74,7 +74,8 @@ export default {
       name: 'Comet',
       short_name: 'Comet',
       description: 'Create and browse posts and comments on Comet',
-      theme_color: '#F44336'
+      theme_color: '#F44336',
+      background_color: '#313235'
     },
     meta: {
       name: 'Comet',

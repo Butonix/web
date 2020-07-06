@@ -2,18 +2,17 @@
   <v-container fluid>
     <v-row>
       <v-col class="pt-0">
-        <DynamicScroller
+        <!--<DynamicScroller
           :items="globalStickies.concat(homeFeed)"
-          :min-item-size="80"
+          :min-item-size="92"
           :page-mode="true"
-          :buffer="1000"
         >
           <template v-slot="{ item, index, active }">
             <DynamicScrollerItem
               v-intersect.quiet="showMore(index)"
               :item="item"
               :active="active"
-              :size-dependencies="[item.title]"
+              :size-dependencies="[item.title, item.topics]"
               :index="index"
             >
               <div class="pb-3">
@@ -21,19 +20,49 @@
               </div>
             </DynamicScrollerItem>
           </template>
-        </DynamicScroller>
+        </DynamicScroller>-->
+
+        <!--<list-scroller
+          :item-component="postComponent"
+          :items-data="homeFeed"
+          :item-height="80"
+          @bottom="showMore"
+        />-->
+
+        <virtual-list
+          :data-key="'id'"
+          :data-sources="homeFeed"
+          :data-component="postComponent"
+          :estimate-size="92"
+          page-mode
+          @tobottom="showMore"
+        >
+          <div slot="footer">
+            <v-progress-linear indeterminate />
+          </div>
+        </virtual-list>
       </v-col>
       <v-col v-if="$device.isDesktop" cols="2" class="pt-0">
         <client-only>
           <div v-if="!discordHidden">
-            <vue-friendly-iframe
+            <iframe
+              :src="
+                `https://discordapp.com/widget?id=653652395959648314${
+                  $vuetify.theme.dark ? '&theme=dark' : '&theme=light'
+                }${currentUser ? `&username=${currentUser.username}` : ''}`
+              "
+              class="frame"
+              allowtransparency="true"
+              frameborder="0"
+            />
+            <!--<vue-friendly-iframe
               class="friendlyframe"
               :src="
                 `https://discordapp.com/widget?id=653652395959648314${
                   $vuetify.theme.dark ? '&theme=dark' : '&theme=light'
                 }${currentUser ? `&username=${currentUser.username}` : ''}`
               "
-            />
+            />-->
             <div style="text-align: right" class="mb-4">
               <span
                 class="text--secondary hoverable"
@@ -67,6 +96,8 @@
 </template>
 
 <script>
+// import ListScroller from 'vue-list-scroller'
+import VirtualList from 'vue-virtual-scroll-list'
 import TopicsSidebar from '../components/TopicsSidebar'
 import Post from '../components/Post'
 import InfoLinks from '../components/InfoLinks'
@@ -74,19 +105,21 @@ import homeFeedGql from '../gql/homeFeed.graphql'
 import globalStickiesGql from '../gql/globalStickies.graphql'
 import currentUserGql from '../gql/currentUser.graphql'
 
+const vars = (query) => {
+  return {
+    sort: query.sort ? query.sort.toUpperCase() : 'HOT',
+    time: query.time ? query.time.toUpperCase() : 'ALL',
+    filter: query.feed ? query.feed.toUpperCase() : 'ALL',
+    types: query.types ? query.types.split('-').map((t) => t.toUpperCase()) : []
+  }
+}
+
 export default {
   scrollToTop: false,
-  components: { Post, InfoLinks, TopicsSidebar },
-  async asyncData(context) {
-    const client = context.app.apolloProvider.defaultClient
-    const homeFeedData = await client.query({
-      query: homeFeedGql,
-      fetchPolicy: 'cache-first'
-    })
-
-    return {
-      homeFeed: homeFeedData.data.homeFeed
-    }
+  components: {
+    /* Post, */ InfoLinks,
+    TopicsSidebar /*, ListScroller */,
+    'virtual-list': VirtualList
   },
   data() {
     return {
@@ -101,32 +134,12 @@ export default {
     }
   },
   computed: {
-    windowHeight() {
-      if (process.client) return window.innerHeight
-      else return 1920
-    },
     page: {
       get() {
         return this.$store.state.homeFeedPage
       },
       set(val) {
         this.$store.commit('setHomeFeedPage', val)
-      }
-    },
-    vars() {
-      return {
-        sort: this.$route.query.sort
-          ? this.$route.query.sort.toUpperCase()
-          : 'HOT',
-        time: this.$route.query.time
-          ? this.$route.query.time.toUpperCase()
-          : 'ALL',
-        filter: this.$route.query.feed
-          ? this.$route.query.feed.toUpperCase()
-          : 'ALL',
-        types: this.$route.query.types
-          ? this.$route.query.types.split('-').map((t) => t.toUpperCase())
-          : []
       }
     }
   },
@@ -147,14 +160,14 @@ export default {
       query: homeFeedGql,
       variables() {
         return {
-          ...this.vars
+          ...vars(this.$route.query)
         }
       },
       fetchPolicy: 'cache-first'
     },
     globalStickies: {
       query: globalStickiesGql,
-      fetchPolicy: 'cache-and-network'
+      fetchPolicy: 'cache-first'
     }
   },
   methods: {
@@ -168,11 +181,7 @@ export default {
       localStorage.removeItem('discordHidden')
       this.discordHidden = false
     },
-    showMore(index) {
-      if (index !== this.globalStickies.concat(this.homeFeed).length - 1) return
-      if (this.$apollo.queries.homeFeed.loading) return
-      console.log('showMore')
-      console.log(index)
+    showMore() {
       if (this.$apollo.queries.homeFeed.loading) return
       if (!this.hasMore) return
       this.page++
@@ -180,7 +189,7 @@ export default {
         query: homeFeedGql,
         variables: {
           page: this.page,
-          ...this.vars
+          ...vars(this.$route.query)
         },
         updateQuery: (previousResult, { fetchMoreResult }) => {
           const newPosts = fetchMoreResult.homeFeed
@@ -205,6 +214,11 @@ export default {
   top: 76px;
 }
 .friendlyframe >>> iframe {
+  width: 100%;
+  height: 400px;
+}
+
+.frame {
   width: 100%;
   height: 400px;
 }

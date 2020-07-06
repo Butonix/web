@@ -1,0 +1,5 @@
+[{
+  "relation": ["delegate_permission/common.handle_all_urls"],
+  "target" : { "namespace": "android_app", "package_name": "net.getcomet.comet",
+    "sha256_cert_fingerprints": ["53:24:EA:CE:78:84:E6:7B:51:DB:74:EA:9D:BC:0D:CA:2E:8B:E3:3D:DB:A7:7B:33:7F:AA:CA:BE:D0:BD:D5:C7"] }
+}]

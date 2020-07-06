@@ -4,13 +4,11 @@
     <span class="mx-1">&middot;</span>
     <a href="https://github.com/comet-app" target="_blank">GitHub</a>
     <span class="mx-1">&middot;</span>
-    <nuxt-link to="/content-policy" target="_blank">Content Policy</nuxt-link>
+    <nuxt-link to="/content" target="_blank">Content Policy</nuxt-link>
     <span class="mx-1">&middot;</span>
-    <nuxt-link to="/terms-of-service" target="_blank"
-      >Terms of Service</nuxt-link
-    >
+    <nuxt-link to="/terms" target="_blank">Terms of Service</nuxt-link>
     <span class="mx-1">&middot;</span>
-    <nuxt-link to="/privacy-policy" target="_blank">Privacy Policy</nuxt-link>
+    <nuxt-link to="/privacy" target="_blank">Privacy Policy</nuxt-link>
   </div>
 </template>
 
