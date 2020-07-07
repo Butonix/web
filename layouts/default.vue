@@ -1,11 +1,9 @@
 <template>
   <v-app>
-    <!--<NavDrawer v-model="drawer" />-->
-
     <v-app-bar
+      :hide-on-scroll="!$device.isIos"
       app
       bottom
-      :hide-on-scroll="!$device.isIos"
       class="bottomappbar"
       height="56"
     >
@@ -166,15 +164,9 @@
     </v-app-bar>
 
     <v-main>
-      <!--<v-fade-transition>
-        <nuxt />
-      </v-fade-transition>-->
-      <nuxt />
+      <nuxt keep-alive />
       <Snackbar />
     </v-main>
-    <!--<v-footer :fixed="fixed" app>
-      <span>&copy; {{ new Date().getFullYear() }}</span>
-    </v-footer>-->
   </v-app>
 </template>
 

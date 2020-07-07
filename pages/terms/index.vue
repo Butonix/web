@@ -266,9 +266,7 @@
 </template>
 
 <script>
-export default {
-  scrollToTop: false
-}
+export default {}
 </script>
 
 <style scoped></style>

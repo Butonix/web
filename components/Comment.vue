@@ -22,6 +22,7 @@
 <script>
 import MobileComment from './MobileComment'
 import DesktopComment from './DesktopComment'
+
 export default {
   name: 'Comment',
   components: { DesktopComment, MobileComment },

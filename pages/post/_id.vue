@@ -110,7 +110,6 @@ import TextEditor from '../../components/TextEditor'
 import Comment from '../../components/Comment'
 
 export default {
-  scrollToTop: true,
   validate({ params }) {
     return params.id !== undefined
   },

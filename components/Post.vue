@@ -20,6 +20,7 @@
 <script>
 import DesktopPost from './DesktopPost'
 import MobilePost from './MobilePost'
+
 export default {
   name: 'Post',
   components: { MobilePost, DesktopPost },

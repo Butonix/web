@@ -1,8 +1,12 @@
 <template>
   <div class="caption mt-2 mx-2 text--secondary">
-    <a href="https://discord.gg/NPCMGSm" target="_blank">Discord</a>
+    <a href="https://discord.gg/NPCMGSm" target="_blank" rel="noopener"
+      >Discord</a
+    >
     <span class="mx-1">&middot;</span>
-    <a href="https://github.com/comet-app" target="_blank">GitHub</a>
+    <a href="https://github.com/comet-app" target="_blank" rel="noopener"
+      >GitHub</a
+    >
     <span class="mx-1">&middot;</span>
     <nuxt-link to="/content" target="_blank">Content Policy</nuxt-link>
     <span class="mx-1">&middot;</span>

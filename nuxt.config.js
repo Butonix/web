@@ -47,7 +47,9 @@ import {
   mdiFilterVariant,
   mdiShare,
   mdiContentCopy,
-  mdiOpenInNew
+  mdiOpenInNew,
+  mdiComment,
+  mdiMessageReply
 } from '@mdi/js'
 
 export default {
@@ -85,7 +87,8 @@ export default {
     '~/plugins/vue-youtube',
     '~/plugins/vue-clipboard2',
     '~/plugins/marked',
-    '~/plugins/vue-friendly-iframe'
+    '~/plugins/vue-friendly-iframe',
+    '~/plugins/vue-virtual-scroller'
   ],
   /*
    ** Nuxt.js dev-modules
@@ -246,7 +249,9 @@ export default {
         mdiFilterVariant,
         mdiShare,
         mdiContentCopy,
-        mdiOpenInNew
+        mdiOpenInNew,
+        mdiComment,
+        mdiMessageReply
       }
     },
     theme: {
