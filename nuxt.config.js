@@ -87,7 +87,6 @@ export default {
     '~/plugins/vue-youtube',
     '~/plugins/vue-clipboard2',
     '~/plugins/marked',
-    '~/plugins/vue-friendly-iframe',
     '~/plugins/vue-virtual-scroller'
   ],
   /*
