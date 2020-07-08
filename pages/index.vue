@@ -7,8 +7,6 @@
         </div>
       </v-col>
       <v-col>
-        <v-text-field outlined label="Write your post" />
-
         <DynamicScroller
           page-mode
           :items="globalStickies.concat(homeFeed)"

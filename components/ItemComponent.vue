@@ -21,14 +21,12 @@
         </v-list-item-avatar>
 
         <v-list-item-content style="align-content: start">
-          <div v-if="source.sticky" class="overline primary--text mb-0">
-            <span style="display: flex; align-items: center">
-              <v-icon color="primary" small class="mr-1">{{
-                $vuetify.icons.values.mdiStar
-              }}</v-icon>
-              ANNOUNCEMENT
-            </span>
-          </div>
+          <span v-if="source.sticky">
+            <v-icon color="primary" size="13" class="mr-1">{{
+              $vuetify.icons.values.mdiStar
+            }}</v-icon>
+            <span class="overline primary--text mb-0">ANNOUNCEMENT</span>
+          </span>
 
           <v-list-item-title style="white-space: normal">
             <nuxt-link
