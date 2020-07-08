@@ -1,9 +1,9 @@
 <template>
   <div>
     <v-fade-transition hide-on-leave>
-      <v-list v-show="!selectingTime" class="py-0">
+      <v-list v-show="!selectingTime" dense class="py-0">
         <v-list-item @click="chooseHot">
-          <v-list-item-icon>
+          <v-list-item-icon class="mr-3">
             <v-icon>{{ $vuetify.icons.values.mdiFire }}</v-icon>
           </v-list-item-icon>
           <v-list-item-content>
@@ -15,7 +15,7 @@
         </v-list-item>
 
         <v-list-item @click="chooseTop">
-          <v-list-item-icon>
+          <v-list-item-icon class="mr-3">
             <v-icon>{{ $vuetify.icons.values.mdiFormatListNumbered }}</v-icon>
           </v-list-item-icon>
           <v-list-item-content>
@@ -27,7 +27,7 @@
         </v-list-item>
 
         <v-list-item @click="chooseNew">
-          <v-list-item-icon>
+          <v-list-item-icon class="mr-3">
             <v-icon>{{ $vuetify.icons.values.mdiClockTimeOneOutline }}</v-icon>
           </v-list-item-icon>
           <v-list-item-content>

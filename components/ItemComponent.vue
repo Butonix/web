@@ -21,8 +21,13 @@
         </v-list-item-avatar>
 
         <v-list-item-content style="align-content: start">
-          <div v-if="source.sticky" class="overline text--secondary mb-0">
-            ANNOUNCEMENT
+          <div v-if="source.sticky" class="overline primary--text mb-0">
+            <span style="display: flex; align-items: center">
+              <v-icon color="primary" small class="mr-1">{{
+                $vuetify.icons.values.mdiStar
+              }}</v-icon>
+              ANNOUNCEMENT
+            </span>
           </div>
 
           <v-list-item-title style="white-space: normal">

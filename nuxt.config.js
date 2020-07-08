@@ -52,7 +52,9 @@ import {
   mdiMessageReply,
   mdiWeb,
   mdiPost,
-  mdiPostOutline
+  mdiPostOutline,
+  mdiDiscord,
+  mdiStar
 } from '@mdi/js'
 
 export default {
@@ -256,7 +258,9 @@ export default {
         mdiMessageReply,
         mdiWeb,
         mdiPost,
-        mdiPostOutline
+        mdiPostOutline,
+        mdiDiscord,
+        mdiStar
       }
     },
     theme: {

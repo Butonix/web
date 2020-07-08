@@ -1,5 +1,13 @@
 <template>
-  <v-card outlined style="background-color: transparent;">
+  <v-card
+    outlined
+    :style="
+      $vuetify.theme.dark
+        ? 'background-color: transparent'
+        : 'background-color: #FAFAFA'
+    "
+    style="border-width: 1px"
+  >
     <v-subheader class="ml-2"
       >TOPICS
       <span v-if="!topicSearchText" class="ml-4"

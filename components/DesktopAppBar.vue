@@ -2,7 +2,7 @@
   <v-app-bar
     app
     flat
-    :color="$vuetify.theme.dark ? '#202124' : '#FFFFFF'"
+    :color="$vuetify.theme.dark ? '#202124' : ''"
     :style="
       $vuetify.theme.dark
         ? 'border-bottom: 1px solid rgba(255, 255, 255, .12)'
@@ -13,7 +13,11 @@
       <nuxt-link :to="{ path: '/', query: $store.state.homeQuery }">
         <v-img
           alt="Comet Logo"
-          :src="require('~/assets/comet_logo2.png')"
+          :src="
+            $vuetify.theme.dark
+              ? require('~/assets/comet_logo2.png')
+              : require('~/assets/comet_logo2.png')
+          "
           width="96"
           contain
         />
@@ -50,6 +54,29 @@
       </div>
 
       <v-spacer />
+
+      <client-only>
+        <v-menu offset-y transition="slide-y-transition">
+          <template v-slot:activator="{ on }">
+            <v-btn icon color="#7289da" v-on="on">
+              <v-icon>{{ $vuetify.icons.values.mdiDiscord }}</v-icon>
+            </v-btn>
+          </template>
+
+          <iframe
+            title="Discord widget"
+            :src="
+              `https://discordapp.com/widget?id=653652395959648314${
+                $vuetify.theme.dark ? '&theme=dark' : '&theme=light'
+              }`
+            "
+            class="frame"
+            height="500"
+            allowtransparency="true"
+            frameborder="0"
+          />
+        </v-menu>
+      </client-only>
 
       <ProfileMenu />
     </v-row>

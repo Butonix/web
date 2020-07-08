@@ -4,44 +4,11 @@
       <v-col v-if="$device.isDesktop" cols="3">
         <div class="sticky">
           <UserSideCard :current-user="currentUser" />
-
-          <client-only>
-            <div v-if="!discordHidden" class="mt-4">
-              <iframe
-                title="Discord widget"
-                :src="
-                  `https://discordapp.com/widget?id=653652395959648314${
-                    $vuetify.theme.dark ? '&theme=dark' : '&theme=light'
-                  }${currentUser ? `&username=${currentUser.username}` : ''}`
-                "
-                class="frame"
-                allowtransparency="true"
-                frameborder="0"
-              />
-              <div style="text-align: right" class="mb-4">
-                <span
-                  class="text--secondary hoverable"
-                  style="font-size: .625rem"
-                  @click="hideDiscordWidget"
-                >
-                  Hide Discord widget
-                </span>
-              </div>
-            </div>
-
-            <div v-else style="text-align: right" class="mt-2">
-              <span
-                class="text--secondary hoverable"
-                style="font-size: .625rem"
-                @click="showDiscordWidget"
-              >
-                Show Discord widget
-              </span>
-            </div>
-          </client-only>
         </div>
       </v-col>
       <v-col>
+        <v-text-field outlined label="Write your post" />
+
         <DynamicScroller
           page-mode
           :items="globalStickies.concat(homeFeed)"

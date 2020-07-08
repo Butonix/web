@@ -13,7 +13,11 @@
         class="betterbutton"
         v-on="on"
       >
-        <v-avatar v-if="currentUser && currentUser.profilePicUrl" class="mr-2">
+        <v-avatar
+          v-if="currentUser && currentUser.profilePicUrl"
+          color="grey darken-2"
+          class="mr-2"
+        >
           <v-img :src="currentUser.profilePicUrl" />
         </v-avatar>
 
@@ -46,6 +50,7 @@
           v-if="currentUser && currentUser.profilePicUrl"
           size="24"
           class="mr-2"
+          color="grey darken-2"
         >
           <v-img :src="currentUser.profilePicUrl" />
         </v-avatar>

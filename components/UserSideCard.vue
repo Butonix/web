@@ -1,7 +1,12 @@
 <template>
   <v-card
     outlined
-    style="background-color: transparent; border-width: 1px; border-radius: 10px"
+    style="border-width: 1px; border-radius: 10px"
+    :style="
+      $vuetify.theme.dark
+        ? 'background-color: transparent'
+        : 'background-color: #FAFAFA'
+    "
     :to="currentUser ? `/u/${currentUser.username}` : '/login'"
   >
     <ApolloQuery
