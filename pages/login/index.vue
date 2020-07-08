@@ -1,5 +1,5 @@
 <template>
-  <v-container fluid>
+  <v-container v-if="!$apolloHelpers.getToken()" fluid>
     <v-row justify="center">
       <v-col :cols="$device.isDesktop ? 6 : 12">
         <v-tabs v-model="tab" grow>
@@ -155,6 +155,14 @@
       </v-col>
     </v-row>
   </v-container>
+
+  <v-container v-else>
+    <v-row>
+      <v-col>
+        <div class="headline">Already logged in</div>
+      </v-col>
+    </v-row>
+  </v-container>
 </template>
 
 <script>
@@ -195,6 +203,12 @@ export default {
       }
     }
   },
+  deactivated() {
+    this.reset()
+  },
+  activated() {
+    this.reset()
+  },
   methods: {
     async signUp() {
       this.loading = true
@@ -210,6 +224,7 @@ export default {
           .then(({ data }) => data && data.signUp)
         await this.$apolloHelpers.onLogin(res.accessToken)
         await this.$router.push('/')
+        this.reset()
       } catch (e) {
         this.err = e.message
         this.$store.dispatch('displaySnackbar', {
@@ -232,6 +247,7 @@ export default {
           .then(({ data }) => data && data.login)
         await this.$apolloHelpers.onLogin(res.accessToken)
         await this.$router.push('/')
+        this.reset()
       } catch (e) {
         this.err = e.message
         this.$store.dispatch('displaySnackbar', {
@@ -239,6 +255,11 @@ export default {
         })
       }
       this.loading = false
+    },
+    reset() {
+      this.username = ''
+      this.password = ''
+      this.confirmPassword = ''
     }
   }
 }

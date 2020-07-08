@@ -4,7 +4,9 @@ query post($postId: ID!) {
         id
         username
         isCurrentUser
-        title
+        tag
+        tagColor
+        profilePicUrl
       }
       commentCount
       createdAt

@@ -1,14 +1,9 @@
 <template>
-  <v-container fluid>
+  <v-container>
     <v-row>
-      <v-col v-if="$device.isDesktop" cols="2">
+      <v-col v-if="$device.isDesktop" cols="3">
         <div class="sticky">
-          <v-card
-            outlined
-            style="background-color: transparent; border-width: 1px; border-radius: 10px"
-          >
-            <v-card-title>Not logged in</v-card-title>
-          </v-card>
+          <UserSideCard :current-user="currentUser" />
 
           <client-only>
             <div v-if="!discordHidden" class="mt-4">
@@ -47,19 +42,19 @@
         </div>
       </v-col>
       <v-col>
-        <DynamicScroller page-mode :items="homeFeed" :min-item-size="54">
+        <DynamicScroller
+          page-mode
+          :items="globalStickies.concat(homeFeed)"
+          :min-item-size="54"
+        >
           <template v-slot="{ item, index, active }">
             <DynamicScrollerItem
               :item="item"
               :active="active"
-              :size-dependencies="[
-                item.title,
-                item.textContent,
-                item.link,
-                item.thumbnailUrl
-              ]"
+              :index="index"
+              :size-dependencies="[item.title, item.textContent]"
             >
-              <ItemComponent :source="item" :index="index" />
+              <ItemComponent :source="item" :index="index" :active="active" />
             </DynamicScrollerItem>
           </template>
         </DynamicScroller>
@@ -69,7 +64,7 @@
           indeterminate
         />
       </v-col>
-      <v-col v-if="$device.isDesktop" cols="2">
+      <v-col v-if="$device.isDesktop" cols="3">
         <div class="sticky">
           <TopicsSidebar />
           <InfoLinks class="mt-2" />
@@ -80,7 +75,6 @@
 </template>
 
 <script>
-// import VirtualList from 'vue-virtual-scroll-list'
 import TopicsSidebar from '../components/TopicsSidebar'
 import InfoLinks from '../components/InfoLinks'
 import homeFeedGql from '../gql/homeFeed.graphql'
@@ -88,24 +82,16 @@ import globalStickiesGql from '../gql/globalStickies.graphql'
 import currentUserGql from '../gql/currentUser.graphql'
 import ItemComponent from '../components/ItemComponent'
 import Post from '../components/Post'
-
-const vars = (query) => {
-  return {
-    sort: query.sort ? query.sort.toUpperCase() : 'HOT',
-    time: query.time ? query.time.toUpperCase() : 'ALL',
-    filter: query.feed ? query.feed.toUpperCase() : 'ALL',
-    types: query.types ? query.types.split('-').map((t) => t.toUpperCase()) : []
-  }
-}
+import UserSideCard from '../components/UserSideCard'
 
 export default {
   name: 'Index',
   scrollToTop: false,
   components: {
+    UserSideCard,
     ItemComponent,
     InfoLinks,
     TopicsSidebar
-    // 'virtual-list': VirtualList
   },
   data() {
     return {
@@ -121,6 +107,24 @@ export default {
     }
   },
   computed: {
+    vars() {
+      return {
+        sort: this.$store.state.homeQuery.sort
+          ? this.$store.state.homeQuery.sort.toUpperCase()
+          : 'HOT',
+        time: this.$store.state.homeQuery.time
+          ? this.$store.state.homeQuery.time.toUpperCase()
+          : 'ALL',
+        filter: this.$store.state.homeQuery.feed
+          ? this.$store.state.homeQuery.feed.toUpperCase()
+          : 'ALL',
+        types: this.$store.state.homeQuery.types
+          ? this.$store.state.homeQuery.types
+              .split('-')
+              .map((t) => t.toUpperCase())
+          : []
+      }
+    },
     page: {
       get() {
         return this.$store.state.homeFeedPage
@@ -128,22 +132,33 @@ export default {
       set(val) {
         this.$store.commit('setHomeFeedPage', val)
       }
-    },
-    listHeight() {
-      if (!process.client) return 0
-      return window.innerHeight - 64 - 56
-    },
-    items() {
-      return Array.from(Array(1000).keys()).map((number) => ({ number }))
     }
   },
   watch: {
     $route: {
       deep: true,
       handler() {
-        this.$store.commit('setHomeQuery', this.$route.query)
-        this.$vuetify.goTo(0)
+        if (this.$route.path === '/') {
+          const oldQuery = this.$store.state.homeQuery
+          if (
+            oldQuery.sort !== this.$route.query.sort ||
+            oldQuery.time !== this.$route.query.time ||
+            oldQuery.feed !== this.$route.query.feed ||
+            oldQuery.types !== this.$route.query.types
+          ) {
+            this.$store.commit('setHomeQuery', this.$route.query)
+            this.$store.commit('setHomeFeedPage', 0)
+            if (process.client) {
+              window.scrollTo(0, 0)
+            }
+          }
+        }
       }
+    }
+  },
+  created() {
+    if (this.$route.path === '/') {
+      this.$store.commit('setHomeQuery', this.$route.query)
     }
   },
   activated() {
@@ -160,8 +175,11 @@ export default {
       query: homeFeedGql,
       variables() {
         return {
-          ...vars(this.$route.query)
+          ...this.vars
         }
+      },
+      skip() {
+        return this.$route.path !== '/'
       },
       fetchPolicy: 'cache-first'
     },
@@ -189,14 +207,18 @@ export default {
       this.discordHidden = false
     },
     showMore() {
-      if (this.$apollo.queries.homeFeed.loading) return
-      if (!this.hasMore) return
+      if (
+        this.$apollo.queries.homeFeed.loading ||
+        !this.hasMore ||
+        this.$route.path !== '/'
+      )
+        return
       this.page++
       this.$apollo.queries.homeFeed.fetchMore({
         query: homeFeedGql,
         variables: {
           page: this.page,
-          ...vars(this.$route.query)
+          ...this.vars
         },
         updateQuery: (previousResult, { fetchMoreResult }) => {
           const newPosts = fetchMoreResult.homeFeed

@@ -15,7 +15,9 @@ query topicFeed($topicName: String!, $page: Int, $sort: Sort, $time: Time, $type
       id
       username
       isCurrentUser
-      title
+      tag
+      tagColor
+      profilePicUrl
     }
     topics {
       capitalizedName

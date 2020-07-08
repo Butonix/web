@@ -49,7 +49,10 @@ import {
   mdiContentCopy,
   mdiOpenInNew,
   mdiComment,
-  mdiMessageReply
+  mdiMessageReply,
+  mdiWeb,
+  mdiPost,
+  mdiPostOutline
 } from '@mdi/js'
 
 export default {
@@ -250,7 +253,10 @@ export default {
         mdiContentCopy,
         mdiOpenInNew,
         mdiComment,
-        mdiMessageReply
+        mdiMessageReply,
+        mdiWeb,
+        mdiPost,
+        mdiPostOutline
       }
     },
     theme: {

@@ -8,6 +8,10 @@
             class="subtitle-1 font-weight-bold primary--text"
             >[{{ user.title }}] </span
           >{{ user.username }}
+
+          <v-avatar>
+            <v-img :src="user.profilePicUrl" />
+          </v-avatar>
         </div>
         <div class="subtitle-1">
           Joined on {{ joinDate }} &middot;

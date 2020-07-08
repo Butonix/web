@@ -2,6 +2,8 @@ query currentUser {
   currentUser {
     id
     username
-    title
+    tag
+    tagColor
+    profilePicUrl
   }
 }

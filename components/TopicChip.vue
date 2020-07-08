@@ -1,16 +1,9 @@
 <template>
-  <v-chip
-    v-if="!currentUser"
-    outlined
-    label
-    small
-    class="mr-1 px-2"
-    nuxt
-    :to="`/topic/${topic.name}`"
+  <v-menu
+    :close-on-content-click="false"
+    offset-y
+    transition="slide-y-transition"
   >
-    <span>{{ topic.capitalizedName }}</span>
-  </v-chip>
-  <v-menu v-else v-model="menu" :close-on-content-click="false" offset-x>
     <template v-slot:activator="{ on }">
       <v-chip
         outlined

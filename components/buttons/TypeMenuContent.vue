@@ -117,14 +117,12 @@ export default {
   },
   methods: {
     chooseAll() {
-      this.$vuetify.goTo(0)
       this.$emit('selected')
       const query = Object.assign({}, this.$route.query)
       delete query.feed
       this.$router.push({ path: this.$route.path, query })
     },
     chooseMyTopics() {
-      this.$vuetify.goTo(0)
       this.$emit('selected')
 
       if (!this.$apolloHelpers.getToken()) {

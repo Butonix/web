@@ -9,6 +9,9 @@ query user($username: String!) {
     isBlocking
     isBlocked
     isCurrentUser
-    title
+    tag
+    tagColor
+    profilePicUrl
+    bio
   }
 }

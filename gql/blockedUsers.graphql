@@ -3,6 +3,8 @@ query blockedUsers {
     username
     id
     isBlocking
-    title
+    tag
+    tagColor
+    profilePicUrl
   }
 }

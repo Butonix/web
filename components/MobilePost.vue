@@ -14,7 +14,7 @@
 
         <div
           class="text--primary font-weight-light"
-          style="display: block; line-height: normal; font-size: 1.25rem"
+          style="display: block; font-size: 1.25rem"
           @click="followLink"
         >
           {{ post.title }}

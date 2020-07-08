@@ -1,5 +1,6 @@
 query globalStickies {
   globalStickies {
+    sticky
     commentCount
     createdAt
     editedAt
@@ -16,7 +17,9 @@ query globalStickies {
       id
       username
       isCurrentUser
-      title
+      tag
+      tagColor
+      profilePicUrl
     }
     topics {
       capitalizedName

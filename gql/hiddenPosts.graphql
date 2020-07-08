@@ -4,7 +4,9 @@ query hiddenPosts {
         id
         username
         isCurrentUser
-        title
+        tag
+        tagColor
+        profilePicUrl
       }
       commentCount
       createdAt

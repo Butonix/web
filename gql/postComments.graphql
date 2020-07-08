@@ -12,7 +12,9 @@ query postComments($postId: ID!, $sort: Sort) {
       id
       username
       isCurrentUser
-      title
+      tag
+      tagColor
+      profilePicUrl
     }
   }
 }

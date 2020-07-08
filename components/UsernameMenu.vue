@@ -2,22 +2,30 @@
   <v-menu offset-y open-on-hover>
     <template v-slot:activator="{ on }">
       <span v-on="on">
-        <nuxt-link :to="`/u/${source.author.username}`" class="text--primary">
-          <v-avatar size="24" color="grey darken-3">
-            <img
-              src="https://avataaars.io/?avatarStyle=Transparent&topType=ShortHairShortCurly&accessoriesType=Prescription02&hairColor=Black&facialHairType=Blank&clotheType=Hoodie&clotheColor=White&eyeType=Default&eyebrowType=DefaultNatural&mouthType=Default&skinColor=Light"
+        <nuxt-link :to="`/u/${user.username}`" class="text--primary">
+          <v-avatar size="32" color="grey darken-3">
+            <img :src="user.profilePicUrl"
           /></v-avatar>
-          <span class="ml-1" style="font-size: .75rem">
-            {{ source.author.username }}
+          <span class="ml-1" style="font-size: .875rem">
+            {{ user.username }}
           </span>
+          <v-chip
+            v-if="user.tag"
+            dark
+            x-small
+            label
+            :color="user.tagColor"
+            class="ml-1"
+            >{{ user.tag }}</v-chip
+          >
         </nuxt-link>
       </span>
     </template>
 
-    <v-card>
+    <v-card max-width="400">
       <ApolloQuery
         :query="require('../gql/user.graphql')"
-        :variables="{ username: source.author.username }"
+        :variables="{ username: user.username }"
       >
         <template v-slot="{ result: { loading, error, data } }">
           <div v-if="!data" class="pa-4">
@@ -26,18 +34,59 @@
             </v-row>
           </div>
 
-          <div v-else>
-            <v-list-item>
-              <v-list-item-avatar>
-                <v-img
-                  src="https://avataaars.io/?avatarStyle=Transparent&topType=ShortHairShortCurly&accessoriesType=Prescription02&hairColor=Black&facialHairType=Blank&clotheType=Hoodie&clotheColor=White&eyeType=Default&eyebrowType=DefaultNatural&mouthType=Default&skinColor=Light"
-                />
-              </v-list-item-avatar>
-              <v-list-item-content>
-                <v-list-item-title>{{ data.user.username }}</v-list-item-title>
-              </v-list-item-content>
-            </v-list-item>
-          </div>
+          <v-list-item v-else>
+            <v-list-item-avatar size="64">
+              <v-img
+                v-if="data.user.profilePicUrl"
+                :src="data.user.profilePicUrl"
+              />
+              <v-icon v-else>{{
+                $vuetify.icons.values.mdiAccountOutline
+              }}</v-icon>
+            </v-list-item-avatar>
+            <v-list-item-content>
+              <v-list-item-title style="font-size: 1.25rem" class="my-0">
+                <span>{{ data.user.username }}</span>
+                <v-chip
+                  v-if="data.user.tag"
+                  dark
+                  small
+                  label
+                  :color="data.user.tagColor"
+                  class="ml-1"
+                  >{{ user.tag }}</v-chip
+                >
+              </v-list-item-title>
+              <v-list-item-subtitle
+                v-if="data.user.bio"
+                class="mt-1 mb-0"
+                style="white-space: normal"
+                >{{ data.user.bio }}</v-list-item-subtitle
+              >
+              <v-list-item-subtitle class="mt-2">
+                <v-chip small outlined>
+                  <v-icon small left>{{
+                    $vuetify.icons.values.mdiRocket
+                  }}</v-icon>
+                  {{ data.user.endorsementCount }}
+                </v-chip>
+
+                <v-chip small outlined class="ml-2">
+                  <v-icon small left>{{
+                    $vuetify.icons.values.mdiCommentOutline
+                  }}</v-icon>
+                  {{ data.user.commentCount }}
+                </v-chip>
+
+                <v-chip small outlined class="ml-2">
+                  <v-icon small left>{{
+                    $vuetify.icons.values.mdiPost
+                  }}</v-icon>
+                  {{ data.user.postCount }}
+                </v-chip>
+              </v-list-item-subtitle>
+            </v-list-item-content>
+          </v-list-item>
         </template>
       </ApolloQuery>
     </v-card>
@@ -48,7 +97,7 @@
 export default {
   name: 'UsernameMenu',
   props: {
-    source: {
+    user: {
       type: Object,
       required: true
     }

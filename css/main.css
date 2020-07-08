@@ -61,10 +61,6 @@ h1 {
   font-size: 18px;
 }
 
-body {
-  line-height: normal !important;
-}
-
 .vb > .vb-dragger {
   z-index: 5;
   width: 12px;

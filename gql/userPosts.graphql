@@ -17,7 +17,9 @@ query userPosts($username: String!) {
       id
       username
       isCurrentUser
-      title
+      tag
+      tagColor
+      profilePicUrl
     }
     topics {
       capitalizedName

@@ -16,7 +16,9 @@ query searchPosts($search: String!, $page: Int, $pageSize: Int, $sort: Sort, $ti
       id
       username
       isCurrentUser
-      title
+      tag
+      tagColor
+      profilePicUrl
     }
     topics {
       capitalizedName

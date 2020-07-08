@@ -153,7 +153,6 @@ export default {
   },
   methods: {
     chooseHot() {
-      this.$vuetify.goTo(0)
       this.$emit('selected')
       const query = Object.assign({}, this.$route.query)
       delete query.sort
@@ -163,7 +162,6 @@ export default {
       } catch (e) {}
     },
     chooseTop() {
-      this.$vuetify.goTo(0)
       this.selectingTime = true
       try {
         this.$router.push({
@@ -173,7 +171,6 @@ export default {
       } catch (e) {}
     },
     chooseNew() {
-      this.$vuetify.goTo(0)
       this.$emit('selected')
       const query = Object.assign({}, this.$route.query)
       query.sort = 'new'
@@ -186,7 +183,6 @@ export default {
       } catch (e) {}
     },
     chooseTimeAll() {
-      this.$vuetify.goTo(0)
       this.$emit('selected')
       this.cancelSelectingTime()
       const query = Object.assign({}, this.$route.query)
@@ -196,7 +192,6 @@ export default {
       } catch (e) {}
     },
     chooseTimeHour() {
-      this.$vuetify.goTo(0)
       this.$emit('selected')
       this.cancelSelectingTime()
       try {
@@ -207,7 +202,6 @@ export default {
       } catch (e) {}
     },
     chooseTimeDay() {
-      this.$vuetify.goTo(0)
       this.$emit('selected')
       this.cancelSelectingTime()
       try {
@@ -218,7 +212,6 @@ export default {
       } catch (e) {}
     },
     chooseTimeWeek() {
-      this.$vuetify.goTo(0)
       this.$emit('selected')
       this.cancelSelectingTime()
       try {
@@ -229,7 +222,6 @@ export default {
       } catch (e) {}
     },
     chooseTimeMonth() {
-      this.$vuetify.goTo(0)
       this.$emit('selected')
       this.cancelSelectingTime()
       try {
@@ -240,7 +232,6 @@ export default {
       } catch (e) {}
     },
     chooseTimeYear() {
-      this.$vuetify.goTo(0)
       this.$emit('selected')
       this.cancelSelectingTime()
       try {

@@ -16,7 +16,9 @@ query homeFeed($page: Int, $sort: Sort, $time: Time, $filter: Filter, $types: [T
       id
       username
       isCurrentUser
-      title
+      tag
+      tagColor
+      profilePicUrl
     }
     topics {
       capitalizedName

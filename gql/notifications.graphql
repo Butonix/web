@@ -11,7 +11,10 @@ query notifications($unreadOnly: Boolean!) {
     fromUser {
       id
       username
-      title
+      isCurrentUser
+      tag
+      tagColor
+      profilePicUrl
     }
     post {
       id

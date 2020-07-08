@@ -13,9 +13,14 @@
         class="betterbutton"
         v-on="on"
       >
-        <v-icon class="mr-2">{{
+        <v-avatar v-if="currentUser && currentUser.profilePicUrl" class="mr-2">
+          <v-img :src="currentUser.profilePicUrl" />
+        </v-avatar>
+
+        <v-icon v-else class="mr-2">{{
           $vuetify.icons.values.mdiAccountOutline
         }}</v-icon>
+
         {{ currentUser ? currentUser.username : 'Not logged in' }}
       </v-btn>
     </template>
@@ -37,9 +42,18 @@
         class="betterbutton"
         v-on="on"
       >
-        <v-icon class="mr-2">{{
+        <v-avatar
+          v-if="currentUser && currentUser.profilePicUrl"
+          size="24"
+          class="mr-2"
+        >
+          <v-img :src="currentUser.profilePicUrl" />
+        </v-avatar>
+
+        <v-icon v-else class="mr-2">{{
           $vuetify.icons.values.mdiAccountOutline
         }}</v-icon>
+
         {{ currentUser ? currentUser.username : 'Not logged in' }}
       </v-btn>
     </template>
