@@ -1,6 +1,6 @@
 <template>
   <v-container fluid>
-    <v-row v-if="currentUser">
+    <v-row v-if="$store.state.currentUser">
       <v-col :cols="$device.isDesktop ? 6 : 12">
         <v-tabs v-model="tab" background-color="transparent">
           <v-tab>Blocked Users</v-tab>
@@ -95,7 +95,6 @@ import unblockUserGql from '../../gql/unblockUser.graphql'
 import hiddenTopicsGql from '../../gql/hiddenTopics.graphql'
 import hideTopicGql from '../../gql/hideTopic.graphql'
 import unhideTopicGql from '../../gql/unhideTopic.graphql'
-import currentUserGql from '../../gql/currentUser.graphql'
 import hiddenPostsGql from '../../gql/hiddenPosts.graphql'
 import Post from '../../components/Post'
 
@@ -129,13 +128,7 @@ export default {
       tab: null,
       hiddenTopics: [],
       blockedUsers: [],
-      hiddenPosts: [],
-      currentUser: null
-    }
-  },
-  apollo: {
-    currentUser: {
-      query: currentUserGql
+      hiddenPosts: []
     }
   },
   methods: {

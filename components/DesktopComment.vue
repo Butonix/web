@@ -73,7 +73,7 @@
           class="font-weight-medium caption"
           :style="comment.isEndorsed ? 'color: var(--v-primary-base)' : ''"
           style="text-transform: none; font-size: 12px"
-          :disabled="currentUser && comment.author.isCurrentUser"
+          :disabled="comment.author.isCurrentUser"
           @click="toggleEndorsement"
         >
           <span
@@ -82,7 +82,7 @@
             :class="
               comment.isEndorsed
                 ? ''
-                : currentUser && comment.author.isCurrentUser
+                : comment.author.isCurrentUser
                 ? ''
                 : 'text--secondary'
             "
@@ -97,7 +97,7 @@
             :class="
               comment.isEndorsed
                 ? ''
-                : currentUser && comment.author.isCurrentUser
+                : comment.author.isCurrentUser
                 ? ''
                 : 'text--secondary'
             "
@@ -137,7 +137,7 @@
 
         <span v-if="$device.isDesktop">
           <!--Delete-->
-          <v-menu v-if="currentUser && comment.author.isCurrentUser">
+          <v-menu v-if="comment.author.isCurrentUser">
             <template v-slot:activator="{ on }">
               <v-btn
                 aria-label="Delete Comment"
@@ -174,7 +174,7 @@
 
           <!--Edit-->
           <span
-            v-if="!deleted && currentUser && comment.author.isCurrentUser"
+            v-if="!deleted && comment.author.isCurrentUser"
             class="ml-1 caption font-weight-medium hoverable"
             @click="editing = true"
             >Edit</span
@@ -182,7 +182,7 @@
         </span>
 
         <span v-else>
-          <v-menu v-if="currentUser && post.author.isCurrentUser">
+          <v-menu v-if="post.author.isCurrentUser">
             <template v-slot:activator="{ on }">
               <v-btn
                 aria-label="More options"
@@ -268,7 +268,6 @@ import toggleCommentEndorsementGql from '../gql/toggleCommentEndorsement.graphql
 import submitCommentGql from '../gql/submitComment.graphql'
 import postCommentsGql from '../gql/postComments.graphql'
 import recordPostViewGql from '../gql/recordPostView.graphql'
-import currentUserGql from '../gql/currentUser.graphql'
 import deleteCommentGql from '../gql/deleteComment.graphql'
 import editCommentGql from '../gql/editComment.graphql'
 import TextEditor from './TextEditor'
@@ -313,7 +312,6 @@ export default {
       replying: false,
       replyText: '',
       loading: false,
-      currentUser: null,
       submitCommentErr: '',
       childrenCollapsed: false,
       deleted: false
@@ -346,11 +344,6 @@ export default {
       return this.comment.author.username === this.post.author.username
     }
   },
-  apollo: {
-    currentUser: {
-      query: currentUserGql
-    }
-  },
   methods: {
     cancelEdit() {
       this.editing = false
@@ -371,7 +364,7 @@ export default {
       this.editBtnLoading = false
     },
     async deleteComment() {
-      if (this.currentUser.id !== this.comment.author.id) return
+      if (this.$store.state.currentUser.id !== this.comment.author.id) return
 
       if (!this.$device.isDesktop) {
         if (!process.client) return
@@ -430,7 +423,7 @@ export default {
       this.loading = false
     },
     async toggleEndorsement() {
-      if (!this.currentUser) {
+      if (!this.$store.state.currentUser) {
         this.$store.dispatch('showLoginDialog')
         return
       }

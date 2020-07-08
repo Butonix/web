@@ -1,6 +1,6 @@
 <template>
   <v-container fluid>
-    <v-row v-if="currentUser">
+    <v-row v-if="$store.state.currentUser">
       <v-col :cols="$device.isDesktop ? 6 : 12">
         <v-form ref="form" v-model="valid" @submit.prevent="changePassword">
           <div class="title mb-2">Change password</div>
@@ -97,7 +97,6 @@
 </template>
 
 <script>
-import currentUserGql from '../../gql/currentUser.graphql'
 import changePasswordGql from '../../gql/changePassword.graphql'
 
 export default {
@@ -108,7 +107,6 @@ export default {
       newPasswordConfirm: '',
       errMessage: '',
       successMessage: '',
-      currentUser: null,
       loading: false,
       valid: false,
       showPassword: false,
@@ -150,11 +148,6 @@ export default {
       }
       this.loading = false
       this.$refs.form.resetValidation()
-    }
-  },
-  apollo: {
-    currentUser: {
-      query: currentUserGql
     }
   }
 }

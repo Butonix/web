@@ -1,4 +1,7 @@
+import currentUserGql from '../gql/currentUser.graphql'
+
 export const state = () => ({
+  currentUser: null,
   homeFeedPage: 0,
   topicFeedPage: {},
   topicSidebarSelected: 'Popular',
@@ -14,6 +17,9 @@ export const state = () => ({
 })
 
 export const mutations = {
+  setCurrentUser(state, currentUser) {
+    state.currentUser = currentUser
+  },
   setCurrentPostTitle(state, title) {
     state.currentPostTitle = title
   },
@@ -53,6 +59,24 @@ export const mutations = {
 }
 
 export const actions = {
+  async nuxtServerInit({ commit }, context) {
+    if (!context.app.$apolloHelpers.getToken()) return
+    const client = context.app.apolloProvider.defaultClient
+    const { data } = await client.query({ query: currentUserGql })
+    commit('setCurrentUser', data.currentUser)
+    if (!data.currentUser) {
+      await context.app.$apolloHelpers.onLogout()
+    }
+  },
+  async fetchCurrentUser({ commit }) {
+    if (!this.app.$apolloHelpers.getToken()) {
+      commit('setCurrentUser', null)
+      return
+    }
+    const client = this.app.apolloProvider.defaultClient
+    const { data } = await client.query({ query: currentUserGql })
+    commit('setCurrentUser', data.currentUser)
+  },
   displaySnackbar({ commit }, { message, success = false }) {
     commit('setSnackbarMessage', message)
     commit('setSnackbarEnabled', true)

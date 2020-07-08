@@ -3,7 +3,7 @@
     <v-row>
       <v-col v-if="$device.isDesktop" cols="3">
         <div class="sticky">
-          <UserSideCard :current-user="currentUser" />
+          <UserSideCard />
         </div>
       </v-col>
       <v-col>
@@ -44,7 +44,6 @@ import TopicsSidebar from '../components/TopicsSidebar'
 import InfoLinks from '../components/InfoLinks'
 import homeFeedGql from '../gql/homeFeed.graphql'
 import globalStickiesGql from '../gql/globalStickies.graphql'
-import currentUserGql from '../gql/currentUser.graphql'
 import ItemComponent from '../components/ItemComponent'
 import Post from '../components/Post'
 import UserSideCard from '../components/UserSideCard'
@@ -66,7 +65,6 @@ export default {
       homeFeed: [],
       globalStickies: [],
       hasMore: true,
-      currentUser: null,
       postComponent: Post,
       itemComponent: ItemComponent
     }
@@ -133,9 +131,6 @@ export default {
     window.addEventListener('scroll', this.handleScroll)
   },
   apollo: {
-    currentUser: {
-      query: currentUserGql
-    },
     homeFeed: {
       query: homeFeedGql,
       variables() {

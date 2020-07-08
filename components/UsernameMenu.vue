@@ -3,9 +3,9 @@
     <template v-slot:activator="{ on }">
       <span v-on="on">
         <nuxt-link :to="`/u/${user.username}`" class="text--primary">
-          <v-avatar size="32" color="grey darken-3">
-            <img :src="user.profilePicUrl"
-          /></v-avatar>
+          <v-avatar size="32">
+            <img :src="user.profilePicUrl" />
+          </v-avatar>
           <span class="ml-1" style="font-size: .875rem">
             {{ user.username }}
           </span>
@@ -28,7 +28,7 @@
         :variables="{ username: user.username }"
       >
         <template v-slot="{ result: { loading, error, data } }">
-          <div v-if="!data" class="pa-4">
+          <div v-if="!data || !data.user" class="pa-4">
             <v-row align="center" justify="center">
               <v-progress-circular indeterminate />
             </v-row>

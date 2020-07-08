@@ -6,8 +6,12 @@
           <v-text-field
             v-model="title"
             filled
-            :label="currentUser ? 'Title' : 'Must log in to create a post'"
-            :disabled="!currentUser"
+            :label="
+              $store.state.currentUser
+                ? 'Title'
+                : 'Must log in to create a post'
+            "
+            :disabled="!$store.state.currentUser"
             clearable
             :loading="detectTitleLoading"
             :rules="titleRules"
@@ -31,9 +35,11 @@
                 filled
                 hide-details
                 :label="
-                  currentUser ? 'Link URL' : 'Must log in to create a post'
+                  $store.state.currentUser
+                    ? 'Link URL'
+                    : 'Must log in to create a post'
                 "
-                :disabled="!currentUser"
+                :disabled="!$store.state.currentUser"
                 clearable
               />
             </v-tab-item>
@@ -52,7 +58,7 @@
           <v-combobox
             ref="combobox"
             v-model="selectedTopics"
-            :disabled="!currentUser"
+            :disabled="!$store.state.currentUser"
             :items="searchTopicsNames"
             label="Choose topics"
             filled
@@ -106,7 +112,7 @@
               :disabled="
                 !title ||
                   selectedTopics.length <= 0 ||
-                  !currentUser ||
+                  !$store.state.currentUser ||
                   !$refs.combobox.valid ||
                   !uploadValid ||
                   !valid
@@ -151,7 +157,6 @@ import isUrl from 'is-url'
 import xss from 'xss'
 import TextEditor from '../../components/TextEditor'
 import submitPostGql from '../../gql/submitPost.graphql'
-import currentUserGql from '../../gql/currentUser.graphql'
 import searchTopicsGql from '../../gql/searchTopics.graphql'
 import topicGql from '../../gql/topic.graphql'
 import { escapeHtml } from '../../util/escapeHtml'
@@ -165,7 +170,6 @@ export default {
     link: '',
     valid: false,
     selectedTopics: [],
-    currentUser: null,
     loading: false,
     detectTitleLoading: false,
     prevRoute: null,
@@ -337,9 +341,6 @@ export default {
     next((vm) => (vm.prevRoute = from))
   },
   apollo: {
-    currentUser: {
-      query: currentUserGql
-    },
     previousTopic: {
       query: topicGql,
       variables() {

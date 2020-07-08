@@ -1,5 +1,5 @@
 <template>
-  <v-container v-if="!$apolloHelpers.getToken()" fluid>
+  <v-container v-if="!$store.state.currentUser" fluid>
     <v-row justify="center">
       <v-col :cols="$device.isDesktop ? 6 : 12">
         <v-tabs v-model="tab" grow>
@@ -223,6 +223,7 @@ export default {
           })
           .then(({ data }) => data && data.signUp)
         await this.$apolloHelpers.onLogin(res.accessToken)
+        await this.$store.dispatch('fetchCurrentUser')
         await this.$router.push('/')
         this.reset()
       } catch (e) {
@@ -246,6 +247,7 @@ export default {
           })
           .then(({ data }) => data && data.login)
         await this.$apolloHelpers.onLogin(res.accessToken)
+        await this.$store.dispatch('fetchCurrentUser')
         await this.$router.push('/')
         this.reset()
       } catch (e) {

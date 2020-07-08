@@ -71,7 +71,6 @@ import toggleCommentEndorsementGql from '../gql/toggleCommentEndorsement.graphql
 import submitCommentGql from '../gql/submitComment.graphql'
 import postCommentsGql from '../gql/postComments.graphql'
 import recordPostViewGql from '../gql/recordPostView.graphql'
-import currentUserGql from '../gql/currentUser.graphql'
 import deleteCommentGql from '../gql/deleteComment.graphql'
 import editCommentGql from '../gql/editComment.graphql'
 import { timeSince } from '../util/timeSince'
@@ -117,7 +116,6 @@ export default {
       replying: false,
       replyText: '',
       loading: false,
-      currentUser: null,
       submitCommentErr: '',
       childrenCollapsed: false,
       deleted: false
@@ -174,11 +172,6 @@ export default {
       if (val !== this.comment.id) this.expanded = false
     }
   },
-  apollo: {
-    currentUser: {
-      query: currentUserGql
-    }
-  },
   methods: {
     expand() {
       this.expanded = !this.expanded
@@ -203,7 +196,7 @@ export default {
       this.editBtnLoading = false
     },
     async deleteComment() {
-      if (this.currentUser.id !== this.comment.author.id) return
+      if (this.$store.state.currentUser.id !== this.comment.author.id) return
 
       if (!this.$device.isDesktop) {
         if (!process.client) return
@@ -262,7 +255,7 @@ export default {
       this.loading = false
     },
     async toggleEndorsement() {
-      if (!this.currentUser) {
+      if (!this.$store.state.currentUser) {
         this.$store.dispatch('showLoginDialog')
         return
       }

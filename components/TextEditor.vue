@@ -102,10 +102,10 @@
       ref="textarea"
       v-model="$attrs.value"
       filled
-      :label="currentUser ? label : notLoggedInLabel"
+      :label="$store.state.currentUser ? label : notLoggedInLabel"
       :hide-details="!showDetails"
       :rows="rows"
-      :disabled="!currentUser"
+      :disabled="!$store.state.currentUser"
       :error-messages="err"
       @input="updateTextContent"
       @focus="showButtons = true"
@@ -114,8 +114,6 @@
 </template>
 
 <script>
-import currentUserGql from '../gql/currentUser.graphql'
-
 export default {
   name: 'TextEditor',
   props: {
@@ -143,14 +141,8 @@ export default {
   },
   data: () => ({
     textContent: '',
-    currentUser: null,
     showButtons: false
   }),
-  apollo: {
-    currentUser: {
-      query: currentUserGql
-    }
-  },
   watch: {
     textContent() {
       this.$attrs.value = this.textContent

@@ -220,7 +220,6 @@ import { formatDistanceToNowStrict } from 'date-fns'
 import editPostGql from '../gql/editPost.graphql'
 import { timeSince } from '../util/timeSince'
 import togglePostEndorsementGql from '../gql/togglePostEndorsement.graphql'
-import currentUserGql from '../gql/currentUser.graphql'
 import TextContent from './TextContent'
 
 export default {
@@ -250,7 +249,6 @@ export default {
       editBtnLoading: false,
       editing: false,
       expanded: this.expand,
-      currentUser: null,
       menu: false,
       twitterbird: require('~/assets/twitterbird.jpg')
     }
@@ -292,11 +290,6 @@ export default {
     },
     isTitleOnlyTextPost() {
       return this.post.type === 'TEXT' && !this.post.textContent
-    }
-  },
-  apollo: {
-    currentUser: {
-      query: currentUserGql
     }
   },
   methods: {
@@ -350,7 +343,7 @@ export default {
       this.editBtnLoading = false
     },
     async toggleEndorsement() {
-      if (!this.currentUser) {
+      if (!this.$store.state.currentUser) {
         this.$store.dispatch('displaySnackbar', {
           message: 'Must log in to rocket this post'
         })

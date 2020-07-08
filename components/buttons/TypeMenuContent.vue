@@ -125,7 +125,7 @@ export default {
     chooseMyTopics() {
       this.$emit('selected')
 
-      if (!this.$apolloHelpers.getToken()) {
+      if (!this.$store.state.currentUser) {
         this.$store.dispatch('displaySnackbar', {
           message: 'Must login to view My Topics'
         })

@@ -7,12 +7,16 @@
         ? 'background-color: transparent'
         : 'background-color: #FAFAFA'
     "
-    :to="currentUser ? `/u/${currentUser.username}` : '/login'"
+    :to="
+      $store.state.currentUser
+        ? `/u/${$store.state.currentUser.username}`
+        : '/login'
+    "
   >
     <ApolloQuery
-      v-if="currentUser"
+      v-if="$store.state.currentUser"
       :query="require('../gql/user.graphql')"
-      :variables="{ username: currentUser.username }"
+      :variables="{ username: $store.state.currentUser.username }"
     >
       <template v-slot="{ result: { loading, error, data } }">
         <div v-if="!data" class="pa-4">
@@ -80,13 +84,7 @@
 
 <script>
 export default {
-  name: 'UserSideCard',
-  props: {
-    currentUser: {
-      type: Object,
-      required: true
-    }
-  }
+  name: 'UserSideCard'
 }
 </script>
 

@@ -14,18 +14,23 @@
         v-on="on"
       >
         <v-avatar
-          v-if="currentUser && currentUser.profilePicUrl"
-          color="grey darken-2"
+          v-if="
+            $store.state.currentUser && $store.state.currentUser.profilePicUrl
+          "
           class="mr-2"
         >
-          <v-img :src="currentUser.profilePicUrl" />
+          <v-img :src="$store.state.currentUser.profilePicUrl" />
         </v-avatar>
 
         <v-icon v-else class="mr-2">{{
           $vuetify.icons.values.mdiAccountOutline
         }}</v-icon>
 
-        {{ currentUser ? currentUser.username : 'Not logged in' }}
+        {{
+          $store.state.currentUser
+            ? $store.state.currentUser.username
+            : 'Not logged in'
+        }}
       </v-btn>
     </template>
 
@@ -47,19 +52,24 @@
         v-on="on"
       >
         <v-avatar
-          v-if="currentUser && currentUser.profilePicUrl"
+          v-if="
+            $store.state.currentUser && $store.state.currentUser.profilePicUrl
+          "
           size="24"
           class="mr-2"
-          color="grey darken-2"
         >
-          <v-img :src="currentUser.profilePicUrl" />
+          <v-img :src="$store.state.currentUser.profilePicUrl" />
         </v-avatar>
 
         <v-icon v-else class="mr-2">{{
           $vuetify.icons.values.mdiAccountOutline
         }}</v-icon>
 
-        {{ currentUser ? currentUser.username : 'Not logged in' }}
+        {{
+          $store.state.currentUser
+            ? $store.state.currentUser.username
+            : 'Not logged in'
+        }}
       </v-btn>
     </template>
 
@@ -68,7 +78,6 @@
 </template>
 
 <script>
-import currentUserGql from '../../gql/currentUser.graphql'
 import ProfileMenuContent from './ProfileMenuContent'
 
 export default {
@@ -76,13 +85,7 @@ export default {
   components: { ProfileMenuContent },
   data() {
     return {
-      menu: false,
-      currentUser: null
-    }
-  },
-  apollo: {
-    currentUser: {
-      query: currentUserGql
+      menu: false
     }
   }
 }

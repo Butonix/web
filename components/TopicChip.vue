@@ -83,7 +83,6 @@ import unfollowTopicGql from '../gql/unfollowTopic.graphql'
 import followTopicGql from '../gql/followTopic.graphql'
 import followedTopicsGql from '../gql/followedTopics.graphql'
 import topicGql from '../gql/topic.graphql'
-import currentUserGql from '../gql/currentUser.graphql'
 
 export default {
   name: 'TopicChip',
@@ -97,14 +96,10 @@ export default {
     return {
       subscribed: false,
       menu: false,
-      topic: this.topicData,
-      currentUser: null
+      topic: this.topicData
     }
   },
   apollo: {
-    currentUser: {
-      query: currentUserGql
-    },
     topic: {
       query: topicGql,
       variables() {

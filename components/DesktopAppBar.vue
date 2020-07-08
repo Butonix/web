@@ -55,10 +55,61 @@
 
       <v-spacer />
 
+      <v-text-field
+        hide-details
+        flat
+        dense
+        class="mr-4"
+        style="max-width: 400px"
+        solo
+        label="Search"
+        :append-icon="$vuetify.icons.values.mdiMagnify"
+      />
+
+      <v-menu
+        offset-y
+        transition="slide-y-transition"
+        :close-on-content-click="false"
+      >
+        <template v-slot:activator="{ on }">
+          <v-btn icon class="mr-1" v-on="on">
+            <v-badge overlap content="1">
+              <v-icon>{{ $vuetify.icons.values.mdiBellOutline }}</v-icon>
+            </v-badge>
+          </v-btn>
+        </template>
+
+        <v-card class="pa-2" width="300">
+          <v-card outlined class="mb-2">
+            <v-list-item>
+              <v-list-item-content>
+                <v-list-item-subtitle
+                  >This is a notification</v-list-item-subtitle
+                >
+              </v-list-item-content>
+            </v-list-item>
+            <v-card-actions>
+              <UsernameMenu :user="$store.state.currentUser" />
+            </v-card-actions>
+          </v-card>
+
+          <div
+            style="display: flex; justify-content: center"
+            class="caption text--secondary"
+          >
+            That's all!
+          </div>
+        </v-card>
+      </v-menu>
+
+      <div class="mr-1">
+        <ProfileMenu />
+      </div>
+
       <client-only>
         <v-menu offset-y transition="slide-y-transition">
           <template v-slot:activator="{ on }">
-            <v-btn icon color="#7289da" v-on="on">
+            <v-btn icon :color="$vuetify.theme.dark ? '' : '#7289da'" v-on="on">
               <v-icon>{{ $vuetify.icons.values.mdiDiscord }}</v-icon>
             </v-btn>
           </template>
@@ -77,8 +128,6 @@
           />
         </v-menu>
       </client-only>
-
-      <ProfileMenu />
     </v-row>
   </v-app-bar>
 </template>
@@ -88,10 +137,17 @@ import CommentSortMenu from './buttons/CommentSortMenu'
 import ProfileMenu from './buttons/ProfileMenu'
 import SortMenu from './buttons/SortMenu'
 import TypeMenu from './buttons/TypeMenu'
+import UsernameMenu from './UsernameMenu'
 
 export default {
   name: 'DesktopAppBar',
-  components: { CommentSortMenu, ProfileMenu, SortMenu, TypeMenu }
+  components: {
+    UsernameMenu,
+    CommentSortMenu,
+    ProfileMenu,
+    SortMenu,
+    TypeMenu
+  }
 }
 </script>
 

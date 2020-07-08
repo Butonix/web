@@ -1,6 +1,6 @@
 <template>
   <v-container fluid>
-    <v-row v-if="currentUser">
+    <v-row v-if="$store.state.currentUser">
       <v-col>
         <div class="headline">
           Notifications
@@ -57,7 +57,6 @@
 </template>
 
 <script>
-import currentUserGql from '../../gql/currentUser.graphql'
 import notificationsGql from '../../gql/notifications.graphql'
 import Notification from '../../components/Notification'
 import markAllNotificationsReadGql from '../../gql/markAllNotificationsRead.graphql'
@@ -66,7 +65,6 @@ export default {
   components: { Notification },
   data() {
     return {
-      currentUser: null,
       notifications: [],
       unreadOnly: true
     }
@@ -86,9 +84,6 @@ export default {
     }
   },
   apollo: {
-    currentUser: {
-      query: currentUserGql
-    },
     notifications: {
       query: notificationsGql,
       variables() {
@@ -97,7 +92,7 @@ export default {
         }
       },
       skip() {
-        return !this.currentUser
+        return !this.$store.state.currentUser
       },
       fetchPolicy: 'cache-and-network'
     }

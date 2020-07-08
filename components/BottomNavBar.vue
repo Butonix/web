@@ -19,23 +19,6 @@
       </v-btn>
 
       <v-btn
-        aria-label="Notifications"
-        class="font-weight-regular"
-        style="letter-spacing: normal"
-        @click="openNotifications"
-      >
-        <span>Notifications</span>
-        <v-badge
-          v-if="notifications.length > 0"
-          overlap
-          :content="notifications.length"
-        >
-          <v-icon>{{ $vuetify.icons.values.mdiBellOutline }}</v-icon>
-        </v-badge>
-        <v-icon v-else>{{ $vuetify.icons.values.mdiBellOutline }}</v-icon>
-      </v-btn>
-
-      <v-btn
         aria-label="Search"
         to="/search"
         nuxt
@@ -89,13 +72,13 @@ export default {
         }
       },
       skip() {
-        return !this.currentUser
+        return !this.$store.state.currentUser
       }
     }
   },
   methods: {
     openNotifications() {
-      if (this.currentUser) {
+      if (this.$store.state.currentUser) {
         this.$router.push('/notifications')
       } else {
         this.$store.dispatch('displaySnackbar', {
@@ -104,7 +87,7 @@ export default {
       }
     },
     openCompose() {
-      if (this.currentUser) {
+      if (this.$store.state.currentUser) {
         this.$router.push('/new')
       } else {
         this.$store.dispatch('displaySnackbar', {

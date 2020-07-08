@@ -8,140 +8,84 @@
     "
     style="border-width: 1px"
   >
-    <v-subheader class="ml-2"
-      >TOPICS
-      <span v-if="!topicSearchText" class="ml-4"
-        ><span
-          class="hoverable"
-          :class="{ 'font-weight-bold': selected === 'Popular' }"
-          @click="selected = 'Popular'"
-          >Popular</span
+    <v-tabs v-model="tab" background-color="transparent">
+      <v-tab>Followed</v-tab>
+      <v-tab>Popular</v-tab>
+    </v-tabs>
+
+    <v-tabs-items v-model="tab" style="background-color: transparent">
+      <v-tab-item>
+        <v-list
+          class="sidebar"
+          dense
+          style="overflow-y: auto; background-color: transparent"
         >
-        <span v-if="currentUser">/</span>
-        <span
-          v-if="currentUser"
-          class="hoverable"
-          :class="{ 'font-weight-bold': selected === 'Following' }"
-          @click="selected = 'Following'"
-          >Following</span
-        ></span
-      >
-      <span v-else class="ml-4 font-weight-bold">
-        Searching
-      </span>
-    </v-subheader>
-    <v-text-field
-      v-model="topicSearchText"
-      clearable
-      dense
-      solo-inverted
-      flat
-      label="Find topics"
-      hide-details
-      :append-icon="$vuetify.icons.values.mdiMagnify"
-      class="mb-2 mx-2"
-    />
+          <v-list-item v-if="followedTopics.length === 0">
+            <v-list-item-content>
+              <v-list-item-title
+                >Not following any topics.
+                <v-icon small
+                  >{{ $vuetify.icons.values.mdiOpenInNew }}-frown</v-icon
+                ></v-list-item-title
+              >
+            </v-list-item-content>
+          </v-list-item>
+          <v-list-item
+            v-for="(topic, index) in followedTopics"
+            :key="index"
+            link
+            nuxt
+            :to="`/topic/${topic.name}`"
+          >
+            <v-list-item-content>
+              <v-list-item-title>{{ topic.capitalizedName }}</v-list-item-title>
+              <v-list-item-subtitle
+                >{{ topic.postCount }} post{{
+                  topic.postCount === 1 ? '' : 's'
+                }}
+                today</v-list-item-subtitle
+              >
+            </v-list-item-content>
+          </v-list-item>
+        </v-list>
+      </v-tab-item>
 
-    <v-divider class="mb-2" />
-
-    <v-list
-      v-if="topicSearchText"
-      class="sidebar pt-0"
-      dense
-      style="overflow-y: auto; background-color: transparent"
-    >
-      <v-list-item v-if="searchTopics.length === 0">
-        <v-list-item-content>
-          <v-list-item-title
-            >No topics matching {{ topicSearchText }} found.
-            <v-icon small>{{
-              $vuetify.icons.values.mdiEmoticonFrown
-            }}</v-icon></v-list-item-title
+      <v-tab-item>
+        <v-list
+          class="sidebar"
+          dense
+          style="overflow-y: auto; background-color: transparent"
+        >
+          <v-list-item v-if="popularTopics.length === 0">
+            <v-list-item-content>
+              <v-list-item-title
+                >No popular topics today.
+                <v-icon small>{{
+                  $vuetify.icons.values.mdiEmoticonFrown
+                }}</v-icon></v-list-item-title
+              >
+            </v-list-item-content>
+          </v-list-item>
+          <v-list-item
+            v-for="(topic, index) in popularTopics"
+            :key="index"
+            link
+            nuxt
+            :to="`/topic/${topic.name}`"
           >
-        </v-list-item-content>
-      </v-list-item>
-      <v-list-item
-        v-for="(topic, index) in searchTopics"
-        :key="index"
-        link
-        nuxt
-        :to="`/topic/${topic.name}`"
-      >
-        <v-list-item-content>
-          <v-list-item-title>{{ topic.capitalizedName }}</v-list-item-title>
-        </v-list-item-content>
-      </v-list-item>
-    </v-list>
-
-    <v-list
-      v-else-if="selected === 'Following'"
-      class="sidebar pt-0"
-      dense
-      style="overflow-y: auto; background-color: transparent"
-    >
-      <v-list-item v-if="followedTopics.length === 0">
-        <v-list-item-content>
-          <v-list-item-title
-            >Not following any topics.
-            <v-icon small
-              >{{ $vuetify.icons.values.mdiOpenInNew }}-frown</v-icon
-            ></v-list-item-title
-          >
-        </v-list-item-content>
-      </v-list-item>
-      <v-list-item
-        v-for="(topic, index) in followedTopics"
-        :key="index"
-        link
-        nuxt
-        :to="`/topic/${topic.name}`"
-      >
-        <v-list-item-content>
-          <v-list-item-title>{{ topic.capitalizedName }}</v-list-item-title>
-          <v-list-item-subtitle
-            >{{ topic.postCount }} post{{
-              topic.postCount === 1 ? '' : 's'
-            }}
-            today</v-list-item-subtitle
-          >
-        </v-list-item-content>
-      </v-list-item>
-    </v-list>
-
-    <v-list
-      v-else-if="selected === 'Popular'"
-      class="sidebar pt-0"
-      dense
-      style="overflow-y: auto; background-color: transparent"
-    >
-      <v-list-item v-if="popularTopics.length === 0">
-        <v-list-item-content>
-          <v-list-item-title
-            >No popular topics today.
-            <v-icon small>{{
-              $vuetify.icons.values.mdiEmoticonFrown
-            }}</v-icon></v-list-item-title
-          >
-        </v-list-item-content>
-      </v-list-item>
-      <v-list-item
-        v-for="(topic, index) in popularTopics"
-        :key="index"
-        link
-        nuxt
-        :to="`/topic/${topic.name}`"
-      >
-        <v-list-item-content>
-          <v-list-item-title>{{ topic.capitalizedName }}</v-list-item-title>
-          <v-list-item-subtitle
-            >{{ topic.postCount }} post{{
-              topic.postCount === 1 ? '' : 's'
-            }}
-            today</v-list-item-subtitle
-          >
-        </v-list-item-content>
-      </v-list-item>
-    </v-list>
+            <v-list-item-content>
+              <v-list-item-title>{{ topic.capitalizedName }}</v-list-item-title>
+              <v-list-item-subtitle
+                >{{ topic.postCount }} post{{
+                  topic.postCount === 1 ? '' : 's'
+                }}
+                today</v-list-item-subtitle
+              >
+            </v-list-item-content>
+          </v-list-item>
+        </v-list>
+      </v-tab-item>
+    </v-tabs-items>
   </v-card>
 </template>
 
@@ -149,16 +93,15 @@
 import followedTopicsGql from '../gql/followedTopics.graphql'
 import popularTopicsGql from '../gql/popularTopics.graphql'
 import searchTopicsGql from '../gql/searchTopics.graphql'
-import currentUserGql from '../gql/currentUser.graphql'
 
 export default {
   name: 'TopicsSidebar',
   data() {
     return {
-      currentUser: null,
       followedTopics: [],
       popularTopics: [],
-      searchTopics: []
+      searchTopics: [],
+      tab: 0
     }
   },
   computed: {
@@ -180,9 +123,6 @@ export default {
     }
   },
   apollo: {
-    currentUser: {
-      query: currentUserGql
-    },
     followedTopics: {
       query: followedTopicsGql
     },

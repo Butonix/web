@@ -7,20 +7,20 @@
       <v-list-item>
         <v-list-item-avatar
           v-if="source.type !== 'TEXT'"
-          style="border-radius: 12px"
+          style="border-radius: 12px; align-self: start"
           class="my-3"
           size="64"
           :color="$vuetify.theme.dark ? 'grey darken-3' : 'grey lighten-2'"
         >
           <img
             v-if="source.thumbnailUrl"
-            style="border-radius: 12px"
+            style="border-radius: 12px; object-fit: cover"
             :src="source.thumbnailUrl"
           />
           <v-icon v-else size="32">{{ $vuetify.icons.values.mdiWeb }}</v-icon>
         </v-list-item-avatar>
 
-        <v-list-item-content style="align-content: start">
+        <v-list-item-content style="align-self: start; align-content: start">
           <span v-if="source.sticky">
             <v-icon color="primary" size="13" class="mr-1">{{
               $vuetify.icons.values.mdiStar
@@ -31,7 +31,7 @@
           <v-list-item-title style="white-space: normal">
             <nuxt-link
               class="text--primary mr-1"
-              style="font-size: 1.125rem; font-weight: 500"
+              style="font-size: 1.125rem; font-weight: 400"
               :to="`/p/${source.id}`"
             >
               {{ source.title }}

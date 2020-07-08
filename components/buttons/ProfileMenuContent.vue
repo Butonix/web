@@ -1,17 +1,24 @@
 <template>
   <v-list class="py-0">
-    <v-list-item v-if="currentUser" :to="`/u/${currentUser.username}`" nuxt>
-      <v-list-item-avatar
-        :color="$vuetify.theme.dark ? 'grey darken-3' : 'grey lighten-2'"
-      >
-        <v-icon small>{{ $vuetify.icons.values.mdiAccountOutline }}</v-icon>
+    <v-list-item
+      v-if="$store.state.currentUser"
+      :to="`/u/${$store.state.currentUser.username}`"
+      nuxt
+    >
+      <v-list-item-avatar>
+        <v-icon v-if="!$store.state.currentUser.profilePicUrl">{{
+          $vuetify.icons.values.mdiAccountOutline
+        }}</v-icon>
+        <v-img v-else :src="$store.state.currentUser.profilePicUrl" />
       </v-list-item-avatar>
       <v-list-item-content>
-        <v-list-item-title>{{ currentUser.username }}</v-list-item-title>
+        <v-list-item-title>{{
+          $store.state.currentUser.username
+        }}</v-list-item-title>
       </v-list-item-content>
     </v-list-item>
 
-    <v-list-item v-if="!currentUser" nuxt to="/login">
+    <v-list-item v-if="!$store.state.currentUser" nuxt to="/login">
       <v-list-item-icon>
         <v-icon>{{ $vuetify.icons.values.mdiLogin }}</v-icon>
       </v-list-item-icon>
@@ -20,7 +27,7 @@
       </v-list-item-content>
     </v-list-item>
 
-    <v-list-item v-if="currentUser" nuxt to="/settings">
+    <v-list-item v-if="$store.state.currentUser" nuxt to="/settings">
       <v-list-item-icon>
         <v-icon>{{ $vuetify.icons.values.mdiCogOutline }}</v-icon>
       </v-list-item-icon>
@@ -41,7 +48,7 @@
       </v-list-item-action>
     </v-list-item>
 
-    <v-list-item v-if="currentUser" @click="logout">
+    <v-list-item v-if="$store.state.currentUser" @click="logout">
       <v-list-item-icon>
         <v-icon>{{ $vuetify.icons.values.mdiLogout }}</v-icon>
       </v-list-item-icon>
@@ -57,11 +64,6 @@ import currentUserGql from '../../gql/currentUser.graphql'
 
 export default {
   name: 'ProfileMenuContent',
-  data() {
-    return {
-      currentUser: null
-    }
-  },
   methods: {
     toggleDark() {
       this.$vuetify.theme.dark = !this.$vuetify.theme.dark
@@ -77,11 +79,7 @@ export default {
         data: { currentUser: null }
       })
       await this.$apolloHelpers.onLogout()
-    }
-  },
-  apollo: {
-    currentUser: {
-      query: currentUserGql
+      this.$store.commit('setCurrentUser', null)
     }
   }
 }
