@@ -9,11 +9,12 @@
           :href="source.link"
           target="_blank"
           rel="noopener"
+          style="align-self: start"
           @click.stop.prevent="toggleEmbed"
         >
           <v-list-item-avatar
             v-if="source.type !== 'TEXT'"
-            style="border-radius: 12px; align-self: start"
+            style="border-radius: 12px"
             class="my-3"
             size="64"
             :color="$vuetify.theme.dark ? '#313235' : 'grey lighten-2'"
@@ -45,6 +46,21 @@
             >
               {{ source.title }}
             </nuxt-link>
+            <nuxt-link
+              v-if="source.type === 'TEXT'"
+              :to="`/p/${source.id}`"
+              class="text--secondary caption hoverable"
+            >
+              (text post)
+            </nuxt-link>
+            <a
+              v-else
+              :href="source.link"
+              target="_blank"
+              rel="noopener"
+              class="text--secondary caption hoverable"
+              >({{ source.domain }})</a
+            >
           </v-list-item-title>
           <v-list-item-subtitle
             v-if="source.textContent || source.link"
