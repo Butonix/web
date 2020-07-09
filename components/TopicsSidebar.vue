@@ -6,7 +6,7 @@
         ? 'background-color: transparent'
         : 'background-color: #FAFAFA'
     "
-    style="border-width: 1px"
+    style="border-width: 1px; border-radius: 10px"
   >
     <v-tabs v-model="tab" background-color="transparent">
       <v-tab>Followed</v-tab>

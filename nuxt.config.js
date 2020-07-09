@@ -54,7 +54,10 @@ import {
   mdiPost,
   mdiPostOutline,
   mdiDiscord,
-  mdiStar
+  mdiStar,
+  mdiAccountPlusOutline,
+  mdiAccountCheckOutline,
+  mdiAccountCancelOutline
 } from '@mdi/js'
 
 export default {
@@ -260,7 +263,10 @@ export default {
         mdiPost,
         mdiPostOutline,
         mdiDiscord,
-        mdiStar
+        mdiStar,
+        mdiAccountPlusOutline,
+        mdiAccountCheckOutline,
+        mdiAccountCancelOutline
       }
     },
     theme: {

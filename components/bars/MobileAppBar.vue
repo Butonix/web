@@ -12,7 +12,7 @@
     <v-row class="ma-0" align="center">
       <nuxt-link :to="{ path: '/', query: $store.state.homeQuery }">
         <v-img
-          alt="Comet Logo"
+          alt="Comet logo"
           :src="require('~/assets/comet_logo2.png')"
           width="96"
           contain
@@ -45,10 +45,10 @@
 </template>
 
 <script>
-import CommentSortMenu from './buttons/CommentSortMenu'
-import ProfileMenu from './buttons/ProfileMenu'
-import SortMenu from './buttons/SortMenu'
-import TypeMenu from './buttons/TypeMenu'
+import CommentSortMenu from '../buttons/CommentSortMenu'
+import ProfileMenu from '../buttons/ProfileMenu'
+import SortMenu from '../buttons/SortMenu'
+import TypeMenu from '../buttons/TypeMenu'
 
 export default {
   name: 'MobileAppBar',

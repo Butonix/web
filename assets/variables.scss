@@ -1,7 +1,4 @@
-// Ref: https://github.com/nuxt-community/vuetify-module#customvariables
-//
-// The variables you want to modify
-// $font-size-root: 20px;
+@import '~vuetify/src/styles/settings/variables';
 
 $material-dark: (
   'background': #202124,
@@ -18,6 +15,12 @@ $material-light: (
     'primary': #000000,
     'secondary': #8D8D8D
   )
+);
+
+$container-max-widths: (
+  'md': map-get($grid-breakpoints, 'md') * 0.85,
+  'lg': map-get($grid-breakpoints, 'lg') * 0.85,
+  'xl': map-get($grid-breakpoints, 'xl') * 0.85
 );
 
 $chip-outlined-active-opacity: 0;

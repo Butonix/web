@@ -54,7 +54,7 @@
 </template>
 
 <script>
-import notificationsGql from '../gql/notifications.graphql'
+import notificationsGql from '../../gql/notifications.graphql'
 
 export default {
   name: 'BottomNavBar',

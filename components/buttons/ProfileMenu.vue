@@ -19,7 +19,10 @@
           "
           class="mr-2"
         >
-          <v-img :src="$store.state.currentUser.profilePicUrl" />
+          <v-img
+            alt="Profile picture"
+            :src="$store.state.currentUser.profilePicUrl"
+          />
         </v-avatar>
 
         <v-icon v-else class="mr-2">{{
@@ -58,7 +61,10 @@
           size="24"
           class="mr-2"
         >
-          <v-img :src="$store.state.currentUser.profilePicUrl" />
+          <v-img
+            alt="Profile picture"
+            :src="$store.state.currentUser.profilePicUrl"
+          />
         </v-avatar>
 
         <v-icon v-else class="mr-2">{{

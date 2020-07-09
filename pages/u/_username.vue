@@ -10,7 +10,7 @@
           >{{ user.username }}
 
           <v-avatar>
-            <v-img :src="user.profilePicUrl" />
+            <v-img alt="Profile picture" :src="user.profilePicUrl" />
           </v-avatar>
         </div>
         <div class="subtitle-1">

@@ -1,11 +1,11 @@
 <template>
   <v-card
-    outlined
-    style="border-width: 1px; border-radius: 10px"
+    v-if="$store.state.currentUser"
+    :flat="$vuetify.theme.dark"
+    :outlined="!$vuetify.theme.dark"
+    style="border-radius: 10px"
     :style="
-      $vuetify.theme.dark
-        ? 'background-color: transparent'
-        : 'background-color: #FAFAFA'
+      $vuetify.theme.dark ? '' : 'background-color: #FAFAFA; border-width: 1px'
     "
     :to="
       $store.state.currentUser
@@ -14,7 +14,6 @@
     "
   >
     <ApolloQuery
-      v-if="$store.state.currentUser"
       :query="require('../gql/user.graphql')"
       :variables="{ username: $store.state.currentUser.username }"
     >
@@ -29,6 +28,7 @@
           <v-list-item-avatar size="64">
             <v-img
               v-if="data.user.profilePicUrl"
+              alt="Profile picture"
               :src="data.user.profilePicUrl"
             />
             <v-icon v-else>{{
@@ -78,7 +78,29 @@
         </v-list-item>
       </template>
     </ApolloQuery>
-    <v-card-title v-else>Not logged in</v-card-title>
+  </v-card>
+
+  <v-card
+    v-else
+    :flat="$vuetify.theme.dark"
+    :outlined="!$vuetify.theme.dark"
+    style="border-radius: 10px"
+    :style="
+      $vuetify.theme.dark ? '' : 'background-color: #FAFAFA; border-width: 1px'
+    "
+  >
+    <v-card-title style="word-break: normal"
+      >Login to enjoy all of Comet's features!</v-card-title
+    >
+    <v-card-subtitle
+      >Create posts and comments, follow topics, fine-tune the content you see,
+      and more!</v-card-subtitle
+    >
+    <v-card-actions>
+      <v-spacer />
+      <v-btn text>Login</v-btn>
+      <v-btn text>Sign Up</v-btn>
+    </v-card-actions>
   </v-card>
 </template>
 

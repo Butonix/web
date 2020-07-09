@@ -1,6 +1,6 @@
 <template>
   <v-app>
-    <BottomNavBar />
+    <BottomNavBar v-if="!$device.isDesktop" />
 
     <DesktopAppBar v-if="$device.isDesktop" />
     <MobileAppBar v-else />
@@ -14,9 +14,9 @@
 
 <script>
 import Snackbar from '../components/Snackbar'
-import DesktopAppBar from '../components/DesktopAppBar'
-import MobileAppBar from '../components/MobileAppBar'
-import BottomNavBar from '../components/BottomNavBar'
+import DesktopAppBar from '../components/bars/DesktopAppBar'
+import MobileAppBar from '../components/bars/MobileAppBar'
+import BottomNavBar from '../components/bars/BottomNavBar'
 
 export default {
   name: 'Default',

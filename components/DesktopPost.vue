@@ -20,18 +20,12 @@
           :width="isYoutubeLink ? 128 : undefined"
           style="border-radius: 10px"
         >
-          <!--<v-img
-            :max-width="isYoutubeLink ? 128 : 80"
-            height="80"
-            :src="isTwitterLink ? twitterbird : post.thumbnailUrl"
-            :transition="false"
-          />-->
-          <img
+          <!--<img
             alt="Thumbnail"
             :src="isTwitterLink ? twitterbird : post.thumbnailUrl"
             style="height: 78px; border-radius: 10px"
             :style="{ 'max-width': isYoutubeLink ? '128px' : '78px' }"
-          />
+          />-->
         </v-avatar>
       </a>
 

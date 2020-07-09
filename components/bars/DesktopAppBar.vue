@@ -12,7 +12,7 @@
     <v-row class="ma-0" align="center">
       <nuxt-link :to="{ path: '/', query: $store.state.homeQuery }">
         <v-img
-          alt="Comet Logo"
+          alt="Comet logo"
           :src="
             $vuetify.theme.dark
               ? require('~/assets/comet_logo2.png')
@@ -61,21 +61,36 @@
         dense
         class="mr-4"
         style="max-width: 400px"
+        :background-color="$vuetify.theme.dark ? '' : 'grey lighten-2'"
         solo
         label="Search"
         :append-icon="$vuetify.icons.values.mdiMagnify"
       />
 
+      <v-btn
+        rounded
+        depressed
+        class="betterbutton mr-4"
+        :to="$store.state.currentUser ? '/new' : '/login'"
+        nuxt
+        :color="$vuetify.theme.dark ? '#313235' : 'primary'"
+      >
+        <v-icon class="mr-2">{{ $vuetify.icons.values.mdiPencil }}</v-icon>
+        Submit
+      </v-btn>
+
       <v-menu
+        v-if="$store.state.currentUser"
         offset-y
         transition="slide-y-transition"
         :close-on-content-click="false"
       >
         <template v-slot:activator="{ on }">
           <v-btn icon class="mr-1" v-on="on">
-            <v-badge overlap content="1">
+            <v-badge v-if="notifications.length > 0" overlap content="1">
               <v-icon>{{ $vuetify.icons.values.mdiBellOutline }}</v-icon>
             </v-badge>
+            <v-icon v-else>{{ $vuetify.icons.values.mdiBellOutline }}</v-icon>
           </v-btn>
         </template>
 
@@ -89,7 +104,7 @@
               </v-list-item-content>
             </v-list-item>
             <v-card-actions>
-              <UsernameMenu :user="$store.state.currentUser" />
+              <UsernameMenu :user-data="$store.state.currentUser" />
             </v-card-actions>
           </v-card>
 
@@ -133,11 +148,12 @@
 </template>
 
 <script>
-import CommentSortMenu from './buttons/CommentSortMenu'
-import ProfileMenu from './buttons/ProfileMenu'
-import SortMenu from './buttons/SortMenu'
-import TypeMenu from './buttons/TypeMenu'
-import UsernameMenu from './UsernameMenu'
+import notificationsGql from '../../gql/notifications.graphql'
+import CommentSortMenu from '../buttons/CommentSortMenu'
+import ProfileMenu from '../buttons/ProfileMenu'
+import SortMenu from '../buttons/SortMenu'
+import TypeMenu from '../buttons/TypeMenu'
+import UsernameMenu from '../UsernameMenu'
 
 export default {
   name: 'DesktopAppBar',
@@ -147,6 +163,21 @@ export default {
     ProfileMenu,
     SortMenu,
     TypeMenu
+  },
+  data() {
+    return {
+      notifications: []
+    }
+  },
+  apollo: {
+    notifications: {
+      query: notificationsGql,
+      variables() {
+        return {
+          unreadOnly: true
+        }
+      }
+    }
   }
 }
 </script>

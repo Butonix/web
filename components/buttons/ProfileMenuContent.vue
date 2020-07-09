@@ -9,7 +9,11 @@
         <v-icon v-if="!$store.state.currentUser.profilePicUrl">{{
           $vuetify.icons.values.mdiAccountOutline
         }}</v-icon>
-        <v-img v-else :src="$store.state.currentUser.profilePicUrl" />
+        <v-img
+          v-else
+          alt="Profile picture"
+          :src="$store.state.currentUser.profilePicUrl"
+        />
       </v-list-item-avatar>
       <v-list-item-content>
         <v-list-item-title>{{
