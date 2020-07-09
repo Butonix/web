@@ -141,6 +141,7 @@ export default {
       theme_color: '#F44336'
     },
     workbox: {
+      clientClaims: false,
       runtimeCaching: [
         {
           urlPattern: 'https://i.getcomet.net/*',
