@@ -92,7 +92,7 @@
 </template>
 
 <script>
-import SortMenuContent from './SortMenuContent'
+import SortMenuContent from './HomeSortMenuContent'
 
 export default {
   name: 'SortMenu',

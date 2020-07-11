@@ -35,19 +35,19 @@
         </div>
       </div>
 
-      <div v-if="$route.name.startsWith('post')" class="ml-4">
+      <div v-if="$route.name === 'p-id-title'" class="ml-4">
         <CommentSortMenu />
       </div>
 
       <div
-        v-if="$route.path === '/' || $route.name.startsWith('topic-')"
+        v-if="$route.path === '/' || $route.name.startsWith('t-')"
         class="ml-4"
       >
         <TypeMenu />
       </div>
 
       <div
-        v-if="$route.path === '/' || $route.name.startsWith('topic-')"
+        v-if="$route.path === '/' || $route.name.startsWith('t-')"
         class="ml-2"
       >
         <SortMenu />
@@ -59,25 +59,58 @@
         hide-details
         flat
         dense
-        class="mr-4"
+        class="mr-6"
         style="max-width: 400px"
         :background-color="$vuetify.theme.dark ? '' : 'grey lighten-2'"
         solo
+        rounded
         label="Search"
         :append-icon="$vuetify.icons.values.mdiMagnify"
       />
 
-      <v-btn
-        rounded
-        depressed
-        class="betterbutton mr-4"
-        :to="$store.state.currentUser ? '/new' : '/login'"
-        nuxt
-        :color="$vuetify.theme.dark ? '#313235' : 'primary'"
-      >
-        <v-icon class="mr-2">{{ $vuetify.icons.values.mdiPencil }}</v-icon>
-        Submit
-      </v-btn>
+      <v-menu offset-y transition="slide-y-transition">
+        <template v-slot:activator="{ on }">
+          <v-btn
+            rounded
+            depressed
+            class="betterbutton mr-4 white--text"
+            :color="$vuetify.theme.dark ? 'primary' : 'primary'"
+            v-on="on"
+          >
+            <v-icon class="mr-2">{{ $vuetify.icons.values.mdiPlusBox }}</v-icon>
+            New Post
+          </v-btn>
+        </template>
+
+        <v-list>
+          <v-list-item>
+            <v-list-item-icon>
+              <v-icon>{{ $vuetify.icons.values.mdiText }}</v-icon>
+            </v-list-item-icon>
+            <v-list-item-content>
+              <v-list-item-title>Text Post</v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
+
+          <v-list-item>
+            <v-list-item-icon>
+              <v-icon>{{ $vuetify.icons.values.mdiLink }}</v-icon>
+            </v-list-item-icon>
+            <v-list-item-content>
+              <v-list-item-title>Link Post</v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
+
+          <v-list-item>
+            <v-list-item-icon>
+              <v-icon>{{ $vuetify.icons.values.mdiImage }}</v-icon>
+            </v-list-item-icon>
+            <v-list-item-content>
+              <v-list-item-title>Image Upload</v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
+        </v-list>
+      </v-menu>
 
       <v-menu
         v-if="$store.state.currentUser"
@@ -149,11 +182,11 @@
 
 <script>
 import notificationsGql from '../../gql/notifications.graphql'
-import CommentSortMenu from '../buttons/CommentSortMenu'
-import ProfileMenu from '../buttons/ProfileMenu'
-import SortMenu from '../buttons/SortMenu'
-import TypeMenu from '../buttons/TypeMenu'
-import UsernameMenu from '../UsernameMenu'
+import CommentSortMenu from '../buttons/comment_sort/CommentSortMenu'
+import ProfileMenu from '../buttons/profile/ProfileMenu'
+import SortMenu from '../buttons/home_sort/HomeSortMenu'
+import TypeMenu from '../buttons/home_type/HomeTypeMenu'
+import UsernameMenu from '../user/UsernameMenu'
 
 export default {
   name: 'DesktopAppBar',

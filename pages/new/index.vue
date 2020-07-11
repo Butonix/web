@@ -22,12 +22,7 @@
             <v-tab>Image Upload</v-tab>
           </v-tabs>
           <v-tabs-items v-model="tab" style="background-color: transparent">
-            <v-tab-item class="pb-7">
-              <TextEditor
-                v-model="textContent"
-                not-logged-in-label="Must log in to create a post"
-              />
-            </v-tab-item>
+            <v-tab-item class="pb-7"> </v-tab-item>
 
             <v-tab-item class="pb-7">
               <v-text-field
@@ -132,37 +127,19 @@
             </div>
           </v-row>
         </v-col>
-        <v-col v-if="$device.isDesktop">
-          <div v-show="tab === 0">
-            <div class="title mb-1">Preview</div>
-            <v-card flat>
-              <div class="pt-2 px-4">{{ title ? title : 'Title' }}</div>
-              <v-divider class="mt-2 mb-1" />
-              <div class="pb-1 pt-1 px-4 body-2" v-html="markedText" />
-            </v-card>
-          </div>
-          <div v-show="tab === 2">
-            <img ref="imagePreview" style="max-height: 500px" />
-          </div>
-        </v-col>
       </v-row>
     </v-form>
   </v-container>
 </template>
 
 <script>
-import marked from 'marked'
 import gql from 'graphql-tag'
 import isUrl from 'is-url'
-import xss from 'xss'
-import TextEditor from '../../components/TextEditor'
 import submitPostGql from '../../gql/submitPost.graphql'
 import searchTopicsGql from '../../gql/searchTopics.graphql'
 import topicGql from '../../gql/topic.graphql'
-import { escapeHtml } from '../../util/escapeHtml'
 
 export default {
-  components: { TextEditor },
   data: () => ({
     tab: 0,
     title: '',
@@ -214,11 +191,6 @@ export default {
     uploadValid() {
       if (this.tab !== 2 || !this.$refs.fileInput) return true
       return this.$refs.fileInput.valid
-    },
-    markedText() {
-      return this.textContent
-        ? xss(marked(escapeHtml(this.textContent)))
-        : marked('(No content written)')
     },
     previousTopicName() {
       if (this.prevRoute && this.prevRoute.name === 'Topic')

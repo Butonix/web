@@ -21,21 +21,6 @@
           <TypeMenu v-model="type" />
         </v-row>
 
-        <Post
-          v-for="post in topicFeed.slice(0, topicFeed.length - 1)"
-          :key="post.id"
-          :source="post"
-        />
-        <Post
-          v-for="post in topicFeed.slice(
-            topicFeed.length - 1,
-            topicFeed.length
-          )"
-          :key="post.id"
-          v-intersect.quiet="showMore"
-          :source="post"
-        />
-
         <v-progress-linear
           v-show="$apollo.queries.topicFeed.loading"
           indeterminate
@@ -49,18 +34,17 @@
 </template>
 
 <script>
-import SortMenu from '../../components/buttons/SortMenu'
-import TopicsSidebar from '../../components/TopicsSidebar'
+import SortMenu from '../../components/buttons/home_sort/HomeSortMenu'
+import TopicsSidebar from '../../components/topic/TopicsSidebar'
 import followedTopicsGql from '../../gql/followedTopics.graphql'
 import followTopicGql from '../../gql/followTopic.graphql'
 import unfollowTopicGql from '../../gql/unfollowTopic.graphql'
 import topicGql from '../../gql/topic.graphql'
 import topicFeedGql from '../../gql/topicFeed.graphql'
-import Post from '../../components/Post'
-import TypeMenu from '../../components/buttons/TypeMenu'
+import TypeMenu from '../../components/buttons/home_type/HomeTypeMenu'
 
 export default {
-  components: { TypeMenu, Post, TopicsSidebar, SortMenu },
+  components: { TypeMenu, TopicsSidebar, SortMenu },
   async asyncData(context) {
     const client = context.app.apolloProvider.defaultClient
     const topicData = await client.query({

@@ -26,14 +26,14 @@
       </div>
 
       <div
-        v-if="$route.path === '/' || $route.name.startsWith('topic-')"
+        v-if="$route.path === '/' || $route.name.startsWith('t-')"
         class="ml-4"
       >
         <TypeMenu />
       </div>
 
       <div
-        v-if="$route.path === '/' || $route.name.startsWith('topic-')"
+        v-if="$route.path === '/' || $route.name.startsWith('t-')"
         class="ml-2"
       >
         <SortMenu />
@@ -45,10 +45,10 @@
 </template>
 
 <script>
-import CommentSortMenu from '../buttons/CommentSortMenu'
-import ProfileMenu from '../buttons/ProfileMenu'
-import SortMenu from '../buttons/SortMenu'
-import TypeMenu from '../buttons/TypeMenu'
+import CommentSortMenu from '../buttons/comment_sort/CommentSortMenu'
+import ProfileMenu from '../buttons/profile/ProfileMenu'
+import SortMenu from '../buttons/home_sort/HomeSortMenu'
+import TypeMenu from '../buttons/home_type/HomeTypeMenu'
 
 export default {
   name: 'MobileAppBar',

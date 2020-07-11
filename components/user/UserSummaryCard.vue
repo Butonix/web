@@ -1,35 +1,20 @@
 <template>
-  <v-menu v-model="menu" offset-y open-on-hover :close-on-content-click="false">
-    <template v-slot:activator="{ on }">
-      <span v-on="on">
-        <nuxt-link :to="`/u/${userData.username}`" class="text--primary">
-          <v-avatar size="32">
-            <img :src="userData.profilePicUrl" />
-          </v-avatar>
-          <span class="ml-1" style="font-size: .875rem">
-            {{ userData.username }}
-          </span>
-          <v-chip
-            v-if="userData.tag"
-            dark
-            x-small
-            label
-            :color="userData.tagColor"
-            class="ml-1"
-            >{{ userData.tag }}</v-chip
-          >
-        </nuxt-link>
-      </span>
-    </template>
+  <v-card
+    :flat="$vuetify.theme.dark"
+    :outlined="!$vuetify.theme.dark"
+    :style="
+      $vuetify.theme.dark ? '' : 'background-color: #F5F5F5; border-width: 1px'
+    "
+    :max-width="isHover ? 400 : undefined"
+  >
+    <div v-if="!user" class="pa-4">
+      <v-row align="center" justify="center">
+        <v-progress-circular indeterminate />
+      </v-row>
+    </div>
 
-    <v-card style="border-radius: 10px" max-width="400">
-      <div v-if="!user || $apollo.queries.user.loading" class="pa-4">
-        <v-row align="center" justify="center">
-          <v-progress-circular indeterminate />
-        </v-row>
-      </div>
-
-      <v-list-item v-else>
+    <v-list-item v-else>
+      <nuxt-link :to="`/u/${user.username}`">
         <v-list-item-avatar size="64">
           <v-img
             v-if="user.profilePicUrl"
@@ -38,22 +23,28 @@
           />
           <v-icon v-else>{{ $vuetify.icons.values.mdiAccountOutline }}</v-icon>
         </v-list-item-avatar>
-        <v-list-item-content>
-          <v-list-item-title style="font-size: 1.25rem" class="my-0">
-            <v-row no-gutters>
-              <span>{{ user.username }}</span>
-              <v-chip
-                v-if="user.tag"
-                dark
-                small
-                label
-                :color="user.tagColor"
-                class="ml-1"
-                >{{ user.tag }}</v-chip
-              >
+      </nuxt-link>
 
-              <v-spacer />
+      <v-list-item-content>
+        <v-list-item-title style="font-size: 1.43rem" class="my-0">
+          <v-row no-gutters>
+            <nuxt-link :to="`/u/${user.username}`" class="text--primary">{{
+              user.username
+            }}</nuxt-link>
+            <v-chip
+              v-if="user.tag"
+              dark
+              small
+              label
+              :color="user.tagColor"
+              class="ml-2"
+              style="border-radius: 12px !important;"
+              >{{ user.tag }}</v-chip
+            >
 
+            <v-spacer />
+
+            <template v-if="isHover && !user.isCurrentUser">
               <v-tooltip bottom>
                 <template v-slot:activator="{ on }">
                   <v-btn
@@ -92,57 +83,55 @@
                 </template>
                 <span>Follow</span>
               </v-tooltip>
-            </v-row>
-          </v-list-item-title>
-          <v-list-item-subtitle
-            v-if="user.bio"
-            class="mt-1 mb-0"
-            style="white-space: normal"
-            >{{ user.bio }}</v-list-item-subtitle
-          >
-          <v-list-item-subtitle class="mt-2">
-            <v-chip small outlined>
-              <v-icon small left>{{ $vuetify.icons.values.mdiRocket }}</v-icon>
-              {{ user.endorsementCount }}
-            </v-chip>
+            </template>
+          </v-row>
+        </v-list-item-title>
+        <v-list-item-subtitle
+          v-if="user.bio"
+          class="mt-1 mb-0"
+          style="white-space: normal; font-size: 1rem"
+          >{{ user.bio }}</v-list-item-subtitle
+        >
+        <v-list-item-subtitle class="mt-2">
+          <v-chip small outlined>
+            <v-icon small left>{{ $vuetify.icons.values.mdiRocket }}</v-icon>
+            {{ user.endorsementCount }}
+          </v-chip>
 
-            <v-chip small outlined class="ml-2">
-              <v-icon small left>{{
-                $vuetify.icons.values.mdiCommentOutline
-              }}</v-icon>
-              {{ user.commentCount }}
-            </v-chip>
+          <v-chip small outlined class="ml-2">
+            <v-icon small left>{{
+              $vuetify.icons.values.mdiCommentOutline
+            }}</v-icon>
+            {{ user.commentCount }}
+          </v-chip>
 
-            <v-chip small outlined class="ml-2">
-              <v-icon small left>{{ $vuetify.icons.values.mdiPost }}</v-icon>
-              {{ user.postCount }}
-            </v-chip>
-          </v-list-item-subtitle>
-        </v-list-item-content>
-      </v-list-item>
-    </v-card>
-  </v-menu>
+          <v-chip small outlined class="ml-2">
+            <v-icon small left>{{ $vuetify.icons.values.mdiPost }}</v-icon>
+            {{ user.postCount }}
+          </v-chip>
+        </v-list-item-subtitle>
+      </v-list-item-content>
+    </v-list-item>
+  </v-card>
 </template>
 
 <script>
-import blockUserGql from '../gql/blockUser.graphql'
-import unblockUserGql from '../gql/unblockUser.graphql'
-import followUserGql from '../gql/followUser.graphql'
-import unfollowUserGql from '../gql/unfollowUser.graphql'
-import userGql from '../gql/user.graphql'
+import userGql from '../../gql/user.graphql'
+import blockUserGql from '../../gql/blockUser.graphql'
+import unblockUserGql from '../../gql/unblockUser.graphql'
+import followUserGql from '../../gql/followUser.graphql'
+import unfollowUserGql from '../../gql/unfollowUser.graphql'
 
 export default {
-  name: 'UsernameMenu',
+  name: 'UserSummaryCard',
   props: {
-    userData: {
+    user: {
       type: Object,
-      required: true
-    }
-  },
-  data() {
-    return {
-      user: null,
-      menu: false
+      default: null
+    },
+    isHover: {
+      type: Boolean,
+      default: false
     }
   },
   apollo: {
@@ -211,8 +200,4 @@ export default {
 }
 </script>
 
-<style scoped>
-.v-menu__content {
-  border-radius: 10px;
-}
-</style>
+<style scoped></style>

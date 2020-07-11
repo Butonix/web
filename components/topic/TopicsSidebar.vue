@@ -4,9 +4,9 @@
     :style="
       $vuetify.theme.dark
         ? 'background-color: transparent'
-        : 'background-color: #FAFAFA'
+        : 'background-color: #F5F5F5'
     "
-    style="border-width: 1px; border-radius: 10px"
+    style="border-width: 1px"
   >
     <v-tabs v-model="tab" background-color="transparent">
       <v-tab>Followed</v-tab>
@@ -90,9 +90,9 @@
 </template>
 
 <script>
-import followedTopicsGql from '../gql/followedTopics.graphql'
-import popularTopicsGql from '../gql/popularTopics.graphql'
-import searchTopicsGql from '../gql/searchTopics.graphql'
+import followedTopicsGql from '../../gql/followedTopics.graphql'
+import popularTopicsGql from '../../gql/popularTopics.graphql'
+import searchTopicsGql from '../../gql/searchTopics.graphql'
 
 export default {
   name: 'TopicsSidebar',

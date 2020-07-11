@@ -21,21 +21,6 @@
           />
         </v-row>
 
-        <Post
-          v-for="post in searchPosts.slice(0, searchPosts.length - 1)"
-          :key="post.id"
-          :source="post"
-        />
-        <Post
-          v-for="post in searchPosts.slice(
-            searchPosts.length - 1,
-            searchPosts.length
-          )"
-          :key="post.id"
-          v-intersect.quiet="showMore"
-          :source="post"
-        />
-
         <v-progress-linear
           v-show="$apollo.queries.searchPosts.loading"
           indeterminate
@@ -47,11 +32,10 @@
 
 <script>
 import searchPostsGql from '../../gql/searchPosts.graphql'
-import Post from '../../components/Post'
-import SortMenu from '../../components/buttons/SortMenu'
+import SortMenu from '../../components/buttons/home_sort/HomeSortMenu'
 
 export default {
-  components: { SortMenu, Post },
+  components: { SortMenu },
   data() {
     return {
       searchPosts: [],

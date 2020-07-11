@@ -36,13 +36,6 @@
             >Mark all as read</v-btn
           >
         </v-row>
-        <Notification
-          v-for="notification in notifications"
-          :key="notification.id"
-          :notification="notification"
-          :unread-only="unreadOnly"
-          class="mb-1"
-        />
         <div v-if="notifications.length === 0" class="title">
           No {{ unreadOnly ? 'new ' : '' }}notifications
         </div>
@@ -58,11 +51,9 @@
 
 <script>
 import notificationsGql from '../../gql/notifications.graphql'
-import Notification from '../../components/Notification'
 import markAllNotificationsReadGql from '../../gql/markAllNotificationsRead.graphql'
 
 export default {
-  components: { Notification },
   data() {
     return {
       notifications: [],

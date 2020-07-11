@@ -64,7 +64,7 @@
 </template>
 
 <script>
-import currentUserGql from '../../gql/currentUser.graphql'
+import currentUserGql from '../../../gql/currentUser.graphql'
 
 export default {
   name: 'ProfileMenuContent',

@@ -13,7 +13,7 @@
 </template>
 
 <script>
-import Snackbar from '../components/Snackbar'
+import Snackbar from '../components/bars/Snackbar'
 import DesktopAppBar from '../components/bars/DesktopAppBar'
 import MobileAppBar from '../components/bars/MobileAppBar'
 import BottomNavBar from '../components/bars/BottomNavBar'

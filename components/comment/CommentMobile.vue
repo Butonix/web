@@ -17,7 +17,7 @@
       }"
       @click="expand"
     >
-      <div class="text--secondary" style="font-size: .875rem">
+      <div class="text--secondary">
         <span class="font-weight-medium">{{ comment.author.username }}</span>
         <span
           >{{ comment.endorsementCount }} rocket{{
@@ -26,11 +26,6 @@
         >
         <span>{{ timeSince }}</span>
       </div>
-      <TextContent
-        v-if="!editing"
-        :text-content="comment.textContent"
-        class="body-2 comment text--primary"
-      />
     </v-card>
 
     <v-expand-transition>
@@ -67,18 +62,16 @@
 
 <script>
 import { formatDistanceToNowStrict } from 'date-fns'
-import toggleCommentEndorsementGql from '../gql/toggleCommentEndorsement.graphql'
-import submitCommentGql from '../gql/submitComment.graphql'
-import postCommentsGql from '../gql/postComments.graphql'
-import recordPostViewGql from '../gql/recordPostView.graphql'
-import deleteCommentGql from '../gql/deleteComment.graphql'
-import editCommentGql from '../gql/editComment.graphql'
-import { timeSince } from '../util/timeSince'
-import TextContent from './TextContent'
+import toggleCommentEndorsementGql from '../../gql/toggleCommentEndorsement.graphql'
+import submitCommentGql from '../../gql/submitComment.graphql'
+import postCommentsGql from '../../gql/postComments.graphql'
+import recordPostViewGql from '../../gql/recordPostView.graphql'
+import deleteCommentGql from '../../gql/deleteComment.graphql'
+import editCommentGql from '../../gql/editComment.graphql'
+import { timeSince } from '../../util/timeSince'
 
 export default {
   name: 'MobileComment',
-  components: { TextContent },
   props: {
     comment: {
       type: Object,
@@ -278,10 +271,4 @@ export default {
 }
 </script>
 
-<style scoped>
-.comment >>> blockquote {
-  padding: 0 8px !important;
-  margin-left: 5px !important;
-  border-left: 2px solid var(--v-primary-base) !important;
-}
-</style>
+<style scoped></style>

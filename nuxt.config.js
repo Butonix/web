@@ -57,7 +57,18 @@ import {
   mdiStar,
   mdiAccountPlusOutline,
   mdiAccountCheckOutline,
-  mdiAccountCancelOutline
+  mdiAccountCancelOutline,
+  mdiFormatHeader1,
+  mdiFormatHeader2,
+  mdiFormatHeader3,
+  mdiMinus,
+  mdiFormatUnderline,
+  mdiCodeNotEqualVariant,
+  mdiClose,
+  mdiCloseCircleOutline,
+  mdiCloseCircle,
+  mdiTelescope,
+  mdiPlusBoxOutline
 } from '@mdi/js'
 
 export default {
@@ -87,14 +98,13 @@ export default {
   /*
    ** Global CSS
    */
-  css: ['~/css/main.css'],
+  css: ['~/css/main.css', '~/css/main.scss'],
   /*
    ** Plugins to load before mounting the App
    */
   plugins: [
     '~/plugins/vue-youtube',
     '~/plugins/vue-clipboard2',
-    '~/plugins/marked',
     '~/plugins/vue-virtual-scroller'
   ],
   /*
@@ -267,7 +277,18 @@ export default {
         mdiStar,
         mdiAccountPlusOutline,
         mdiAccountCheckOutline,
-        mdiAccountCancelOutline
+        mdiAccountCancelOutline,
+        mdiFormatHeader1,
+        mdiFormatHeader2,
+        mdiFormatHeader3,
+        mdiMinus,
+        mdiFormatUnderline,
+        mdiCodeNotEqualVariant,
+        mdiClose,
+        mdiCloseCircleOutline,
+        mdiCloseCircle,
+        mdiTelescope,
+        mdiPlusBoxOutline
       }
     },
     theme: {

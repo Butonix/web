@@ -66,9 +66,7 @@
           </v-tab-item>
 
           <v-tab-item>
-            <div v-if="hiddenPosts.length > 0">
-              <Post v-for="post in hiddenPosts" :key="post.id" :source="post" />
-            </div>
+            <div v-if="hiddenPosts.length > 0"></div>
             <v-list v-else>
               <v-list-item>
                 <v-list-item-content>
@@ -96,10 +94,8 @@ import hiddenTopicsGql from '../../gql/hiddenTopics.graphql'
 import hideTopicGql from '../../gql/hideTopic.graphql'
 import unhideTopicGql from '../../gql/unhideTopic.graphql'
 import hiddenPostsGql from '../../gql/hiddenPosts.graphql'
-import Post from '../../components/Post'
 
 export default {
-  components: { Post },
   async asyncData(context) {
     const client = context.app.apolloProvider.defaultClient
     const hiddenTopicsData = await client.query({

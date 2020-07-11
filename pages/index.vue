@@ -19,7 +19,9 @@
               :index="index"
               :size-dependencies="[item.title, item.textContent]"
             >
-              <ItemComponent :source="item" :index="index" :active="active" />
+              <div class="pb-3">
+                <PostDesktop :post="item" :index="index" :active="active" />
+              </div>
             </DynamicScrollerItem>
           </template>
         </DynamicScroller>
@@ -40,20 +42,19 @@
 </template>
 
 <script>
-import TopicsSidebar from '../components/TopicsSidebar'
+import TopicsSidebar from '../components/topic/TopicsSidebar'
 import InfoLinks from '../components/InfoLinks'
 import homeFeedGql from '../gql/homeFeed.graphql'
 import globalStickiesGql from '../gql/globalStickies.graphql'
-import ItemComponent from '../components/ItemComponent'
-import Post from '../components/Post'
-import UserSideCard from '../components/UserSideCard'
+import PostDesktop from '../components/post/PostDesktop'
+import UserSideCard from '../components/user/UserSideCard'
 
 export default {
   name: 'Index',
   scrollToTop: false,
   components: {
     UserSideCard,
-    ItemComponent,
+    PostDesktop,
     InfoLinks,
     TopicsSidebar
   },
@@ -64,9 +65,7 @@ export default {
         : true,
       homeFeed: [],
       globalStickies: [],
-      hasMore: true,
-      postComponent: Post,
-      itemComponent: ItemComponent
+      hasMore: true
     }
   },
   computed: {
@@ -139,13 +138,14 @@ export default {
         }
       },
       skip() {
-        return this.$route.path !== '/'
-      },
-      fetchPolicy: 'cache-first'
+        return this.$route.name !== 'index'
+      }
     },
     globalStickies: {
       query: globalStickiesGql,
-      fetchPolicy: 'cache-first'
+      skip() {
+        return this.$route.name !== 'index'
+      }
     }
   },
   methods: {

@@ -2,7 +2,7 @@
   <v-card
     flat
     :outlined="!isPostView"
-    style="background-color: transparent; border-width: 1px; border-radius: 10px"
+    style="background-color: transparent; border-width: 1px"
     :tile="isPostView"
     :ripple="false"
     :class="isPostView ? 'pb-0 px-4 pt-3' : 'pa-2'"
@@ -19,7 +19,7 @@
         >
           {{ post.title }}
         </div>
-        <div class="text--secondary" style="font-size: .875rem">
+        <div class="text--secondary">
           {{ post.author.username }}
           <span class="font-weight-bold">&middot;</span>
           {{ timeSince }}
@@ -68,11 +68,6 @@
       class="pa-0"
     >
       <div class="pt-3">
-        <TextContent
-          v-if="!editing"
-          :text-content="post.textContent"
-          class="body-2 text--primary"
-        />
         <div v-if="editing">
           <v-textarea v-model="newTextContent" hide-details filled />
           <v-row class="mx-0 my-2">
@@ -217,14 +212,12 @@
 
 <script>
 import { formatDistanceToNowStrict } from 'date-fns'
-import editPostGql from '../gql/editPost.graphql'
-import { timeSince } from '../util/timeSince'
-import togglePostEndorsementGql from '../gql/togglePostEndorsement.graphql'
-import TextContent from './TextContent'
+import editPostGql from '../../gql/editPost.graphql'
+import { timeSince } from '../../util/timeSince'
+import togglePostEndorsementGql from '../../gql/togglePostEndorsement.graphql'
 
 export default {
   name: 'MobilePost',
-  components: { TextContent },
   props: {
     post: {
       type: Object,

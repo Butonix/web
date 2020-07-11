@@ -1,5 +1,12 @@
 @import '~vuetify/src/styles/settings/variables';
 
+$font-size-root: 14px;
+$border-radius-root: 10px;
+$list-item-dense-title-font-size: .93rem;
+$list-item-action-icon-margin: 16px;
+$snackbar-content-font-size: 1rem;
+$list-item-dense-title-font-weight: 400;
+
 $material-dark: (
   'background': #202124,
   'surface': #202124,
@@ -18,12 +25,21 @@ $material-light: (
 );
 
 $container-max-widths: (
-  'md': map-get($grid-breakpoints, 'md') * 0.85,
-  'lg': map-get($grid-breakpoints, 'lg') * 0.85,
+  'md': 100%,
+  'lg': 100%,
   'xl': map-get($grid-breakpoints, 'xl') * 0.85
 );
 
 $chip-outlined-active-opacity: 0;
 $card-link-focus-opacity: 0;
+
+$code-background-color: #000000;
+$code-color: #FFFFFF;
+$code-kbd-border-radius: 5px;
+$code-kbd-font-size: 0.8rem;
+$code-kbd-font-weight: bold;
+$code-padding: 0.2rem 0.4rem;
+$blockquote-font-size: 1rem;
+$blockquote-font-weight: 400;
 
 @import '~vuetify/src/styles/styles.sass';

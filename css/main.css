@@ -6,12 +6,12 @@
 }*/
 
 .hoverable:hover {
-  text-decoration: underline;
+  text-decoration: underline !important;
 }
 
 .hoverable {
-  cursor: pointer;
-  text-decoration: none;
+  cursor: pointer !important;
+  text-decoration: none !important;
 }
 
 .hidescroll::-webkit-scrollbar {
@@ -19,8 +19,8 @@
 }
 
 .hidescroll {
-  overflow: -moz-scrollbars-none;
-  -ms-overflow-style: none;
+  overflow: -moz-scrollbars-none !important;
+  -ms-overflow-style: none !important;
 }
 
 .betterbutton {
@@ -29,80 +29,28 @@
   letter-spacing: normal !important;
 }
 
+.betterbutton > .v-btn__content {
+  font-size: 1rem !important;
+}
+
 a {
-  text-decoration: none;
+  text-decoration: none !important;
 }
 
-hr {
-  margin-top: 7px;
-  margin-bottom: 7px;
+.ProseMirror:focus {
+  outline: none !important;
 }
 
-ul {
-  margin-top: 5px;
-  margin-bottom: 5px;
-  margin-left: 40px;
+.bettercard {
+  background-color: transparent !important;
+  border-width: 1px !important;
 }
 
-ol {
-  margin-top: 5px;
-  margin-bottom: 5px;
-  margin-left: 40px;
+.v-btn--active::before {
+  opacity: 0 !important;
 }
 
-p {
-  margin-top: 5px;
-  margin-bottom: 5px !important;
+.v-btn--active:hover::before {
+  opacity: 0.08 !important;
 }
 
-h1 {
-  margin-top: 15px;
-  margin-bottom: 15px;
-  font-size: 18px;
-}
-
-.vb > .vb-dragger {
-  z-index: 5;
-  width: 12px;
-  right: 0;
-}
-
-.vb > .vb-dragger > .vb-dragger-styler {
-  -webkit-backface-visibility: hidden;
-  backface-visibility: hidden;
-  -webkit-transform: rotate3d(0,0,0,0);
-  transform: rotate3d(0,0,0,0);
-  -webkit-transition:
-    background-color 100ms ease-out,
-    margin 100ms ease-out,
-    height 100ms ease-out;
-  transition:
-    background-color 100ms ease-out,
-    margin 100ms ease-out,
-    height 100ms ease-out;
-  background-color: rgba(48, 121, 244,.1);
-  margin: 5px 5px 5px 0;
-  border-radius: 20px;
-  height: calc(100% - 10px);
-  display: block;
-}
-
-.vb.vb-scrolling-phantom > .vb-dragger > .vb-dragger-styler {
-  background-color: rgba(48, 121, 244,.3);
-}
-
-.vb > .vb-dragger:hover > .vb-dragger-styler {
-  background-color: rgba(48, 121, 244,.5);
-  margin: 0px;
-  height: 100%;
-}
-
-.vb.vb-dragging > .vb-dragger > .vb-dragger-styler {
-  background-color: rgba(48, 121, 244,.5);
-  margin: 0px;
-  height: 100%;
-}
-
-.vb.vb-dragging-phantom > .vb-dragger > .vb-dragger-styler {
-  background-color: rgba(48, 121, 244,.5);
-}

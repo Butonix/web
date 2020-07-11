@@ -77,12 +77,12 @@
 </template>
 
 <script>
-import unhideTopicGql from '../gql/unhideTopic.graphql'
-import hideTopicGql from '../gql/hideTopic.graphql'
-import unfollowTopicGql from '../gql/unfollowTopic.graphql'
-import followTopicGql from '../gql/followTopic.graphql'
-import followedTopicsGql from '../gql/followedTopics.graphql'
-import topicGql from '../gql/topic.graphql'
+import unhideTopicGql from '../../gql/unhideTopic.graphql'
+import hideTopicGql from '../../gql/hideTopic.graphql'
+import unfollowTopicGql from '../../gql/unfollowTopic.graphql'
+import followTopicGql from '../../gql/followTopic.graphql'
+import followedTopicsGql from '../../gql/followedTopics.graphql'
+import topicGql from '../../gql/topic.graphql'
 
 export default {
   name: 'TopicChip',

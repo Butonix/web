@@ -25,4 +25,8 @@ export default {
 }
 </script>
 
-<style scoped></style>
+<style scoped>
+.v-snack__content {
+  font-size: 1rem;
+}
+</style>
