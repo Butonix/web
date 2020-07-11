@@ -68,7 +68,8 @@ import {
   mdiCloseCircleOutline,
   mdiCloseCircle,
   mdiTelescope,
-  mdiPlusBoxOutline
+  mdiPlusBoxOutline,
+  mdiLinkOff
 } from '@mdi/js'
 
 export default {
@@ -288,7 +289,8 @@ export default {
         mdiCloseCircleOutline,
         mdiCloseCircle,
         mdiTelescope,
-        mdiPlusBoxOutline
+        mdiPlusBoxOutline,
+        mdiLinkOff
       }
     },
     theme: {

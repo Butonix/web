@@ -33,10 +33,6 @@
   font-size: 1rem !important;
 }
 
-a {
-  text-decoration: none !important;
-}
-
 .ProseMirror:focus {
   outline: none !important;
 }

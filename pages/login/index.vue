@@ -224,7 +224,7 @@ export default {
           .then(({ data }) => data && data.signUp)
         await this.$apolloHelpers.onLogin(res.accessToken)
         await this.$store.dispatch('fetchCurrentUser')
-        await this.$router.push('/')
+        this.$router.back()
         this.reset()
       } catch (e) {
         this.err = e.message
@@ -248,7 +248,7 @@ export default {
           .then(({ data }) => data && data.login)
         await this.$apolloHelpers.onLogin(res.accessToken)
         await this.$store.dispatch('fetchCurrentUser')
-        await this.$router.push('/')
+        this.$router.back()
         this.reset()
       } catch (e) {
         this.err = e.message

@@ -7,7 +7,7 @@
   >
     <div class="overline text--secondary">NEW COMMENT</div>
 
-    <Editor v-model="commentJSON" editable />
+    <Editor v-model="commentHTML" editable />
 
     <v-card-actions class="pl-0 pt-0">
       <span class="caption text--secondary"
@@ -38,8 +38,8 @@ export default {
   components: { Editor },
   props: {
     value: {
-      type: Object,
-      default: null
+      type: String,
+      default: `<p></p>`
     },
     loading: {
       type: Boolean,
@@ -48,20 +48,17 @@ export default {
   },
   data() {
     return {
-      commentJSON: this.value
+      commentHTML: this.value
     }
   },
   computed: {
     isEditorEmpty() {
-      return isEditorEmpty(this.commentJSON)
+      return isEditorEmpty(this.commentHTML)
     }
   },
   watch: {
-    commentJSON: {
-      deep: true,
-      handler(val) {
-        this.$emit('input', val)
-      }
+    commentHTML(val) {
+      this.$emit('input', val)
     }
   }
 }

@@ -92,7 +92,14 @@
                     : ''
                 "
               >
-                <Editor :value="post.textContent" />
+                <div
+                  :class="
+                    $vuetify.theme.dark
+                      ? 'editor-dark__content'
+                      : 'editor-light__content'
+                  "
+                  v-html="post.textContent"
+                />
               </div>
 
               <a
@@ -179,11 +186,10 @@ import { formatDistanceToNowStrict } from 'date-fns'
 import togglePostEndorsementGql from '../../gql/togglePostEndorsement.graphql'
 import UsernameMenu from '../user/UsernameMenu'
 import TopicChip from '../topic/TopicChip'
-import Editor from '../editor/Editor'
 
 export default {
   name: 'PostDesktop',
-  components: { Editor, TopicChip, UsernameMenu, Tweet },
+  components: { TopicChip, UsernameMenu, Tweet },
   mixins: [
     IdState({
       idProp: (vm) => vm.post.id

@@ -6,81 +6,83 @@
       </v-col>
       <v-col xl="7" lg="8" cols="9">
         <div class="pb-3">
-          <v-fade-transition hide-on-leave>
-            <v-card v-if="!post" outlined class="bettercard">
-              <v-skeleton-loader
-                transition="fade-transition"
-                type="list-item-avatar-three-line"
-                height="134"
-              />
-            </v-card>
-            <ItemComponent v-else :post="post" is-post-view />
-          </v-fade-transition>
+          <v-skeleton-loader
+            v-if="!post"
+            transition="fade-transition"
+            type="list-item-avatar-three-line"
+            height="134"
+          />
+          <ItemComponent v-else :post="post" is-post-view />
         </div>
 
-        <v-fade-transition hide-on-leave>
-          <v-row v-if="!writingComment" no-gutters>
-            <v-btn
-              v-if="!writingComment"
-              rounded
-              depressed
-              color="primary"
-              class="betterbutton mb-3"
-              @click="writingComment = true"
-            >
-              <v-icon class="mr-2">{{
-                $vuetify.icons.values.mdiPencil
-              }}</v-icon>
-              New Comment
-            </v-btn>
-
-            <v-spacer />
-
-            <CommentSortMenu />
-          </v-row>
-        </v-fade-transition>
-
-        <v-fade-transition hide-on-leave>
-          <CommentEditor
-            v-if="writingComment"
-            v-model="commentJSON"
-            class="mb-3"
-            :loading="submitBtnLoading"
-            @submitted="submitComment"
-            @cancelled="writingComment = false"
-          />
-        </v-fade-transition>
-
-        <v-fade-transition hide-on-leave>
-          <DynamicScroller
-            v-if="postComments.length > 0"
-            page-mode
-            :items="threadedComments"
-            :min-item-size="54"
+        <v-row v-if="!writingComment" no-gutters>
+          <v-btn
+            v-if="$store.state.currentUser"
+            rounded
+            depressed
+            color="primary"
+            class="betterbutton mb-3"
+            @click="writingComment = true"
           >
-            <template v-slot="{ item, index, active }">
-              <DynamicScrollerItem
-                :item="item"
-                :active="active"
-                :index="index"
-                :size-dependencies="[item.textContent]"
-              >
-                <div class="pb-3">
-                  <CommentDesktop :post-view="postView" :comment="item" />
-                </div>
-              </DynamicScrollerItem>
-            </template>
-          </DynamicScroller>
+            <v-icon class="mr-2">{{ $vuetify.icons.values.mdiPencil }}</v-icon>
+            New Comment
+          </v-btn>
 
-          <v-progress-linear
-            v-else-if="$apollo.queries.postComments.loading"
-            indeterminate
-          />
+          <v-btn
+            v-else
+            rounded
+            depressed
+            color="primary"
+            class="betterbutton mb-3"
+            to="/login"
+            nuxt
+          >
+            <v-icon class="mr-2">{{ $vuetify.icons.values.mdiPencil }}</v-icon>
+            Login to Comment
+          </v-btn>
 
-          <v-row v-else justify="center" no-gutters>
-            No one has commented yet. Will you be the first?
-          </v-row>
-        </v-fade-transition>
+          <v-spacer />
+
+          <CommentSortMenu />
+        </v-row>
+
+        <CommentEditor
+          v-else
+          v-model="commentHTML"
+          class="mb-3"
+          :loading="submitBtnLoading"
+          @submitted="submitComment"
+          @cancelled="writingComment = false"
+        />
+
+        <DynamicScroller
+          v-if="postComments.length > 0"
+          page-mode
+          :items="threadedComments"
+          :min-item-size="54"
+        >
+          <template v-slot="{ item, index, active }">
+            <DynamicScrollerItem
+              :item="item"
+              :active="active"
+              :index="index"
+              :size-dependencies="[item.textContent]"
+            >
+              <div class="pb-3">
+                <CommentDesktop :post-view="postView" :comment="item" />
+              </div>
+            </DynamicScrollerItem>
+          </template>
+        </DynamicScroller>
+
+        <v-progress-linear
+          v-else-if="$apollo.queries.postComments.loading"
+          indeterminate
+        />
+
+        <v-row v-else justify="center" no-gutters>
+          No one has commented yet. Will you be the first?
+        </v-row>
 
         <div style="height: 500px" />
       </v-col>
@@ -114,7 +116,7 @@ export default {
       postView: null,
       submitCommentErr: '',
       writingComment: false,
-      commentJSON: null,
+      commentHTML: null,
       submitBtnLoading: false
     }
   },
@@ -164,7 +166,7 @@ export default {
           mutation: submitCommentGql,
           variables: {
             postId: this.postId,
-            textContent: JSON.stringify(this.commentJSON)
+            textContent: this.commentHTML
           },
           update: (store, { data: { submitComment } }) => {
             const data = store.readQuery({
@@ -185,7 +187,7 @@ export default {
             })
           }
         })
-        this.commentJSON = null
+        this.commentHTML = null
         this.writingComment = false
 
         await this.$apollo.mutate({

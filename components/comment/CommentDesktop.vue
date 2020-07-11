@@ -27,7 +27,7 @@
           class="pt-4 pb-1 px-4"
           style="background-color: #202124; border-radius: 10px"
         >
-          <Editor v-model="idState.editJSON" editable />
+          <Editor v-model="idState.editHTML" editable />
           <v-row>
             <v-spacer />
             <v-btn text color="primary" @click="idState.editing = false"
@@ -45,7 +45,13 @@
         </div>
       </div>
 
-      <Editor v-else :value="JSON.parse(comment.textContent)" />
+      <div
+        v-else
+        :class="
+          $vuetify.theme.dark ? 'editor-dark__content' : 'editor-light__content'
+        "
+        v-html="comment.textContent"
+      />
     </v-card-text>
     <v-card-actions class="px-4">
       <UsernameMenu v-if="comment.author" :user-data="comment.author" />
@@ -129,7 +135,7 @@
         }"
         class="pt-4 pb-1 px-4"
       >
-        <Editor v-model="idState.replyJSON" editable />
+        <Editor v-model="idState.replyHTML" editable />
         <v-row>
           <v-spacer />
 
@@ -150,28 +156,6 @@
     </div>
 
     <div v-show="!idState.childrenCollapsed">
-      <!--<DynamicScroller
-        v-if="comment.childComments.length > 0"
-        page-mode
-        :items="comment.childComments"
-        :min-item-size="54"
-      >
-        <template v-slot="{ item, index, active }">
-          <DynamicScrollerItem
-            :item="item"
-            :active="active"
-            :index="index"
-            :size-dependencies="[item.textContent]"
-          >
-            <CommentDesktop
-              :post-view="postView"
-              :comment="item"
-              :level="level + 1"
-            />
-          </DynamicScrollerItem>
-        </template>
-      </DynamicScroller>-->
-
       <CommentDesktop
         v-for="c in comment.childComments"
         :key="c.id"
@@ -207,12 +191,12 @@ export default {
   idState() {
     return {
       replying: false,
-      replyJSON: null,
+      replyHTML: null,
       submitBtnLoading: false,
       editBtnLoading: false,
       childrenCollapsed: false,
       editing: false,
-      editJSON: null,
+      editHTML: null,
       deleted: false
     }
   },
@@ -245,10 +229,10 @@ export default {
       )
     },
     isEditEmpty() {
-      return isEditorEmpty(this.idState.editJSON)
+      return isEditorEmpty(this.idState.editHTML)
     },
     isReplyEmpty() {
-      return isEditorEmpty(this.idState.replyJSON)
+      return isEditorEmpty(this.idState.replyHTML)
     },
     borderColor() {
       const l = (this.level - 1) % 5
@@ -269,7 +253,7 @@ export default {
   },
   watch: {
     'idState.editing'(editing) {
-      if (editing) this.idState.editJSON = JSON.parse(this.comment.textContent)
+      if (editing) this.idState.editHTML = this.comment.textContent
     }
   },
   methods: {
@@ -278,12 +262,12 @@ export default {
         'Are you sure you want to delete this comment?'
       )
       if (!confirmed) return
-      this.comment.textContent = JSON.stringify({
+      this.comment.textContent = {
         type: 'doc',
         content: [
           { type: 'paragraph', content: [{ text: '[deleted]', type: 'text' }] }
         ]
-      })
+      }
       this.comment.authorId = null
       this.comment.author = null
       this.idState.deleted = true
@@ -298,10 +282,10 @@ export default {
         mutation: editCommentGql,
         variables: {
           commentId: this.comment.id,
-          newTextContent: JSON.stringify(this.idState.editJSON)
+          newTextContent: this.idState.editHTML
         }
       })
-      this.comment.textContent = JSON.stringify(this.idState.editJSON)
+      this.comment.textContent = this.idState.editHTML
       this.idState.editing = false
       this.idState.editBtnLoading = false
     },
@@ -311,7 +295,7 @@ export default {
         await this.$apollo.mutate({
           mutation: submitCommentGql,
           variables: {
-            textContent: JSON.stringify(this.idState.replyJSON),
+            textContent: this.idState.replyHTML,
             postId: this.comment.postId,
             parentCommentId: this.comment.id
           },
@@ -332,7 +316,7 @@ export default {
               },
               data
             })
-            this.idState.replyJSON = null
+            this.idState.replyHTML = null
             this.idState.replying = false
           }
         })

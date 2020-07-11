@@ -1,5 +1,6 @@
 a {
   color: inherit !important;
+  text-decoration: none;
 }
 
 h1,
@@ -47,21 +48,22 @@ $color-grey: #dddddd;
 
     pre {
       padding: 0.7rem 1rem !important;
-      border-radius: 5px !important;
+      border-radius: 10px !important;
       background: $color-black !important;
       color: $color-white !important;
-      font-size: 0.8rem !important;
+      font-size: 0.93rem !important;
       overflow-x: auto !important;
 
       code {
         display: block !important;
+        background-color: transparent;
       }
     }
 
     p code {
       padding: 0.2rem 0.4rem !important;
       border-radius: 5px !important;
-      font-size: 0.8rem !important;
+      font-size: 0.93rem !important;
       font-weight: bold !important;
       background: #202124 !important;
       color: rgba($color-white, 0.8) !important;
@@ -176,21 +178,26 @@ $color-grey: #dddddd;
 
     pre {
       padding: 0.7rem 1rem !important;
-      border-radius: 5px !important;
-      background: $color-black !important;
-      color: $color-white !important;
-      font-size: 0.8rem !important;
+      border-radius: 10px !important;
+      background: #F5F5F5 !important;
+      border-width: 1px;
+      border-style: solid;
+      border-color: rgba(0, 0, 0, 0.12);
+      color: $color-black !important;
+      font-size: 0.93rem !important;
       overflow-x: auto !important;
 
       code {
         display: block !important;
+        background-color: transparent !important;
+        color: $color-black;
       }
     }
 
     p code {
       padding: 0.2rem 0.4rem !important;
       border-radius: 5px !important;
-      font-size: 0.8rem !important;
+      font-size: 0.93rem !important;
       font-weight: bold !important;
       background: #202124 !important;
       color: rgba($color-white, 0.8) !important;
@@ -340,5 +347,9 @@ $color-grey: #dddddd;
     border: none !important;
     background: transparent !important;
     color: $color-white !important;
+  }
+
+  &__input:focus {
+    outline: none !important;
   }
 }
