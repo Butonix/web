@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <!--<div>
     <v-card outlined class="bettercard">
       <v-list-item class="px-2">
         <a
@@ -15,12 +15,12 @@
             size="64"
             :color="$vuetify.theme.dark ? '#313235' : 'grey lighten-2'"
           >
-            <img
+            <img alt="Thumbnail"
               v-if="post.thumbnailUrl"
               style="border-radius: 12px; object-fit: cover"
               :src="post.thumbnailUrl"
             />
-            <v-icon v-else size="32" class="text--secondary">{{
+            <v-icon v-else size="32" class="text&#45;&#45;secondary">{{
               $vuetify.icons.values.mdiWeb
             }}</v-icon>
           </v-list-item-avatar>
@@ -34,13 +34,13 @@
             <v-icon color="primary" size="13" class="mr-1">{{
               $vuetify.icons.values.mdiStar
             }}</v-icon>
-            <span class="overline primary--text mb-0">ANNOUNCEMENT</span>
+            <span class="overline primary&#45;&#45;text mb-0">ANNOUNCEMENT</span>
           </span>
 
           <v-list-item-title style="white-space: normal">
             <a
               v-if="post.type !== 'TEXT' && isPostView"
-              class="text--primary mr-1"
+              class="text&#45;&#45;primary mr-1"
               style="font-size: 1.125rem; font-weight: 400"
               :href="post.link"
               target="_blank"
@@ -50,7 +50,7 @@
             </a>
             <nuxt-link
               v-else
-              class="text--primary mr-1"
+              class="text&#45;&#45;primary mr-1"
               style="font-size: 1.125rem; font-weight: 400"
               :to="`/p/${post.id}/${urlName}`"
             >
@@ -60,7 +60,7 @@
             <nuxt-link
               v-if="post.type === 'TEXT'"
               :to="`/p/${post.id}/${urlName}`"
-              class="text--secondary caption hoverable"
+              class="text&#45;&#45;secondary caption hoverable"
             >
               (text post)
             </nuxt-link>
@@ -69,7 +69,7 @@
               :href="post.link"
               target="_blank"
               rel="noopener"
-              class="text--secondary caption hoverable"
+              class="text&#45;&#45;secondary caption hoverable"
               >({{ post.domain }})</a
             >
           </v-list-item-title>
@@ -116,12 +116,12 @@
           :color="$vuetify.theme.dark ? '#313235' : 'grey lighten-2'"
           @click.stop.prevent="toggleEmbed"
         >
-          <img
+          <img alt="Thumbnail"
             v-if="post.thumbnailUrl"
             style="border-radius: 12px; object-fit: cover"
             :src="post.thumbnailUrl"
           />
-          <v-icon v-else size="32" class="text--secondary">{{
+          <v-icon v-else size="32" class="text&#45;&#45;secondary">{{
             $vuetify.icons.values.mdiWeb
           }}</v-icon>
         </v-list-item-avatar>
@@ -136,7 +136,7 @@
           <UsernameMenu :user-data="post.author" />
         </div>
 
-        <span class="caption text--secondary ml-2">{{ timeSince }}</span>
+        <span class="caption text&#45;&#45;secondary ml-2">{{ timeSince }}</span>
 
         <v-spacer />
 
@@ -144,7 +144,7 @@
           small
           rounded
           text
-          class="mr-2 ml-0  text--secondary"
+          class="mr-2 ml-0  text&#45;&#45;secondary"
           :to="`/p/${post.id}/${urlName}`"
           nuxt
         >
@@ -159,7 +159,7 @@
           rounded
           text
           class="mr-2 ml-0 "
-          :class="post.isEndorsed ? '' : 'text--secondary'"
+          :class="post.isEndorsed ? '' : 'text&#45;&#45;secondary'"
           :color="post.isEndorsed ? 'primary' : ''"
           @click.stop.prevent="toggleEndorsement"
         >
@@ -169,7 +169,7 @@
           {{ post.endorsementCount }}
         </v-btn>
 
-        <v-btn small icon class="text--secondary ml-0">
+        <v-btn small icon class="text&#45;&#45;secondary ml-0">
           <v-icon size="20">{{ $vuetify.icons.values.mdiDotsVertical }}</v-icon>
         </v-btn>
       </v-card-actions>
@@ -193,22 +193,162 @@
         />
       </div>
     </v-dialog>
-  </div>
+  </div>-->
+
+  <v-card v-if="$device.isDesktop" outlined class="bettercard">
+    <v-list-item class="px-2">
+      <PostThumbnail :post="post" @thumbnailclick="toggleEmbed" />
+
+      <v-list-item-content
+        style="align-self: start; align-content: start"
+        class="pt-2"
+      >
+        <span v-if="post.sticky">
+          <v-icon color="primary" size="13" class="mr-1">{{
+            $vuetify.icons.values.mdiStar
+          }}</v-icon>
+          <span class="overline primary--text mb-0">ANNOUNCEMENT</span>
+        </span>
+
+        <v-list-item-title style="white-space: normal">
+          <a
+            v-if="post.type !== 'TEXT' && isPostView"
+            class="text--primary mr-1"
+            style="font-size: 1.125rem; font-weight: 400"
+            :href="post.link"
+            target="_blank"
+            rel="noopener"
+          >
+            {{ post.title }}
+          </a>
+          <nuxt-link
+            v-else
+            class="text--primary mr-1"
+            style="font-size: 1.125rem; font-weight: 400"
+            :to="`/p/${post.id}/${urlName}`"
+          >
+            {{ post.title }}
+          </nuxt-link>
+
+          <nuxt-link
+            v-if="post.type === 'TEXT'"
+            :to="`/p/${post.id}/${urlName}`"
+            class="text--secondary caption hoverable"
+          >
+            (text post)
+          </nuxt-link>
+          <a
+            v-else
+            :href="post.link"
+            target="_blank"
+            rel="noopener"
+            class="text--secondary caption hoverable"
+            >({{ post.domain }})</a
+          >
+        </v-list-item-title>
+        <v-list-item-subtitle style="white-space: normal" class="pt-1">
+          <div>
+            <v-chip
+              v-for="topic in post.topics"
+              :key="topic.name"
+              outlined
+              label
+              small
+              class="mr-1 px-2"
+              nuxt
+              :to="`/t/${topic.name}`"
+            >
+              <span>{{ topic.capitalizedName }}</span>
+            </v-chip>
+          </div>
+
+          <div v-if="post.type === 'TEXT' && post.textContent">
+            <div
+              ref="textcontent"
+              :class="
+                !idState.viewingMore && idState.textContentHeight >= 100
+                  ? 'textcontent'
+                  : ''
+              "
+            >
+              <TextContent
+                :dark="$vuetify.theme.dark"
+                :text-content="post.textContent"
+              />
+            </div>
+
+            <a
+              v-if="idState.textContentHeight >= 150"
+              @click.stop.prevent="idState.viewingMore = !idState.viewingMore"
+              >View {{ idState.viewingMore ? 'less' : 'more' }}</a
+            >
+          </div>
+        </v-list-item-subtitle>
+      </v-list-item-content>
+    </v-list-item>
+
+    <div v-if="idState.imagePreview" style="max-width: none" class="px-4">
+      <a :href="post.link" rel="noopener" target="_blank">
+        <img alt="Image preview" :src="post.link" style="max-width: 60%" />
+      </a>
+    </div>
+
+    <v-card-actions class="pt-0 pb-2">
+      <UsernameMenu :user-data="post.author" />
+
+      <span class="caption text--secondary ml-2">{{ timeSince }}</span>
+
+      <v-spacer />
+
+      <v-btn
+        small
+        rounded
+        text
+        class="mr-2 ml-0 text--secondary"
+        :to="`/p/${post.id}/${urlName}`"
+        nuxt
+      >
+        <v-icon size="20" class="mr-2">{{
+          $vuetify.icons.values.mdiCommentOutline
+        }}</v-icon>
+        {{ post.commentCount }}
+      </v-btn>
+
+      <v-btn
+        small
+        rounded
+        text
+        class="mr-2 ml-0 "
+        :class="post.isEndorsed ? '' : 'text--secondary'"
+        :color="post.isEndorsed ? 'primary' : ''"
+        @click.stop.prevent="toggleEndorsement"
+      >
+        <v-icon size="20" class="mr-2">{{
+          $vuetify.icons.values.mdiRocket
+        }}</v-icon>
+        {{ post.endorsementCount }}
+      </v-btn>
+
+      <v-btn small icon class="text--secondary ml-0">
+        <v-icon size="20">{{ $vuetify.icons.values.mdiDotsVertical }}</v-icon>
+      </v-btn>
+    </v-card-actions>
+  </v-card>
 </template>
 
 <script>
 import { IdState } from 'vue-virtual-scroller'
-import { Tweet } from 'vue-tweet-embed'
 import { formatDistanceToNowStrict } from 'date-fns'
 import togglePostEndorsementGql from '../../gql/togglePostEndorsement.graphql'
-import UsernameMenu from '../user/UsernameMenu'
-import TopicChip from '../topic/TopicChip'
 import { timeSince } from '../../util/timeSince'
+import UsernameMenu from '../user/UsernameMenu'
+// import TopicChip from '../topic/TopicChip'
 import TextContent from '../TextContent'
+import PostThumbnail from './PostThumbnail'
 
 export default {
   name: 'Post',
-  components: { TextContent, TopicChip, UsernameMenu, Tweet },
+  components: { TextContent, /* TopicChip, */ UsernameMenu, PostThumbnail },
   mixins: [
     IdState({
       idProp: (vm) => vm.post.id
@@ -243,25 +383,8 @@ export default {
         .slice(0, 9)
         .join('_')
     },
-    isYoutubeLink() {
-      return (
-        this.post.type === 'LINK' &&
-        (this.post.link.includes('youtube.com/') ||
-          this.post.link.includes('youtu.be/'))
-      )
-    },
-    isTwitterLink() {
-      return (
-        this.post.type === 'LINK' &&
-        this.post.link.includes('twitter.com/') &&
-        this.post.link.includes('/status/')
-      )
-    },
     isEmbeddableImage() {
       return this.post.type === 'IMAGE' && this.post.link.startsWith('https://')
-    },
-    isEmbed() {
-      return this.isYoutubeLink || this.isTwitterLink || this.isEmbeddableImage
     },
     timeSince() {
       return this.$device.isDesktop
@@ -285,15 +408,9 @@ export default {
   },
   methods: {
     doNothing() {},
-    openIfMobile() {
-      if (this.$device.isDesktop || this.$route.name === 'p-id-title') return
-      this.$router.push(`/p/${this.post.id}/${this.urlName}`)
-    },
     toggleEmbed() {
       if (this.post.type === 'IMAGE' && this.isEmbeddableImage) {
         this.idState.imagePreview = !this.idState.imagePreview
-      } else if (this.post.type === 'LINK' && this.isEmbed) {
-        this.idState.dialog = true
       } else {
         window.open(this.post.link, '_blank')
       }

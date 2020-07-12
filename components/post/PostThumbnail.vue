@@ -1,0 +1,44 @@
+<template>
+  <v-list-item-avatar
+    v-if="post.type !== 'TEXT'"
+    style="border-radius: 10px; align-self: start"
+    size="64"
+    :color="$vuetify.theme.dark ? '#313235' : 'grey lighten-2'"
+  >
+    <a
+      :href="post.link"
+      target="_blank"
+      rel="noopener"
+      @click.stop.prevent="$emit('thumbnailclick')"
+    >
+      <img
+        v-if="post.thumbnailUrl"
+        alt="Thumbnail"
+        style="border-radius: 10px; object-fit: cover"
+        :src="post.thumbnailUrl"
+      />
+      <div
+        v-else
+        style="height: 64px; width: 64px; display: flex; justify-content: center; align-items: center"
+      >
+        <v-icon size="32" class="text--secondary">{{
+          $vuetify.icons.values.mdiWeb
+        }}</v-icon>
+      </div>
+    </a>
+  </v-list-item-avatar>
+</template>
+
+<script>
+export default {
+  name: 'PostThumbnail',
+  props: {
+    post: {
+      type: Object,
+      required: true
+    }
+  }
+}
+</script>
+
+<style scoped></style>

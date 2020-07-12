@@ -51,7 +51,7 @@
         <DynamicScroller
           page-mode
           :items="globalStickies.concat(homeFeed)"
-          :min-item-size="54"
+          :min-item-size="20"
         >
           <template v-slot="{ item, index, active }">
             <DynamicScrollerItem

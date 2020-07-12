@@ -107,11 +107,7 @@ export default {
   /*
    ** Plugins to load before mounting the App
    */
-  plugins: [
-    '~/plugins/vue-youtube',
-    '~/plugins/vue-clipboard2',
-    '~/plugins/vue-virtual-scroller'
-  ],
+  plugins: ['~/plugins/vue-clipboard2', '~/plugins/vue-virtual-scroller'],
   /*
    ** Nuxt.js dev-modules
    */
@@ -156,7 +152,6 @@ export default {
       theme_color: '#F44336'
     },
     workbox: {
-      clientClaims: false,
       runtimeCaching: [
         {
           urlPattern: 'https://i.getcomet.net/*',

@@ -12,7 +12,7 @@
     <v-card-title style="word-break: normal"
       >Login to enjoy all of Comet's features!</v-card-title
     >
-    <v-card-subtitle
+    <v-card-subtitle style="font-size: .93rem"
       >Create posts and comments, follow topics, fine-tune the content you see,
       and more!</v-card-subtitle
     >

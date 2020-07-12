@@ -96,7 +96,10 @@
           No one has commented yet. Will you be the first?
         </v-row>
 
-        <div style="height: 300px" />
+        <div
+          v-if="postComments && postComments.length > 0"
+          style="height: 300px"
+        />
       </v-col>
     </v-row>
   </v-container>
@@ -163,7 +166,7 @@ export default {
   },
   watch: {
     postComments(val) {
-      if (!val || val.length === 0) {
+      if ((!val || val.length === 0) && this.$store.state.currentUser) {
         this.writingComment = true
       }
     }

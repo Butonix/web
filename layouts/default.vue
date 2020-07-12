@@ -5,7 +5,7 @@
     <AppBar />
 
     <v-main>
-      <nuxt keep-alive />
+      <nuxt keep-alive :keep-alive-props="{ include: ['Index', 'T'] }" />
       <Snackbar />
     </v-main>
   </v-app>

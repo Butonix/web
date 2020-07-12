@@ -1,7 +1,7 @@
 <template>
   <v-container v-if="topic" class="pt-0">
     <v-row>
-      <v-col cols="3">
+      <v-col v-if="$device.isDesktop" cols="3">
         <div class="sticky">
           <UserSideCard />
           <v-card flat class="mt-3">
@@ -73,6 +73,7 @@ import Post from '../../components/post/Post'
 import InfoLinks from '../../components/InfoLinks'
 
 export default {
+  name: 'T',
   components: { InfoLinks, Post, UserSideCard, TopicsSidebar },
   data() {
     return {

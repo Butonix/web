@@ -35,7 +35,7 @@
             :key="index"
             link
             nuxt
-            :to="`/topic/${topic.name}`"
+            :to="`/t/${topic.name}`"
           >
             <v-list-item-content>
               <v-list-item-title>{{ topic.capitalizedName }}</v-list-item-title>
@@ -71,7 +71,7 @@
             :key="index"
             link
             nuxt
-            :to="`/topic/${topic.name}`"
+            :to="`/t/${topic.name}`"
           >
             <v-list-item-content>
               <v-list-item-title>{{ topic.capitalizedName }}</v-list-item-title>
