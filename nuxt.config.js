@@ -69,7 +69,11 @@ import {
   mdiCloseCircle,
   mdiTelescope,
   mdiPlusBoxOutline,
-  mdiLinkOff
+  mdiLinkOff,
+  mdiAccountMultiple,
+  mdiAccountMultipleOutline,
+  mdiCommentMultiple,
+  mdiCommentMultipleOutline
 } from '@mdi/js'
 
 export default {
@@ -290,7 +294,11 @@ export default {
         mdiCloseCircle,
         mdiTelescope,
         mdiPlusBoxOutline,
-        mdiLinkOff
+        mdiLinkOff,
+        mdiAccountMultiple,
+        mdiAccountMultipleOutline,
+        mdiCommentMultiple,
+        mdiCommentMultipleOutline
       }
     },
     theme: {

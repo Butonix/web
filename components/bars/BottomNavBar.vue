@@ -9,12 +9,11 @@
     <v-bottom-navigation grow color="primary">
       <v-btn
         aria-label="Home"
-        :to="{ path: '/', query: $store.state.homeQuery }"
-        nuxt
         class="font-weight-regular"
         style="letter-spacing: normal"
+        @click="clickHomeButton"
       >
-        <span>Home</span>
+        <!--<span>Home</span>-->
         <v-icon>{{ $vuetify.icons.values.mdiHome }}</v-icon>
       </v-btn>
 
@@ -25,9 +24,25 @@
         class="font-weight-regular"
         style="letter-spacing: normal"
       >
-        <span>Search</span>
+        <!--<span>Search</span>-->
         <v-icon>{{ $vuetify.icons.values.mdiMagnify }}</v-icon>
       </v-btn>
+
+      <v-bottom-sheet v-model="newPostBottomSheet">
+        <template v-slot:activator="{ on }">
+          <v-btn
+            aria-label="New Post"
+            class="font-weight-regular"
+            style="letter-spacing: normal"
+            v-on="on"
+          >
+            <!--<span>New Post</span>-->
+            <v-icon>{{ $vuetify.icons.values.mdiPlusBox }}</v-icon>
+          </v-btn>
+        </template>
+
+        <NewPostButtonContent @selected="newPostBottomSheet = false" />
+      </v-bottom-sheet>
 
       <v-btn
         aria-label="Topics"
@@ -36,18 +51,22 @@
         class="font-weight-regular"
         style="letter-spacing: normal"
       >
-        <span>Topics</span>
+        <!--<span>Topics</span>-->
         <v-icon>{{ $vuetify.icons.values.mdiNewspaper }}</v-icon>
       </v-btn>
 
       <v-btn
-        aria-label="Submit"
+        aria-label="Notificatinos"
+        to="/notifications"
+        nuxt
         class="font-weight-regular"
         style="letter-spacing: normal"
-        @click="openCompose"
       >
-        <span>Submit</span>
-        <v-icon>{{ $vuetify.icons.values.mdiPencil }}</v-icon>
+        <!--<span>Notifications</span>-->
+        <v-badge v-if="notifications.length > 0" overlap content="1">
+          <v-icon>{{ $vuetify.icons.values.mdiBellOutline }}</v-icon>
+        </v-badge>
+        <v-icon v-else>{{ $vuetify.icons.values.mdiBellOutline }}</v-icon>
       </v-btn>
     </v-bottom-navigation>
   </v-app-bar>
@@ -55,12 +74,15 @@
 
 <script>
 import notificationsGql from '../../gql/notifications.graphql'
+import NewPostButtonContent from '../buttons/NewPostButtonContent'
 
 export default {
   name: 'BottomNavBar',
+  components: { NewPostButtonContent },
   data() {
     return {
-      notifications: []
+      notifications: [],
+      newPostBottomSheet: false
     }
   },
   apollo: {
@@ -93,6 +115,13 @@ export default {
         this.$store.dispatch('displaySnackbar', {
           message: 'Must log in to submit a post'
         })
+      }
+    },
+    clickHomeButton() {
+      if (this.$route.path === '/') {
+        window.scrollTo(0, 0)
+      } else {
+        this.$router.push({ path: '/', query: this.$store.state.homeQuery })
       }
     }
   }

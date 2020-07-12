@@ -4,6 +4,7 @@
       !idState.deleted ||
         (comment.childComments && comment.childComments.length > 0)
     "
+    :id="comment.id"
     :flat="$vuetify.theme.dark"
     :outlined="!$vuetify.theme.dark"
     :style="{
@@ -25,15 +26,19 @@
         <div class="overline text--secondary">EDIT</div>
         <div
           class="pt-4 pb-1 px-4"
-          style="background-color: #202124; border-radius: 10px"
+          :style="{
+            'background-color': $vuetify.theme.dark ? '#202124' : '#FFFFFF'
+          }"
+          style="border-radius: 10px"
         >
           <Editor v-model="idState.editHTML" editable />
           <v-row>
             <v-spacer />
-            <v-btn text color="primary" @click="idState.editing = false"
+            <v-btn small text color="primary" @click="idState.editing = false"
               >Cancel</v-btn
             >
             <v-btn
+              small
               text
               color="primary"
               :loading="idState.editBtnLoading"
@@ -45,12 +50,10 @@
         </div>
       </div>
 
-      <div
+      <TextContent
         v-else
-        :class="
-          $vuetify.theme.dark ? 'editor-dark__content' : 'editor-light__content'
-        "
-        v-html="comment.textContent"
+        :dark="$vuetify.theme.dark"
+        :text-content="comment.textContent"
       />
     </v-card-text>
     <v-card-actions class="px-4">
@@ -61,11 +64,11 @@
       <v-spacer />
 
       <v-btn
-        v-if="!idState.replying && comment.author"
+        v-if="$device.isDesktop && !idState.replying && comment.author"
         small
         rounded
         text
-        class="betterbutton text--secondary"
+        class="text--secondary"
         @click="idState.replying = true"
       >
         Reply
@@ -75,11 +78,21 @@
       </v-btn>
 
       <v-btn
+        v-if="!$device.isDesktop && !idState.replying && comment.author"
+        small
+        icon
+        class=" text--secondary"
+        @click="idState.replying = true"
+      >
+        <v-icon>{{ $vuetify.icons.values.mdiReply }}</v-icon>
+      </v-btn>
+
+      <v-btn
         v-if="comment.author"
         small
         rounded
         text
-        class="ml-2 ml-0 betterbutton"
+        class="ml-1 ml-0 "
         :class="comment.isEndorsed ? '' : 'text--secondary'"
         :color="comment.isEndorsed ? 'primary' : ''"
         @click="toggleEndorsement"
@@ -139,11 +152,12 @@
         <v-row>
           <v-spacer />
 
-          <v-btn text color="primary" @click="idState.replying = false"
+          <v-btn small text color="primary" @click="idState.replying = false"
             >Cancel</v-btn
           >
 
           <v-btn
+            small
             text
             color="primary"
             :loading="idState.submitBtnLoading"
@@ -156,7 +170,7 @@
     </div>
 
     <div v-show="!idState.childrenCollapsed">
-      <CommentDesktop
+      <Comment
         v-for="c in comment.childComments"
         :key="c.id"
         :post-view="postView"
@@ -179,10 +193,12 @@ import recordPostViewGql from '../../gql/recordPostView.graphql'
 import editCommentGql from '../../gql/editComment.graphql'
 import { isEditorEmpty } from '../../util/isEditorEmpty'
 import deleteCommentGql from '../../gql/deleteComment.graphql'
+import { timeSince } from '../../util/timeSince'
+import TextContent from '../TextContent'
 
 export default {
-  name: 'CommentDesktop',
-  components: { Editor, UsernameMenu },
+  name: 'Comment',
+  components: { TextContent, Editor, UsernameMenu },
   mixins: [
     IdState({
       idProp: (vm) => vm.comment.id
@@ -224,9 +240,9 @@ export default {
   },
   computed: {
     timeSince() {
-      return (
-        formatDistanceToNowStrict(new Date(this.comment.createdAt)) + ' ago'
-      )
+      return this.$device.isDesktop
+        ? formatDistanceToNowStrict(new Date(this.comment.createdAt)) + ' ago'
+        : timeSince(new Date(this.comment.createdAt))
     },
     isEditEmpty() {
       return isEditorEmpty(this.idState.editHTML)

@@ -122,6 +122,12 @@ export default {
       }
     }
   },
+  watch: {
+    followedTopics() {
+      if (this.followedTopics.length > 0) this.tab = 0
+      else this.tab = 1
+    }
+  },
   apollo: {
     followedTopics: {
       query: followedTopicsGql

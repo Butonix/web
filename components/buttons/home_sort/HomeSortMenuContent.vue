@@ -1,9 +1,9 @@
 <template>
   <div>
     <v-fade-transition hide-on-leave>
-      <v-list v-show="!selectingTime" dense>
+      <v-list v-show="!selectingTime" class="py-0">
         <v-list-item @click="chooseHot">
-          <v-list-item-icon class="mr-4">
+          <v-list-item-icon>
             <v-icon>{{ $vuetify.icons.values.mdiFire }}</v-icon>
           </v-list-item-icon>
           <v-list-item-content>
@@ -15,7 +15,7 @@
         </v-list-item>
 
         <v-list-item @click="chooseTop">
-          <v-list-item-icon class="mr-4">
+          <v-list-item-icon>
             <v-icon>{{ $vuetify.icons.values.mdiFormatListNumbered }}</v-icon>
           </v-list-item-icon>
           <v-list-item-content>
@@ -27,7 +27,7 @@
         </v-list-item>
 
         <v-list-item @click="chooseNew">
-          <v-list-item-icon class="mr-4">
+          <v-list-item-icon>
             <v-icon>{{ $vuetify.icons.values.mdiClockTimeOneOutline }}</v-icon>
           </v-list-item-icon>
           <v-list-item-content>
@@ -37,11 +37,27 @@
             >
           </v-list-item-content>
         </v-list-item>
+
+        <v-list-item @click="chooseComments">
+          <v-list-item-icon>
+            <v-icon>{{
+              $vuetify.icons.values.mdiCommentMultipleOutline
+            }}</v-icon>
+          </v-list-item-icon>
+          <v-list-item-content>
+            <v-list-item-title
+              :class="
+                $route.query.sort === 'comments' ? 'font-weight-bold' : ''
+              "
+              >Comments</v-list-item-title
+            >
+          </v-list-item-content>
+        </v-list-item>
       </v-list>
     </v-fade-transition>
 
     <v-fade-transition hide-on-leave>
-      <v-list v-show="selectingTime" dense>
+      <v-list v-show="selectingTime" class="py-0">
         <v-list-item @click="chooseTimeAll">
           <v-list-item-action>
             <v-radio-group v-model="allTime">
@@ -114,7 +130,7 @@
 
 <script>
 export default {
-  name: 'SortMenuContent',
+  name: 'HomeSortMenuContent',
   props: {
     open: {
       type: Boolean,
@@ -179,6 +195,15 @@ export default {
         this.$router.push({
           path: this.$route.path,
           query
+        })
+      } catch (e) {}
+    },
+    chooseComments() {
+      this.selectingTime = true
+      try {
+        this.$router.push({
+          path: this.$route.path,
+          query: { ...this.$route.query, sort: 'comments' }
         })
       } catch (e) {}
     },

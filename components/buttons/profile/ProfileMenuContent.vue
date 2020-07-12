@@ -4,6 +4,7 @@
       v-if="$store.state.currentUser"
       :to="`/u/${$store.state.currentUser.username}`"
       nuxt
+      @click="$emit('selected')"
     >
       <v-list-item-avatar>
         <v-icon v-if="!$store.state.currentUser.profilePicUrl">{{
@@ -22,7 +23,12 @@
       </v-list-item-content>
     </v-list-item>
 
-    <v-list-item v-if="!$store.state.currentUser" nuxt to="/login">
+    <v-list-item
+      v-if="!$store.state.currentUser"
+      nuxt
+      to="/login"
+      @click="$emit('selected')"
+    >
       <v-list-item-icon>
         <v-icon>{{ $vuetify.icons.values.mdiLogin }}</v-icon>
       </v-list-item-icon>
@@ -31,7 +37,26 @@
       </v-list-item-content>
     </v-list-item>
 
-    <v-list-item v-if="$store.state.currentUser" nuxt to="/settings">
+    <v-list-item
+      v-if="$store.state.currentUser"
+      nuxt
+      to="/filters"
+      @click="$emit('selected')"
+    >
+      <v-list-item-icon>
+        <v-icon>{{ $vuetify.icons.values.mdiFilterVariant }}</v-icon>
+      </v-list-item-icon>
+      <v-list-item-content>
+        <v-list-item-title>Filters</v-list-item-title>
+      </v-list-item-content>
+    </v-list-item>
+
+    <v-list-item
+      v-if="$store.state.currentUser"
+      nuxt
+      to="/settings"
+      @click="$emit('selected')"
+    >
       <v-list-item-icon>
         <v-icon>{{ $vuetify.icons.values.mdiCogOutline }}</v-icon>
       </v-list-item-icon>
@@ -70,6 +95,7 @@ export default {
   name: 'ProfileMenuContent',
   methods: {
     toggleDark() {
+      this.$emit('selected')
       this.$vuetify.theme.dark = !this.$vuetify.theme.dark
       if (process.client) {
         localStorage.setItem('dark', this.$vuetify.theme.dark.toString())

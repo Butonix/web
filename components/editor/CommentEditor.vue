@@ -7,7 +7,7 @@
   >
     <div class="overline text--secondary">NEW COMMENT</div>
 
-    <Editor v-model="commentHTML" editable />
+    <Editor v-model="commentHTML" editable :autofocus="autofocus" />
 
     <v-card-actions class="pl-0 pt-0">
       <span class="caption text--secondary"
@@ -15,9 +15,12 @@
       >
       <v-spacer />
 
-      <v-btn text color="primary" @click="$emit('cancelled')">Cancel</v-btn>
+      <v-btn small text color="primary" @click="$emit('cancelled')"
+        >Cancel</v-btn
+      >
 
       <v-btn
+        small
         :disabled="isEditorEmpty"
         text
         color="primary"
@@ -44,6 +47,10 @@ export default {
     loading: {
       type: Boolean,
       default: false
+    },
+    autofocus: {
+      type: Boolean,
+      default: true
     }
   },
   data() {

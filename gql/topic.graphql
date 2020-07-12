@@ -5,5 +5,6 @@ query topic($topicName: String!) {
     isHidden
     name
     postCount
+    followerCount
   }
 }

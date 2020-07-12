@@ -1,43 +1,51 @@
 <template>
-  <v-container>
+  <v-container class="pt-0">
     <v-row>
-      <v-col cols="3">
-        <UserSideCard />
+      <v-col v-if="$device.isDesktop" cols="3">
+        <div class="sticky">
+          <UserSideCard />
+        </div>
       </v-col>
-      <v-col xl="7" lg="8" cols="9">
-        <div class="pb-3">
+      <v-col xl="7">
+        <div class="mb-3">
           <v-skeleton-loader
             v-if="!post"
             transition="fade-transition"
             type="list-item-avatar-three-line"
             height="134"
           />
-          <ItemComponent v-else :post="post" is-post-view />
+          <Post v-else :post="post" is-post-view />
         </div>
 
         <v-row v-if="!writingComment" no-gutters>
           <v-btn
             v-if="$store.state.currentUser"
+            small
             rounded
             depressed
             color="primary"
-            class="betterbutton mb-3"
+            class="mb-3 font-weight-regular"
             @click="writingComment = true"
           >
-            <v-icon class="mr-2">{{ $vuetify.icons.values.mdiPencil }}</v-icon>
+            <v-icon size="20" class="mr-2">{{
+              $vuetify.icons.values.mdiPencil
+            }}</v-icon>
             New Comment
           </v-btn>
 
           <v-btn
             v-else
+            small
             rounded
             depressed
             color="primary"
-            class="betterbutton mb-3"
+            class="mb-3 font-weight-regular"
             to="/login"
             nuxt
           >
-            <v-icon class="mr-2">{{ $vuetify.icons.values.mdiPencil }}</v-icon>
+            <v-icon size="20" class="mr-2">{{
+              $vuetify.icons.values.mdiPencil
+            }}</v-icon>
             Login to Comment
           </v-btn>
 
@@ -51,6 +59,10 @@
           v-model="commentHTML"
           class="mb-3"
           :loading="submitBtnLoading"
+          :autofocus="
+            (postComments.length === 0 && $device.isDesktop) ||
+              postComments.length > 0
+          "
           @submitted="submitComment"
           @cancelled="writingComment = false"
         />
@@ -69,7 +81,7 @@
               :size-dependencies="[item.textContent]"
             >
               <div class="pb-3">
-                <CommentDesktop :post-view="postView" :comment="item" />
+                <Comment :post-view="postView" :comment="item" />
               </div>
             </DynamicScrollerItem>
           </template>
@@ -84,7 +96,7 @@
           No one has commented yet. Will you be the first?
         </v-row>
 
-        <div style="height: 500px" />
+        <div style="height: 300px" />
       </v-col>
     </v-row>
   </v-container>
@@ -93,11 +105,11 @@
 <script>
 import postGql from '../../gql/post.graphql'
 import postCommentsGql from '../../gql/postComments.graphql'
-import ItemComponent from '../../components/post/PostDesktop'
 import submitCommentGql from '../../gql/submitComment.graphql'
 import recordPostViewGql from '../../gql/recordPostView.graphql'
+import Post from '../../components/post/Post'
 import UserSideCard from '../../components/user/UserSideCard'
-import CommentDesktop from '../../components/comment/CommentDesktop'
+import Comment from '../../components/comment/Comment'
 import CommentEditor from '../../components/editor/CommentEditor'
 import CommentSortMenu from '../../components/buttons/comment_sort/CommentSortMenu'
 
@@ -105,9 +117,9 @@ export default {
   components: {
     CommentSortMenu,
     CommentEditor,
-    CommentDesktop,
+    Comment,
     UserSideCard,
-    ItemComponent
+    Post
   },
   data() {
     return {
@@ -147,6 +159,13 @@ export default {
       }
       fun(thread)
       return thread
+    }
+  },
+  watch: {
+    postComments(val) {
+      if (!val || val.length === 0) {
+        this.writingComment = true
+      }
     }
   },
   async activated() {

@@ -1,5 +1,5 @@
 <template>
-  <v-container>
+  <v-container class="pt-0">
     <v-row>
       <v-col v-if="$device.isDesktop" cols="3">
         <div class="sticky">
@@ -7,6 +7,47 @@
         </div>
       </v-col>
       <v-col>
+        <v-row no-gutters class="pb-3">
+          <TypeMenu v-if="false" />
+
+          <template v-else>
+            <v-btn
+              small
+              text
+              rounded
+              class="mr-1 font-weight-regular"
+              :color="!$route.query || !$route.query.feed ? 'primary' : ''"
+              @click="chooseAll"
+            >
+              <v-icon size="20" class="mr-2">{{
+                $vuetify.icons.values.mdiInfinity
+              }}</v-icon>
+              All
+            </v-btn>
+
+            <v-btn
+              small
+              text
+              rounded
+              class="font-weight-regular"
+              :color="
+                $route.query && $route.query.feed === 'mytopics'
+                  ? 'primary'
+                  : ''
+              "
+              @click="chooseMyTopics"
+            >
+              <v-icon size="20" class="mr-2">{{
+                $vuetify.icons.values.mdiNewspaper
+              }}</v-icon>
+              My Topics
+            </v-btn>
+          </template>
+
+          <v-spacer />
+          <HomeSortMenu />
+        </v-row>
+
         <DynamicScroller
           page-mode
           :items="globalStickies.concat(homeFeed)"
@@ -20,7 +61,7 @@
               :size-dependencies="[item.title, item.textContent]"
             >
               <div class="pb-3">
-                <PostDesktop :post="item" :index="index" :active="active" />
+                <Post :post="item" :index="index" :active="active" />
               </div>
             </DynamicScrollerItem>
           </template>
@@ -46,23 +87,24 @@ import TopicsSidebar from '../components/topic/TopicsSidebar'
 import InfoLinks from '../components/InfoLinks'
 import homeFeedGql from '../gql/homeFeed.graphql'
 import globalStickiesGql from '../gql/globalStickies.graphql'
-import PostDesktop from '../components/post/PostDesktop'
+import Post from '../components/post/Post'
 import UserSideCard from '../components/user/UserSideCard'
+import TypeMenu from '../components/buttons/home_type/HomeTypeMenu'
+import HomeSortMenu from '../components/buttons/home_sort/HomeSortMenu'
 
 export default {
   name: 'Index',
   scrollToTop: false,
   components: {
+    HomeSortMenu,
+    TypeMenu,
     UserSideCard,
-    PostDesktop,
+    Post,
     InfoLinks,
     TopicsSidebar
   },
   data() {
     return {
-      discordHidden: process.client
-        ? !!localStorage.getItem('discordHidden')
-        : true,
       homeFeed: [],
       globalStickies: [],
       hasMore: true
@@ -108,6 +150,7 @@ export default {
             oldQuery.feed !== this.$route.query.feed ||
             oldQuery.types !== this.$route.query.types
           ) {
+            this.homeFeed = []
             this.$store.commit('setHomeQuery', this.$route.query)
             this.$store.commit('setHomeFeedPage', 0)
             if (process.client) {
@@ -149,22 +192,30 @@ export default {
     }
   },
   methods: {
+    chooseAll() {
+      const query = Object.assign({}, this.$route.query)
+      delete query.feed
+      this.$router.push({ path: this.$route.path, query })
+    },
+    chooseMyTopics() {
+      if (!this.$store.state.currentUser) {
+        this.$store.dispatch('displaySnackbar', {
+          message: 'Must login to view My Topics'
+        })
+        return
+      }
+
+      this.$router.push({
+        path: this.$route.path,
+        query: { ...this.$route.query, feed: 'mytopics' }
+      })
+    },
     handleScroll(e) {
       const totalPageHeight = document.body.scrollHeight
       const scrollPoint = window.scrollY + window.innerHeight
-      if (scrollPoint >= totalPageHeight) {
+      if (scrollPoint >= totalPageHeight - 200) {
         this.showMore()
       }
-    },
-    hideDiscordWidget() {
-      if (!process.client) return
-      localStorage.setItem('discordHidden', 'true')
-      this.discordHidden = true
-    },
-    showDiscordWidget() {
-      if (!process.client) return
-      localStorage.removeItem('discordHidden')
-      this.discordHidden = false
     },
     showMore() {
       if (
@@ -197,11 +248,6 @@ export default {
 </script>
 
 <style scoped>
-.sticky {
-  position: -webkit-sticky; /* Safari */
-  position: sticky;
-  top: 88px;
-}
 .friendlyframe >>> iframe {
   width: 100%;
   height: 400px;

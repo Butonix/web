@@ -23,16 +23,6 @@
   -ms-overflow-style: none !important;
 }
 
-.betterbutton {
-  text-transform: none !important;
-  font-weight: 400 !important;
-  letter-spacing: normal !important;
-}
-
-.betterbutton > .v-btn__content {
-  font-size: 1rem !important;
-}
-
 .ProseMirror:focus {
   outline: none !important;
 }
@@ -50,3 +40,8 @@
   opacity: 0.08 !important;
 }
 
+.sticky {
+  position: -webkit-sticky; /* Safari */
+  position: sticky;
+  top: 76px;
+}

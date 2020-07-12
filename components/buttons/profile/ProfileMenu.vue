@@ -1,22 +1,18 @@
 <template>
   <v-bottom-sheet v-if="!$device.isDesktop" v-model="menu">
     <template v-slot:activator="{ on }">
-      <v-btn v-if="!$device.isDesktop" aria-label="Account" icon v-on="on">
-        <v-icon>{{ $vuetify.icons.values.mdiAccountOutline }}</v-icon>
-      </v-btn>
-
       <v-btn
-        v-else
+        style="font-weight: 400"
         aria-label="Account"
         text
         rounded
-        class="betterbutton"
         v-on="on"
       >
         <v-avatar
           v-if="
             $store.state.currentUser && $store.state.currentUser.profilePicUrl
           "
+          size="24"
           class="mr-2"
         >
           <v-img
@@ -42,16 +38,11 @@
 
   <v-menu v-else v-model="menu" bottom offset-y transition="slide-y-transition">
     <template v-slot:activator="{ on }">
-      <v-btn v-if="!$device.isDesktop" aria-label="Account" icon v-on="on">
-        <v-icon>{{ $vuetify.icons.values.mdiAccountOutline }}</v-icon>
-      </v-btn>
-
       <v-btn
-        v-else
+        style="font-weight: 400"
         aria-label="Account"
         text
         rounded
-        class="betterbutton"
         v-on="on"
       >
         <v-avatar

@@ -1,5 +1,5 @@
-query topicFeed($topicName: String!, $page: Int, $sort: Sort, $time: Time, $type: Type) {
-  topicFeed(topicName: $topicName, page: $page, sort: $sort, time: $time, type: $type) {
+query topicFeed($topicName: String!, $page: Int, $sort: Sort, $time: Time, $types: [Type!]) {
+  topicFeed(topicName: $topicName, page: $page, sort: $sort, time: $time, types: $types) {
     commentCount
     createdAt
     endorsementCount

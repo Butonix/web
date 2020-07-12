@@ -11,20 +11,12 @@ export const state = () => ({
   snackbarSuccess: false,
   searchPage: 0,
   homeQuery: {},
-  expandedCommentId: '',
-  currentPostTitle: '',
-  currentPostComments: 0
+  expandedCommentId: ''
 })
 
 export const mutations = {
   setCurrentUser(state, currentUser) {
     state.currentUser = currentUser
-  },
-  setCurrentPostTitle(state, title) {
-    state.currentPostTitle = title
-  },
-  setCurrentPostComments(state, comments) {
-    state.currentPostComments = comments
   },
   setExpandedCommentId(state, commentId) {
     state.expandedCommentId = commentId

@@ -1,8 +1,9 @@
 <template>
   <div>
     <v-card outlined class="bettercard">
-      <v-list-item>
+      <v-list-item class="px-2">
         <a
+          v-if="$device.isDesktop && post.type !== 'TEXT'"
           :href="post.link"
           target="_blank"
           rel="noopener"
@@ -10,9 +11,7 @@
           @click.stop.prevent="toggleEmbed"
         >
           <v-list-item-avatar
-            v-if="post.type !== 'TEXT'"
             style="border-radius: 12px"
-            class="my-3"
             size="64"
             :color="$vuetify.theme.dark ? '#313235' : 'grey lighten-2'"
           >
@@ -27,7 +26,10 @@
           </v-list-item-avatar>
         </a>
 
-        <v-list-item-content style="align-self: start; align-content: start">
+        <v-list-item-content
+          style="align-self: start; align-content: start"
+          class="pt-2"
+        >
           <span v-if="post.sticky">
             <v-icon color="primary" size="13" class="mr-1">{{
               $vuetify.icons.values.mdiStar
@@ -92,32 +94,47 @@
                     : ''
                 "
               >
-                <div
-                  :class="
-                    $vuetify.theme.dark
-                      ? 'editor-dark__content'
-                      : 'editor-light__content'
-                  "
-                  v-html="post.textContent"
+                <TextContent
+                  :dark="$vuetify.theme.dark"
+                  :text-content="post.textContent"
                 />
               </div>
 
               <a
                 v-if="idState.textContentHeight >= 150"
-                @click="idState.viewingMore = !idState.viewingMore"
+                @click.stop.prevent="idState.viewingMore = !idState.viewingMore"
                 >View {{ idState.viewingMore ? 'less' : 'more' }}</a
               >
             </div>
           </v-list-item-subtitle>
         </v-list-item-content>
+
+        <v-list-item-avatar
+          v-if="!$device.isDesktop && post.type !== 'TEXT'"
+          style="border-radius: 10px; align-self: start"
+          size="64"
+          :color="$vuetify.theme.dark ? '#313235' : 'grey lighten-2'"
+          @click.stop.prevent="toggleEmbed"
+        >
+          <img
+            v-if="post.thumbnailUrl"
+            style="border-radius: 12px; object-fit: cover"
+            :src="post.thumbnailUrl"
+          />
+          <v-icon v-else size="32" class="text--secondary">{{
+            $vuetify.icons.values.mdiWeb
+          }}</v-icon>
+        </v-list-item-avatar>
       </v-list-item>
       <div v-if="idState.imagePreview" style="max-width: none" class="px-4">
         <a :href="post.link" rel="noopener" target="_blank">
           <img alt="Image preview" :src="post.link" style="max-width: 100%" />
         </a>
       </div>
-      <v-card-actions class="pt-0 pl-4">
-        <UsernameMenu :user-data="post.author" />
+      <v-card-actions class="pt-0 pb-2">
+        <div @click.stop.prevent="doNothing">
+          <UsernameMenu :user-data="post.author" />
+        </div>
 
         <span class="caption text--secondary ml-2">{{ timeSince }}</span>
 
@@ -127,7 +144,7 @@
           small
           rounded
           text
-          class="mr-2 ml-0 betterbutton text--secondary"
+          class="mr-2 ml-0  text--secondary"
           :to="`/p/${post.id}/${urlName}`"
           nuxt
         >
@@ -141,10 +158,10 @@
           small
           rounded
           text
-          class="mr-2 ml-0 betterbutton"
+          class="mr-2 ml-0 "
           :class="post.isEndorsed ? '' : 'text--secondary'"
           :color="post.isEndorsed ? 'primary' : ''"
-          @click="toggleEndorsement"
+          @click.stop.prevent="toggleEndorsement"
         >
           <v-icon size="20" class="mr-2">{{
             $vuetify.icons.values.mdiRocket
@@ -162,7 +179,7 @@
       <div
         v-if="idState.dialog"
         style="display: flex; justify-content: center"
-        @click="idState.dialog = false"
+        @click.stop.prevent="idState.dialog = false"
       >
         <Tweet
           v-if="isTwitterLink"
@@ -186,10 +203,12 @@ import { formatDistanceToNowStrict } from 'date-fns'
 import togglePostEndorsementGql from '../../gql/togglePostEndorsement.graphql'
 import UsernameMenu from '../user/UsernameMenu'
 import TopicChip from '../topic/TopicChip'
+import { timeSince } from '../../util/timeSince'
+import TextContent from '../TextContent'
 
 export default {
-  name: 'PostDesktop',
-  components: { TopicChip, UsernameMenu, Tweet },
+  name: 'Post',
+  components: { TextContent, TopicChip, UsernameMenu, Tweet },
   mixins: [
     IdState({
       idProp: (vm) => vm.post.id
@@ -245,7 +264,9 @@ export default {
       return this.isYoutubeLink || this.isTwitterLink || this.isEmbeddableImage
     },
     timeSince() {
-      return formatDistanceToNowStrict(new Date(this.post.createdAt)) + ' ago'
+      return this.$device.isDesktop
+        ? formatDistanceToNowStrict(new Date(this.post.createdAt)) + ' ago'
+        : timeSince(new Date(this.post.createdAt))
     }
   },
   mounted() {
@@ -264,6 +285,10 @@ export default {
   },
   methods: {
     doNothing() {},
+    openIfMobile() {
+      if (this.$device.isDesktop || this.$route.name === 'p-id-title') return
+      this.$router.push(`/p/${this.post.id}/${this.urlName}`)
+    },
     toggleEmbed() {
       if (this.post.type === 'IMAGE' && this.isEmbeddableImage) {
         this.idState.imagePreview = !this.idState.imagePreview

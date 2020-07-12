@@ -26,7 +26,7 @@ $material-light: (
 
 $container-max-widths: (
   'md': 100%,
-  'lg': 100%,
+  'lg': map-get($grid-breakpoints, 'lg') * 0.9375,
   'xl': map-get($grid-breakpoints, 'xl') * 0.85
 );
 
@@ -41,5 +41,16 @@ $code-kbd-font-weight: bold;
 $code-padding: 0.2rem 0.4rem;
 $blockquote-font-size: 1rem;
 $blockquote-font-weight: 400;
+
+$btn-font-weight: 500;
+$btn-letter-spacing: normal;
+$btn-text-transform: none;
+$btn-font-sizes: (
+  'x-small': .714rem,
+  'small': .857rem,
+  'default': 1rem,
+  'large': 1rem,
+  'x-large': 1.143rem
+);
 
 @import '~vuetify/src/styles/styles.sass';

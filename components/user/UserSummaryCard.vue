@@ -7,13 +7,7 @@
     "
     :max-width="isHover ? 400 : undefined"
   >
-    <div v-if="!user" class="pa-4">
-      <v-row align="center" justify="center">
-        <v-progress-circular indeterminate />
-      </v-row>
-    </div>
-
-    <v-list-item v-else>
+    <v-list-item>
       <nuxt-link :to="`/u/${user.username}`">
         <v-list-item-avatar size="64">
           <v-img
@@ -92,26 +86,27 @@
           style="white-space: normal; font-size: 1rem"
           >{{ user.bio }}</v-list-item-subtitle
         >
-        <v-list-item-subtitle class="mt-2">
-          <v-chip small outlined>
-            <v-icon small left>{{ $vuetify.icons.values.mdiRocket }}</v-icon>
-            {{ user.endorsementCount }}
-          </v-chip>
-
-          <v-chip small outlined class="ml-2">
-            <v-icon small left>{{
-              $vuetify.icons.values.mdiCommentOutline
-            }}</v-icon>
-            {{ user.commentCount }}
-          </v-chip>
-
-          <v-chip small outlined class="ml-2">
-            <v-icon small left>{{ $vuetify.icons.values.mdiPost }}</v-icon>
-            {{ user.postCount }}
-          </v-chip>
-        </v-list-item-subtitle>
       </v-list-item-content>
     </v-list-item>
+
+    <v-row align="center" justify="start" no-gutters class="px-4 pb-2">
+      <v-chip small outlined>
+        <v-icon small left>{{ $vuetify.icons.values.mdiRocket }}</v-icon>
+        {{ user.endorsementCount }}
+      </v-chip>
+
+      <v-chip small outlined class="ml-2">
+        <v-icon small left>{{
+          $vuetify.icons.values.mdiCommentOutline
+        }}</v-icon>
+        {{ user.commentCount }}
+      </v-chip>
+
+      <v-chip small outlined class="ml-2">
+        <v-icon small left>{{ $vuetify.icons.values.mdiPost }}</v-icon>
+        {{ user.postCount }}
+      </v-chip>
+    </v-row>
   </v-card>
 </template>
 

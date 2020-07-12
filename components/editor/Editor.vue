@@ -231,6 +231,10 @@ export default {
     editable: {
       type: Boolean,
       default: false
+    },
+    autofocus: {
+      type: Boolean,
+      default: true
     }
   },
   data() {
@@ -246,7 +250,7 @@ export default {
         },
         editable: this.editable,
         content: this.value,
-        autoFocus: true,
+        autoFocus: this.autofocus,
         extensions: [
           new Blockquote(),
           new BulletList(),
@@ -278,6 +282,11 @@ export default {
     editable() {
       this.editor.setOptions({
         editable: this.editable
+      })
+    },
+    autofocus() {
+      this.editor.setOptions({
+        autoFocus: this.autofocus
       })
     }
   },

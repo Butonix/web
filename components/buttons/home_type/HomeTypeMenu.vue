@@ -3,9 +3,10 @@
     <template v-slot:activator="{ on }">
       <v-btn
         aria-label="Select Post Feed"
-        class="betterbutton"
+        small
         outlined
         rounded
+        class="font-weight-regular"
         style="border-width: 1px"
         :style="
           $vuetify.theme.dark
@@ -14,7 +15,7 @@
         "
         v-on="on"
       >
-        <v-icon class="mr-2">{{
+        <v-icon size="20" class="mr-2">{{
           $route.query.feed === 'mytopics'
             ? $vuetify.icons.values.mdiNewspaper
             : $vuetify.icons.values.mdiInfinity
@@ -23,7 +24,7 @@
       </v-btn>
     </template>
 
-    <TypeMenuContent />
+    <HomeTypeMenuContent />
   </v-bottom-sheet>
 
   <v-menu
@@ -37,9 +38,10 @@
     <template v-slot:activator="{ on }">
       <v-btn
         aria-label="Select Post Feed"
-        class="betterbutton"
+        small
         outlined
         rounded
+        class="font-weight-regular"
         style="border-width: 1px"
         :style="
           $vuetify.theme.dark
@@ -48,7 +50,7 @@
         "
         v-on="on"
       >
-        <v-icon class="mr-2">{{
+        <v-icon size="20" class="mr-2">{{
           $route.query.feed === 'mytopics'
             ? $vuetify.icons.values.mdiNewspaper
             : $vuetify.icons.values.mdiInfinity
@@ -57,16 +59,16 @@
       </v-btn>
     </template>
 
-    <TypeMenuContent @selected="menu = false" />
+    <HomeTypeMenuContent @selected="menu = false" />
   </v-menu>
 </template>
 
 <script>
-import TypeMenuContent from './HomeTypeMenuContent'
+import HomeTypeMenuContent from './HomeTypeMenuContent'
 
 export default {
-  name: 'TypeMenu',
-  components: { TypeMenuContent },
+  name: 'HomeTypeMenu',
+  components: { HomeTypeMenuContent },
   data() {
     return {
       menu: false

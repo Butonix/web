@@ -1,13 +1,5 @@
 <template>
-  <ApolloQuery
-    v-if="$store.state.currentUser"
-    :query="require('../../gql/user.graphql')"
-    :variables="{ username: $store.state.currentUser.username }"
-  >
-    <template v-slot="{ result: { loading, error, data } }">
-      <UserSummaryCard :user="data ? data.user : null" />
-    </template>
-  </ApolloQuery>
+  <UserSummaryCard v-if="user" :user="user" />
 
   <v-card
     v-else
@@ -33,10 +25,30 @@
 </template>
 
 <script>
+import userGql from '../../gql/user.graphql'
 import UserSummaryCard from './UserSummaryCard'
+
 export default {
   name: 'UserSideCard',
-  components: { UserSummaryCard }
+  components: { UserSummaryCard },
+  data() {
+    return {
+      user: null
+    }
+  },
+  apollo: {
+    user: {
+      query: userGql,
+      variables() {
+        return {
+          username: this.$store.state.currentUser.username
+        }
+      },
+      skip() {
+        return !this.$store.state.currentUser
+      }
+    }
+  }
 }
 </script>
 

@@ -1,9 +1,8 @@
 <template>
-  <v-app>
+  <v-app id="app">
     <BottomNavBar v-if="!$device.isDesktop" />
 
-    <DesktopAppBar v-if="$device.isDesktop" />
-    <MobileAppBar v-else />
+    <AppBar />
 
     <v-main>
       <nuxt keep-alive />
@@ -14,16 +13,14 @@
 
 <script>
 import Snackbar from '../components/bars/Snackbar'
-import DesktopAppBar from '../components/bars/DesktopAppBar'
-import MobileAppBar from '../components/bars/MobileAppBar'
+import AppBar from '../components/bars/AppBar'
 import BottomNavBar from '../components/bars/BottomNavBar'
 
 export default {
   name: 'Default',
   components: {
     BottomNavBar,
-    MobileAppBar,
-    DesktopAppBar,
+    AppBar,
     Snackbar
   },
   mounted() {

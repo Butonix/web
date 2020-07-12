@@ -22,7 +22,16 @@
       </span>
     </template>
 
-    <UserSummaryCard is-hover :user="user" />
+    <template v-if="$device.isDesktop">
+      <UserSummaryCard v-if="user" is-hover :user="user" />
+      <v-card v-else max-width="400">
+        <div class="pa-4">
+          <v-row align="center" justify="center">
+            <v-progress-circular indeterminate />
+          </v-row>
+        </div>
+      </v-card>
+    </template>
   </v-menu>
 </template>
 
@@ -63,6 +72,7 @@ export default {
     }
   },
   methods: {
+    doNothing() {},
     toggleBlock() {
       if (this.user.isBlocking) this.unblockUser()
       else this.blockUser()

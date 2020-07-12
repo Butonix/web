@@ -1,91 +1,84 @@
 <template>
-  <v-container fluid>
+  <v-container v-if="topic" class="pt-0">
     <v-row>
-      <v-col>
-        <div class="px-2">
-          <div class="overline">Topic</div>
-          <div class="headline">
-            <span>{{ topic.capitalizedName }}</span>
-            <v-btn
-              aria-label="Follow Topic"
-              small
-              class="ml-1"
-              @click="toggleFollow"
-              >{{ topic.isFollowing ? 'Unfollow' : 'Follow' }}</v-btn
-            >
-          </div>
+      <v-col cols="3">
+        <div class="sticky">
+          <UserSideCard />
+          <v-card flat class="mt-3">
+            <v-list-item>
+              <v-list-item-content class="pt-1">
+                <div class="overline text--secondary">TOPIC</div>
+                <v-list-item-title style="font-size: 1.43rem">{{
+                  topic.capitalizedName
+                }}</v-list-item-title>
+              </v-list-item-content>
+            </v-list-item>
+
+            <v-row align="center" justify="start" no-gutters class="px-4 pb-2">
+              <v-chip small outlined>
+                <v-icon small left>{{
+                  $vuetify.icons.values.mdiAccountMultiple
+                }}</v-icon>
+                {{ topic.followerCount }}
+              </v-chip>
+
+              <v-chip small outlined class="ml-2">
+                <v-icon small left>{{ $vuetify.icons.values.mdiPost }}</v-icon>
+                {{ topic.postCount }}
+              </v-chip>
+            </v-row>
+          </v-card>
         </div>
-        <v-divider class="my-1" />
-        <v-row class="mb-1 mx-0">
-          <SortMenu v-model="sort" class="mr-1" />
-          <TypeMenu v-model="type" />
-        </v-row>
+      </v-col>
+      <v-col>
+        <DynamicScroller page-mode :items="topicFeed" :min-item-size="54">
+          <template v-slot="{ item, index, active }">
+            <DynamicScrollerItem
+              :item="item"
+              :active="active"
+              :index="index"
+              :size-dependencies="[item.title, item.textContent]"
+            >
+              <div class="pb-3">
+                <Post :post="item" :index="index" :active="active" />
+              </div>
+            </DynamicScrollerItem>
+          </template>
+        </DynamicScroller>
 
         <v-progress-linear
           v-show="$apollo.queries.topicFeed.loading"
           indeterminate
         />
       </v-col>
-      <v-col v-if="$device.isDesktop" cols="2">
-        <TopicsSidebar />
+      <v-col v-if="$device.isDesktop" cols="3">
+        <div class="sticky">
+          <TopicsSidebar />
+          <InfoLinks class="mt-2" />
+        </div>
       </v-col>
     </v-row>
   </v-container>
 </template>
 
 <script>
-import SortMenu from '../../components/buttons/home_sort/HomeSortMenu'
 import TopicsSidebar from '../../components/topic/TopicsSidebar'
 import followedTopicsGql from '../../gql/followedTopics.graphql'
 import followTopicGql from '../../gql/followTopic.graphql'
 import unfollowTopicGql from '../../gql/unfollowTopic.graphql'
 import topicGql from '../../gql/topic.graphql'
 import topicFeedGql from '../../gql/topicFeed.graphql'
-import TypeMenu from '../../components/buttons/home_type/HomeTypeMenu'
+import UserSideCard from '../../components/user/UserSideCard'
+import Post from '../../components/post/Post'
+import InfoLinks from '../../components/InfoLinks'
 
 export default {
-  components: { TypeMenu, TopicsSidebar, SortMenu },
-  async asyncData(context) {
-    const client = context.app.apolloProvider.defaultClient
-    const topicData = await client.query({
-      query: topicGql,
-      variables: {
-        topicName: context.params.name
-      },
-      fetchPolicy: 'network-only'
-    })
-
-    if (!topicData.data.topic)
-      context.error({ statusCode: 404, message: 'Topic not found' })
-
-    return {
-      topic: topicData.data.topic
-    }
-  },
+  components: { InfoLinks, Post, UserSideCard, TopicsSidebar },
   data() {
     return {
       topic: null,
       topicFeed: [],
-      hasMore: true,
-      type:
-        this.$route.query.type &&
-        ['all', 'text', 'link'].includes(this.$route.query.type)
-          ? this.$route.query.type
-          : 'all',
-      sort: {
-        sort:
-          this.$route.query.sort &&
-          ['new', 'top', 'hot'].includes(this.$route.query.sort)
-            ? this.$route.query.sort
-            : 'hot',
-        time:
-          this.$route.query.time &&
-          ['hour', 'day', 'week', 'month', 'year', 'all'].includes(
-            this.$route.query.time
-          )
-            ? this.$route.query.time
-            : 'all'
-      }
+      hasMore: true
     }
   },
   computed: {
@@ -104,40 +97,44 @@ export default {
       }
     }
   },
-  watch: {
-    async type(type) {
-      await this.$router.push({
-        path: `/topic/${this.topicName}`,
-        query: { ...this.$route.query, type }
-      })
-      this.$store.commit('setHomeQuery', this.$route.query)
-    },
-    sort: {
-      async handler(sort) {
-        await this.$router.push({
-          path: `/topic/${this.topicName}`,
-          query: { ...this.$route.query, s: sort.sort, t: sort.time }
-        })
-        this.$store.commit('setHomeQuery', this.$route.query)
-      },
-      deep: true
-    }
+  activated() {
+    window.addEventListener('scroll', this.handleScroll)
+  },
+  deactivated() {
+    window.addEventListener('scroll', this.handleScroll)
   },
   apollo: {
+    topic: {
+      query: topicGql,
+      variables() {
+        return {
+          topicName: this.topicName
+        }
+      },
+      skip() {
+        return this.$route.name !== 't-name'
+      }
+    },
     topicFeed: {
       query: topicFeedGql,
       variables() {
         return {
-          sort: this.sort.sort.toUpperCase(),
-          time: this.sort.time.toUpperCase(),
-          type: this.type.toUpperCase(),
           topicName: this.topicName
         }
       },
-      fetchPolicy: 'cache-and-network'
+      skip() {
+        return this.$route.name !== 't-name'
+      }
     }
   },
   methods: {
+    handleScroll(e) {
+      const totalPageHeight = document.body.scrollHeight
+      const scrollPoint = window.scrollY + window.innerHeight
+      if (scrollPoint >= totalPageHeight - 200) {
+        this.showMore()
+      }
+    },
     toggleFollow() {
       if (this.topic.isFollowing) this.unfollowTopic()
       else this.followTopic()
@@ -163,15 +160,17 @@ export default {
       })
     },
     showMore() {
-      if (!this.hasMore) return
+      if (
+        this.$apollo.queries.topicFeed.loading ||
+        !this.hasMore ||
+        this.$route.name !== 't-name'
+      )
+        return
       this.page++
       this.$apollo.queries.topicFeed.fetchMore({
         query: topicFeedGql,
         variables: {
           page: this.page,
-          sort: this.sort.sort.toUpperCase(),
-          time: this.sort.time.toUpperCase(),
-          type: this.type.toUpperCase(),
           topicName: this.topicName
         },
         updateQuery: (previousResult, { fetchMoreResult }) => {

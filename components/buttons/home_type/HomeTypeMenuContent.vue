@@ -1,7 +1,7 @@
 <template>
-  <v-list dense>
+  <v-list class="py-0">
     <v-list-item @click="chooseAll">
-      <v-list-item-icon class="mr-4">
+      <v-list-item-icon>
         <v-icon>{{ $vuetify.icons.values.mdiInfinity }}</v-icon>
       </v-list-item-icon>
       <v-list-item-content>
@@ -12,7 +12,7 @@
     </v-list-item>
 
     <v-list-item @click="chooseMyTopics">
-      <v-list-item-icon class="mr-4">
+      <v-list-item-icon>
         <v-icon>{{ $vuetify.icons.values.mdiNewspaper }}</v-icon>
       </v-list-item-icon>
       <v-list-item-content>
@@ -26,7 +26,7 @@
     <v-divider />
 
     <v-list-item :disabled="textDisabled" @click="toggle('text')">
-      <v-list-item-action class="mr-4">
+      <v-list-item-action>
         <v-checkbox v-model="textEnabled" readonly />
       </v-list-item-action>
       <v-list-item-content>
@@ -39,7 +39,7 @@
     </v-list-item>
 
     <v-list-item :disabled="linksDisabled" @click="toggle('link')">
-      <v-list-item-action class="mr-4">
+      <v-list-item-action>
         <v-checkbox v-model="linksEnabled" readonly />
       </v-list-item-action>
       <v-list-item-content>
@@ -52,7 +52,7 @@
     </v-list-item>
 
     <v-list-item :disabled="imagesDisabled" @click="toggle('image')">
-      <v-list-item-action class="mr-4">
+      <v-list-item-action>
         <v-checkbox v-model="imagesEnabled" readonly />
       </v-list-item-action>
       <v-list-item-content>
@@ -68,7 +68,7 @@
 
 <script>
 export default {
-  name: 'TypeMenuContent',
+  name: 'HomeTypeMenuContent',
   data() {
     return {
       menu: false
