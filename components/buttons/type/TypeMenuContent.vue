@@ -1,30 +1,5 @@
 <template>
   <v-list class="py-0">
-    <v-list-item @click="chooseAll">
-      <v-list-item-icon>
-        <v-icon>{{ $vuetify.icons.values.mdiInfinity }}</v-icon>
-      </v-list-item-icon>
-      <v-list-item-content>
-        <v-list-item-title :class="!$route.query.feed ? 'font-weight-bold' : ''"
-          >All</v-list-item-title
-        >
-      </v-list-item-content>
-    </v-list-item>
-
-    <v-list-item @click="chooseMyTopics">
-      <v-list-item-icon>
-        <v-icon>{{ $vuetify.icons.values.mdiNewspaper }}</v-icon>
-      </v-list-item-icon>
-      <v-list-item-content>
-        <v-list-item-title
-          :class="$route.query.feed === 'mytopics' ? 'font-weight-bold' : ''"
-          >My Topics</v-list-item-title
-        >
-      </v-list-item-content>
-    </v-list-item>
-
-    <v-divider />
-
     <v-list-item :disabled="textDisabled" @click="toggle('text')">
       <v-list-item-action>
         <v-checkbox v-model="textEnabled" readonly />
@@ -68,7 +43,7 @@
 
 <script>
 export default {
-  name: 'HomeTypeMenuContent',
+  name: 'TypeMenuContent',
   data() {
     return {
       menu: false
@@ -116,27 +91,6 @@ export default {
     }
   },
   methods: {
-    chooseAll() {
-      this.$emit('selected')
-      const query = Object.assign({}, this.$route.query)
-      delete query.feed
-      this.$router.push({ path: this.$route.path, query })
-    },
-    chooseMyTopics() {
-      this.$emit('selected')
-
-      if (!this.$store.state.currentUser) {
-        this.$store.dispatch('displaySnackbar', {
-          message: 'Must login to view My Topics'
-        })
-        return
-      }
-
-      this.$router.push({
-        path: this.$route.path,
-        query: { ...this.$route.query, feed: 'mytopics' }
-      })
-    },
     toggle(type) {
       let types = this.$route.query.types
         ? this.$route.query.types.split('-')

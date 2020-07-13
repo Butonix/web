@@ -24,7 +24,7 @@
             rounded
             depressed
             color="primary"
-            class="mb-3 font-weight-regular"
+            class="mb-3 font-weight-regular white--text"
             @click="writingComment = true"
           >
             <v-icon size="20" class="mr-2">{{
@@ -39,14 +39,14 @@
             rounded
             depressed
             color="primary"
-            class="mb-3 font-weight-regular"
+            class="mb-3 font-weight-regular white--text"
             to="/login"
             nuxt
           >
             <v-icon size="20" class="mr-2">{{
               $vuetify.icons.values.mdiPencil
             }}</v-icon>
-            Login to Comment
+            Log in to comment
           </v-btn>
 
           <v-spacer />

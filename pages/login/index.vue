@@ -3,7 +3,7 @@
     <v-row justify="center">
       <v-col :cols="$device.isDesktop ? 6 : 12">
         <v-tabs v-model="tab" grow>
-          <v-tab>Login</v-tab>
+          <v-tab>Log In</v-tab>
           <v-tab>Sign Up</v-tab>
         </v-tabs>
         <v-tabs-items v-model="tab">
@@ -46,14 +46,14 @@
               </v-card-text>
               <v-card-actions>
                 <v-btn
-                  aria-label="Login"
+                  aria-label="Log In"
                   color="primary"
                   depressed
                   block
                   :loading="loading"
                   :disabled="!loginValid"
                   type="submit"
-                  >Login</v-btn
+                  >Log In</v-btn
                 >
               </v-card-actions>
             </v-form>

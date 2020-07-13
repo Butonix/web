@@ -21,6 +21,7 @@
     "@nuxtjs/device": "^1.2.7",
     "@nuxtjs/vuetify": "^1.11.2",
     "date-fns": "^2.14.0",
+    "email-validator": "^2.0.4",
     "graphql-tag": "^2.10.3",
     "is-url": "^1.2.4",
     "nuxt": "^2.13.3",

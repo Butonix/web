@@ -29,7 +29,9 @@
             :append-icon="$vuetify.icons.values.mdiMagnify"
           />
 
-          <NewPostButton />
+          <div class="mr-4">
+            <NewPostButton />
+          </div>
 
           <v-menu
             v-if="$store.state.currentUser"
@@ -72,9 +74,7 @@
           </v-menu>
         </template>
 
-        <div>
-          <ProfileMenu />
-        </div>
+        <ProfileMenu />
 
         <template v-if="$device.isDesktop">
           <client-only>

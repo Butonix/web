@@ -73,7 +73,12 @@ import {
   mdiAccountMultiple,
   mdiAccountMultipleOutline,
   mdiCommentMultiple,
-  mdiCommentMultipleOutline
+  mdiCommentMultipleOutline,
+  mdiShuffleVariant,
+  mdiFace,
+  mdiPlus,
+  mdiCheck,
+  mdiClipboardAccount
 } from '@mdi/js'
 
 export default {
@@ -293,7 +298,12 @@ export default {
         mdiAccountMultiple,
         mdiAccountMultipleOutline,
         mdiCommentMultiple,
-        mdiCommentMultipleOutline
+        mdiCommentMultipleOutline,
+        mdiShuffleVariant,
+        mdiFace,
+        mdiPlus,
+        mdiCheck,
+        mdiClipboardAccount
       }
     },
     theme: {

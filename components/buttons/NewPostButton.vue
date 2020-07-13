@@ -4,7 +4,7 @@
       <v-btn
         rounded
         depressed
-        class=" white--text"
+        class="white--text"
         :color="$vuetify.theme.dark ? 'primary' : 'primary'"
         v-on="on"
       >

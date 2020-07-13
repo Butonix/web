@@ -26,6 +26,20 @@
     <v-list-item
       v-if="!$store.state.currentUser"
       nuxt
+      to="/signup"
+      @click="$emit('selected')"
+    >
+      <v-list-item-icon>
+        <v-icon>{{ $vuetify.icons.values.mdiClipboardAccount }}</v-icon>
+      </v-list-item-icon>
+      <v-list-item-content>
+        <v-list-item-title>Sign Up</v-list-item-title>
+      </v-list-item-content>
+    </v-list-item>
+
+    <v-list-item
+      v-if="!$store.state.currentUser"
+      nuxt
       to="/login"
       @click="$emit('selected')"
     >

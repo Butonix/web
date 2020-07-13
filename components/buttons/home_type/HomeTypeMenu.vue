@@ -64,7 +64,7 @@
 </template>
 
 <script>
-import HomeTypeMenuContent from './HomeTypeMenuContent'
+import HomeTypeMenuContent from '../type/TypeMenuContent'
 
 export default {
   name: 'HomeTypeMenu',

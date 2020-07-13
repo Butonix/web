@@ -10,7 +10,7 @@
     "
   >
     <v-card-title style="word-break: normal"
-      >Login to enjoy all of Comet's features!</v-card-title
+      >Log in to enjoy all of Comet's features!</v-card-title
     >
     <v-card-subtitle style="font-size: .93rem"
       >Create posts and comments, follow topics, fine-tune the content you see,
@@ -18,8 +18,16 @@
     >
     <v-card-actions>
       <v-spacer />
-      <v-btn text>Login</v-btn>
-      <v-btn text>Sign Up</v-btn>
+      <v-btn text rounded>Log In</v-btn>
+      <v-btn
+        depressed
+        rounded
+        color="primary"
+        nuxt
+        to="/signup"
+        class="white--text"
+        >Sign Up</v-btn
+      >
     </v-card-actions>
   </v-card>
 </template>
@@ -41,11 +49,10 @@ export default {
       query: userGql,
       variables() {
         return {
-          username: this.$store.state.currentUser.username
+          username: this.$store.state.currentUser
+            ? this.$store.state.currentUser.username
+            : ''
         }
-      },
-      skip() {
-        return !this.$store.state.currentUser
       }
     }
   }

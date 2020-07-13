@@ -66,7 +66,10 @@ export const actions = {
       return
     }
     const client = this.app.apolloProvider.defaultClient
-    const { data } = await client.query({ query: currentUserGql })
+    const { data } = await client.query({
+      query: currentUserGql,
+      fetchPolicy: 'network-only'
+    })
     commit('setCurrentUser', data.currentUser)
   },
   displaySnackbar({ commit }, { message, success = false }) {

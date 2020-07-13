@@ -45,13 +45,16 @@
           </template>
 
           <v-spacer />
+
+          <TypeMenu />
+
           <HomeSortMenu />
         </v-row>
 
         <DynamicScroller
           page-mode
           :items="globalStickies.concat(homeFeed)"
-          :min-item-size="20"
+          :min-item-size="54"
         >
           <template v-slot="{ item, index, active }">
             <DynamicScrollerItem
@@ -89,7 +92,7 @@ import homeFeedGql from '../gql/homeFeed.graphql'
 import globalStickiesGql from '../gql/globalStickies.graphql'
 import Post from '../components/post/Post'
 import UserSideCard from '../components/user/UserSideCard'
-import TypeMenu from '../components/buttons/home_type/HomeTypeMenu'
+import TypeMenu from '../components/buttons/type/TypeMenu'
 import HomeSortMenu from '../components/buttons/home_sort/HomeSortMenu'
 
 export default {
@@ -200,7 +203,7 @@ export default {
     chooseMyTopics() {
       if (!this.$store.state.currentUser) {
         this.$store.dispatch('displaySnackbar', {
-          message: 'Must login to view My Topics'
+          message: 'Must log in to view My Topics'
         })
         return
       }
