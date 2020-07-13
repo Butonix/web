@@ -50,7 +50,7 @@
           :items="globalStickies.concat(homeFeed)"
           :min-item-size="54"
           :prerender="20"
-          :buffer="1"
+          :buffer="100"
         >
           <template v-slot="{ item, index, active }">
             <DynamicScrollerItem
