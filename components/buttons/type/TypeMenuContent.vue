@@ -1,5 +1,5 @@
 <template>
-  <v-list class="py-0">
+  <div>
     <v-list-item :disabled="textDisabled" @click="toggle('text')">
       <v-list-item-action>
         <v-checkbox v-model="textEnabled" readonly />
@@ -38,7 +38,7 @@
         >
       </v-list-item-content>
     </v-list-item>
-  </v-list>
+  </div>
 </template>
 
 <script>

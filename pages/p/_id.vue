@@ -30,7 +30,7 @@
             <v-icon size="20" class="mr-2">{{
               $vuetify.icons.values.mdiPencil
             }}</v-icon>
-            New Comment
+            <span class="mr-2">New Comment</span>
           </v-btn>
 
           <v-btn
@@ -59,10 +59,6 @@
           v-model="commentHTML"
           class="mb-3"
           :loading="submitBtnLoading"
-          :autofocus="
-            (postComments.length === 0 && $device.isDesktop) ||
-              postComments.length > 0
-          "
           @submitted="submitComment"
           @cancelled="writingComment = false"
         />
@@ -114,7 +110,7 @@ import Post from '../../components/post/Post'
 import UserSideCard from '../../components/user/UserSideCard'
 import Comment from '../../components/comment/Comment'
 import CommentEditor from '../../components/editor/CommentEditor'
-import CommentSortMenu from '../../components/buttons/comment_sort/CommentSortMenu'
+import CommentSortMenu from '../../components/comment/sort/CommentSortMenu'
 
 export default {
   components: {
@@ -162,13 +158,6 @@ export default {
       }
       fun(thread)
       return thread
-    }
-  },
-  watch: {
-    postComments(val) {
-      if ((!val || val.length === 0) && this.$store.state.currentUser) {
-        this.writingComment = true
-      }
     }
   },
   async activated() {

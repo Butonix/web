@@ -111,6 +111,9 @@
         class="mr-2 ml-0 text--secondary"
         :to="`/p/${post.id}/${urlName}`"
         nuxt
+        :title="
+          `${post.commentCount} Comment${post.commentCount === 1 ? '' : 's'}`
+        "
       >
         <v-icon size="20" class="mr-2">{{
           $vuetify.icons.values.mdiCommentOutline
@@ -125,6 +128,11 @@
         class="mr-2 ml-0 "
         :class="post.isEndorsed ? '' : 'text--secondary'"
         :color="post.isEndorsed ? 'primary' : ''"
+        :title="
+          `${post.endorsementCount} Rocket${
+            post.endorsementCount === 1 ? '' : 's'
+          }`
+        "
         @click.stop.prevent="toggleEndorsement"
       >
         <v-icon size="20" class="mr-2">{{
@@ -133,9 +141,14 @@
         {{ post.endorsementCount }}
       </v-btn>
 
-      <v-btn small icon class="text--secondary ml-0">
-        <v-icon size="20">{{ $vuetify.icons.values.mdiDotsVertical }}</v-icon>
-      </v-btn>
+      <PostOptions
+        :post="post"
+        :hidden="idState.hidden"
+        :reported="idState.reported"
+        @hidden="idState.hidden = true"
+        @unhidden="idState.hidden = false"
+        @reported="idState.reported = true"
+      />
     </v-card-actions>
   </v-card>
 
@@ -219,7 +232,12 @@
     </v-list-item>
 
     <div v-if="idState.imagePreview" style="max-width: none" class="px-4">
-      <a :href="post.link" rel="noopener" target="_blank">
+      <a
+        :href="post.link"
+        rel="noopener"
+        target="_blank"
+        @click.stop.prevent="openImageLink"
+      >
         <img alt="Image preview" :src="post.link" style="max-width: 100%" />
       </a>
     </div>
@@ -253,9 +271,14 @@
         {{ post.endorsementCount }}
       </v-btn>
 
-      <v-btn small icon class="text--secondary ml-0">
-        <v-icon size="20">{{ $vuetify.icons.values.mdiDotsVertical }}</v-icon>
-      </v-btn>
+      <PostOptions
+        :post="post"
+        :hidden="idState.hidden"
+        :reported="idState.reported"
+        @hidden="idState.hidden = true"
+        @unhidden="idState.hidden = false"
+        @reported="idState.reported = true"
+      />
     </v-card-actions>
   </v-card>
 </template>
@@ -269,10 +292,12 @@ import UsernameMenu from '../user/UsernameMenu'
 import TextContent from '../TextContent'
 import Username from '../user/Username'
 import PostThumbnail from './PostThumbnail'
+import PostOptions from './PostOptions'
 
 export default {
   name: 'Post',
   components: {
+    PostOptions,
     Username,
     TextContent,
     UsernameMenu,
@@ -332,11 +357,16 @@ export default {
       viewingMore: false,
       textContentHeight: 0,
       dialog: false,
-      imagePreview: false
+      imagePreview: false,
+      hidden: false,
+      reported: false
     }
   },
   methods: {
     doNothing() {},
+    openImageLink() {
+      window.open(this.post.link, '_blank')
+    },
     toggleEmbed() {
       if (this.post.type === 'IMAGE' && this.isEmbeddableImage) {
         this.idState.imagePreview = !this.idState.imagePreview

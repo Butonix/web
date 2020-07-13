@@ -45,6 +45,9 @@
     >
     <span v-else-if="$route.query.sort === 'new'">New</span>
     <span v-else-if="$route.query.sort === 'comments'">Comments</span>
+    <span v-if="!$device.isDesktop && $route.query && $route.query.types"
+      >*</span
+    >
   </v-btn>
 </template>
 

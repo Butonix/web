@@ -172,6 +172,7 @@ import loginGql from '../../gql/login.graphql'
 export default {
   data() {
     return {
+      prevRoute: null,
       tab: 0,
       username: '',
       password: '',
@@ -209,6 +210,11 @@ export default {
   activated() {
     this.reset()
   },
+  beforeRouteEnter(to, from, next) {
+    next((vm) => {
+      vm.prevRoute = from
+    })
+  },
   methods: {
     async signUp() {
       this.loading = true
@@ -224,8 +230,12 @@ export default {
           .then(({ data }) => data && data.signUp)
         await this.$apolloHelpers.onLogin(res.accessToken)
         await this.$store.dispatch('fetchCurrentUser')
-        this.$router.back()
         this.reset()
+        if (this.prevRoute && this.prevRoute.name === 'signup') {
+          await this.$router.push('/')
+        } else {
+          this.$router.back()
+        }
       } catch (e) {
         this.err = e.message
         this.$store.dispatch('displaySnackbar', {
@@ -248,8 +258,12 @@ export default {
           .then(({ data }) => data && data.login)
         await this.$apolloHelpers.onLogin(res.accessToken)
         await this.$store.dispatch('fetchCurrentUser')
-        this.$router.back()
         this.reset()
+        if (this.prevRoute && this.prevRoute.name === 'signup') {
+          await this.$router.push('/')
+        } else {
+          this.$router.back()
+        }
       } catch (e) {
         this.err = e.message
         this.$store.dispatch('displaySnackbar', {

@@ -90,19 +90,39 @@
     </v-list-item>
 
     <v-row align="center" justify="start" no-gutters class="px-4 pb-2">
-      <v-chip small outlined>
+      <v-chip
+        small
+        outlined
+        :title="
+          `${user.endorsementCount} Rocket${
+            user.endorsementCount === 1 ? '' : 's'
+          }`
+        "
+      >
         <v-icon small left>{{ $vuetify.icons.values.mdiRocket }}</v-icon>
         {{ user.endorsementCount }}
       </v-chip>
 
-      <v-chip small outlined class="ml-2">
+      <v-chip
+        small
+        outlined
+        class="ml-2"
+        :title="
+          `${user.commentCount} Comment${user.commentCount === 1 ? '' : 's'}`
+        "
+      >
         <v-icon small left>{{
           $vuetify.icons.values.mdiCommentOutline
         }}</v-icon>
         {{ user.commentCount }}
       </v-chip>
 
-      <v-chip small outlined class="ml-2">
+      <v-chip
+        small
+        outlined
+        class="ml-2"
+        :title="`${user.postCount} Post${user.postCount === 1 ? '' : 's'}`"
+      >
         <v-icon small left>{{ $vuetify.icons.values.mdiPost }}</v-icon>
         {{ user.postCount }}
       </v-chip>

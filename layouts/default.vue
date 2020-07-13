@@ -23,6 +23,13 @@ export default {
     AppBar,
     Snackbar
   },
+  watch: {
+    '$vuetify.theme.dark'() {
+      document.documentElement.style.backgroundColor = this.$vuetify.theme.dark
+        ? '#202124'
+        : '#F5F5F5'
+    }
+  },
   mounted() {
     const mq = window.matchMedia('(prefers-color-scheme: dark)')
 
@@ -41,6 +48,20 @@ export default {
         this.$vuetify.theme.dark = e.matches
       }
     })
+
+    document.documentElement.style.backgroundColor = this.$vuetify.theme.dark
+      ? '#202124'
+      : '#F5F5F5'
+  },
+  head() {
+    return {
+      meta: [
+        {
+          name: 'theme-color',
+          content: this.$vuetify.theme.dark ? '#202124' : '#F5F5F5'
+        }
+      ]
+    }
   }
 }
 </script>

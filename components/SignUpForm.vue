@@ -97,6 +97,10 @@
       :loading="loading"
       >Continue</v-btn
     >
+
+    <v-btn rounded text class="ml-1 text--secondary" nuxt to="/login"
+      >Already have an account?</v-btn
+    >
   </v-form>
 </template>
 
@@ -150,7 +154,8 @@ export default {
             mutation: signUpGql,
             variables: {
               username: this.username,
-              password: this.password
+              password: this.password,
+              email: this.email
             }
           })
           .then(({ data }) => data && data.signUp)

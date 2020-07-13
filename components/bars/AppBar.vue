@@ -114,7 +114,7 @@
 import notificationsGql from '../../gql/notifications.graphql'
 import ProfileMenu from '../buttons/profile/ProfileMenu'
 import UsernameMenu from '../user/UsernameMenu'
-import NewPostButton from '../buttons/NewPostButton'
+import NewPostButton from '../buttons/new_post/NewPostButton'
 import CometLogo from '../buttons/CometLogo'
 
 export default {

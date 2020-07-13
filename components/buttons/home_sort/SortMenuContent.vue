@@ -1,7 +1,7 @@
 <template>
   <div>
     <v-fade-transition hide-on-leave>
-      <v-list v-show="!selectingTime" class="py-0">
+      <v-list v-show="!selectingTime">
         <v-list-item @click="chooseHot">
           <v-list-item-icon>
             <v-icon>{{ $vuetify.icons.values.mdiFire }}</v-icon>
@@ -53,11 +53,18 @@
             >
           </v-list-item-content>
         </v-list-item>
+
+        <template v-if="!$device.isDesktop">
+          <v-divider />
+          <v-list>
+            <TypeMenuContent />
+          </v-list>
+        </template>
       </v-list>
     </v-fade-transition>
 
     <v-fade-transition hide-on-leave>
-      <v-list v-show="selectingTime" class="py-0">
+      <v-list v-show="selectingTime">
         <v-list-item @click="chooseTimeAll">
           <v-list-item-action>
             <v-radio-group v-model="allTime">
@@ -129,8 +136,10 @@
 </template>
 
 <script>
+import TypeMenuContent from '../type/TypeMenuContent'
 export default {
-  name: 'HomeSortMenuContent',
+  name: 'SortMenuContent',
+  components: { TypeMenuContent },
   props: {
     open: {
       type: Boolean,

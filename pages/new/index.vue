@@ -205,6 +205,9 @@ export default {
         .toLowerCase()
         .replace(/ /g, '_')
         .replace(/\W/g, '')
+        .split('_')
+        .slice(0, 9)
+        .join('_')
     }
   },
   watch: {

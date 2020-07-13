@@ -13,7 +13,7 @@
             Search: {{ $route.query.q ? $route.query.q : '' }}
           </div>
 
-          <HomeSortMenu
+          <SortMenu
             v-model="sort"
             :hot-enabled="false"
             :new-enabled="false"
@@ -32,10 +32,10 @@
 
 <script>
 import searchPostsGql from '../../gql/searchPosts.graphql'
-import HomeSortMenu from '../../components/buttons/home_sort/HomeSortMenu'
+import SortMenu from '../../components/buttons/home_sort/SortMenu'
 
 export default {
-  components: { HomeSortMenu },
+  components: { SortMenu },
   data() {
     return {
       searchPosts: [],

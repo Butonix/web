@@ -3,7 +3,7 @@
     <template v-slot:activator="{ on }">
       <SortMenuButton v-on="on" />
     </template>
-    <HomeSortMenuContent :open="menu" @selected="menu = false" />
+    <SortMenuContent :open="menu" @selected="menu = false" />
   </v-bottom-sheet>
 
   <v-menu
@@ -17,17 +17,17 @@
     <template v-slot:activator="{ on }">
       <SortMenuButton v-on="on" />
     </template>
-    <HomeSortMenuContent :open="menu" @selected="menu = false" />
+    <SortMenuContent :open="menu" @selected="menu = false" />
   </v-menu>
 </template>
 
 <script>
-import HomeSortMenuContent from './HomeSortMenuContent'
+import SortMenuContent from './SortMenuContent'
 import SortMenuButton from './SortMenuButton'
 
 export default {
-  name: 'HomeSortMenu',
-  components: { SortMenuButton, HomeSortMenuContent },
+  name: 'SortMenu',
+  components: { SortMenuButton, SortMenuContent },
   data() {
     return {
       menu: false

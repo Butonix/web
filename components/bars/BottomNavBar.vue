@@ -6,15 +6,19 @@
     class="bottomappbar"
     height="56"
   >
-    <v-bottom-navigation grow color="primary">
+    <v-bottom-navigation grow color="#8D8D8D">
       <v-btn
         aria-label="Home"
         class="font-weight-regular"
         style="letter-spacing: normal"
-        @click="clickHomeButton"
+        :to="{ path: '/', query: $store.state.homeQuery }"
+        nuxt
+        @click.stop.prevent="clickHomeButton"
       >
         <!--<span>Home</span>-->
-        <v-icon>{{ $vuetify.icons.values.mdiHome }}</v-icon>
+        <v-icon :color="$route.name === 'index' ? 'primary' : ''">{{
+          $vuetify.icons.values.mdiHome
+        }}</v-icon>
       </v-btn>
 
       <v-btn
@@ -25,7 +29,9 @@
         style="letter-spacing: normal"
       >
         <!--<span>Search</span>-->
-        <v-icon>{{ $vuetify.icons.values.mdiMagnify }}</v-icon>
+        <v-icon :color="$route.name === 'search' ? 'primary' : ''">{{
+          $vuetify.icons.values.mdiMagnify
+        }}</v-icon>
       </v-btn>
 
       <v-bottom-sheet v-model="newPostBottomSheet">
@@ -37,7 +43,9 @@
             v-on="on"
           >
             <!--<span>New Post</span>-->
-            <v-icon>{{ $vuetify.icons.values.mdiPlusBox }}</v-icon>
+            <v-icon :color="$route.name.startsWith('new') ? 'primary' : ''">{{
+              $vuetify.icons.values.mdiPlusBox
+            }}</v-icon>
           </v-btn>
         </template>
 
@@ -52,7 +60,9 @@
         style="letter-spacing: normal"
       >
         <!--<span>Topics</span>-->
-        <v-icon>{{ $vuetify.icons.values.mdiNewspaper }}</v-icon>
+        <v-icon :color="$route.name === 'topics' ? 'primary' : ''">{{
+          $vuetify.icons.values.mdiNewspaper
+        }}</v-icon>
       </v-btn>
 
       <v-btn
@@ -64,9 +74,15 @@
       >
         <!--<span>Notifications</span>-->
         <v-badge v-if="notifications.length > 0" overlap content="1">
-          <v-icon>{{ $vuetify.icons.values.mdiBellOutline }}</v-icon>
+          <v-icon :color="$route.name === 'notifications' ? 'primary' : ''">{{
+            $vuetify.icons.values.mdiBellOutline
+          }}</v-icon>
         </v-badge>
-        <v-icon v-else>{{ $vuetify.icons.values.mdiBellOutline }}</v-icon>
+        <v-icon
+          v-else
+          :color="$route.name === 'notifications' ? 'primary' : ''"
+          >{{ $vuetify.icons.values.mdiBellOutline }}</v-icon
+        >
       </v-btn>
     </v-bottom-navigation>
   </v-app-bar>
@@ -74,7 +90,7 @@
 
 <script>
 import notificationsGql from '../../gql/notifications.graphql'
-import NewPostButtonContent from '../buttons/NewPostButtonContent'
+import NewPostButtonContent from '../buttons/new_post/NewPostButtonContent'
 
 export default {
   name: 'BottomNavBar',

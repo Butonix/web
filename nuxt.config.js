@@ -97,7 +97,7 @@ export default {
         name: 'description',
         content: process.env.npm_package_description || ''
       },
-      { name: 'theme-color', content: '#C62828' }
+      { name: 'theme-color', content: '#202124' }
     ],
     link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }]
   },
@@ -148,13 +148,13 @@ export default {
       name: 'Comet',
       short_name: 'Comet',
       description: 'Create and browse posts and comments on Comet',
-      theme_color: '#F44336',
-      background_color: '#313235'
+      theme_color: '#202124',
+      background_color: '#202124'
     },
     meta: {
       name: 'Comet',
       description: 'Create and browse posts and comments on Comet',
-      theme_color: '#F44336'
+      theme_color: '#202124'
     },
     workbox: {
       runtimeCaching: [
@@ -319,7 +319,7 @@ export default {
           info: colors.teal.lighten1,
           warning: colors.amber.base,
           error: colors.red.base,
-          success: colors.green.accent3
+          success: colors.green.darken1
         },
         light: {
           primary: colors.red.base,
@@ -327,8 +327,8 @@ export default {
           secondary: colors.amber.darken3,
           info: colors.teal.lighten1,
           warning: colors.amber.base,
-          error: colors.red.base,
-          success: colors.green.accent3
+          error: colors.red.darken1,
+          success: colors.green.darken1
         }
       }
     }

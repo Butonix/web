@@ -20,8 +20,8 @@
       <v-spacer />
       <v-btn text rounded>Log In</v-btn>
       <v-btn
+        style="border-radius: 4px"
         depressed
-        rounded
         color="primary"
         nuxt
         to="/signup"

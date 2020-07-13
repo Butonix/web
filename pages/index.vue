@@ -8,53 +8,49 @@
       </v-col>
       <v-col>
         <v-row no-gutters class="pb-3">
-          <TypeMenu v-if="false" />
+          <v-btn
+            small
+            text
+            rounded
+            class="mr-1 font-weight-regular"
+            :color="!$route.query || !$route.query.feed ? 'primary' : ''"
+            @click="chooseAll"
+          >
+            <v-icon size="20" class="mr-2">{{
+              $vuetify.icons.values.mdiInfinity
+            }}</v-icon>
+            All
+          </v-btn>
 
-          <template v-else>
-            <v-btn
-              small
-              text
-              rounded
-              class="mr-1 font-weight-regular"
-              :color="!$route.query || !$route.query.feed ? 'primary' : ''"
-              @click="chooseAll"
-            >
-              <v-icon size="20" class="mr-2">{{
-                $vuetify.icons.values.mdiInfinity
-              }}</v-icon>
-              All
-            </v-btn>
-
-            <v-btn
-              small
-              text
-              rounded
-              class="font-weight-regular"
-              :color="
-                $route.query && $route.query.feed === 'mytopics'
-                  ? 'primary'
-                  : ''
-              "
-              @click="chooseMyTopics"
-            >
-              <v-icon size="20" class="mr-2">{{
-                $vuetify.icons.values.mdiNewspaper
-              }}</v-icon>
-              My Topics
-            </v-btn>
-          </template>
+          <v-btn
+            small
+            text
+            rounded
+            class="font-weight-regular"
+            :color="
+              $route.query && $route.query.feed === 'mytopics' ? 'primary' : ''
+            "
+            @click="chooseMyTopics"
+          >
+            <v-icon size="20" class="mr-2">{{
+              $vuetify.icons.values.mdiNewspaper
+            }}</v-icon>
+            My Topics
+          </v-btn>
 
           <v-spacer />
 
-          <TypeMenu />
+          <TypeMenu v-if="$device.isDesktop" />
 
-          <HomeSortMenu />
+          <SortMenu />
         </v-row>
 
         <DynamicScroller
           page-mode
           :items="globalStickies.concat(homeFeed)"
           :min-item-size="54"
+          :prerender="20"
+          :buffer="1000"
         >
           <template v-slot="{ item, index, active }">
             <DynamicScrollerItem
@@ -93,13 +89,13 @@ import globalStickiesGql from '../gql/globalStickies.graphql'
 import Post from '../components/post/Post'
 import UserSideCard from '../components/user/UserSideCard'
 import TypeMenu from '../components/buttons/type/TypeMenu'
-import HomeSortMenu from '../components/buttons/home_sort/HomeSortMenu'
+import SortMenu from '../components/buttons/home_sort/SortMenu'
 
 export default {
   name: 'Index',
   scrollToTop: false,
   components: {
-    HomeSortMenu,
+    SortMenu,
     TypeMenu,
     UserSideCard,
     Post,
