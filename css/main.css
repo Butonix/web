@@ -1,9 +1,13 @@
-/*.page-enter-active, .page-leave-active {
-  transition: opacity .05s;
+.page-enter-active,
+.page-leave-active {
+  transition-property: opacity;
+  transition-timing-function: ease-in-out;
+  transition-duration: 150ms;
 }
-.page-enter, .page-leave-to {
+.page-enter,
+.page-leave-to {
   opacity: 0;
-}*/
+}
 
 .hoverable:hover {
   text-decoration: underline !important;

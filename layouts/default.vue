@@ -25,6 +25,7 @@ export default {
   },
   watch: {
     '$vuetify.theme.dark'() {
+      if (!process.client) return
       document.documentElement.style.backgroundColor = this.$vuetify.theme.dark
         ? '#202124'
         : '#F5F5F5'

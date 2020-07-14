@@ -50,7 +50,6 @@
           :items="globalStickies.concat(homeFeed)"
           :min-item-size="54"
           :prerender="20"
-          :buffer="100"
         >
           <template v-slot="{ item, index, active }">
             <DynamicScrollerItem
@@ -210,6 +209,7 @@ export default {
       })
     },
     handleScroll(e) {
+      if (!process.client) return
       const totalPageHeight = document.body.scrollHeight
       const scrollPoint = window.scrollY + window.innerHeight
       if (scrollPoint >= totalPageHeight - 200) {

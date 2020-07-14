@@ -130,6 +130,7 @@ export default {
   },
   methods: {
     handleScroll(e) {
+      if (!process.client) return
       const totalPageHeight = document.body.scrollHeight
       const scrollPoint = window.scrollY + window.innerHeight
       if (scrollPoint >= totalPageHeight - 200) {

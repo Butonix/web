@@ -346,5 +346,13 @@ export default {
         return ['script', 'style', 'font'].includes(type)
       }
     }
+  },
+
+  build: {
+    extractCSS: true
   }
+
+  /* pageTransition: {
+    name: 'fade-transition'
+  } */
 }
