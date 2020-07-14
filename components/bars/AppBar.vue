@@ -84,6 +84,7 @@
                   class="ml-1"
                   icon
                   :color="$vuetify.theme.dark ? '' : '#7289da'"
+                  aria-label="Discord"
                   v-on="on"
                 >
                   <v-icon>{{ $vuetify.icons.values.mdiDiscord }}</v-icon>

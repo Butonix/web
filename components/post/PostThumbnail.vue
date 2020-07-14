@@ -9,6 +9,7 @@
       :href="post.link"
       target="_blank"
       rel="noopener"
+      aria-label="Thumbnail"
       @click.stop.prevent="$emit('thumbnailclick')"
     >
       <img

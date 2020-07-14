@@ -338,21 +338,5 @@ export default {
     redirectSSL.create({
       enabled: process.env.NODE_ENV === 'production'
     })
-  ],
-
-  render: {
-    bundleRenderer: {
-      shouldPreload: (file, type) => {
-        return ['script', 'style', 'font'].includes(type)
-      }
-    }
-  },
-
-  build: {
-    extractCSS: true
-  }
-
-  /* pageTransition: {
-    name: 'fade-transition'
-  } */
+  ]
 }

@@ -4,6 +4,7 @@
     text
     rounded
     class="mr-1 font-weight-regular"
+    aria-label="Post Types"
     @click.stop.prevent="click"
   >
     <span v-if="typeString === 'Everything'">
