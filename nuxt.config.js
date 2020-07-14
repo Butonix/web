@@ -310,7 +310,7 @@ export default {
       options: {
         customProperties: true
       },
-      dark: true,
+      dark: false,
       themes: {
         dark: {
           primary: colors.red.lighten1,
@@ -338,5 +338,13 @@ export default {
     redirectSSL.create({
       enabled: process.env.NODE_ENV === 'production'
     })
-  ]
+  ],
+
+  render: {
+    bundleRenderer: {
+      shouldPreload: (file, type) => {
+        return ['script', 'style', 'font'].includes(type)
+      }
+    }
+  }
 }

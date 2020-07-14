@@ -36,11 +36,11 @@ export default {
     const dark = localStorage.getItem('dark')
 
     if (dark) {
-      this.$vuetify.theme.dark = dark === 'true'
+      setTimeout(() => (this.$vuetify.theme.dark = dark === 'true'), 0)
     } else if (mq.matches) {
-      this.$vuetify.theme.dark = true
+      setTimeout(() => (this.$vuetify.theme.dark = true), 0)
     } else {
-      this.$vuetify.theme.dark = false
+      setTimeout(() => (this.$vuetify.theme.dark = false), 0)
     }
 
     mq.addEventListener('change', (e) => {
