@@ -5,7 +5,9 @@
     <AppBar />
 
     <v-main>
-      <nuxt keep-alive :keep-alive-props="{ include: ['Index', 'T'] }" />
+      <v-container class="pt-0">
+        <nuxt keep-alive :keep-alive-props="{ include: ['Index', 'T'] }" />
+      </v-container>
       <Snackbar />
     </v-main>
   </v-app>
@@ -67,9 +69,4 @@ export default {
 }
 </script>
 
-<style scoped>
-.bottomappbar >>> .v-toolbar__content {
-  padding: 0;
-  margin: 0;
-}
-</style>
+<style scoped></style>

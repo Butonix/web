@@ -144,4 +144,9 @@ export default {
 }
 </script>
 
-<style scoped></style>
+<style scoped>
+.bottomappbar >>> .v-toolbar__content {
+  padding: 0;
+  margin: 0;
+}
+</style>

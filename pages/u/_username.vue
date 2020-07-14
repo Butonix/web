@@ -1,74 +1,63 @@
 <template>
-  <v-container fluid>
-    <v-row>
-      <v-col>
-        <div class="headline">
-          <span
-            v-if="user.title"
-            class="subtitle-1 font-weight-bold primary--text"
-            >[{{ user.title }}] </span
-          >{{ user.username }}
+  <v-row>
+    <v-col>
+      <div class="headline">
+        <span
+          v-if="user.title"
+          class="subtitle-1 font-weight-bold primary--text"
+          >[{{ user.title }}] </span
+        >{{ user.username }}
 
-          <v-avatar>
-            <v-img alt="Profile picture" :src="user.profilePicUrl" />
-          </v-avatar>
-        </div>
-        <div class="subtitle-1">
-          Joined on {{ joinDate }} &middot;
-          {{ user.endorsementCount }} endorsement{{
-            user.endorsementCount === 1 ? '' : 's'
-          }}
-        </div>
+        <v-avatar>
+          <v-img alt="Profile picture" :src="user.profilePicUrl" />
+        </v-avatar>
+      </div>
+      <div class="subtitle-1">
+        Joined on {{ joinDate }} &middot;
+        {{ user.endorsementCount }} endorsement{{
+          user.endorsementCount === 1 ? '' : 's'
+        }}
+      </div>
 
-        <v-tabs
-          v-model="currentTab"
-          class="mb-2"
-          background-color="transparent"
+      <v-tabs v-model="currentTab" class="mb-2" background-color="transparent">
+        <v-tab>All</v-tab>
+        <v-tab
+          >{{ user.postCount }} Post{{ user.postCount === 1 ? '' : 's' }}</v-tab
         >
-          <v-tab>All</v-tab>
-          <v-tab
-            >{{ user.postCount }} Post{{
-              user.postCount === 1 ? '' : 's'
-            }}</v-tab
-          >
-          <v-tab
-            >{{ user.commentCount }} Comment{{
-              user.commentCount === 1 ? '' : 's'
-            }}</v-tab
-          >
-        </v-tabs>
-
-        <!--<SortMenu v-model="sort" :hot-enabled="false" class="mb-1" />-->
-
-        <v-tabs-items
-          v-model="currentTab"
-          style="background-color: transparent"
+        <v-tab
+          >{{ user.commentCount }} Comment{{
+            user.commentCount === 1 ? '' : 's'
+          }}</v-tab
         >
-          <v-tab-item>
-            <div
-              v-for="item in postsAndComments"
-              :key="item.id"
-              class="mb-1"
-            ></div>
-          </v-tab-item>
+      </v-tabs>
 
-          <v-tab-item>
-            <Post v-for="post in userPosts" :key="post.id" :source="post" />
-          </v-tab-item>
+      <!--<SortMenu v-model="sort" :hot-enabled="false" class="mb-1" />-->
 
-          <v-tab-item>
-            <Comment
-              v-for="comment in userComments"
-              :key="comment.id"
-              profile
-              :comment="comment"
-              class="mb-1"
-            />
-          </v-tab-item>
-        </v-tabs-items>
-      </v-col>
-    </v-row>
-  </v-container>
+      <v-tabs-items v-model="currentTab" style="background-color: transparent">
+        <v-tab-item>
+          <div
+            v-for="item in postsAndComments"
+            :key="item.id"
+            class="mb-1"
+          ></div>
+        </v-tab-item>
+
+        <v-tab-item>
+          <Post v-for="post in userPosts" :key="post.id" :source="post" />
+        </v-tab-item>
+
+        <v-tab-item>
+          <Comment
+            v-for="comment in userComments"
+            :key="comment.id"
+            profile
+            :comment="comment"
+            class="mb-1"
+          />
+        </v-tab-item>
+      </v-tabs-items>
+    </v-col>
+  </v-row>
 </template>
 
 <script>

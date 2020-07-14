@@ -1,33 +1,31 @@
 <template>
-  <v-container fluid>
-    <v-row>
-      <v-col>
-        <v-text-field
-          v-model="searchText"
-          :style="$device.isDesktop ? 'max-width: 35%' : ''"
-          filled
-          label="Search"
-        />
-        <v-row class="mx-0 mb-2" align="center">
-          <div class="title mr-2">
-            Search: {{ $route.query.q ? $route.query.q : '' }}
-          </div>
+  <v-row>
+    <v-col>
+      <v-text-field
+        v-model="searchText"
+        :style="$device.isDesktop ? 'max-width: 35%' : ''"
+        filled
+        label="Search"
+      />
+      <v-row class="mx-0 mb-2" align="center">
+        <div class="title mr-2">
+          Search: {{ $route.query.q ? $route.query.q : '' }}
+        </div>
 
-          <SortMenu
-            v-model="sort"
-            :hot-enabled="false"
-            :new-enabled="false"
-            relevance-enabled
-          />
-        </v-row>
-
-        <v-progress-linear
-          v-show="$apollo.queries.searchPosts.loading"
-          indeterminate
+        <SortMenu
+          v-model="sort"
+          :hot-enabled="false"
+          :new-enabled="false"
+          relevance-enabled
         />
-      </v-col>
-    </v-row>
-  </v-container>
+      </v-row>
+
+      <v-progress-linear
+        v-show="$apollo.queries.searchPosts.loading"
+        indeterminate
+      />
+    </v-col>
+  </v-row>
 </template>
 
 <script>

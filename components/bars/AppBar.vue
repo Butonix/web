@@ -9,7 +9,7 @@
         : 'border-bottom: 1px solid rgba(0, 0, 0, .12)'
     "
   >
-    <v-container class="py-0" :class="$device.isDesktop ? '' : 'px-0'">
+    <v-container class="pa-0">
       <v-row class="ma-0" align="center" no-gutters>
         <CometLogo />
 

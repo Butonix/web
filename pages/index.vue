@@ -1,83 +1,80 @@
 <template>
-  <v-container class="pt-0">
-    <v-row>
-      <v-col v-if="$device.isDesktop" cols="3">
-        <div class="sticky">
-          <UserSideCard />
-        </div>
-      </v-col>
-      <v-col>
-        <v-row no-gutters class="pb-3">
-          <v-btn
-            small
-            text
-            rounded
-            class="mr-1 font-weight-regular"
-            :color="!$route.query || !$route.query.feed ? 'primary' : ''"
-            @click="chooseAll"
-          >
-            <v-icon size="20" class="mr-2">{{
-              $vuetify.icons.values.mdiInfinity
-            }}</v-icon>
-            All
-          </v-btn>
-
-          <v-btn
-            small
-            text
-            rounded
-            class="font-weight-regular"
-            :color="
-              $route.query && $route.query.feed === 'mytopics' ? 'primary' : ''
-            "
-            @click="chooseMyTopics"
-          >
-            <v-icon size="20" class="mr-2">{{
-              $vuetify.icons.values.mdiNewspaper
-            }}</v-icon>
-            My Topics
-          </v-btn>
-
-          <v-spacer />
-
-          <TypeMenu v-if="$device.isDesktop" />
-
-          <SortMenu />
-        </v-row>
-
-        <DynamicScroller
-          page-mode
-          :items="globalStickies.concat(homeFeed)"
-          :min-item-size="54"
-          :prerender="20"
+  <v-row>
+    <v-col v-if="$device.isDesktop" cols="3">
+      <div class="sticky">
+        <UserSideCard />
+      </div>
+    </v-col>
+    <v-col>
+      <v-row no-gutters class="pb-3">
+        <v-btn
+          small
+          text
+          rounded
+          class="mr-1 font-weight-regular"
+          :color="!$route.query || !$route.query.feed ? 'primary' : ''"
+          @click="chooseAll"
         >
-          <template v-slot="{ item, index, active }">
-            <DynamicScrollerItem
-              :item="item"
-              :active="active"
-              :index="index"
-              :size-dependencies="[item.title, item.textContent]"
-            >
-              <div class="pb-3">
-                <Post :post="item" :index="index" :active="active" />
-              </div>
-            </DynamicScrollerItem>
-          </template>
-        </DynamicScroller>
+          <v-icon size="20" class="mr-2">{{
+            $vuetify.icons.values.mdiInfinity
+          }}</v-icon>
+          All
+        </v-btn>
 
-        <v-progress-linear
-          v-show="$apollo.queries.homeFeed.loading"
-          indeterminate
-        />
-      </v-col>
-      <v-col v-if="$device.isDesktop" cols="3">
-        <div class="sticky">
-          <TopicsSidebar />
-          <InfoLinks class="mt-2" />
-        </div>
-      </v-col>
-    </v-row>
-  </v-container>
+        <v-btn
+          small
+          text
+          rounded
+          class="font-weight-regular"
+          :color="
+            $route.query && $route.query.feed === 'mytopics' ? 'primary' : ''
+          "
+          @click="chooseMyTopics"
+        >
+          <v-icon size="20" class="mr-2">{{
+            $vuetify.icons.values.mdiNewspaper
+          }}</v-icon>
+          My Topics
+        </v-btn>
+
+        <v-spacer />
+
+        <TypeMenu v-if="$device.isDesktop" />
+
+        <SortMenu />
+      </v-row>
+
+      <DynamicScroller
+        page-mode
+        :items="globalStickies.concat(homeFeed)"
+        :min-item-size="54"
+      >
+        <template v-slot="{ item, index, active }">
+          <DynamicScrollerItem
+            :item="item"
+            :active="active"
+            :index="index"
+            :size-dependencies="[item.title, item.textContent]"
+          >
+            <div class="pb-3">
+              <Post :post="item" :index="index" :active="active" />
+            </div>
+          </DynamicScrollerItem>
+        </template>
+      </DynamicScroller>
+
+      <v-progress-linear
+        v-show="$apollo.queries.homeFeed.loading"
+        indeterminate
+      />
+    </v-col>
+    <v-col v-if="$device.isDesktop" cols="3">
+      <div class="sticky">
+        <TopicsSidebar />
+        <InfoLinks class="mt-2" />
+      </div>
+    </v-col>
+  </v-row>
 </template>
 
 <script>

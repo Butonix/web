@@ -1,135 +1,129 @@
 <template>
-  <v-container fluid>
-    <v-form v-model="valid">
-      <v-row>
-        <v-col>
-          <v-text-field
-            v-model="title"
-            filled
-            :label="
-              $store.state.currentUser
-                ? 'Title'
-                : 'Must log in to create a post'
-            "
-            :disabled="!$store.state.currentUser"
-            clearable
-            :loading="detectTitleLoading"
-            :rules="titleRules"
-          />
-          <v-tabs v-model="tab" class="mb-2" background-color="transparent">
-            <v-tab>Text Post</v-tab>
-            <v-tab>Link Post</v-tab>
-            <v-tab>Image Upload</v-tab>
-          </v-tabs>
-          <v-tabs-items v-model="tab" style="background-color: transparent">
-            <v-tab-item class="pb-7"> </v-tab-item>
+  <v-form v-model="valid">
+    <v-row>
+      <v-col>
+        <v-text-field
+          v-model="title"
+          filled
+          :label="
+            $store.state.currentUser ? 'Title' : 'Must log in to create a post'
+          "
+          :disabled="!$store.state.currentUser"
+          clearable
+          :loading="detectTitleLoading"
+          :rules="titleRules"
+        />
+        <v-tabs v-model="tab" class="mb-2" background-color="transparent">
+          <v-tab>Text Post</v-tab>
+          <v-tab>Link Post</v-tab>
+          <v-tab>Image Upload</v-tab>
+        </v-tabs>
+        <v-tabs-items v-model="tab" style="background-color: transparent">
+          <v-tab-item class="pb-7"> </v-tab-item>
 
-            <v-tab-item class="pb-7">
-              <v-text-field
-                v-model="link"
-                filled
-                hide-details
-                :label="
-                  $store.state.currentUser
-                    ? 'Link URL'
-                    : 'Must log in to create a post'
-                "
-                :disabled="!$store.state.currentUser"
-                clearable
-              />
-            </v-tab-item>
-
-            <v-tab-item class="pb-7">
-              <v-file-input
-                ref="fileInput"
-                v-model="image"
-                class="mt-0"
-                label="Choose an image"
-                :rules="uploadRules"
-              />
-            </v-tab-item>
-          </v-tabs-items>
-
-          <v-combobox
-            ref="combobox"
-            v-model="selectedTopics"
-            :disabled="!$store.state.currentUser"
-            :items="searchTopicsNames"
-            label="Choose topics"
-            filled
-            hide-no-data
-            hide-selected
-            chips
-            multiple
-            dense
-            persistent-hint
-            hint="Select topics, or type and press enter to add a new topic"
-            clearable
-            append-icon=""
-            :search-input.sync="topicSearchText"
-            :loading="$apollo.queries.searchTopics.loading"
-            :rules="topicRules"
-          >
-            <template v-slot:selection="data">
-              <v-chip
-                v-bind="data.attrs"
-                :input-value="data.selected"
-                close
-                small
-                label
-                @click="data.select"
-                @click:close="remove(data.item)"
-              >
-                {{ data.item }}
-              </v-chip>
-            </template>
-
-            <template v-slot:item="data">
-              <v-list-item-content>
-                <v-list-item-title>{{ data.item }}</v-list-item-title>
-              </v-list-item-content>
-            </template>
-          </v-combobox>
-
-          <v-row class="ma-0" align="end">
-            <v-spacer />
-            <div
-              v-if="submitPostErr"
-              class="error--text body-2 font-weight-medium mr-2"
-            >
-              {{ submitPostErr }}
-            </div>
-            <v-btn
-              aria-label="Submit Post"
-              depressed
-              color="primary"
-              :loading="loading"
-              :disabled="
-                !title ||
-                  selectedTopics.length <= 0 ||
-                  !$store.state.currentUser ||
-                  !$refs.combobox.valid ||
-                  !uploadValid ||
-                  !valid
+          <v-tab-item class="pb-7">
+            <v-text-field
+              v-model="link"
+              filled
+              hide-details
+              :label="
+                $store.state.currentUser
+                  ? 'Link URL'
+                  : 'Must log in to create a post'
               "
-              @click="submitPost"
-              >Submit</v-btn
+              :disabled="!$store.state.currentUser"
+              clearable
+            />
+          </v-tab-item>
+
+          <v-tab-item class="pb-7">
+            <v-file-input
+              ref="fileInput"
+              v-model="image"
+              class="mt-0"
+              label="Choose an image"
+              :rules="uploadRules"
+            />
+          </v-tab-item>
+        </v-tabs-items>
+
+        <v-combobox
+          ref="combobox"
+          v-model="selectedTopics"
+          :disabled="!$store.state.currentUser"
+          :items="searchTopicsNames"
+          label="Choose topics"
+          filled
+          hide-no-data
+          hide-selected
+          chips
+          multiple
+          dense
+          persistent-hint
+          hint="Select topics, or type and press enter to add a new topic"
+          clearable
+          append-icon=""
+          :search-input.sync="topicSearchText"
+          :loading="$apollo.queries.searchTopics.loading"
+          :rules="topicRules"
+        >
+          <template v-slot:selection="data">
+            <v-chip
+              v-bind="data.attrs"
+              :input-value="data.selected"
+              close
+              small
+              label
+              @click="data.select"
+              @click:close="remove(data.item)"
             >
-          </v-row>
-          <v-row class="caption mx-0 mt-1">
-            <v-spacer />
-            <div class="text--secondary">
-              Please review our
-              <nuxt-link to="/content" target="_blank"
-                >Content Policy</nuxt-link
-              >
-              before posting
-            </div>
-          </v-row>
-        </v-col>
-      </v-row>
-    </v-form>
-  </v-container>
+              {{ data.item }}
+            </v-chip>
+          </template>
+
+          <template v-slot:item="data">
+            <v-list-item-content>
+              <v-list-item-title>{{ data.item }}</v-list-item-title>
+            </v-list-item-content>
+          </template>
+        </v-combobox>
+
+        <v-row class="ma-0" align="end">
+          <v-spacer />
+          <div
+            v-if="submitPostErr"
+            class="error--text body-2 font-weight-medium mr-2"
+          >
+            {{ submitPostErr }}
+          </div>
+          <v-btn
+            aria-label="Submit Post"
+            depressed
+            color="primary"
+            :loading="loading"
+            :disabled="
+              !title ||
+                selectedTopics.length <= 0 ||
+                !$store.state.currentUser ||
+                !$refs.combobox.valid ||
+                !uploadValid ||
+                !valid
+            "
+            @click="submitPost"
+            >Submit</v-btn
+          >
+        </v-row>
+        <v-row class="caption mx-0 mt-1">
+          <v-spacer />
+          <div class="text--secondary">
+            Please review our
+            <nuxt-link to="/content" target="_blank">Content Policy</nuxt-link>
+            before posting
+          </div>
+        </v-row>
+      </v-col>
+    </v-row>
+  </v-form>
 </template>
 
 <script>

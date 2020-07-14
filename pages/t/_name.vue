@@ -1,64 +1,62 @@
 <template>
-  <v-container v-if="topic" class="pt-0">
-    <v-row>
-      <v-col v-if="$device.isDesktop" cols="3">
-        <div class="sticky">
-          <UserSideCard />
-          <v-card flat class="mt-3">
-            <v-list-item>
-              <v-list-item-content class="pt-1">
-                <div class="overline text--secondary">TOPIC</div>
-                <v-list-item-title style="font-size: 1.43rem">{{
-                  topic.capitalizedName
-                }}</v-list-item-title>
-              </v-list-item-content>
-            </v-list-item>
+  <v-row>
+    <v-col v-if="$device.isDesktop" cols="3">
+      <div class="sticky">
+        <UserSideCard />
+        <v-card flat class="mt-3">
+          <v-list-item>
+            <v-list-item-content class="pt-1">
+              <div class="overline text--secondary">TOPIC</div>
+              <v-list-item-title style="font-size: 1.43rem">{{
+                topic.capitalizedName
+              }}</v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
 
-            <v-row align="center" justify="start" no-gutters class="px-4 pb-2">
-              <v-chip small outlined>
-                <v-icon small left>{{
-                  $vuetify.icons.values.mdiAccountMultiple
-                }}</v-icon>
-                {{ topic.followerCount }}
-              </v-chip>
+          <v-row align="center" justify="start" no-gutters class="px-4 pb-2">
+            <v-chip small outlined>
+              <v-icon small left>{{
+                $vuetify.icons.values.mdiAccountMultiple
+              }}</v-icon>
+              {{ topic.followerCount }}
+            </v-chip>
 
-              <v-chip small outlined class="ml-2">
-                <v-icon small left>{{ $vuetify.icons.values.mdiPost }}</v-icon>
-                {{ topic.postCount }}
-              </v-chip>
-            </v-row>
-          </v-card>
-        </div>
-      </v-col>
-      <v-col>
-        <DynamicScroller page-mode :items="topicFeed" :min-item-size="54">
-          <template v-slot="{ item, index, active }">
-            <DynamicScrollerItem
-              :item="item"
-              :active="active"
-              :index="index"
-              :size-dependencies="[item.title, item.textContent]"
-            >
-              <div class="pb-3">
-                <Post :post="item" :index="index" :active="active" />
-              </div>
-            </DynamicScrollerItem>
-          </template>
-        </DynamicScroller>
+            <v-chip small outlined class="ml-2">
+              <v-icon small left>{{ $vuetify.icons.values.mdiPost }}</v-icon>
+              {{ topic.postCount }}
+            </v-chip>
+          </v-row>
+        </v-card>
+      </div>
+    </v-col>
+    <v-col>
+      <DynamicScroller page-mode :items="topicFeed" :min-item-size="54">
+        <template v-slot="{ item, index, active }">
+          <DynamicScrollerItem
+            :item="item"
+            :active="active"
+            :index="index"
+            :size-dependencies="[item.title, item.textContent]"
+          >
+            <div class="pb-3">
+              <Post :post="item" :index="index" :active="active" />
+            </div>
+          </DynamicScrollerItem>
+        </template>
+      </DynamicScroller>
 
-        <v-progress-linear
-          v-show="$apollo.queries.topicFeed.loading"
-          indeterminate
-        />
-      </v-col>
-      <v-col v-if="$device.isDesktop" cols="3">
-        <div class="sticky">
-          <TopicsSidebar />
-          <InfoLinks class="mt-2" />
-        </div>
-      </v-col>
-    </v-row>
-  </v-container>
+      <v-progress-linear
+        v-show="$apollo.queries.topicFeed.loading"
+        indeterminate
+      />
+    </v-col>
+    <v-col v-if="$device.isDesktop" cols="3">
+      <div class="sticky">
+        <TopicsSidebar />
+        <InfoLinks class="mt-2" />
+      </div>
+    </v-col>
+  </v-row>
 </template>
 
 <script>
