@@ -100,7 +100,7 @@ export default {
         name: 'description',
         content: process.env.npm_package_description || ''
       },
-      { name: 'theme-color', content: '#202124' }
+      { name: 'theme-color', content: '#F5F5F5' }
     ],
     link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }]
   },
@@ -151,13 +151,13 @@ export default {
       name: 'Comet',
       short_name: 'Comet',
       description: 'Create and browse posts and comments on Comet',
-      theme_color: '#202124',
-      background_color: '#202124'
+      theme_color: '#F5F5F5',
+      background_color: '#F5F5F5'
     },
     meta: {
       name: 'Comet',
       description: 'Create and browse posts and comments on Comet',
-      theme_color: '#202124'
+      theme_color: '#F5F5F5'
     },
     workbox: {
       runtimeCaching: [
