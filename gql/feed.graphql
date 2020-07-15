@@ -1,7 +1,8 @@
-query topicFeed($topicName: String!, $page: Int, $sort: Sort, $time: Time, $types: [Type!]) {
-  topicFeed(topicName: $topicName, page: $page, sort: $sort, time: $time, types: $types) {
+query feed($page: Int, $sort: Sort, $time: Time, $filter: Filter, $types: [Type!], $topicName: String) {
+  feed(page: $page, sort: $sort, time: $time, filter: $filter, types: $types, topicName: $topicName) {
     commentCount
     createdAt
+    editedAt
     endorsementCount
     id
     isEndorsed

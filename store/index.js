@@ -11,6 +11,7 @@ export const state = () => ({
   snackbarSuccess: false,
   searchPage: 0,
   homeQuery: {},
+  topicQuery: {},
   expandedCommentId: ''
 })
 
@@ -23,6 +24,9 @@ export const mutations = {
   },
   setHomeQuery(state, query) {
     state.homeQuery = query
+  },
+  setTopicQuery(state, query) {
+    state.topicQuery = query
   },
   setHomeFeedPage(state, page) {
     state.homeFeedPage = page

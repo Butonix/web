@@ -1,5 +1,9 @@
 <template>
-  <v-menu offset-y transition="slide-y-transition">
+  <v-menu
+    offset-y
+    transition="slide-y-transition"
+    :close-on-content-click="false"
+  >
     <template v-slot:activator="{ on }">
       <TypeMenuBtn v-on="on" />
     </template>

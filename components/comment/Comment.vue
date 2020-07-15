@@ -57,8 +57,15 @@
       />
     </v-card-text>
     <v-card-actions class="px-4">
-      <UsernameMenu v-if="comment.author" :user-data="comment.author" />
-      <span v-else class="text--secondary">[deleted]</span>
+      <UsernameMenu
+        v-if="comment.author && $device.isDesktop"
+        :user-data="comment.author"
+      />
+      <Username
+        v-else-if="comment.author && !$device.isDesktop"
+        :user-data="comment.author"
+      />
+      <span v-else-if="!comment.author" class="text--secondary">[deleted]</span>
       <span class="caption text--secondary ml-2">{{ timeSince }}</span>
 
       <v-spacer />
@@ -195,10 +202,11 @@ import { isEditorEmpty } from '../../util/isEditorEmpty'
 import deleteCommentGql from '../../gql/deleteComment.graphql'
 import { timeSince } from '../../util/timeSince'
 import TextContent from '../TextContent'
+import Username from '~/components/user/Username'
 
 export default {
   name: 'Comment',
-  components: { TextContent, Editor, UsernameMenu },
+  components: { Username, TextContent, Editor, UsernameMenu },
   mixins: [
     IdState({
       idProp: (vm) => vm.comment.id

@@ -91,11 +91,11 @@
       </v-list-item-content>
     </v-list-item>
 
-    <div v-if="idState.imagePreview" style="max-width: none" class="px-4">
-      <a :href="post.link" rel="noopener" target="_blank">
-        <img alt="Image preview" :src="post.link" style="max-width: 60%" />
-      </a>
-    </div>
+    <PostPreview
+      :post="post"
+      :expand="idState.expand"
+      :image-preview="idState.imagePreview"
+    />
 
     <v-card-actions class="pt-0 pb-2">
       <UsernameMenu :user-data="post.author" />
@@ -145,9 +145,12 @@
         :post="post"
         :hidden="idState.hidden"
         :reported="idState.reported"
+        :blocked="idState.blocked"
         @hidden="idState.hidden = true"
         @unhidden="idState.hidden = false"
         @reported="idState.reported = true"
+        @blocked="idState.blocked = true"
+        @unblocked="idState.blocked = false"
       />
     </v-card-actions>
   </v-card>
@@ -231,16 +234,11 @@
       <PostThumbnail :post="post" @thumbnailclick="toggleEmbed" />
     </v-list-item>
 
-    <div v-if="idState.imagePreview" style="max-width: none" class="px-4">
-      <a
-        :href="post.link"
-        rel="noopener"
-        target="_blank"
-        @click.stop.prevent="openImageLink"
-      >
-        <img alt="Image preview" :src="post.link" style="max-width: 100%" />
-      </a>
-    </div>
+    <PostPreview
+      :post="post"
+      :expand="idState.expand"
+      :image-preview="idState.imagePreview"
+    />
 
     <v-card-actions class="pt-0 pb-2">
       <Username :user-data="post.author" />
@@ -275,9 +273,12 @@
         :post="post"
         :hidden="idState.hidden"
         :reported="idState.reported"
+        :blocked="idState.blocked"
         @hidden="idState.hidden = true"
         @unhidden="idState.hidden = false"
         @reported="idState.reported = true"
+        @blocked="idState.blocked = true"
+        @unblocked="idState.blocked = false"
       />
     </v-card-actions>
   </v-card>
@@ -287,16 +288,18 @@
 import { IdState } from 'vue-virtual-scroller'
 import { formatDistanceToNowStrict } from 'date-fns'
 import togglePostEndorsementGql from '../../gql/togglePostEndorsement.graphql'
-import { timeSince } from '../../util/timeSince'
 import UsernameMenu from '../user/UsernameMenu'
 import TextContent from '../TextContent'
 import Username from '../user/Username'
 import PostThumbnail from './PostThumbnail'
 import PostOptions from './PostOptions'
+import { timeSince } from '~/util/timeSince'
+import PostPreview from '~/components/post/PostPreview'
 
 export default {
   name: 'Post',
   components: {
+    PostPreview,
     PostOptions,
     Username,
     TextContent,
@@ -337,13 +340,25 @@ export default {
         .slice(0, 9)
         .join('_')
     },
-    isEmbeddableImage() {
-      return this.post.type === 'IMAGE' && this.post.link.startsWith('https://')
-    },
     timeSince() {
       return this.$device.isDesktop
         ? formatDistanceToNowStrict(new Date(this.post.createdAt)) + ' ago'
         : timeSince(new Date(this.post.createdAt))
+    },
+    isEmbeddableImage() {
+      return this.post.type === 'IMAGE' && this.post.link.startsWith('https://')
+    }
+  },
+  watch: {
+    $route: {
+      deep: true,
+      handler(val) {
+        if (val.name === 'p-id-title' && val.params.id === this.post.id) {
+          setTimeout(() => (this.idState.expand = true), 251)
+        } else {
+          setTimeout(() => (this.idState.expand = false), 251)
+        }
+      }
     }
   },
   mounted() {
@@ -358,15 +373,16 @@ export default {
       textContentHeight: 0,
       dialog: false,
       imagePreview: false,
+      expand:
+        this.$route.name === 'p-id-title' &&
+        this.$route.params.id === this.post.id,
       hidden: false,
-      reported: false
+      reported: false,
+      blocked: false
     }
   },
   methods: {
     doNothing() {},
-    openImageLink() {
-      window.open(this.post.link, '_blank')
-    },
     toggleEmbed() {
       if (this.post.type === 'IMAGE' && this.isEmbeddableImage) {
         this.idState.imagePreview = !this.idState.imagePreview

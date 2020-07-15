@@ -78,7 +78,10 @@ import {
   mdiFace,
   mdiPlus,
   mdiCheck,
-  mdiClipboardAccount
+  mdiClipboardAccount,
+  mdiNewspaperPlus,
+  mdiNewspaperMinus,
+  mdiTrendingUp
 } from '@mdi/js'
 
 export default {
@@ -303,7 +306,10 @@ export default {
         mdiFace,
         mdiPlus,
         mdiCheck,
-        mdiClipboardAccount
+        mdiClipboardAccount,
+        mdiNewspaperPlus,
+        mdiNewspaperMinus,
+        mdiTrendingUp
       }
     },
     theme: {

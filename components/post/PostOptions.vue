@@ -8,9 +8,12 @@
       :post="post"
       :hidden="hidden"
       :reported="reported"
+      :blocked="blocked"
       @hidden="$emit('hidden')"
       @unhidden="$emit('unhidden')"
       @reported="$emit('reported')"
+      @blocked="$emit('blocked')"
+      @unblocked="$emit('unblocked')"
       @selected="idState.menuOpen = false"
     />
   </v-bottom-sheet>
@@ -29,9 +32,12 @@
       :post="post"
       :hidden="hidden"
       :reported="reported"
+      :blocked="blocked"
       @hidden="$emit('hidden')"
       @unhidden="$emit('unhidden')"
       @reported="$emit('reported')"
+      @blocked="$emit('blocked')"
+      @unblocked="$emit('unblocked')"
       @selected="idState.menuOpen = false"
     />
   </v-menu>
@@ -59,6 +65,10 @@ export default {
       default: false
     },
     reported: {
+      type: Boolean,
+      default: false
+    },
+    blocked: {
       type: Boolean,
       default: false
     }

@@ -46,7 +46,7 @@
 
       <DynamicScroller
         page-mode
-        :items="globalStickies.concat(homeFeed)"
+        :items="globalStickies.concat(feed)"
         :min-item-size="54"
       >
         <template v-slot="{ item, index, active }">
@@ -63,10 +63,7 @@
         </template>
       </DynamicScroller>
 
-      <v-progress-linear
-        v-show="$apollo.queries.homeFeed.loading"
-        indeterminate
-      />
+      <v-progress-linear v-show="$apollo.queries.feed.loading" indeterminate />
     </v-col>
     <v-col v-if="$device.isDesktop" cols="3">
       <div class="sticky">
@@ -80,7 +77,7 @@
 <script>
 import TopicsSidebar from '../components/topic/TopicsSidebar'
 import InfoLinks from '../components/InfoLinks'
-import homeFeedGql from '../gql/homeFeed.graphql'
+import feedGql from '../gql/feed.graphql'
 import globalStickiesGql from '../gql/globalStickies.graphql'
 import Post from '../components/post/Post'
 import UserSideCard from '../components/user/UserSideCard'
@@ -100,7 +97,7 @@ export default {
   },
   data() {
     return {
-      homeFeed: [],
+      feed: [],
       globalStickies: [],
       hasMore: true
     }
@@ -145,7 +142,7 @@ export default {
             oldQuery.feed !== this.$route.query.feed ||
             oldQuery.types !== this.$route.query.types
           ) {
-            this.homeFeed = []
+            this.feed = []
             this.$store.commit('setHomeQuery', this.$route.query)
             this.$store.commit('setHomeFeedPage', 0)
             if (process.client) {
@@ -168,8 +165,8 @@ export default {
     window.addEventListener('scroll', this.handleScroll)
   },
   apollo: {
-    homeFeed: {
-      query: homeFeedGql,
+    feed: {
+      query: feedGql,
       variables() {
         return {
           ...this.vars
@@ -215,23 +212,23 @@ export default {
     },
     showMore() {
       if (
-        this.$apollo.queries.homeFeed.loading ||
+        this.$apollo.queries.feed.loading ||
         !this.hasMore ||
         this.$route.path !== '/'
       )
         return
       this.page++
-      this.$apollo.queries.homeFeed.fetchMore({
-        query: homeFeedGql,
+      this.$apollo.queries.feed.fetchMore({
+        query: feedGql,
         variables: {
           page: this.page,
           ...this.vars
         },
         updateQuery: (previousResult, { fetchMoreResult }) => {
-          const newPosts = fetchMoreResult.homeFeed
+          const newPosts = fetchMoreResult.feed
           if (newPosts.length === 0) this.hasMore = false
           return {
-            homeFeed: [...previousResult.homeFeed, ...newPosts]
+            feed: [...previousResult.feed, ...newPosts]
           }
         }
       })

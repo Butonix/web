@@ -15,7 +15,7 @@
         nuxt
         @click.stop.prevent="clickHomeButton"
       >
-        <!--<span>Home</span>-->
+        <span>Home</span>
         <v-icon :color="$route.name === 'index' ? 'primary' : ''">{{
           $vuetify.icons.values.mdiHome
         }}</v-icon>
@@ -28,7 +28,7 @@
         class="font-weight-regular"
         style="letter-spacing: normal"
       >
-        <!--<span>Search</span>-->
+        <span>Search</span>
         <v-icon :color="$route.name === 'search' ? 'primary' : ''">{{
           $vuetify.icons.values.mdiMagnify
         }}</v-icon>
@@ -42,7 +42,7 @@
             style="letter-spacing: normal"
             v-on="on"
           >
-            <!--<span>New Post</span>-->
+            <span>Post</span>
             <v-icon :color="$route.name.startsWith('new') ? 'primary' : ''">{{
               $vuetify.icons.values.mdiPlusBox
             }}</v-icon>
@@ -59,20 +59,21 @@
         class="font-weight-regular"
         style="letter-spacing: normal"
       >
-        <!--<span>Topics</span>-->
+        <span>Topics</span>
         <v-icon :color="$route.name === 'topics' ? 'primary' : ''">{{
           $vuetify.icons.values.mdiNewspaper
         }}</v-icon>
       </v-btn>
 
       <v-btn
+        v-if="$store.state.currentUser"
         aria-label="Notificatinos"
         to="/notifications"
         nuxt
         class="font-weight-regular"
         style="letter-spacing: normal"
       >
-        <!--<span>Notifications</span>-->
+        <span>Notifications</span>
         <v-badge v-if="notifications.length > 0" overlap content="1">
           <v-icon :color="$route.name === 'notifications' ? 'primary' : ''">{{
             $vuetify.icons.values.mdiBellOutline
@@ -83,6 +84,20 @@
           :color="$route.name === 'notifications' ? 'primary' : ''"
           >{{ $vuetify.icons.values.mdiBellOutline }}</v-icon
         >
+      </v-btn>
+
+      <v-btn
+        v-else
+        aria-label="Sign Up"
+        to="/signup"
+        nuxt
+        class="font-weight-regular"
+        style="letter-spacing: normal"
+      >
+        <span>Sign Up</span>
+        <v-icon :color="$route.name === 'signup' ? 'primary' : ''">
+          {{ $vuetify.icons.values.mdiClipboardAccount }}
+        </v-icon>
       </v-btn>
     </v-bottom-navigation>
   </v-app-bar>

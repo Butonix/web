@@ -5,6 +5,7 @@
       following ? $vuetify.icons.values.mdiCheck : $vuetify.icons.values.mdiPlus
     "
     class="mr-2 mb-2"
+    @click="followTopic"
     @click:close="followTopic"
     >{{ capitalizedName }}</v-chip
   >

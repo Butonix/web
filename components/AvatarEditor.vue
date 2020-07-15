@@ -26,6 +26,7 @@
 
       <v-dialog
         v-model="avataaarDialog"
+        persistent
         :transition="
           $device.isDesktop ? 'dialog-transition' : 'dialog-bottom-transition'
         "

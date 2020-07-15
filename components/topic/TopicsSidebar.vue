@@ -9,8 +9,18 @@
     style="border-width: 1px"
   >
     <v-tabs v-model="tab" background-color="transparent">
-      <v-tab>Followed</v-tab>
-      <v-tab>Popular</v-tab>
+      <v-tab
+        style="letter-spacing: normal; text-transform: none; font-size: 1rem"
+      >
+        <v-icon class="mr-2">{{ $vuetify.icons.values.mdiNewspaper }}</v-icon>
+        My Topics
+      </v-tab>
+      <v-tab
+        style="letter-spacing: normal; text-transform: none; font-size: 1rem"
+      >
+        <v-icon class="mr-2">{{ $vuetify.icons.values.mdiTrendingUp }}</v-icon>
+        Popular
+      </v-tab>
     </v-tabs>
 
     <v-tabs-items v-model="tab" style="background-color: transparent">

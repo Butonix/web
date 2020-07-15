@@ -11,7 +11,24 @@
   >
     <v-container class="pa-0">
       <v-row class="ma-0" align="center" no-gutters>
-        <CometLogo />
+        <CometLogo v-if="$device.isDesktop || $route.name !== 't-name'" />
+
+        <span
+          v-if="$route.name === 't-name'"
+          :class="$device.isDesktop ? 'ml-4' : ''"
+          style="font-size: 1.286rem; cursor: pointer"
+          @click="scrollToTop"
+          >{{
+            $route.params.name
+              .replace(/_/g, ' ')
+              .split(' ')
+              .map(
+                (word) =>
+                  word.charAt(0).toUpperCase() + word.substring(1).toLowerCase()
+              )
+              .join(' ')
+          }}</span
+        >
 
         <v-spacer />
 
@@ -132,12 +149,8 @@ export default {
     }
   },
   methods: {
-    clickCometLogo() {
-      if (this.$route.path === '/') {
-        window.scrollTo(0, 0)
-      } else {
-        this.$router.push({ path: '/', query: this.$store.state.homeQuery })
-      }
+    scrollToTop() {
+      window.scrollTo(0, 0)
     }
   },
   apollo: {

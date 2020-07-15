@@ -39,7 +39,7 @@
           tabindex="-1"
           @click="showPassword = !showPassword"
         >
-          <v-icon>{{
+          <v-icon class="text--secondary">{{
             showPassword
               ? $vuetify.icons.values.mdiEye
               : $vuetify.icons.values.mdiEyeOff
@@ -64,7 +64,7 @@
           tabindex="-1"
           @click="showPassword = !showPassword"
         >
-          <v-icon>{{
+          <v-icon class="text--secondary">{{
             showPassword
               ? $vuetify.icons.values.mdiEye
               : $vuetify.icons.values.mdiEyeOff
@@ -77,7 +77,7 @@
       *Emails are only used for account recovery and are not shared with any
       third parties.
     </div>
-    <div class="caption text--secondary pb-2">
+    <div class="caption text--secondary pb-3">
       By clicking Continue, you agree to our
       <nuxt-link to="/terms" target="_blank" class="primary--text"
         >Terms of Service</nuxt-link
@@ -89,6 +89,8 @@
     </div>
 
     <v-btn
+      small
+      class="mr-1"
       rounded
       depressed
       color="primary"
@@ -98,7 +100,7 @@
       >Continue</v-btn
     >
 
-    <v-btn rounded text class="ml-1 text--secondary" nuxt to="/login"
+    <v-btn small rounded text class="text--secondary" nuxt to="/login"
       >Already have an account?</v-btn
     >
   </v-form>

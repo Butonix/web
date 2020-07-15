@@ -1,6 +1,6 @@
 <template>
   <v-row justify="center">
-    <v-col cols="6">
+    <v-col :cols="$device.isDesktop ? 6 : 12">
       <v-text-field
         :background-color="$vuetify.theme.dark ? '' : '#F5F5F5'"
         label="Title"
