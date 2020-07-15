@@ -8,7 +8,15 @@
     "
     style="border-width: 1px"
   >
-    <v-tabs v-model="tab" background-color="transparent">
+    <div class="overline text--secondary ml-3 mt-2" style="line-height: 1.5rem">
+      TOPICS
+    </div>
+    <v-tabs
+      v-model="tab"
+      grow
+      :show-arrows="false"
+      background-color="transparent"
+    >
       <v-tab
         style="letter-spacing: normal; text-transform: none; font-size: 1rem"
       >
@@ -20,6 +28,12 @@
       >
         <v-icon class="mr-2">{{ $vuetify.icons.values.mdiTrendingUp }}</v-icon>
         Popular
+      </v-tab>
+      <v-tab
+        style="letter-spacing: normal; text-transform: none; font-size: 1rem"
+      >
+        <v-icon class="mr-2">{{ $vuetify.icons.values.mdiMagnify }}</v-icon>
+        Find
       </v-tab>
     </v-tabs>
 
@@ -95,6 +109,32 @@
           </v-list-item>
         </v-list>
       </v-tab-item>
+
+      <v-tab-item>
+        <div class="px-3 pt-3">
+          <v-text-field
+            v-model="topicSearchText"
+            solo
+            flat
+            dense
+            hide-details
+            :background-color="$vuetify.theme.dark ? '' : 'grey lighten-2'"
+            label="Search topics"
+          />
+        </div>
+
+        <v-list color="transparent">
+          <v-list-item
+            v-for="topic in searchTopicsResult"
+            :key="topic.name"
+            :to="`/t/${topic.name}`"
+          >
+            <v-list-item-content>
+              <v-list-item-title>{{ topic.capitalizedName }}</v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
+        </v-list>
+      </v-tab-item>
     </v-tabs-items>
   </v-card>
 </template>
@@ -111,25 +151,14 @@ export default {
       followedTopics: [],
       popularTopics: [],
       searchTopics: [],
+      topicSearchText: '',
       tab: 0
     }
   },
   computed: {
-    selected: {
-      get() {
-        return this.$store.state.topicSidebarSelected
-      },
-      set(val) {
-        this.$store.commit('setTopicSidebarSelected', val)
-      }
-    },
-    topicSearchText: {
-      get() {
-        return this.$store.state.topicSidebarSearchText
-      },
-      set(val) {
-        this.$store.commit('setTopicSidebarSearchText', val)
-      }
+    searchTopicsResult() {
+      if (!this.topicSearchText) return []
+      else return this.searchTopics
     }
   },
   watch: {
@@ -162,7 +191,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<style>
 .sidebar {
   -ms-overflow-style: none;
   overflow: -moz-scrollbars-none;
@@ -170,5 +199,10 @@ export default {
 
 .sidebar::-webkit-scrollbar {
   width: 0 !important;
+}
+
+.v-slide-group__next,
+.v-slide-group__prev {
+  display: none !important;
 }
 </style>

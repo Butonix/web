@@ -14,13 +14,15 @@
       >
         <v-row no-gutters class="px-4 py-2">
           <div>
-            <div class="overline text--secondary">TOPIC</div>
+            <div class="overline text--secondary" style="line-height: 1.5rem">
+              TOPIC
+            </div>
             <div style="font-size: 1.43rem">{{ topic.capitalizedName }}</div>
           </div>
 
           <v-spacer />
 
-          <div style="text-align: end">
+          <div v-if="$store.state.currentUser" style="text-align: end">
             <div>
               <v-btn
                 text

@@ -8,16 +8,14 @@
     :max-width="isHover ? 400 : undefined"
   >
     <v-list-item>
-      <nuxt-link :to="`/u/${user.username}`">
-        <v-list-item-avatar size="64">
-          <v-img
-            v-if="user.profilePicUrl"
-            alt="Profile picture"
-            :src="user.profilePicUrl"
-          />
-          <v-icon v-else>{{ $vuetify.icons.values.mdiAccountOutline }}</v-icon>
-        </v-list-item-avatar>
-      </nuxt-link>
+      <v-list-item-avatar size="64">
+        <v-img
+          v-if="user.profilePicUrl"
+          alt="Profile picture"
+          :src="user.profilePicUrl"
+        />
+        <v-icon v-else>{{ $vuetify.icons.values.mdiAccountOutline }}</v-icon>
+      </v-list-item-avatar>
 
       <v-list-item-content>
         <v-list-item-title style="font-size: 1.43rem" class="my-0">

@@ -27,7 +27,7 @@ $material-light: (
 
 $container-max-widths: (
   'md': 100%,
-  'lg': map-get($grid-breakpoints, 'lg') * 0.9375,
+  'lg': 100%,
   'xl': map-get($grid-breakpoints, 'xl') * 0.85
 );
 

@@ -91,11 +91,13 @@
       </v-list-item-content>
     </v-list-item>
 
-    <PostPreview
-      :post="post"
-      :expand="idState.expand"
-      :image-preview="idState.imagePreview"
-    />
+    <client-only>
+      <PostPreview
+        :post="post"
+        :expand="idState.expand"
+        :image-preview="idState.imagePreview"
+      />
+    </client-only>
 
     <v-card-actions class="pt-0 pb-2">
       <UsernameMenu :user-data="post.author" />
@@ -234,11 +236,13 @@
       <PostThumbnail :post="post" @thumbnailclick="toggleEmbed" />
     </v-list-item>
 
-    <PostPreview
-      :post="post"
-      :expand="idState.expand"
-      :image-preview="idState.imagePreview"
-    />
+    <client-only>
+      <PostPreview
+        :post="post"
+        :expand="idState.expand"
+        :image-preview="idState.imagePreview"
+      />
+    </client-only>
 
     <v-card-actions class="pt-0 pb-2">
       <Username :user-data="post.author" />
@@ -384,7 +388,11 @@ export default {
   methods: {
     doNothing() {},
     toggleEmbed() {
-      if (this.post.type === 'IMAGE' && this.isEmbeddableImage) {
+      if (
+        this.post.type === 'IMAGE' &&
+        this.isEmbeddableImage &&
+        this.$route.name !== 'p-id-title'
+      ) {
         this.idState.imagePreview = !this.idState.imagePreview
       } else {
         window.open(this.post.link, '_blank')

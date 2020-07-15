@@ -18,7 +18,7 @@
     >
     <v-card-actions>
       <v-spacer />
-      <v-btn text rounded>Log In</v-btn>
+      <v-btn text rounded nuxt to="/login">Log In</v-btn>
       <v-btn
         style="border-radius: 4px"
         depressed

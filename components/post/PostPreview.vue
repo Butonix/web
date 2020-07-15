@@ -15,7 +15,7 @@
         <img
           alt="Image preview"
           :src="post.link"
-          :style="$device.isDesktop ? 'max-width: 60%' : 'max-width: 100%'"
+          :style="$device.isDesktop ? 'max-width: 75%' : 'max-width: 100%'"
         />
       </a>
     </div>
