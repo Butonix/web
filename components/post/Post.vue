@@ -79,7 +79,7 @@
       @togglemore="idState.viewingMore = !idState.viewingMore"
     />
 
-    <v-card-actions class="pt-2 pb-2">
+    <v-card-actions class="pt-0 pb-2">
       <UsernameMenu :user-data="post.author" />
 
       <span class="caption text--secondary ml-2" :title="editedTimeSince">{{
@@ -171,7 +171,7 @@
       @togglemore="idState.viewingMore = !idState.viewingMore"
     />
 
-    <v-card-actions class="pt-2 pb-2">
+    <v-card-actions class="pt-0 pb-2">
       <Username :user-data="post.author" />
 
       <span class="caption text--secondary ml-2" :title="editedTimeSince">{{
