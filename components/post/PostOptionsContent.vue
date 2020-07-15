@@ -74,6 +74,7 @@ import unhidePostGql from '../../gql/unhidePost.graphql'
 import reportPostGql from '../../gql/reportPost.graphql'
 import blockUserGql from '~/gql/blockUser'
 import unblockUserGql from '~/gql/unblockUser'
+import { urlName } from '~/util/urlName'
 
 export default {
   name: 'PostOptionsContent',
@@ -101,13 +102,7 @@ export default {
       return !!navigator.share
     },
     urlName() {
-      return this.post.title
-        .toLowerCase()
-        .replace(/ /g, '_')
-        .replace(/\W/g, '')
-        .split('_')
-        .slice(0, 9)
-        .join('_')
+      return urlName(this.post.title)
     }
   },
   methods: {

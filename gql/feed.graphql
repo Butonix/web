@@ -24,7 +24,6 @@ query feed($page: Int, $sort: Sort, $time: Time, $filter: Filter, $types: [Type!
       capitalizedName
       name
     }
-    newCommentCount
     postView {
       lastCommentCount
       postId

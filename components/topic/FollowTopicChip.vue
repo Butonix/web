@@ -13,6 +13,7 @@
 
 <script>
 import followTopicGql from '../../gql/followTopic.graphql'
+import { capitalizedName } from '~/util/capitalizedName'
 
 export default {
   name: 'FollowTopicChip',
@@ -29,14 +30,7 @@ export default {
   },
   computed: {
     capitalizedName() {
-      return this.topicName
-        .replace(/_/g, ' ')
-        .split(' ')
-        .map(
-          (word) =>
-            word.charAt(0).toUpperCase() + word.substring(1).toLowerCase()
-        )
-        .join(' ')
+      return capitalizedName(this.topicName)
     }
   },
   methods: {

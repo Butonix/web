@@ -24,7 +24,6 @@ query searchPosts($search: String!, $page: Int, $pageSize: Int, $sort: Sort, $ti
       capitalizedName
       name
     }
-    newCommentCount
     postView {
       lastCommentCount
       postId

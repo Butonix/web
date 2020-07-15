@@ -17,17 +17,9 @@
           v-if="$route.name === 't-name'"
           :class="$device.isDesktop ? 'ml-4' : ''"
           style="font-size: 1.286rem; cursor: pointer"
+          class="unselectable"
           @click="scrollToTop"
-          >{{
-            $route.params.name
-              .replace(/_/g, ' ')
-              .split(' ')
-              .map(
-                (word) =>
-                  word.charAt(0).toUpperCase() + word.substring(1).toLowerCase()
-              )
-              .join(' ')
-          }}</span
+          >{{ capitalizedName }}</span
         >
 
         <v-spacer />
@@ -134,6 +126,7 @@ import ProfileMenu from '../buttons/profile/ProfileMenu'
 import UsernameMenu from '../user/UsernameMenu'
 import NewPostButton from '../buttons/new_post/NewPostButton'
 import CometLogo from '../buttons/CometLogo'
+import { capitalizedName } from '~/util/capitalizedName'
 
 export default {
   name: 'AppBar',
@@ -146,6 +139,12 @@ export default {
   data() {
     return {
       notifications: []
+    }
+  },
+  computed: {
+    capitalizedName() {
+      if (this.$route.name !== 't-name') return ''
+      return capitalizedName(this.$route.params.name)
     }
   },
   methods: {
@@ -166,4 +165,11 @@ export default {
 }
 </script>
 
-<style scoped></style>
+<style scoped>
+.unselectable {
+  -webkit-user-select: none; /* Safari */
+  -moz-user-select: none; /* Firefox */
+  -ms-user-select: none; /* IE10+/Edge */
+  user-select: none; /* Standard */
+}
+</style>

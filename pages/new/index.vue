@@ -132,6 +132,7 @@ import isUrl from 'is-url'
 import submitPostGql from '../../gql/submitPost.graphql'
 import searchTopicsGql from '../../gql/searchTopics.graphql'
 import topicGql from '../../gql/topic.graphql'
+import { urlName } from '~/util/urlName'
 
 export default {
   data: () => ({
@@ -195,13 +196,7 @@ export default {
       return this.searchTopics.map((topic) => topic.capitalizedName)
     },
     urlName() {
-      return this.title
-        .toLowerCase()
-        .replace(/ /g, '_')
-        .replace(/\W/g, '')
-        .split('_')
-        .slice(0, 9)
-        .join('_')
+      return urlName(this.title)
     }
   },
   watch: {

@@ -1,7 +1,7 @@
 <template>
   <div :class="$vuetify.theme.dark ? 'editor-dark' : 'editor-light'">
     <editor-menu-bubble
-      v-if="editable && !menubar"
+      v-if="editable && $device.isDesktop"
       v-slot="{ commands, isActive, getMarkAttrs, menu }"
       :editor="editor"
       :keep-in-bounds="true"
@@ -188,13 +188,20 @@
       </div>
     </editor-menu-bubble>
 
+    <editor-content
+      :class="
+        $vuetify.theme.dark ? 'editor-dark__content' : 'editor-light__content'
+      "
+      :editor="editor"
+    />
+
     <editor-menu-bar
-      v-else-if="editable && menubar"
+      v-if="editable && !$device.isDesktop"
       v-slot="{ commands, isActive }"
       :editor="editor"
       @hide="hideLinkMenu"
     >
-      <div class="menubar">
+      <div class="menubar pt-4">
         <form
           v-if="linkMenuIsActive"
           class="menubar__form"
@@ -378,13 +385,6 @@
         </template>
       </div>
     </editor-menu-bar>
-
-    <editor-content
-      :class="
-        $vuetify.theme.dark ? 'editor-dark__content' : 'editor-light__content'
-      "
-      :editor="editor"
-    />
   </div>
 </template>
 
@@ -427,10 +427,6 @@ export default {
     autofocus: {
       type: Boolean,
       default: true
-    },
-    menubar: {
-      type: Boolean,
-      default: false
     }
   },
   data() {

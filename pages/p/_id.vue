@@ -109,6 +109,7 @@ import UserSideCard from '../../components/user/UserSideCard'
 import Comment from '../../components/comment/Comment'
 import CommentEditor from '../../components/editor/CommentEditor'
 import CommentSortMenu from '../../components/comment/sort/CommentSortMenu'
+import { urlName } from '~/util/urlName'
 
 export default {
   components: {
@@ -135,13 +136,7 @@ export default {
     },
     urlName() {
       if (!this.post) return ''
-      return this.post.title
-        .toLowerCase()
-        .replace(/ /g, '_')
-        .replace(/\W/g, '')
-        .split('_')
-        .slice(0, 9)
-        .join('_')
+      return urlName(this.post.title)
     },
     threadedComments() {
       if (this.postComments.length === 0) return []
@@ -158,7 +153,7 @@ export default {
       return thread
     }
   },
-  async activated() {
+  async mounted() {
     const { data } = await this.$apollo.mutate({
       mutation: recordPostViewGql,
       variables: {

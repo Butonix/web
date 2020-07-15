@@ -20,21 +20,55 @@
       </a>
     </div>
 
+    <client-only>
+      <div
+        v-if="
+          $route.name === 'p-id-title' &&
+            $route.params.id === post.id &&
+            expand &&
+            (isYoutubeLink || isTweetLink)
+        "
+        class="px-4"
+      >
+        <Youtube
+          v-if="isYoutubeLink"
+          :video-id="youtubeId"
+          style="max-width: 100%"
+        />
+        <Tweet v-else-if="isTweetLink" :id="tweetId" style="max-width: 100%" />
+      </div>
+    </client-only>
+
     <div
       v-if="
         $route.name === 'p-id-title' &&
           $route.params.id === post.id &&
-          expand &&
-          (isYoutubeLink || isTweetLink)
+          post.type === 'TEXT' &&
+          post.textContent &&
+          expand
       "
-      class="px-4"
+      class="px-2 pb-2"
     >
-      <Youtube
-        v-if="isYoutubeLink"
-        :video-id="youtubeId"
-        style="max-width: 100%"
+      <TextContent
+        :text-content="post.textContent"
+        :dark="$vuetify.theme.dark"
       />
-      <Tweet v-else-if="isTweetLink" :id="tweetId" style="max-width: 100%" />
+    </div>
+
+    <div
+      v-if="post.type === 'TEXT' && post.textContent && !expand"
+      class="px-2"
+    >
+      <div
+        :class="viewingMore || textContentHeight <= 90 ? '' : 'textcontent'"
+        :style="textContentHeight <= 90 ? '' : 'cursor: pointer'"
+        @click.stop.prevent="$emit('togglemore')"
+      >
+        <TextContent
+          :text-content="post.textContent"
+          :dark="$vuetify.theme.dark"
+        />
+      </div>
     </div>
   </div>
 </template>
@@ -42,10 +76,11 @@
 <script>
 import { Youtube, getIdFromUrl } from 'vue-youtube'
 import { Tweet } from 'vue-tweet-embed'
+import TextContent from '~/components/TextContent'
 
 export default {
   name: 'PostPreview',
-  components: { Youtube, Tweet },
+  components: { TextContent, Youtube, Tweet },
   props: {
     post: {
       type: Object,
@@ -58,6 +93,14 @@ export default {
     expand: {
       type: Boolean,
       required: true
+    },
+    viewingMore: {
+      type: Boolean,
+      required: true
+    },
+    textContentHeight: {
+      type: Number,
+      default: 0
     }
   },
   computed: {
@@ -90,4 +133,11 @@ export default {
 }
 </script>
 
-<style scoped></style>
+<style scoped>
+.textcontent {
+  max-height: 90px;
+  overflow: hidden;
+  -webkit-mask-image: linear-gradient(180deg, #000 60%, transparent);
+  mask-image: linear-gradient(180deg, #000 60%, transparent);
+}
+</style>

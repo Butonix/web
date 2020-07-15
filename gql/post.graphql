@@ -24,6 +24,11 @@ query post($postId: ID!) {
         capitalizedName
         name
       }
-      newCommentCount
+      postView {
+        lastCommentCount
+        postId
+        userId
+        createdAt
+      }
     }
   }

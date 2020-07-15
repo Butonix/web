@@ -5,7 +5,7 @@
 
       <v-list-item-content
         style="align-self: start; align-content: start"
-        class="pt-2"
+        class="py-2"
       >
         <span v-if="post.sticky">
           <v-icon color="primary" size="13" class="mr-1">{{
@@ -65,83 +65,30 @@
               <span>{{ topic.capitalizedName }}</span>
             </v-chip>
           </div>
-
-          <div v-if="post.type === 'TEXT' && post.textContent">
-            <div
-              ref="textcontent"
-              :class="
-                !idState.viewingMore && idState.textContentHeight >= 100
-                  ? 'textcontent'
-                  : ''
-              "
-            >
-              <TextContent
-                :dark="$vuetify.theme.dark"
-                :text-content="post.textContent"
-              />
-            </div>
-
-            <a
-              v-if="idState.textContentHeight >= 150"
-              @click.stop.prevent="idState.viewingMore = !idState.viewingMore"
-              >View {{ idState.viewingMore ? 'less' : 'more' }}</a
-            >
-          </div>
         </v-list-item-subtitle>
       </v-list-item-content>
     </v-list-item>
 
-    <client-only>
-      <PostPreview
-        :post="post"
-        :expand="idState.expand"
-        :image-preview="idState.imagePreview"
-      />
-    </client-only>
+    <PostPreview
+      ref="textcontent"
+      :post="post"
+      :expand="idState.expand"
+      :image-preview="idState.imagePreview"
+      :viewing-more="idState.viewingMore"
+      :text-content-height="idState.textContentHeight"
+      @togglemore="idState.viewingMore = !idState.viewingMore"
+    />
 
-    <v-card-actions class="pt-0 pb-2">
+    <v-card-actions class="pt-2 pb-2">
       <UsernameMenu :user-data="post.author" />
 
-      <span class="caption text--secondary ml-2">{{ timeSince }}</span>
+      <span class="caption text--secondary ml-2" :title="editedTimeSince">{{
+        timeSince
+      }}</span>
 
       <v-spacer />
 
-      <v-btn
-        small
-        rounded
-        text
-        class="mr-2 ml-0 text--secondary"
-        :to="`/p/${post.id}/${urlName}`"
-        nuxt
-        :title="
-          `${post.commentCount} Comment${post.commentCount === 1 ? '' : 's'}`
-        "
-      >
-        <v-icon size="20" class="mr-2">{{
-          $vuetify.icons.values.mdiCommentOutline
-        }}</v-icon>
-        {{ post.commentCount }}
-      </v-btn>
-
-      <v-btn
-        small
-        rounded
-        text
-        class="mr-2 ml-0 "
-        :class="post.isEndorsed ? '' : 'text--secondary'"
-        :color="post.isEndorsed ? 'primary' : ''"
-        :title="
-          `${post.endorsementCount} Rocket${
-            post.endorsementCount === 1 ? '' : 's'
-          }`
-        "
-        @click.stop.prevent="toggleEndorsement"
-      >
-        <v-icon size="20" class="mr-2">{{
-          $vuetify.icons.values.mdiRocket
-        }}</v-icon>
-        {{ post.endorsementCount }}
-      </v-btn>
+      <PostActions :post="post" />
 
       <PostOptions
         :post="post"
@@ -169,7 +116,7 @@
     <v-list-item class="px-2">
       <v-list-item-content
         style="align-self: start; align-content: start"
-        class="pt-2"
+        class="py-2"
       >
         <span v-if="post.sticky">
           <v-icon color="primary" size="13" class="mr-1">{{
@@ -208,70 +155,32 @@
               <span>{{ topic.capitalizedName }}</span>
             </v-chip>
           </div>
-
-          <div v-if="post.type === 'TEXT' && post.textContent">
-            <div
-              ref="textcontent"
-              :class="
-                !idState.viewingMore && idState.textContentHeight >= 100
-                  ? 'textcontent'
-                  : ''
-              "
-            >
-              <TextContent
-                :dark="$vuetify.theme.dark"
-                :text-content="post.textContent"
-              />
-            </div>
-
-            <a
-              v-if="idState.textContentHeight >= 150"
-              @click.stop.prevent="idState.viewingMore = !idState.viewingMore"
-              >View {{ idState.viewingMore ? 'less' : 'more' }}</a
-            >
-          </div>
         </v-list-item-subtitle>
       </v-list-item-content>
 
       <PostThumbnail :post="post" @thumbnailclick="toggleEmbed" />
     </v-list-item>
 
-    <client-only>
-      <PostPreview
-        :post="post"
-        :expand="idState.expand"
-        :image-preview="idState.imagePreview"
-      />
-    </client-only>
+    <PostPreview
+      ref="textcontent"
+      :post="post"
+      :expand="idState.expand"
+      :image-preview="idState.imagePreview"
+      :viewing-more="idState.viewingMore"
+      :text-content-height="idState.textContentHeight"
+      @togglemore="idState.viewingMore = !idState.viewingMore"
+    />
 
-    <v-card-actions class="pt-0 pb-2">
+    <v-card-actions class="pt-2 pb-2">
       <Username :user-data="post.author" />
 
-      <span class="caption text--secondary ml-2">{{ timeSince }}</span>
+      <span class="caption text--secondary ml-2" :title="editedTimeSince">{{
+        timeSince
+      }}</span>
 
       <v-spacer />
 
-      <v-btn small rounded text class="mr-2 ml-0 text--secondary">
-        <v-icon size="20" class="mr-2">{{
-          $vuetify.icons.values.mdiCommentOutline
-        }}</v-icon>
-        {{ post.commentCount }}
-      </v-btn>
-
-      <v-btn
-        small
-        rounded
-        text
-        class="mr-2 ml-0 "
-        :class="post.isEndorsed ? '' : 'text--secondary'"
-        :color="post.isEndorsed ? 'primary' : ''"
-        @click.stop.prevent="toggleEndorsement"
-      >
-        <v-icon size="20" class="mr-2">{{
-          $vuetify.icons.values.mdiRocket
-        }}</v-icon>
-        {{ post.endorsementCount }}
-      </v-btn>
+      <PostActions :post="post" />
 
       <PostOptions
         :post="post"
@@ -291,22 +200,22 @@
 <script>
 import { IdState } from 'vue-virtual-scroller'
 import { formatDistanceToNowStrict } from 'date-fns'
-import togglePostEndorsementGql from '../../gql/togglePostEndorsement.graphql'
 import UsernameMenu from '../user/UsernameMenu'
-import TextContent from '../TextContent'
 import Username from '../user/Username'
 import PostThumbnail from './PostThumbnail'
-import PostOptions from './PostOptions'
 import { timeSince } from '~/util/timeSince'
 import PostPreview from '~/components/post/PostPreview'
+import PostActions from '~/components/post/PostActions'
+import PostOptions from '~/components/post/PostOptions'
+import { urlName } from '~/util/urlName'
 
 export default {
   name: 'Post',
   components: {
-    PostPreview,
     PostOptions,
+    PostActions,
+    PostPreview,
     Username,
-    TextContent,
     UsernameMenu,
     PostThumbnail
   },
@@ -336,21 +245,26 @@ export default {
   computed: {
     urlName() {
       if (!this.post) return ''
-      return this.post.title
-        .toLowerCase()
-        .replace(/ /g, '_')
-        .replace(/\W/g, '')
-        .split('_')
-        .slice(0, 9)
-        .join('_')
-    },
-    timeSince() {
-      return this.$device.isDesktop
-        ? formatDistanceToNowStrict(new Date(this.post.createdAt)) + ' ago'
-        : timeSince(new Date(this.post.createdAt))
+      return urlName(this.post.title)
     },
     isEmbeddableImage() {
       return this.post.type === 'IMAGE' && this.post.link.startsWith('https://')
+    },
+    timeSince() {
+      return (
+        (this.$device.isDesktop
+          ? formatDistanceToNowStrict(new Date(this.post.createdAt)) + ' ago'
+          : timeSince(new Date(this.post.createdAt))) +
+        (this.post.editedAt ? '*' : '')
+      )
+    },
+    editedTimeSince() {
+      if (!this.post.editedAt) return ''
+      return (
+        'Edited ' +
+        formatDistanceToNowStrict(new Date(this.post.editedAt)) +
+        ' ago'
+      )
     }
   },
   watch: {
@@ -366,8 +280,9 @@ export default {
     }
   },
   mounted() {
+    if (this.$route.name === 'p-id-title') return
     if (this.$refs.textcontent) {
-      this.idState.textContentHeight = this.$refs.textcontent.clientHeight
+      this.idState.textContentHeight = this.$refs.textcontent.$el.clientHeight
     }
   },
   idState() {
@@ -397,48 +312,12 @@ export default {
       } else {
         window.open(this.post.link, '_blank')
       }
-    },
-    async toggleEndorsement() {
-      if (!this.$store.state.currentUser) {
-        this.$store.dispatch('displaySnackbar', {
-          message: 'Must log in to rocket this post'
-        })
-        return
-      }
-
-      if (this.post.author.isCurrentUser) {
-        this.$store.dispatch('displaySnackbar', {
-          message: 'Cannot rocket your own post'
-        })
-        return
-      }
-
-      if (this.post.isEndorsed) {
-        this.post.isEndorsed = false
-        this.post.endorsementCount--
-      } else {
-        this.post.isEndorsed = true
-        this.post.endorsementCount++
-      }
-      await this.$apollo.mutate({
-        mutation: togglePostEndorsementGql,
-        variables: {
-          postId: this.post.id
-        }
-      })
     }
   }
 }
 </script>
 
 <style scoped>
-.textcontent {
-  max-height: 100px;
-  overflow: hidden;
-  -webkit-mask-image: linear-gradient(180deg, #000 60%, transparent);
-  mask-image: linear-gradient(180deg, #000 60%, transparent);
-}
-
 .v-dialog__content >>> .v-dialog {
   box-shadow: none !important;
 }

@@ -25,6 +25,11 @@ query hiddenPosts {
         capitalizedName
         name
       }
-      newCommentCount
+      postView {
+        lastCommentCount
+        postId
+        userId
+        createdAt
+      }
     }
   }
