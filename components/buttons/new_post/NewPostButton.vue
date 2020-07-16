@@ -2,7 +2,6 @@
   <v-menu offset-y transition="slide-y-transition">
     <template v-slot:activator="{ on }">
       <v-btn
-        :disabled="$route.name.startsWith('new')"
         rounded
         depressed
         class="white--text"

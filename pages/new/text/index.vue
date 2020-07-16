@@ -10,6 +10,7 @@
         flat
         label="Title"
         :rules="titleRules"
+        clearable
       />
       <client-only>
         <v-card
@@ -59,9 +60,6 @@ import { urlName } from '~/util/urlName'
 
 export default {
   components: { TopicCombobox, Editor },
-  beforeRouteEnter(to, from, next) {
-    next((vm) => (vm.prevRoute = from))
-  },
   data() {
     return {
       prevRoute: null,
@@ -103,6 +101,12 @@ export default {
       }
       this.loading = false
     }
+  },
+  head: {
+    title: 'New Text Post'
+  },
+  beforeRouteEnter(to, from, next) {
+    next((vm) => (vm.prevRoute = from))
   }
 }
 </script>

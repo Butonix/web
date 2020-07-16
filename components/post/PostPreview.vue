@@ -9,7 +9,7 @@
             isEmbeddableImage)
       "
       style="max-width: none"
-      class="px-4"
+      class="pa-2"
     >
       <a :href="post.link" rel="noopener" target="_blank">
         <img

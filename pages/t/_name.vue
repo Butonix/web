@@ -14,10 +14,12 @@
       >
         <v-row no-gutters class="px-4 py-2">
           <div>
-            <div class="overline text--secondary" style="line-height: 1.5rem">
+            <div class="overline text--secondary" style="line-height: 1.3rem">
               TOPIC
             </div>
-            <div style="font-size: 1.43rem">{{ topic.capitalizedName }}</div>
+            <div style="font-size: 1.43rem; line-height: 1.4">
+              {{ topic.capitalizedName }}
+            </div>
           </div>
 
           <v-spacer />
@@ -61,6 +63,7 @@
                       : 'primary'
                     : ''
                 "
+                :class="topic.isHidden ? '' : 'text--secondary'"
                 :disabled="topic.isFollowing"
                 @click="toggleHide"
               >
