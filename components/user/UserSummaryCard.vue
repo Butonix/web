@@ -5,7 +5,7 @@
     :style="
       $vuetify.theme.dark ? '' : 'background-color: #F5F5F5; border-width: 1px'
     "
-    :max-width="isHover ? 400 : undefined"
+    :width="isHover ? 400 : undefined"
   >
     <v-list-item>
       <v-list-item-avatar size="64">

@@ -1,395 +1,170 @@
 <template>
   <div :class="$vuetify.theme.dark ? 'editor-dark' : 'editor-light'">
-    <editor-menu-bubble
-      v-if="editable && $device.isDesktop"
-      v-slot="{ commands, isActive, getMarkAttrs, menu }"
-      :editor="editor"
-      :keep-in-bounds="true"
-      @hide="hideLinkMenu"
-    >
-      <div
-        class="menububble"
-        :class="{
-          'is-active': menu.isActive
-        }"
-        :style="`left: ${menu.left}px; bottom: ${menu.bottom}px;`"
-      >
-        <form
-          v-if="linkMenuIsActive"
-          class="menububble__form"
-          @submit.prevent="setLinkUrl(commands.link, linkUrl)"
-        >
-          <input
-            ref="linkInput"
-            v-model="linkUrl"
-            class="menububble__input"
-            type="text"
-            placeholder="https://"
-            @keydown.esc="hideLinkMenu"
-          />
-          <button
-            class="menububble__button"
-            type="button"
-            @click="setLinkUrl(commands.link, null)"
-          >
-            <v-icon dark>{{ $vuetify.icons.values.mdiLinkOff }}</v-icon>
-          </button>
-        </form>
-
-        <template v-else>
-          <button
-            class="menububble__button"
-            :class="{
-              'is-active': isActive.bold()
-            }"
-            @click="commands.bold"
-          >
-            <v-icon dark>{{ $vuetify.icons.values.mdiFormatBold }}</v-icon>
-          </button>
-
-          <button
-            class="menububble__button"
-            :class="{
-              'is-active': isActive.italic()
-            }"
-            @click="commands.italic"
-          >
-            <v-icon dark>{{ $vuetify.icons.values.mdiFormatItalic }}</v-icon>
-          </button>
-
-          <button
-            class="menububble__button"
-            :class="{
-              'is-active': isActive.strike()
-            }"
-            @click="commands.strike"
-          >
-            <v-icon dark>{{
-              $vuetify.icons.values.mdiFormatStrikethrough
-            }}</v-icon>
-          </button>
-
-          <button
-            class="menububble__button"
-            :class="{
-              'is-active': isActive.underline()
-            }"
-            @click="commands.underline"
-          >
-            <v-icon dark>{{ $vuetify.icons.values.mdiFormatUnderline }}</v-icon>
-          </button>
-
-          <button
-            class="menububble__button"
-            :class="{
-              'is-active': isActive.code()
-            }"
-            @click="commands.code"
-          >
-            <v-icon dark>{{ $vuetify.icons.values.mdiCodeTags }}</v-icon>
-          </button>
-
-          <button
-            class="menububble__button"
-            :class="{
-              'is-active': isActive.heading({ level: 1 })
-            }"
-            @click="commands.heading({ level: 1 })"
-          >
-            <v-icon dark>{{ $vuetify.icons.values.mdiFormatHeader1 }}</v-icon>
-          </button>
-
-          <button
-            class="menububble__button"
-            :class="{
-              'is-active': isActive.heading({ level: 2 })
-            }"
-            @click="commands.heading({ level: 2 })"
-          >
-            <v-icon dark>{{ $vuetify.icons.values.mdiFormatHeader2 }}</v-icon>
-          </button>
-
-          <button
-            class="menububble__button"
-            :class="{
-              'is-active': isActive.heading({ level: 3 })
-            }"
-            @click="commands.heading({ level: 3 })"
-          >
-            <v-icon dark>{{ $vuetify.icons.values.mdiFormatHeader3 }}</v-icon>
-          </button>
-
-          <button
-            class="menububble__button"
-            :class="{
-              'is-active': isActive.bullet_list()
-            }"
-            @click="commands.bullet_list"
-          >
-            <v-icon dark>{{
-              $vuetify.icons.values.mdiFormatListBulleted
-            }}</v-icon>
-          </button>
-
-          <button
-            class="menububble__button"
-            :class="{
-              'is-active': isActive.ordered_list()
-            }"
-            @click="commands.ordered_list"
-          >
-            <v-icon dark>{{
-              $vuetify.icons.values.mdiFormatListNumbered
-            }}</v-icon>
-          </button>
-
-          <button
-            class="menububble__button"
-            :class="{
-              'is-active': isActive.blockquote()
-            }"
-            @click="commands.blockquote"
-          >
-            <v-icon dark>{{
-              $vuetify.icons.values.mdiFormatQuoteClose
-            }}</v-icon>
-          </button>
-
-          <button
-            class="menububble__button"
-            :class="{
-              'is-active': isActive.code_block()
-            }"
-            @click="commands.code_block"
-          >
-            <v-icon dark>{{
-              $vuetify.icons.values.mdiCodeNotEqualVariant
-            }}</v-icon>
-          </button>
-
-          <button
-            class="menububble__button"
-            :class="{
-              'is-active': isActive.horizontal_rule()
-            }"
-            @click="commands.horizontal_rule"
-          >
-            <v-icon dark>{{ $vuetify.icons.values.mdiMinus }}</v-icon>
-          </button>
-
-          <button
-            class="menububble__button"
-            :class="{ 'is-active': isActive.link() }"
-            @click="showLinkMenu(getMarkAttrs('link'))"
-          >
-            <v-icon dark>{{ $vuetify.icons.values.mdiLink }}</v-icon>
-          </button>
-        </template>
-      </div>
-    </editor-menu-bubble>
-
     <editor-content
       :class="
         $vuetify.theme.dark ? 'editor-dark__content' : 'editor-light__content'
       "
       :editor="editor"
+      style="padding-bottom: 96px"
     />
 
     <editor-menu-bar
-      v-if="editable && !$device.isDesktop"
+      v-if="editable"
       v-slot="{ commands, isActive }"
       :editor="editor"
-      @hide="hideLinkMenu"
+      style="position: absolute; width: 100%; bottom: 0; left: 0; right: 0; padding-bottom: 8px; padding-left: 8px; padding-right: 8px"
+      :style="{
+        'background-color': $vuetify.theme.dark ? '#202124' : '#F5F5F5',
+        'border-top-width': '1px',
+        'border-top-color': 'rgba(0, 0, 0, 0.12)',
+        'border-top-style': $vuetify.theme.dark ? 'none' : 'solid'
+      }"
     >
-      <div class="menubar pt-4">
-        <form
-          v-if="linkMenuIsActive"
-          class="menubar__form"
-          @submit.prevent="setLinkUrl(commands.link, linkUrl)"
+      <div class="menubar pt-3">
+        <button
+          class="menubar__button"
+          :class="{
+            'is-active': isActive.bold()
+          }"
+          @click="commands.bold"
         >
-          <input
-            ref="linkInput"
-            v-model="linkUrl"
-            class="menubar__input"
-            type="text"
-            placeholder="https://"
-            @keydown.esc="hideLinkMenu"
-          />
-          <button
-            class="menubar__button"
-            type="button"
-            @click="setLinkUrl(commands.link, null)"
-          >
-            <v-icon size="20">{{ $vuetify.icons.values.mdiLinkOff }}</v-icon>
-          </button>
-        </form>
+          <v-icon>{{ $vuetify.icons.values.mdiFormatBold }}</v-icon>
+        </button>
 
-        <template v-else>
-          <button
-            class="menubar__button"
-            :class="{
-              'is-active': isActive.bold()
-            }"
-            @click="commands.bold"
-          >
-            <v-icon size="20">{{ $vuetify.icons.values.mdiFormatBold }}</v-icon>
-          </button>
+        <button
+          class="menubar__button"
+          :class="{
+            'is-active': isActive.italic()
+          }"
+          @click="commands.italic"
+        >
+          <v-icon>{{ $vuetify.icons.values.mdiFormatItalic }}</v-icon>
+        </button>
 
-          <button
-            class="menubar__button"
-            :class="{
-              'is-active': isActive.italic()
-            }"
-            @click="commands.italic"
-          >
-            <v-icon size="20">{{
-              $vuetify.icons.values.mdiFormatItalic
-            }}</v-icon>
-          </button>
+        <button
+          class="menubar__button"
+          :class="{
+            'is-active': isActive.strike()
+          }"
+          @click="commands.strike"
+        >
+          <v-icon>{{ $vuetify.icons.values.mdiFormatStrikethrough }}</v-icon>
+        </button>
 
-          <button
-            class="menubar__button"
-            :class="{
-              'is-active': isActive.strike()
-            }"
-            @click="commands.strike"
-          >
-            <v-icon size="20">{{
-              $vuetify.icons.values.mdiFormatStrikethrough
-            }}</v-icon>
-          </button>
+        <button
+          class="menubar__button"
+          :class="{
+            'is-active': isActive.underline()
+          }"
+          @click="commands.underline"
+        >
+          <v-icon>{{ $vuetify.icons.values.mdiFormatUnderline }}</v-icon>
+        </button>
 
-          <button
-            class="menubar__button"
-            :class="{
-              'is-active': isActive.underline()
-            }"
-            @click="commands.underline"
-          >
-            <v-icon size="20">{{
-              $vuetify.icons.values.mdiFormatUnderline
-            }}</v-icon>
-          </button>
+        <button
+          class="menubar__button"
+          :class="{
+            'is-active': isActive.code()
+          }"
+          @click="commands.code"
+        >
+          <v-icon>{{ $vuetify.icons.values.mdiCodeTags }}</v-icon>
+        </button>
 
-          <button
-            class="menubar__button"
-            :class="{
-              'is-active': isActive.code()
-            }"
-            @click="commands.code"
-          >
-            <v-icon size="20">{{ $vuetify.icons.values.mdiCodeTags }}</v-icon>
-          </button>
+        <button
+          class="menubar__button"
+          :class="{
+            'is-active': isActive.heading({ level: 1 })
+          }"
+          @click="commands.heading({ level: 1 })"
+        >
+          <v-icon>{{ $vuetify.icons.values.mdiFormatHeader1 }}</v-icon>
+        </button>
 
-          <button
-            class="menubar__button"
-            :class="{
-              'is-active': isActive.heading({ level: 1 })
-            }"
-            @click="commands.heading({ level: 1 })"
-          >
-            <v-icon size="20">{{
-              $vuetify.icons.values.mdiFormatHeader1
-            }}</v-icon>
-          </button>
+        <button
+          class="menubar__button"
+          :class="{
+            'is-active': isActive.heading({ level: 2 })
+          }"
+          @click="commands.heading({ level: 2 })"
+        >
+          <v-icon>{{ $vuetify.icons.values.mdiFormatHeader2 }}</v-icon>
+        </button>
 
-          <button
-            class="menubar__button"
-            :class="{
-              'is-active': isActive.heading({ level: 2 })
-            }"
-            @click="commands.heading({ level: 2 })"
-          >
-            <v-icon size="20">{{
-              $vuetify.icons.values.mdiFormatHeader2
-            }}</v-icon>
-          </button>
+        <button
+          class="menubar__button"
+          :class="{
+            'is-active': isActive.heading({ level: 3 })
+          }"
+          @click="commands.heading({ level: 3 })"
+        >
+          <v-icon>{{ $vuetify.icons.values.mdiFormatHeader3 }}</v-icon>
+        </button>
 
-          <button
-            class="menubar__button"
-            :class="{
-              'is-active': isActive.heading({ level: 3 })
-            }"
-            @click="commands.heading({ level: 3 })"
-          >
-            <v-icon size="20">{{
-              $vuetify.icons.values.mdiFormatHeader3
-            }}</v-icon>
-          </button>
+        <button
+          class="menubar__button"
+          :class="{
+            'is-active': isActive.bullet_list()
+          }"
+          @click="commands.bullet_list"
+        >
+          <v-icon>{{ $vuetify.icons.values.mdiFormatListBulleted }}</v-icon>
+        </button>
 
-          <button
-            class="menubar__button"
-            :class="{
-              'is-active': isActive.bullet_list()
-            }"
-            @click="commands.bullet_list"
-          >
-            <v-icon size="20">{{
-              $vuetify.icons.values.mdiFormatListBulleted
-            }}</v-icon>
-          </button>
+        <button
+          class="menubar__button"
+          :class="{
+            'is-active': isActive.ordered_list()
+          }"
+          @click="commands.ordered_list"
+        >
+          <v-icon>{{ $vuetify.icons.values.mdiFormatListNumbered }}</v-icon>
+        </button>
 
-          <button
-            class="menubar__button"
-            :class="{
-              'is-active': isActive.ordered_list()
-            }"
-            @click="commands.ordered_list"
-          >
-            <v-icon size="20">{{
-              $vuetify.icons.values.mdiFormatListNumbered
-            }}</v-icon>
-          </button>
+        <button
+          class="menubar__button"
+          :class="{
+            'is-active': isActive.blockquote()
+          }"
+          @click="commands.blockquote"
+        >
+          <v-icon>{{ $vuetify.icons.values.mdiFormatQuoteClose }}</v-icon>
+        </button>
 
-          <button
-            class="menubar__button"
-            :class="{
-              'is-active': isActive.blockquote()
-            }"
-            @click="commands.blockquote"
-          >
-            <v-icon size="20">{{
-              $vuetify.icons.values.mdiFormatQuoteClose
-            }}</v-icon>
-          </button>
+        <button
+          class="menubar__button"
+          :class="{
+            'is-active': isActive.code_block()
+          }"
+          @click="commands.code_block"
+        >
+          <v-icon>{{ $vuetify.icons.values.mdiCodeNotEqualVariant }}</v-icon>
+        </button>
 
-          <button
-            class="menubar__button"
-            :class="{
-              'is-active': isActive.code_block()
-            }"
-            @click="commands.code_block"
-          >
-            <v-icon size="20">{{
-              $vuetify.icons.values.mdiCodeNotEqualVariant
-            }}</v-icon>
-          </button>
+        <button
+          class="menubar__button"
+          :class="{
+            'is-active': isActive.horizontal_rule()
+          }"
+          @click="commands.horizontal_rule"
+        >
+          <v-icon>{{ $vuetify.icons.values.mdiMinus }}</v-icon>
+        </button>
 
-          <button
-            class="menubar__button"
-            :class="{
-              'is-active': isActive.horizontal_rule()
-            }"
-            @click="commands.horizontal_rule"
-          >
-            <v-icon size="20">{{ $vuetify.icons.values.mdiMinus }}</v-icon>
-          </button>
-
-          <button
-            class="menubar__button"
-            :class="{ 'is-active': isActive.link() }"
-            @click="showLinkMenu(getMarkAttrs('link'))"
-          >
-            <v-icon size="20">{{ $vuetify.icons.values.mdiLink }}</v-icon>
-          </button>
-        </template>
+        <button
+          class="menubar__button"
+          :class="{ 'is-active': isActive.link() }"
+          @click="showLinkPrompt(commands.link)"
+        >
+          <v-icon>{{ $vuetify.icons.values.mdiLink }}</v-icon>
+        </button>
       </div>
     </editor-menu-bar>
   </div>
 </template>
 
 <script>
-import { Editor, EditorContent, EditorMenuBubble, EditorMenuBar } from 'tiptap'
+import { Editor, EditorContent, EditorMenuBar } from 'tiptap'
 import {
   Blockquote,
   BulletList,
@@ -405,14 +180,14 @@ import {
   HorizontalRule,
   ListItem,
   HardBreak,
-  History
+  History,
+  Placeholder
 } from 'tiptap-extensions'
 
 export default {
   name: 'Editor',
   components: {
     EditorContent,
-    EditorMenuBubble,
     EditorMenuBar
   },
   props: {
@@ -431,10 +206,7 @@ export default {
   },
   data() {
     return {
-      linkUrl: null,
-      linkMenuIsActive: false,
       emitAfterOnUpdate: false,
-      keepInBounds: true,
       editor: new Editor({
         onUpdate: ({ getHTML }) => {
           this.emitAfterOnUpdate = true
@@ -458,7 +230,11 @@ export default {
           new HorizontalRule(),
           new ListItem(),
           new HardBreak(),
-          new History()
+          new History(),
+          new Placeholder({
+            showOnlyCurrent: false,
+            emptyNodeText: 'Write something...'
+          })
         ]
       })
     }
@@ -486,23 +262,32 @@ export default {
     this.editor.destroy()
   },
   methods: {
-    showLinkMenu(attrs) {
-      this.linkUrl = attrs.href
-      this.linkMenuIsActive = true
-      this.$nextTick(() => {
-        this.$refs.linkInput.focus()
-      })
-    },
-    hideLinkMenu() {
-      this.linkUrl = null
-      this.linkMenuIsActive = false
-    },
-    setLinkUrl(command, url) {
-      command({ href: url })
-      this.hideLinkMenu()
+    showLinkPrompt(command) {
+      const linkUrl = prompt('Enter the URL of your link')
+      if (linkUrl) {
+        command({ href: linkUrl })
+      }
     }
   }
 }
 </script>
 
-<style lang="scss"></style>
+<style lang="scss">
+.editor-dark p.is-editor-empty:first-child::before {
+  content: attr(data-empty-text);
+  float: left;
+  color: #aaa;
+  pointer-events: none;
+  height: 0;
+  font-style: italic;
+}
+
+.editor-light p.is-editor-empty:first-child::before {
+  content: attr(data-empty-text);
+  float: left;
+  color: #aaa;
+  pointer-events: none;
+  height: 0;
+  font-style: italic;
+}
+</style>

@@ -81,7 +81,8 @@ import {
   mdiClipboardAccount,
   mdiNewspaperPlus,
   mdiNewspaperMinus,
-  mdiTrendingUp
+  mdiTrendingUp,
+  mdiCheckCircleOutline
 } from '@mdi/js'
 
 export default {
@@ -309,7 +310,8 @@ export default {
         mdiClipboardAccount,
         mdiNewspaperPlus,
         mdiNewspaperMinus,
-        mdiTrendingUp
+        mdiTrendingUp,
+        mdiCheckCircleOutline
       }
     },
     theme: {
@@ -320,7 +322,7 @@ export default {
       themes: {
         dark: {
           primary: colors.red.lighten1,
-          accent: colors.grey.darken3,
+          accent: colors.red.lighten2,
           secondary: colors.amber.darken3,
           info: colors.teal.lighten1,
           warning: colors.amber.base,
@@ -328,12 +330,12 @@ export default {
           success: colors.green.darken1
         },
         light: {
-          primary: colors.red.base,
-          accent: colors.grey.darken3,
+          primary: colors.red.lighten1,
+          accent: colors.red.lighten2,
           secondary: colors.amber.darken3,
           info: colors.teal.lighten1,
           warning: colors.amber.base,
-          error: colors.red.darken1,
+          error: colors.red.base,
           success: colors.green.darken1
         }
       }

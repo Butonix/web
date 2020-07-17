@@ -15,7 +15,9 @@
         nuxt
         @click.stop.prevent="clickHomeButton"
       >
-        <span>Home</span>
+        <span :class="$route.name === 'index' ? 'primary--text' : ''"
+          >Home</span
+        >
         <v-icon :color="$route.name === 'index' ? 'primary' : ''">{{
           $vuetify.icons.values.mdiHome
         }}</v-icon>
@@ -28,7 +30,9 @@
         class="font-weight-regular"
         style="letter-spacing: normal"
       >
-        <span>Search</span>
+        <span :class="$route.name === 'search' ? 'primary--text' : ''"
+          >Search</span
+        >
         <v-icon :color="$route.name === 'search' ? 'primary' : ''">{{
           $vuetify.icons.values.mdiMagnify
         }}</v-icon>
@@ -42,7 +46,9 @@
             style="letter-spacing: normal"
             v-on="on"
           >
-            <span>Post</span>
+            <span :class="$route.name.startsWith('new') ? 'primary--text' : ''"
+              >Post</span
+            >
             <v-icon :color="$route.name.startsWith('new') ? 'primary' : ''">{{
               $vuetify.icons.values.mdiPlusBox
             }}</v-icon>
@@ -59,7 +65,9 @@
         class="font-weight-regular"
         style="letter-spacing: normal"
       >
-        <span>Topics</span>
+        <span :class="$route.name === 'topics' ? 'primary--text' : ''"
+          >Topics</span
+        >
         <v-icon :color="$route.name === 'topics' ? 'primary' : ''">{{
           $vuetify.icons.values.mdiNewspaper
         }}</v-icon>
@@ -73,7 +81,9 @@
         class="font-weight-regular"
         style="letter-spacing: normal"
       >
-        <span>Notifications</span>
+        <span :class="$route.name === 'notifications' ? 'primary--text' : ''"
+          >Notifications</span
+        >
         <v-badge v-if="notifications.length > 0" overlap content="1">
           <v-icon :color="$route.name === 'notifications' ? 'primary' : ''">{{
             $vuetify.icons.values.mdiBellOutline
@@ -94,7 +104,9 @@
         class="font-weight-regular"
         style="letter-spacing: normal"
       >
-        <span>Sign Up</span>
+        <span :class="$route.name === 'signup' ? 'primary--text' : ''"
+          >Sign Up</span
+        >
         <v-icon :color="$route.name === 'signup' ? 'primary' : ''">
           {{ $vuetify.icons.values.mdiClipboardAccount }}
         </v-icon>

@@ -1,179 +1,193 @@
 <template>
-  <v-card
+  <div
     v-if="
       !idState.deleted ||
         (comment.childComments && comment.childComments.length > 0)
     "
     :id="comment.id"
-    :flat="$vuetify.theme.dark"
-    :outlined="!$vuetify.theme.dark"
     :style="{
-      'margin-left': level === 0 ? '0' : '29px',
-      'border-width': $vuetify.theme.dark || level > 0 ? undefined : '1px',
-      'border-left-color': level > 0 ? borderColor : '',
-      'border-left-width': level > 0 ? '2px' : '1px',
-      'border-left-style': level > 0 || !$vuetify.theme.dark ? 'solid' : 'none',
-      'border-top-left-radius': level > 0 ? '0' : '10px',
-      'border-bottom-left-radius': level > 0 ? '0' : '10px',
-      'border-top-style': level > 0 || $vuetify.theme.dark ? 'none' : 'solid',
-      'border-bottom-style':
-        level > 0 || $vuetify.theme.dark ? 'none' : 'solid',
-      'border-right-style': level > 0 || $vuetify.theme.dark ? 'none' : 'solid'
+      border:
+        level === 0 && !$vuetify.theme.dark
+          ? '1px solid rgba(0, 0, 0, 0.12)'
+          : '',
+      'border-radius': '10px',
+      'background-color': $vuetify.theme.dark ? '#313235' : '#FAFAFA'
     }"
   >
-    <v-card-text class="text--primary pb-0 pt-3" style="font-size: 1rem">
-      <div v-if="idState.editing">
-        <div class="overline text--secondary">EDIT</div>
-        <div
-          class="pt-4 pb-1 px-4"
-          :style="{
-            'background-color': $vuetify.theme.dark ? '#202124' : '#FFFFFF'
-          }"
-          style="border-radius: 10px"
+    <div
+      :style="{
+        'padding-left': 10 * level + 'px',
+        'background-color': $vuetify.theme.dark
+          ? idState.expanded
+            ? '#414245'
+            : '#313235'
+          : idState.expanded
+          ? '#FFEBEE'
+          : '#FAFAFA',
+        'border-radius': '9px'
+      }"
+    >
+      <div
+        :style="{
+          'border-left-color': borderColor,
+          'border-left-width': '2px',
+          'border-left-style': level > 0 ? 'solid' : 'none',
+          'background-color': 'transparent'
+        }"
+        @click.stop.prevent="idState.expanded = !idState.expanded"
+      >
+        <v-card-text
+          class="text--primary pt-2 pb-0 px-2"
+          style="font-size: 1rem"
         >
-          <Editor v-model="idState.editHTML" editable />
-          <v-row>
-            <v-spacer />
-            <v-btn small text color="primary" @click="idState.editing = false"
-              >Cancel</v-btn
+          <div v-if="idState.editing">
+            <div class="overline text--secondary">EDIT</div>
+            <div
+              class="pt-4 pb-1 px-4"
+              :style="{
+                'background-color': $vuetify.theme.dark ? '#202124' : '#FAFAFA'
+              }"
+              style="border-radius: 10px"
             >
+              <Editor v-model="idState.editHTML" editable />
+              <v-row>
+                <v-spacer />
+                <v-btn
+                  small
+                  text
+                  color="primary"
+                  @click="idState.editing = false"
+                  >Cancel</v-btn
+                >
+                <v-btn
+                  small
+                  text
+                  color="primary"
+                  :loading="idState.editBtnLoading"
+                  :disabled="isEditEmpty"
+                  @click="editComment"
+                  >Done</v-btn
+                >
+              </v-row>
+            </div>
+          </div>
+
+          <TextContent
+            v-else
+            :dark="$vuetify.theme.dark"
+            :text-content="comment.textContent"
+          />
+        </v-card-text>
+
+        <v-card-actions class="px-2 py-2">
+          <UsernameMenu
+            v-if="comment.author && $device.isDesktop"
+            :user-data="comment.author"
+          />
+          <Username
+            v-else-if="comment.author && !$device.isDesktop"
+            :user-data="comment.author"
+            :link="false"
+          />
+          <span v-else-if="!comment.author" class="text--secondary"
+            >[deleted]</span
+          >
+
+          <span :title="editedTimeSince" class="text--secondary caption ml-2"
+            >{{ timeSince }}{{ editedTimeSince ? '*' : '' }}</span
+          >
+
+          <span
+            v-if="!$device.isDesktop"
+            class="caption ml-3"
+            :class="comment.isEndorsed ? 'primary--text' : 'text--secondary'"
+          >
+            {{ comment.endorsementCount }}
+            <v-icon
+              size="12"
+              :class="comment.isEndorsed ? 'primary--text' : 'text--secondary'"
+              style="margin-bottom: 2px"
+              >{{ $vuetify.icons.values.mdiRocket }}</v-icon
+            >
+          </span>
+
+          <span v-if="isNew" class="caption ml-3 primary--text">New</span>
+
+          <template v-if="$device.isDesktop">
+            <v-spacer />
+
             <v-btn
               small
               text
-              color="primary"
-              :loading="idState.editBtnLoading"
-              :disabled="isEditEmpty"
-              @click="editComment"
-              >Done</v-btn
+              rounded
+              class="text--secondary"
+              @click="openReplyDialog"
             >
-          </v-row>
-        </div>
+              <v-icon class="mr-2" size="20">{{
+                $vuetify.icons.values.mdiReply
+              }}</v-icon>
+              Reply
+            </v-btn>
+
+            <v-btn
+              small
+              text
+              rounded
+              :class="comment.isEndorsed ? 'primary--text' : 'text--secondary'"
+              @click="toggleEndorsement"
+            >
+              <v-icon class="mr-2" size="20">{{
+                $vuetify.icons.values.mdiRocket
+              }}</v-icon>
+              {{ comment.endorsementCount }}
+            </v-btn>
+          </template>
+        </v-card-actions>
       </div>
+    </div>
 
-      <TextContent
-        v-else
-        :dark="$vuetify.theme.dark"
-        :text-content="comment.textContent"
-      />
-    </v-card-text>
-    <v-card-actions class="px-4">
-      <UsernameMenu
-        v-if="comment.author && $device.isDesktop"
-        :user-data="comment.author"
-      />
-      <Username
-        v-else-if="comment.author && !$device.isDesktop"
-        :user-data="comment.author"
-      />
-      <span v-else-if="!comment.author" class="text--secondary">[deleted]</span>
-      <span class="caption text--secondary ml-2">{{ timeSince }}</span>
-
-      <v-spacer />
-
+    <div
+      v-if="!$device.isDesktop && idState.expanded"
+      :style="
+        $vuetify.theme.dark
+          ? 'background-color: #313235'
+          : 'background-color: #FAFAFA'
+      "
+      style="border-bottom-left-radius: 9px; border-bottom-right-radius: 9px; display: flex"
+    >
       <v-btn
-        v-if="$device.isDesktop && !idState.replying && comment.author"
-        small
-        rounded
         text
-        class="text--secondary"
-        @click="idState.replying = true"
+        tile
+        class="flex-grow-1"
+        nuxt
+        :to="`/u/${comment.author.username}`"
       >
-        Reply
-        <v-icon size="20" class="ml-2">{{
-          $vuetify.icons.values.mdiReply
+        <v-icon v-if="!comment.author.profilePicUrl" class="mr-2">{{
+          $vuetify.icons.values.mdiAccountOutline
         }}</v-icon>
+        <v-avatar v-else class="mr-2" size="28">
+          <img :src="comment.author.profilePicUrl" alt="Profile Picture" />
+        </v-avatar>
+        {{ comment.author.username }}
+      </v-btn>
+
+      <v-btn text tile class="flex-grow-1" @click="openReplyDialog">
+        <v-icon class="mr-2">{{ $vuetify.icons.values.mdiReply }}</v-icon>
+        Reply
       </v-btn>
 
       <v-btn
-        v-if="!$device.isDesktop && !idState.replying && comment.author"
-        small
-        icon
-        class=" text--secondary"
-        @click="idState.replying = true"
-      >
-        <v-icon>{{ $vuetify.icons.values.mdiReply }}</v-icon>
-      </v-btn>
-
-      <v-btn
-        v-if="comment.author"
-        small
-        rounded
         text
-        class="ml-1 ml-0 "
-        :class="comment.isEndorsed ? '' : 'text--secondary'"
-        :color="comment.isEndorsed ? 'primary' : ''"
+        tile
+        class="flex-grow-1"
+        :class="comment.isEndorsed ? 'primary--text' : ''"
         @click="toggleEndorsement"
       >
-        <v-icon size="20" class="mr-2">{{
-          $vuetify.icons.values.mdiRocket
-        }}</v-icon>
-        {{ comment.endorsementCount }}
+        <v-icon class="mr-2">{{ $vuetify.icons.values.mdiRocket }}</v-icon>
+        {{ comment.endorsementCount }} Rocket{{
+          comment.endorsementCount === 1 ? '' : 's'
+        }}
       </v-btn>
-
-      <v-menu
-        v-if="comment.author && comment.author.isCurrentUser"
-        transition="slide-y-transition"
-        offset-y
-      >
-        <template v-slot:activator="{ on }">
-          <v-btn small icon class="text--secondary ml-2" v-on="on">
-            <v-icon size="20">{{
-              $vuetify.icons.values.mdiDotsVertical
-            }}</v-icon>
-          </v-btn>
-        </template>
-
-        <v-list dense>
-          <v-list-item @click="idState.editing = true">
-            <v-list-item-icon>
-              <v-icon>{{ $vuetify.icons.values.mdiPencil }}</v-icon>
-            </v-list-item-icon>
-            <v-list-item-content>
-              <v-list-item-title>Edit</v-list-item-title>
-            </v-list-item-content>
-          </v-list-item>
-
-          <v-list-item @click="deleteComment">
-            <v-list-item-icon>
-              <v-icon>{{ $vuetify.icons.values.mdiTrashCan }}</v-icon>
-            </v-list-item-icon>
-            <v-list-item-content>
-              <v-list-item-title>Delete</v-list-item-title>
-            </v-list-item-content>
-          </v-list-item>
-        </v-list>
-      </v-menu>
-    </v-card-actions>
-
-    <div v-if="idState.replying" class="px-4 pb-3">
-      <div class="overline text--secondary">REPLY</div>
-      <div
-        style="border-radius: 10px; border-width: 1px; border-color: rgba(0, 0, 0, 0.12);"
-        :style="{
-          'background-color': $vuetify.theme.dark ? '#202124' : '#FFFFFF',
-          'border-style': $vuetify.theme.dark ? 'none' : 'solid'
-        }"
-        class="pt-4 pb-1 px-4"
-      >
-        <Editor v-model="idState.replyHTML" editable />
-        <v-row>
-          <v-spacer />
-
-          <v-btn small text color="primary" @click="idState.replying = false"
-            >Cancel</v-btn
-          >
-
-          <v-btn
-            small
-            text
-            color="primary"
-            :loading="idState.submitBtnLoading"
-            :disabled="isReplyEmpty"
-            @click="submitReply"
-            >Post Reply</v-btn
-          >
-        </v-row>
-      </div>
     </div>
 
     <div v-show="!idState.childrenCollapsed">
@@ -185,7 +199,80 @@
         :level="level + 1"
       />
     </div>
-  </v-card>
+
+    <v-dialog
+      v-model="idState.replyDialog"
+      persistent
+      width="50%"
+      :fullscreen="!$device.isDesktop"
+      :transition="
+        $device.isDesktop ? 'dialog-transition' : 'dialog-bottom-transition'
+      "
+    >
+      <v-card
+        :tile="!$device.isDesktop"
+        :min-height="$device.isDesktop ? '400' : ''"
+      >
+        <div
+          style="display: flex"
+          :style="{
+            'background-color': $vuetify.theme.dark ? '#202124' : '#F5F5F5',
+            'border-bottom-width': '1px',
+            'border-bottom-color': 'rgba(0, 0, 0, 0.12)',
+            'border-bottom-style': $vuetify.theme.dark ? 'none' : 'solid'
+          }"
+        >
+          <v-btn
+            text
+            tile
+            class="flex-grow-1"
+            height="50"
+            @click="closeReplyDialog"
+          >
+            <v-icon class="mr-2">{{
+              $vuetify.icons.values.mdiCloseCircleOutline
+            }}</v-icon>
+            Discard
+          </v-btn>
+          <v-btn
+            text
+            tile
+            class="flex-grow-1"
+            height="50"
+            :disabled="isReplyEmpty"
+            :loading="idState.submitBtnLoading"
+            @click="submitReply"
+          >
+            <v-icon class="mr-2">{{
+              $vuetify.icons.values.mdiCheckCircleOutline
+            }}</v-icon>
+            Done
+          </v-btn>
+        </div>
+
+        <div
+          style="font-size: 1rem; max-height: 200px; border-bottom-width: 1px; border-bottom-style: solid"
+          class="pa-2"
+          :style="{
+            'border-bottom-color': $vuetify.theme.dark
+              ? 'rgba(255, 255, 255, 0.12)'
+              : 'rgba(0, 0, 0, 0.12)'
+          }"
+          v-html="comment.textContent"
+        ></div>
+        <div style="font-size: 1rem">
+          <Editor
+            v-model="idState.replyHTML"
+            editable
+            autofocus
+            :style="$device.isDesktop ? 'max-height: 600px' : ''"
+            style="overflow-y: auto"
+            class="pa-2"
+          />
+        </div>
+      </v-card>
+    </v-dialog>
+  </div>
 </template>
 
 <script>
@@ -198,10 +285,10 @@ import submitCommentGql from '../../gql/submitComment.graphql'
 import postCommentsGql from '../../gql/postComments.graphql'
 import recordPostViewGql from '../../gql/recordPostView.graphql'
 import editCommentGql from '../../gql/editComment.graphql'
-import { isEditorEmpty } from '../../util/isEditorEmpty'
 import deleteCommentGql from '../../gql/deleteComment.graphql'
-import { timeSince } from '../../util/timeSince'
 import TextContent from '../TextContent'
+import { isEditorEmpty } from '@/util/isEditorEmpty'
+import { timeSince } from '@/util/timeSince'
 import Username from '~/components/user/Username'
 
 export default {
@@ -221,7 +308,9 @@ export default {
       childrenCollapsed: false,
       editing: false,
       editHTML: null,
-      deleted: false
+      deleted: false,
+      expanded: false,
+      replyDialog: false
     }
   },
   props: {
@@ -258,6 +347,28 @@ export default {
     isReplyEmpty() {
       return isEditorEmpty(this.idState.replyHTML)
     },
+    editedTimeSince() {
+      if (!this.comment.editedAt) return ''
+      return (
+        'Edited ' +
+        formatDistanceToNowStrict(new Date(this.comment.editedAt)) +
+        ' ago'
+      )
+    },
+    isNew() {
+      if (!this.postView) return false
+      return (
+        new Date(this.comment.createdAt) > new Date(this.postView.createdAt)
+      )
+    },
+    expandedCommentId: {
+      get() {
+        return this.$store.state.expandedCommentId
+      },
+      set(val) {
+        this.$store.commit('setExpandedCommentId', val)
+      }
+    },
     borderColor() {
       const l = (this.level - 1) % 5
       switch (l) {
@@ -278,9 +389,57 @@ export default {
   watch: {
     'idState.editing'(editing) {
       if (editing) this.idState.editHTML = this.comment.textContent
+    },
+    'idState.expanded'(expanded) {
+      if (!expanded) return
+      this.expandedCommentId = this.comment.id
+    },
+    expandedCommentId(id) {
+      if (id !== this.comment.id) this.idState.expanded = false
+    },
+    $route: {
+      deep: true,
+      handler() {
+        if (!this.$route.query || !this.$route.query.replying) {
+          this.idState.replyDialog = false
+        }
+      }
+    }
+  },
+  mounted() {
+    if (this.$route.query && this.$route.query.replying) {
+      const query = Object.assign({}, this.$route.query)
+      delete query.replying
+      this.$router.push({ path: this.$route.path, query })
     }
   },
   methods: {
+    openReplyDialog() {
+      if (!this.$store.state.currentUser) {
+        this.$store.dispatch('displaySnackbar', {
+          message: 'Must log in to reply'
+        })
+        return
+      }
+      this.$router.push({
+        path: this.$route.path,
+        query: { ...this.$route.query, replying: 'true' }
+      })
+      this.idState.replyDialog = true
+    },
+    closeReplyDialog() {
+      if (!this.isReplyEmpty) {
+        const confirmed = window.confirm(
+          'Are you sure you want to discard this reply?'
+        )
+        if (!confirmed) return
+      }
+      this.idState.replyDialog = false
+      const query = Object.assign({}, this.$route.query)
+      delete query.replying
+      this.$router.push({ path: this.$route.path, query })
+      this.idState.replyHTML = null
+    },
     async deleteComment() {
       const confirmed = window.confirm(
         'Are you sure you want to delete this comment?'
@@ -341,7 +500,9 @@ export default {
               data
             })
             this.idState.replyHTML = null
-            this.idState.replying = false
+            this.idState.replyDialog = false
+            if (!this.comment.childComments) this.comment.childComments = []
+            this.comment.childComments.unshift(submitComment)
           }
         })
         await this.$apollo.mutate({
@@ -356,6 +517,8 @@ export default {
       this.idState.submitBtnLoading = false
     },
     async toggleEndorsement() {
+      this.idState.expanded = false
+
       if (!this.$store.state.currentUser) {
         this.$store.dispatch('displaySnackbar', {
           message: 'Must log in to rocket this comment'

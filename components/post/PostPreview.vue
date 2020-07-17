@@ -1,16 +1,6 @@
 <template>
   <div>
-    <div
-      v-if="
-        imagePreview ||
-          ($route.name === 'p-id-title' &&
-            $route.params.id === post.id &&
-            expand &&
-            isEmbeddableImage)
-      "
-      style="max-width: none"
-      class="pa-2"
-    >
+    <div v-if="imagePreview" style="max-width: none" class="pa-2">
       <a :href="post.link" rel="noopener" target="_blank">
         <img
           alt="Image preview"
@@ -20,45 +10,7 @@
       </a>
     </div>
 
-    <client-only>
-      <div
-        v-if="
-          $route.name === 'p-id-title' &&
-            $route.params.id === post.id &&
-            expand &&
-            (isYoutubeLink || isTweetLink)
-        "
-        class="px-4"
-      >
-        <Youtube
-          v-if="isYoutubeLink"
-          :video-id="youtubeId"
-          style="max-width: 100%"
-        />
-        <Tweet v-else-if="isTweetLink" :id="tweetId" style="max-width: 100%" />
-      </div>
-    </client-only>
-
-    <div
-      v-if="
-        $route.name === 'p-id-title' &&
-          $route.params.id === post.id &&
-          post.type === 'TEXT' &&
-          post.textContent &&
-          expand
-      "
-      class="px-2 pb-2"
-    >
-      <TextContent
-        :text-content="post.textContent"
-        :dark="$vuetify.theme.dark"
-      />
-    </div>
-
-    <div
-      v-if="post.type === 'TEXT' && post.textContent && !expand"
-      class="px-2 pb-2"
-    >
+    <div v-if="post.type === 'TEXT' && post.textContent" class="px-2 pb-3 pt-1">
       <div
         :class="viewingMore || textContentHeight <= 90 ? '' : 'textcontent'"
         :style="textContentHeight <= 90 ? '' : 'cursor: pointer'"
@@ -74,23 +26,17 @@
 </template>
 
 <script>
-import { Youtube, getIdFromUrl } from 'vue-youtube'
-import { Tweet } from 'vue-tweet-embed'
 import TextContent from '~/components/TextContent'
 
 export default {
   name: 'PostPreview',
-  components: { TextContent, Youtube, Tweet },
+  components: { TextContent },
   props: {
     post: {
       type: Object,
       required: true
     },
     imagePreview: {
-      type: Boolean,
-      required: true
-    },
-    expand: {
       type: Boolean,
       required: true
     },
@@ -106,28 +52,6 @@ export default {
   computed: {
     isEmbeddableImage() {
       return this.post.type === 'IMAGE' && this.post.link.startsWith('https://')
-    },
-    isYoutubeLink() {
-      return (
-        this.post.type === 'LINK' &&
-        (this.post.link.includes('youtube.com/') ||
-          this.post.link.includes('youtu.be/'))
-      )
-    },
-    isTweetLink() {
-      return (
-        this.post.type === 'LINK' &&
-        this.post.link.includes('twitter.com/') &&
-        this.post.link.includes('/status/')
-      )
-    },
-    youtubeId() {
-      if (!this.isYoutubeLink) return ''
-      else return getIdFromUrl(this.post.link)
-    },
-    tweetId() {
-      if (!this.isTweetLink) return ''
-      else return this.post.link.split('status/')[1].split('?')[0]
     }
   }
 }

@@ -13,38 +13,32 @@
           type="list-item-avatar-three-line"
           height="134"
         />
-        <Post v-else :post="post" is-post-view />
+        <PostViewPost v-else :post="post" />
       </div>
 
-      <v-row v-if="!writingComment" no-gutters>
+      <v-row no-gutters>
         <v-btn
           v-if="$store.state.currentUser"
-          small
           rounded
           depressed
           color="primary"
-          class="mb-3 font-weight-regular white--text"
-          @click="writingComment = true"
+          class="mb-3 white--text"
+          @click="openCommentDialog"
         >
-          <v-icon size="20" class="mr-2">{{
-            $vuetify.icons.values.mdiPencil
-          }}</v-icon>
+          <v-icon class="mr-2">{{ $vuetify.icons.values.mdiPencil }}</v-icon>
           <span class="mr-2">New Comment</span>
         </v-btn>
 
         <v-btn
-          v-else
-          small
+          v-if="!$store.state.currentUser"
           rounded
           depressed
           color="primary"
-          class="mb-3 font-weight-regular white--text"
+          class="mb-3 white--text"
           to="/login"
           nuxt
         >
-          <v-icon size="20" class="mr-2">{{
-            $vuetify.icons.values.mdiPencil
-          }}</v-icon>
+          <v-icon class="mr-2">{{ $vuetify.icons.values.mdiPencil }}</v-icon>
           Log in to comment
         </v-btn>
 
@@ -52,15 +46,6 @@
 
         <CommentSortMenu />
       </v-row>
-
-      <CommentEditor
-        v-else
-        v-model="commentHTML"
-        class="mb-3"
-        :loading="submitBtnLoading"
-        @submitted="submitComment"
-        @cancelled="writingComment = false"
-      />
 
       <DynamicScroller
         v-if="postComments.length > 0"
@@ -91,11 +76,72 @@
         No one has commented yet. Will you be the first?
       </v-row>
 
-      <div
-        v-if="postComments && postComments.length > 0"
-        style="height: 300px"
-      />
+      <div style="height: 600px" />
     </v-col>
+
+    <v-dialog
+      v-if="$store.state.currentUser"
+      v-model="commentDialog"
+      persistent
+      width="50%"
+      :fullscreen="!$device.isDesktop"
+      :transition="
+        $device.isDesktop ? 'dialog-transition' : 'dialog-bottom-transition'
+      "
+    >
+      <v-card
+        :tile="!$device.isDesktop"
+        :min-height="$device.isDesktop ? '400' : ''"
+      >
+        <div
+          style="display: flex"
+          :style="{
+            'background-color': $vuetify.theme.dark ? '#202124' : '#F5F5F5',
+            'border-bottom-width': '1px',
+            'border-bottom-color': 'rgba(0, 0, 0, 0.12)',
+            'border-bottom-style': $vuetify.theme.dark ? 'none' : 'solid'
+          }"
+        >
+          <v-btn
+            text
+            tile
+            class="flex-grow-1"
+            height="50"
+            @click="closeCommentDialog"
+          >
+            <v-icon class="mr-2">{{
+              $vuetify.icons.values.mdiCloseCircleOutline
+            }}</v-icon>
+            Discard
+          </v-btn>
+          <v-btn
+            text
+            tile
+            class="flex-grow-1"
+            height="50"
+            :disabled="isCommentEmpty"
+            :loading="submitBtnLoading"
+            @click="submitComment"
+          >
+            <v-icon class="mr-2">{{
+              $vuetify.icons.values.mdiCheckCircleOutline
+            }}</v-icon>
+            Done
+          </v-btn>
+        </div>
+
+        <div style="font-size: 1rem">
+          <Editor
+            v-model="commentHTML"
+            editable
+            autofocus
+            :style="$device.isDesktop ? 'max-height: 600px' : ''"
+            style="overflow-y: auto"
+            class="pa-2"
+          />
+        </div>
+      </v-card>
+    </v-dialog>
   </v-row>
 </template>
 
@@ -104,20 +150,21 @@ import postGql from '../../gql/post.graphql'
 import postCommentsGql from '../../gql/postComments.graphql'
 import submitCommentGql from '../../gql/submitComment.graphql'
 import recordPostViewGql from '../../gql/recordPostView.graphql'
-import Post from '../../components/post/Post'
 import UserSideCard from '../../components/user/UserSideCard'
 import Comment from '../../components/comment/Comment'
-import CommentEditor from '../../components/editor/CommentEditor'
 import CommentSortMenu from '../../components/comment/sort/CommentSortMenu'
 import { urlName } from '~/util/urlName'
+import Editor from '@/components/editor/Editor'
+import { isEditorEmpty } from '@/util/isEditorEmpty'
+import PostViewPost from '@/components/post/PostViewPost'
 
 export default {
   components: {
+    PostViewPost,
+    Editor,
     CommentSortMenu,
-    CommentEditor,
     Comment,
-    UserSideCard,
-    Post
+    UserSideCard
   },
   data() {
     return {
@@ -125,11 +172,12 @@ export default {
       postComments: [],
       postView: null,
       submitCommentErr: '',
-      writingComment: false,
       commentHTML: null,
-      submitBtnLoading: false
+      submitBtnLoading: false,
+      commentDialog: false
     }
   },
+  scrollToTop: false,
   computed: {
     postId() {
       return this.$route.params.id
@@ -151,9 +199,28 @@ export default {
       }
       fun(thread)
       return thread
+    },
+    isCommentEmpty() {
+      return isEditorEmpty(this.commentHTML)
+    }
+  },
+  watch: {
+    $route: {
+      deep: true,
+      handler() {
+        if (!this.$route.query || !this.$route.query.replying) {
+          this.commentDialog = false
+        }
+      }
     }
   },
   async mounted() {
+    if (this.$route.query && this.$route.query.replying) {
+      const query = Object.assign({}, this.$route.query)
+      delete query.replying
+      this.$router.push({ path: this.$route.path, query })
+    }
+
     const { data } = await this.$apollo.mutate({
       mutation: recordPostViewGql,
       variables: {
@@ -163,6 +230,32 @@ export default {
     this.postView = data.recordPostView
   },
   methods: {
+    openCommentDialog() {
+      if (!this.$store.state.currentUser) {
+        this.$store.dispatch('displaySnackbar', {
+          message: 'Must log in to reply'
+        })
+        return
+      }
+      this.$router.push({
+        path: this.$route.path,
+        query: { ...this.$route.query, replying: 'true' }
+      })
+      this.commentDialog = true
+    },
+    closeCommentDialog() {
+      if (!this.isCommentEmpty) {
+        const confirmed = window.confirm(
+          'Are you sure you want to discard this comment?'
+        )
+        if (!confirmed) return
+      }
+      this.commentDialog = false
+      const query = Object.assign({}, this.$route.query)
+      delete query.replying
+      this.$router.push({ path: this.$route.path, query })
+      this.commentHTML = null
+    },
     async submitComment() {
       this.submitBtnLoading = true
       try {

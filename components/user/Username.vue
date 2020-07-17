@@ -1,5 +1,5 @@
 <template>
-  <nuxt-link :to="`/u/${userData.username}`" class="text--primary">
+  <nuxt-link :to="link ? `/u/${userData.username}` : ''" class="text--primary">
     <v-avatar size="28">
       <img alt="Profile picture" :src="userData.profilePicUrl" />
     </v-avatar>
@@ -25,6 +25,10 @@ export default {
     userData: {
       type: Object,
       required: true
+    },
+    link: {
+      type: Boolean,
+      default: true
     }
   }
 }

@@ -18,27 +18,29 @@
       </v-list-item-content>
     </v-list-item>
 
-    <template v-if="$store.state.currentUser">
-      <v-list-item
-        v-if="!$device.isDesktop && !post.author.isCurrentUser"
-        @click="toggleBlockUser"
-      >
-        <v-list-item-icon>
-          <v-icon>{{
-            blocked
-              ? $vuetify.icons.values.mdiAccountCancelOutline
-              : $vuetify.icons.values.mdiAccountCancelOutline
-          }}</v-icon>
-        </v-list-item-icon>
-        <v-list-item-content>
-          <v-list-item-title>{{
-            blocked
-              ? `${post.author.username} will be blocked upon refresh`
-              : `Block ${post.author.username}`
-          }}</v-list-item-title>
-        </v-list-item-content>
-      </v-list-item>
+    <v-list-item
+      v-if="!$device.isDesktop"
+      nuxt
+      :to="`/u/${post.author.username}`"
+    >
+      <v-list-item-avatar v-if="post.author.profilePicUrl" size="24">
+        <v-avatar>
+          <v-img width="24" height="24" :src="post.author.profilePicUrl" />
+        </v-avatar>
+      </v-list-item-avatar>
 
+      <v-list-item-icon v-else>
+        <v-icon>{{ $vuetify.icons.values.mdiAccountOutline }}</v-icon>
+      </v-list-item-icon>
+
+      <v-list-item-content>
+        <v-list-item-title
+          >{{ post.author.username }}'s profile</v-list-item-title
+        >
+      </v-list-item-content>
+    </v-list-item>
+
+    <template v-if="$store.state.currentUser">
       <v-list-item @click="toggleHide">
         <v-list-item-icon>
           <v-icon>{{
@@ -72,8 +74,6 @@
 import hidePostGql from '../../gql/hidePost.graphql'
 import unhidePostGql from '../../gql/unhidePost.graphql'
 import reportPostGql from '../../gql/reportPost.graphql'
-import blockUserGql from '~/gql/blockUser'
-import unblockUserGql from '~/gql/unblockUser'
 import { urlName } from '~/util/urlName'
 
 export default {
@@ -88,10 +88,6 @@ export default {
       default: false
     },
     reported: {
-      type: Boolean,
-      default: false
-    },
-    blocked: {
       type: Boolean,
       default: false
     }
@@ -160,34 +156,6 @@ export default {
           postId: this.post.id
         }
       })
-    },
-    async toggleBlockUser() {
-      if (this.blocked) await this.unblockUser()
-      else await this.blockUser()
-    },
-    async blockUser() {
-      this.$emit('blocked')
-      this.$emit('selected')
-      try {
-        await this.$apollo.mutate({
-          mutation: blockUserGql,
-          variables: {
-            blockedId: this.post.author.id
-          }
-        })
-      } catch (e) {}
-    },
-    async unblockUser() {
-      this.$emit('unblocked')
-      this.$emit('selected')
-      try {
-        await this.$apollo.mutate({
-          mutation: unblockUserGql,
-          variables: {
-            blockedId: this.post.author.id
-          }
-        })
-      } catch (e) {}
     }
   }
 }

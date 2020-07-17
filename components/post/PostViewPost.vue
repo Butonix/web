@@ -1,16 +1,10 @@
 <template>
-  <v-card
-    outlined
-    class="bettercard"
-    :ripple="false"
-    style="cursor: auto"
-    @click="goToIfMobile"
-  >
+  <v-card outlined class="bettercard" :ripple="false" style="cursor: auto">
     <v-list-item class="px-2">
       <PostThumbnail
         v-if="$device.isDesktop"
         :post="post"
-        @thumbnailclick="toggleEmbed"
+        @thumbnailclick="thumbnailClick"
       />
 
       <v-list-item-content
@@ -25,13 +19,23 @@
         </span>
 
         <v-list-item-title style="white-space: normal">
-          <nuxt-link
+          <a
+            v-if="post.type !== 'TEXT'"
             class="text--primary mr-1"
             style="font-size: 1.125rem; font-weight: 400"
-            :to="`/p/${post.id}/${urlName}`"
+            :href="post.link"
+            target="_blank"
+            rel="noopener"
           >
             {{ post.title }}
-          </nuxt-link>
+          </a>
+          <span
+            v-else
+            class="text--primary mr-1"
+            style="font-size: 1.125rem; font-weight: 400"
+          >
+            {{ post.title }}
+          </span>
 
           <template v-if="$device.isDesktop">
             <nuxt-link
@@ -81,18 +85,41 @@
       <PostThumbnail
         v-if="!$device.isDesktop"
         :post="post"
-        @thumbnailclick="toggleEmbed"
+        @thumbnailclick="thumbnailClick"
       />
     </v-list-item>
 
-    <PostPreview
-      ref="textcontent"
-      :post="post"
-      :image-preview="idState.imagePreview"
-      :viewing-more="idState.viewingMore"
-      :text-content-height="idState.textContentHeight"
-      @togglemore="idState.viewingMore = !idState.viewingMore"
-    />
+    <div v-if="post.type === 'TEXT' && post.textContent" class="px-2 pb-3 pt-1">
+      <TextContent
+        :dark="$vuetify.theme.dark"
+        :text-content="post.textContent"
+      />
+    </div>
+
+    <div
+      v-else-if="post.type === 'IMAGE' && isEmbeddableImage"
+      style="max-width: none"
+      class="pa-2"
+    >
+      <a :href="post.link" rel="noopener" target="_blank">
+        <img
+          alt="Image preview"
+          :src="post.link"
+          :style="$device.isDesktop ? 'max-width: 75%' : 'max-width: 100%'"
+        />
+      </a>
+    </div>
+
+    <div v-else-if="isYoutubeLink || isTweetLink" class="pb-2 px-2">
+      <client-only>
+        <Youtube
+          v-if="isYoutubeLink"
+          :video-id="youtubeId"
+          style="max-width: 100%"
+        />
+        <Tweet v-else-if="isTweetLink" :id="tweetId" style="max-width: 100%" />
+      </client-only>
+    </div>
 
     <v-card-actions class="pt-0 pb-2">
       <UsernameMenu v-if="$device.isDesktop" :user-data="post.author" />
@@ -108,55 +135,51 @@
 
       <PostOptions
         :post="post"
-        :hidden="idState.hidden"
-        :reported="idState.reported"
-        @hidden="idState.hidden = true"
-        @unhidden="idState.hidden = false"
-        @reported="idState.reported = true"
+        :hidden="hidden"
+        :reported="reported"
+        @hidden="hidden = true"
+        @unhidden="hidden = false"
+        @reported="reported = true"
       />
     </v-card-actions>
   </v-card>
 </template>
 
 <script>
-import { IdState } from 'vue-virtual-scroller'
 import { formatDistanceToNowStrict } from 'date-fns'
+import { getIdFromUrl, Youtube } from 'vue-youtube'
+import { Tweet } from 'vue-tweet-embed'
 import UsernameMenu from '../user/UsernameMenu'
 import Username from '../user/Username'
 import PostThumbnail from './PostThumbnail'
 import { timeSince } from '~/util/timeSince'
-import PostPreview from '~/components/post/PostPreview'
 import PostActions from '~/components/post/PostActions'
 import PostOptions from '~/components/post/PostOptions'
 import { urlName } from '~/util/urlName'
+import TextContent from '@/components/TextContent'
 
 export default {
-  name: 'Post',
+  name: 'PostViewPost',
   components: {
+    Tweet,
+    Youtube,
+    TextContent,
     PostOptions,
     PostActions,
-    PostPreview,
     Username,
     UsernameMenu,
     PostThumbnail
   },
-  mixins: [
-    IdState({
-      idProp: (vm) => vm.post.id
-    })
-  ],
   props: {
     post: {
       type: Object,
       required: true
-    },
-    index: {
-      type: Number,
-      default: 0
-    },
-    active: {
-      type: Boolean,
-      default: true
+    }
+  },
+  data() {
+    return {
+      hidden: false,
+      reported: false
     }
   },
   computed: {
@@ -166,6 +189,28 @@ export default {
     },
     isEmbeddableImage() {
       return this.post.type === 'IMAGE' && this.post.link.startsWith('https://')
+    },
+    isYoutubeLink() {
+      return (
+        this.post.type === 'LINK' &&
+        (this.post.link.includes('youtube.com/') ||
+          this.post.link.includes('youtu.be/'))
+      )
+    },
+    isTweetLink() {
+      return (
+        this.post.type === 'LINK' &&
+        this.post.link.includes('twitter.com/') &&
+        this.post.link.includes('/status/')
+      )
+    },
+    youtubeId() {
+      if (!this.isYoutubeLink) return ''
+      else return getIdFromUrl(this.post.link)
+    },
+    tweetId() {
+      if (!this.isTweetLink) return ''
+      else return this.post.link.split('status/')[1].split('?')[0]
     },
     timeSince() {
       return (
@@ -184,44 +229,13 @@ export default {
       )
     }
   },
-  mounted() {
-    if (this.$route.name === 'p-id-title') return
-    if (this.$refs.textcontent) {
-      this.idState.textContentHeight = this.$refs.textcontent.$el.clientHeight
-    }
-  },
-  idState() {
-    return {
-      viewingMore: false,
-      textContentHeight: 0,
-      imagePreview: false,
-      hidden: false,
-      reported: false
-    }
-  },
   methods: {
     doNothing() {},
-    goToIfMobile() {
-      if (this.$device.isDesktop || this.$route.name === 'p-id-title') return
-      this.$router.push(`/p/${this.post.id}/${this.urlName}`)
-    },
-    toggleEmbed() {
-      if (
-        this.post.type === 'IMAGE' &&
-        this.isEmbeddableImage &&
-        this.$route.name !== 'p-id-title'
-      ) {
-        this.idState.imagePreview = !this.idState.imagePreview
-      } else {
-        window.open(this.post.link, '_blank')
-      }
+    thumbnailClick() {
+      window.open(this.post.link, '_blank')
     }
   }
 }
 </script>
 
-<style scoped>
-.v-dialog__content >>> .v-dialog {
-  box-shadow: none !important;
-}
-</style>
+<style scoped></style>

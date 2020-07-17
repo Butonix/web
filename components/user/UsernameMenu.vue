@@ -8,7 +8,7 @@
 
     <template>
       <UserSummaryCard v-if="user" is-hover :user="user" />
-      <v-card v-else max-width="400">
+      <v-card v-else width="400">
         <div class="pa-4">
           <v-row align="center" justify="center">
             <v-progress-circular indeterminate />
