@@ -75,8 +75,6 @@
       <v-row v-else justify="center" no-gutters>
         No one has commented yet. Will you be the first?
       </v-row>
-
-      <div style="height: 600px" />
     </v-col>
 
     <v-dialog
