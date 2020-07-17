@@ -45,7 +45,6 @@
       </v-row>
 
       <DynamicScroller
-        :prerender="20"
         page-mode
         :items="globalStickies.concat(feed)"
         :min-item-size="54"
