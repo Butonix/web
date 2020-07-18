@@ -1,60 +1,114 @@
 <template>
-  <v-bottom-sheet v-if="!$device.isDesktop" v-model="idState.menuOpen">
-    <template v-slot:activator="{ on }">
-      <PostOptionsBtn v-on="on" />
-    </template>
+  <div>
+    <v-bottom-sheet v-if="!$device.isDesktop" v-model="menuOpen">
+      <template v-slot:activator="{ on }">
+        <PostOptionsBtn v-on="on" />
+      </template>
 
-    <PostOptionsContent
-      :post="post"
-      :hidden="hidden"
-      :reported="reported"
-      :blocked="blocked"
-      @hidden="$emit('hidden')"
-      @unhidden="$emit('unhidden')"
-      @reported="$emit('reported')"
-      @blocked="$emit('blocked')"
-      @unblocked="$emit('unblocked')"
-      @selected="idState.menuOpen = false"
-    />
-  </v-bottom-sheet>
+      <PostOptionsContent
+        :post="post"
+        :hidden="hidden"
+        :reported="reported"
+        @hidden="$emit('hidden')"
+        @unhidden="$emit('unhidden')"
+        @reported="$emit('reported')"
+        @selected="menuOpen = false"
+        @edit="openDialog"
+      />
+    </v-bottom-sheet>
 
-  <v-menu
-    v-else
-    v-model="idState.menuOpen"
-    transition="slide-y-transition"
-    offset-y
-  >
-    <template v-slot:activator="{ on }">
-      <PostOptionsBtn v-on="on" />
-    </template>
+    <v-menu v-else v-model="menuOpen" transition="slide-y-transition" offset-y>
+      <template v-slot:activator="{ on }">
+        <PostOptionsBtn v-on="on" />
+      </template>
 
-    <PostOptionsContent
-      :post="post"
-      :hidden="hidden"
-      :reported="reported"
-      :blocked="blocked"
-      @hidden="$emit('hidden')"
-      @unhidden="$emit('unhidden')"
-      @reported="$emit('reported')"
-      @blocked="$emit('blocked')"
-      @unblocked="$emit('unblocked')"
-      @selected="idState.menuOpen = false"
-    />
-  </v-menu>
+      <PostOptionsContent
+        :post="post"
+        :hidden="hidden"
+        :reported="reported"
+        @hidden="$emit('hidden')"
+        @unhidden="$emit('unhidden')"
+        @reported="$emit('reported')"
+        @edit="openDialog"
+      />
+    </v-menu>
+
+    <client-only>
+      <v-dialog
+        v-model="dialog"
+        persistent
+        width="50%"
+        :fullscreen="!$device.isDesktop"
+        :transition="
+          $device.isDesktop ? 'dialog-transition' : 'dialog-bottom-transition'
+        "
+      >
+        <v-card
+          :tile="!$device.isDesktop"
+          :min-height="$device.isDesktop ? '400' : ''"
+        >
+          <div
+            style="display: flex"
+            :style="{
+              'background-color': $vuetify.theme.dark ? '#202124' : '#F5F5F5',
+              'border-bottom-width': '1px',
+              'border-bottom-color': 'rgba(0, 0, 0, 0.12)',
+              'border-bottom-style': $vuetify.theme.dark ? 'none' : 'solid'
+            }"
+          >
+            <v-btn
+              text
+              tile
+              class="flex-grow-1"
+              height="50"
+              @click="closeDialog"
+            >
+              <v-icon class="mr-2">{{
+                $vuetify.icons.values.mdiCloseCircleOutline
+              }}</v-icon>
+              Discard
+            </v-btn>
+            <v-btn
+              text
+              tile
+              class="flex-grow-1"
+              height="50"
+              :loading="editBtnLoading"
+              @click="submitEdit"
+            >
+              <v-icon class="mr-2">{{
+                $vuetify.icons.values.mdiCheckCircleOutline
+              }}</v-icon>
+              Done
+            </v-btn>
+          </div>
+
+          <div style="font-size: 1rem">
+            <Editor
+              v-model="editTextContent"
+              editable
+              autofocus
+              :style="$device.isDesktop ? 'max-height: 600px' : ''"
+              style="overflow-y: auto"
+              class="pa-2"
+            />
+          </div>
+        </v-card>
+      </v-dialog>
+    </client-only>
+  </div>
 </template>
 
 <script>
-import { IdState } from 'vue-virtual-scroller'
+import editPostGql from '../../gql/editPost.graphql'
 import PostOptionsBtn from './PostOptionsBtn'
 import PostOptionsContent from './PostOptionsContent'
+import { isEditorEmpty } from '@/util/isEditorEmpty'
+import Editor from '@/components/editor/Editor'
+
 export default {
   name: 'PostOptions',
-  components: { PostOptionsContent, PostOptionsBtn },
-  mixins: [
-    IdState({
-      idProp: (vm) => vm.post.id
-    })
-  ],
+  components: { Editor, PostOptionsContent, PostOptionsBtn },
   props: {
     post: {
       type: Object,
@@ -73,9 +127,72 @@ export default {
       default: false
     }
   },
-  idState() {
+  data() {
     return {
+      dialog: false,
+      editTextContent: this.post.textContent,
+      editBtnLoading: false,
       menuOpen: false
+    }
+  },
+  computed: {
+    isEditorEmpty() {
+      return isEditorEmpty(this.editTextContent)
+    }
+  },
+  watch: {
+    $route: {
+      deep: true,
+      handler() {
+        if (!this.$route.query || !this.$route.query.editing) {
+          this.dialog = false
+        }
+      }
+    }
+  },
+  mounted() {
+    if (this.$route.query && this.$route.query.editing) {
+      const query = Object.assign({}, this.$route.query)
+      delete query.editing
+      this.$router.push({ path: this.$route.path, query })
+    }
+  },
+  methods: {
+    openDialog() {
+      this.$router.push({
+        path: this.$route.path,
+        query: { ...this.$route.query, editing: 'true' }
+      })
+      this.dialog = true
+    },
+    closeDialog() {
+      if (!this.isEditorEmpty) {
+        const confirmed = window.confirm(
+          'Are you sure you want to discard this edit?'
+        )
+        if (!confirmed) return
+      }
+      this.dialog = false
+      const query = Object.assign({}, this.$route.query)
+      delete query.editing
+      this.$router.push({ path: this.$route.path, query })
+      this.editTextContent = this.post.textContent
+    },
+    async submitEdit() {
+      this.editBtnLoading = true
+      await this.$apollo.mutate({
+        mutation: editPostGql,
+        variables: {
+          postId: this.post.id,
+          newTextContent: this.editTextContent
+        }
+      })
+      this.post.textContent = this.editTextContent
+      this.editBtnLoading = false
+      this.dialog = false
+      const query = Object.assign({}, this.$route.query)
+      delete query.editing
+      await this.$router.push({ path: this.$route.path, query })
     }
   }
 }

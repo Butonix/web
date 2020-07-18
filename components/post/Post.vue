@@ -87,6 +87,7 @@
 
     <PostPreview
       ref="textcontent"
+      :is-post-view="isPostView"
       :post="post"
       :image-preview="idState.imagePreview"
       :viewing-more="idState.viewingMore"
@@ -95,7 +96,8 @@
     />
 
     <v-card-actions class="pt-0 pb-2">
-      <UsernameMenu v-if="$device.isDesktop" :user-data="post.author" />
+      <span v-if="!post.author" class="text--secondary">[deleted]</span>
+      <UsernameMenu v-else-if="$device.isDesktop" :user-data="post.author" />
       <Username v-else :link="false" :user-data="post.author" />
 
       <span :title="editedTimeSince" class="text--secondary caption ml-2">{{
@@ -157,6 +159,10 @@ export default {
     active: {
       type: Boolean,
       default: true
+    },
+    isPostView: {
+      type: Boolean,
+      default: false
     }
   },
   computed: {
@@ -185,7 +191,7 @@ export default {
     }
   },
   mounted() {
-    if (this.$route.name === 'p-id-title') return
+    if (this.isPostView) return
     if (this.$refs.textcontent) {
       this.idState.textContentHeight = this.$refs.textcontent.$el.clientHeight
     }
@@ -202,14 +208,14 @@ export default {
   methods: {
     doNothing() {},
     goToIfMobile() {
-      if (this.$device.isDesktop || this.$route.name === 'p-id-title') return
+      if (this.$device.isDesktop || this.isPostView) return
       this.$router.push(`/p/${this.post.id}/${this.urlName}`)
     },
     toggleEmbed() {
       if (
         this.post.type === 'IMAGE' &&
         this.isEmbeddableImage &&
-        this.$route.name !== 'p-id-title'
+        !this.isPostView
       ) {
         this.idState.imagePreview = !this.idState.imagePreview
       } else {

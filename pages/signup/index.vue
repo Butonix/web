@@ -78,6 +78,9 @@ export default {
     return {
       step: 1
     }
+  },
+  head: {
+    title: 'Sign Up'
   }
 }
 </script>

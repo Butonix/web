@@ -13,7 +13,7 @@
           type="list-item-avatar-three-line"
           height="134"
         />
-        <PostViewPost v-else :post="post" />
+        <Post v-else is-post-view :post="post" />
       </div>
 
       <v-row no-gutters>
@@ -75,71 +75,75 @@
       <v-row v-else justify="center" no-gutters>
         No one has commented yet. Will you be the first?
       </v-row>
+
+      <div style="height: 600px" />
     </v-col>
 
-    <v-dialog
-      v-if="$store.state.currentUser"
-      v-model="commentDialog"
-      persistent
-      width="50%"
-      :fullscreen="!$device.isDesktop"
-      :transition="
-        $device.isDesktop ? 'dialog-transition' : 'dialog-bottom-transition'
-      "
-    >
-      <v-card
-        :tile="!$device.isDesktop"
-        :min-height="$device.isDesktop ? '400' : ''"
+    <client-only>
+      <v-dialog
+        v-if="$store.state.currentUser"
+        v-model="commentDialog"
+        persistent
+        width="50%"
+        :fullscreen="!$device.isDesktop"
+        :transition="
+          $device.isDesktop ? 'dialog-transition' : 'dialog-bottom-transition'
+        "
       >
-        <div
-          style="display: flex"
-          :style="{
-            'background-color': $vuetify.theme.dark ? '#202124' : '#F5F5F5',
-            'border-bottom-width': '1px',
-            'border-bottom-color': 'rgba(0, 0, 0, 0.12)',
-            'border-bottom-style': $vuetify.theme.dark ? 'none' : 'solid'
-          }"
+        <v-card
+          :tile="!$device.isDesktop"
+          :min-height="$device.isDesktop ? '400' : ''"
         >
-          <v-btn
-            text
-            tile
-            class="flex-grow-1"
-            height="50"
-            @click="closeCommentDialog"
+          <div
+            style="display: flex"
+            :style="{
+              'background-color': $vuetify.theme.dark ? '#202124' : '#F5F5F5',
+              'border-bottom-width': '1px',
+              'border-bottom-color': 'rgba(0, 0, 0, 0.12)',
+              'border-bottom-style': $vuetify.theme.dark ? 'none' : 'solid'
+            }"
           >
-            <v-icon class="mr-2">{{
-              $vuetify.icons.values.mdiCloseCircleOutline
-            }}</v-icon>
-            Discard
-          </v-btn>
-          <v-btn
-            text
-            tile
-            class="flex-grow-1"
-            height="50"
-            :disabled="isCommentEmpty"
-            :loading="submitBtnLoading"
-            @click="submitComment"
-          >
-            <v-icon class="mr-2">{{
-              $vuetify.icons.values.mdiCheckCircleOutline
-            }}</v-icon>
-            Done
-          </v-btn>
-        </div>
+            <v-btn
+              text
+              tile
+              class="flex-grow-1"
+              height="50"
+              @click="closeCommentDialog"
+            >
+              <v-icon class="mr-2">{{
+                $vuetify.icons.values.mdiCloseCircleOutline
+              }}</v-icon>
+              Discard
+            </v-btn>
+            <v-btn
+              text
+              tile
+              class="flex-grow-1"
+              height="50"
+              :disabled="isCommentEmpty"
+              :loading="submitBtnLoading"
+              @click="submitComment"
+            >
+              <v-icon class="mr-2">{{
+                $vuetify.icons.values.mdiCheckCircleOutline
+              }}</v-icon>
+              Done
+            </v-btn>
+          </div>
 
-        <div style="font-size: 1rem">
-          <Editor
-            v-model="commentHTML"
-            editable
-            autofocus
-            :style="$device.isDesktop ? 'max-height: 600px' : ''"
-            style="overflow-y: auto"
-            class="pa-2"
-          />
-        </div>
-      </v-card>
-    </v-dialog>
+          <div style="font-size: 1rem">
+            <Editor
+              v-model="commentHTML"
+              editable
+              autofocus
+              :style="$device.isDesktop ? 'max-height: 600px' : ''"
+              style="overflow-y: auto"
+              class="pa-2"
+            />
+          </div>
+        </v-card>
+      </v-dialog>
+    </client-only>
   </v-row>
 </template>
 
@@ -154,11 +158,11 @@ import CommentSortMenu from '../../components/comment/sort/CommentSortMenu'
 import { urlName } from '~/util/urlName'
 import Editor from '@/components/editor/Editor'
 import { isEditorEmpty } from '@/util/isEditorEmpty'
-import PostViewPost from '@/components/post/PostViewPost'
+import Post from '@/components/post/Post'
 
 export default {
   components: {
-    PostViewPost,
+    Post,
     Editor,
     CommentSortMenu,
     Comment,
@@ -175,7 +179,7 @@ export default {
       commentDialog: false
     }
   },
-  scrollToTop: false,
+  scrollToTop: true,
   computed: {
     postId() {
       return this.$route.params.id

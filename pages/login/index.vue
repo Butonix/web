@@ -99,6 +99,9 @@ export default {
       }
       this.loading = false
     }
+  },
+  head: {
+    title: 'Log In'
   }
 }
 </script>

@@ -40,7 +40,11 @@
       </v-list-item-content>
     </v-list-item>
 
-    <template v-if="$store.state.currentUser">
+    <template
+      v-if="
+        $store.state.currentUser && post.author && !post.author.isCurrentUser
+      "
+    >
       <v-list-item @click="toggleHide">
         <v-list-item-icon>
           <v-icon>{{
@@ -67,6 +71,45 @@
         </v-list-item-content>
       </v-list-item>
     </template>
+
+    <v-list-item
+      v-if="
+        post.type === 'TEXT' &&
+          $store.state.currentUser &&
+          post.author &&
+          post.author.isCurrentUser
+      "
+      @click="editPost"
+    >
+      <v-list-item-icon>
+        <v-icon>{{ $vuetify.icons.values.mdiPencil }}</v-icon>
+      </v-list-item-icon>
+      <v-list-item-content>
+        <v-list-item-title>Edit</v-list-item-title>
+      </v-list-item-content>
+    </v-list-item>
+
+    <v-list-item
+      v-if="
+        $store.state.currentUser &&
+          post.author &&
+          (post.author.isCurrentUser || $store.state.currentUser.admin)
+      "
+      @click="deletePost"
+    >
+      <v-list-item-icon>
+        <v-icon>{{ $vuetify.icons.values.mdiTrashCan }}</v-icon>
+      </v-list-item-icon>
+      <v-list-item-content>
+        <v-list-item-title
+          >Delete{{
+            $store.state.currentUser.admin && !post.author.isCurrentUser
+              ? ' (Admin)'
+              : ''
+          }}</v-list-item-title
+        >
+      </v-list-item-content>
+    </v-list-item>
   </v-list>
 </template>
 
@@ -74,6 +117,7 @@
 import hidePostGql from '../../gql/hidePost.graphql'
 import unhidePostGql from '../../gql/unhidePost.graphql'
 import reportPostGql from '../../gql/reportPost.graphql'
+import deletePostGql from '../../gql/deletePost.graphql'
 import { urlName } from '~/util/urlName'
 
 export default {
@@ -92,6 +136,7 @@ export default {
       default: false
     }
   },
+
   computed: {
     canShare() {
       if (!process.client) return false
@@ -156,6 +201,26 @@ export default {
           postId: this.post.id
         }
       })
+    },
+    editPost() {
+      this.$emit('selected')
+      this.$emit('edit')
+    },
+    async deletePost() {
+      this.$emit('selected')
+      const confirmed = window.confirm(
+        'Are you sure you want to delete this post?'
+      )
+      if (!confirmed) return
+      this.$emit('deleted')
+      await this.$apollo.mutate({
+        mutation: deletePostGql,
+        variables: {
+          postId: this.post.id
+        }
+      })
+      this.post.author = null
+      if (this.post.type === 'TEXT') this.post.textContent = '<p>[deleted]</p>'
     }
   }
 }

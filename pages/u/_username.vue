@@ -1,61 +1,104 @@
 <template>
   <v-row>
-    <v-col>
-      <div class="headline">
-        <span
-          v-if="user.title"
-          class="subtitle-1 font-weight-bold primary--text"
-          >[{{ user.title }}] </span
-        >{{ user.username }}
+    <v-col v-if="$device.isDesktop" cols="3">
+      <UserSummaryCard v-if="user" :user="user" />
+    </v-col>
+    <v-col :cols="$device.isDesktop ? 6 : 12">
+      <UserSummaryCard
+        v-if="!$device.isDesktop && user"
+        :user="user"
+        class="mb-3"
+      />
 
-        <v-avatar>
-          <v-img alt="Profile picture" :src="user.profilePicUrl" />
-        </v-avatar>
-      </div>
-      <div class="subtitle-1">
-        Joined on {{ joinDate }} &middot;
-        {{ user.endorsementCount }} endorsement{{
-          user.endorsementCount === 1 ? '' : 's'
-        }}
-      </div>
+      <v-row no-gutters class="pb-3">
+        <template v-if="$device.isDesktop">
+          <v-btn
+            small
+            text
+            rounded
+            class="mr-1 font-weight-regular"
+            :color="!$route.query || !$route.query.view ? 'primary' : ''"
+            @click="chooseAll"
+          >
+            <v-icon size="20" class="mr-2">{{
+              $vuetify.icons.values.mdiInfinity
+            }}</v-icon>
+            All
+          </v-btn>
 
-      <v-tabs v-model="currentTab" class="mb-2" background-color="transparent">
-        <v-tab>All</v-tab>
-        <v-tab
-          >{{ user.postCount }} Post{{ user.postCount === 1 ? '' : 's' }}</v-tab
-        >
-        <v-tab
-          >{{ user.commentCount }} Comment{{
-            user.commentCount === 1 ? '' : 's'
-          }}</v-tab
-        >
-      </v-tabs>
+          <v-btn
+            small
+            text
+            rounded
+            class="mr-1 font-weight-regular"
+            :color="
+              $route.query && $route.query.view === 'posts' ? 'primary' : ''
+            "
+            @click="choosePosts"
+          >
+            <v-icon size="20" class="mr-2">{{
+              $vuetify.icons.values.mdiPost
+            }}</v-icon>
+            Posts
+          </v-btn>
 
-      <!--<SortMenu v-model="sort" :hot-enabled="false" class="mb-1" />-->
+          <v-btn
+            small
+            text
+            rounded
+            class="font-weight-regular"
+            :color="
+              $route.query && $route.query.view === 'comments' ? 'primary' : ''
+            "
+            @click="chooseComments"
+          >
+            <v-icon size="20" class="mr-2">{{
+              $vuetify.icons.values.mdiCommentMultipleOutline
+            }}</v-icon>
+            Comments
+          </v-btn>
+        </template>
 
-      <v-tabs-items v-model="currentTab" style="background-color: transparent">
-        <v-tab-item>
-          <div
-            v-for="item in postsAndComments"
-            :key="item.id"
-            class="mb-1"
-          ></div>
-        </v-tab-item>
+        <UserViewMenu v-else />
 
-        <v-tab-item>
-          <Post v-for="post in userPosts" :key="post.id" :source="post" />
-        </v-tab-item>
+        <v-spacer />
 
-        <v-tab-item>
-          <Comment
-            v-for="comment in userComments"
-            :key="comment.id"
-            profile
-            :comment="comment"
-            class="mb-1"
-          />
-        </v-tab-item>
-      </v-tabs-items>
+        <TypeMenu
+          v-if="
+            $device.isDesktop && $route.query && $route.query.view === 'posts'
+          "
+        />
+
+        <UserSortMenu />
+      </v-row>
+
+      <DynamicScroller page-mode :items="items" :min-item-size="54">
+        <template v-slot="{ item, index, active }">
+          <DynamicScrollerItem
+            :item="item"
+            :active="active"
+            :index="index"
+            :size-dependencies="[item.title, item.textContent]"
+            type-field="__typename"
+          >
+            <div class="pb-3">
+              <Post
+                v-if="item.__typename === 'Post'"
+                :post="item"
+                :index="index"
+                :active="active"
+              />
+              <Comment
+                v-else-if="item.__typename === 'Comment'"
+                :comment="item"
+                :index="index"
+                :active="active"
+                show-post-title
+              />
+            </div>
+          </DynamicScrollerItem>
+        </template>
+      </DynamicScroller>
     </v-col>
   </v-row>
 </template>
@@ -65,61 +108,38 @@ import { format } from 'date-fns'
 import userGql from '../../gql/user.graphql'
 import userPostsGql from '../../gql/userPosts.graphql'
 import userCommentsGql from '../../gql/userComments.graphql'
+import UserSummaryCard from '@/components/user/UserSummaryCard'
+import Post from '@/components/post/Post'
+import Comment from '@/components/comment/Comment'
+import TypeMenu from '@/components/buttons/type/TypeMenu'
+import UserSortMenu from '@/components/buttons/user_sort/UserSortMenu'
+import UserViewMenu from '@/components/buttons/user_view/UserViewMenu'
 
 export default {
-  async asyncData(context) {
-    const client = context.app.apolloProvider.defaultClient
-
-    const username = context.params.username
-
-    const userData = await client.query({
-      query: userGql,
-      variables: { username },
-      fetchPolicy: 'network-only'
-    })
-
-    const userPostsData = await client.query({
-      query: userPostsGql,
-      variables: { username },
-      fetchPolicy: 'network-only'
-    })
-
-    const userCommentsData = await client.query({
-      query: userCommentsGql,
-      variables: { username },
-      fetchPolicy: 'network-only'
-    })
-
-    if (!userData.data.user)
-      context.error({ statusCode: 404, message: 'User not found' })
-
-    return {
-      user: userData.data.user,
-      userPosts: userPostsData.data.userPosts,
-      userComments: userCommentsData.data.userComments
-    }
+  components: {
+    UserViewMenu,
+    UserSortMenu,
+    TypeMenu,
+    Comment,
+    Post,
+    UserSummaryCard
   },
   data() {
     return {
-      currentTab: null,
       user: null,
       userPosts: [],
       userComments: []
-      /* sort: {
-        sort: 'NEW',
-        time: 'ALL'
-      } */
     }
   },
   computed: {
     username() {
-      return this.$route.params.username.substring(1)
+      return this.$route.params.username
     },
     joinDate() {
       if (!this.user) return undefined
       return format(new Date(this.user.createdAt), 'MM/dd/yyyy')
     },
-    postsAndComments() {
+    items() {
       return this.userPosts
         .concat(this.userComments)
         .sort(
@@ -128,14 +148,68 @@ export default {
         )
     }
   },
+  apollo: {
+    user: {
+      query: userGql,
+      variables() {
+        return {
+          username: this.username
+        }
+      },
+      skip() {
+        return this.$route.name !== 'u-username'
+      }
+    },
+    userPosts: {
+      query: userPostsGql,
+      variables() {
+        return {
+          username: this.username
+        }
+      },
+      skip() {
+        return this.$route.name !== 'u-username'
+      }
+    },
+    userComments: {
+      query: userCommentsGql,
+      variables() {
+        return {
+          username: this.username
+        }
+      },
+      skip() {
+        return this.$route.name !== 'u-username'
+      }
+    }
+  },
+  methods: {
+    chooseAll() {
+      const query = Object.assign({}, this.$route.query)
+      delete query.view
+      this.$router.push({ path: this.$route.path, query })
+    },
+    choosePosts() {
+      this.$router.push({
+        path: this.$route.path,
+        query: { ...this.$route.query, view: 'posts' }
+      })
+    },
+    chooseComments() {
+      this.$router.push({
+        path: this.$route.path,
+        query: { ...this.$route.query, view: 'comments' }
+      })
+    }
+  },
   head() {
     return {
-      title: this.user.username,
+      title: this.user ? this.user.username : '',
       meta: [
         {
           hid: 'og:title',
           property: 'og:title',
-          content: `${this.user.username}'s profile / Comet`
+          content: `${this.user ? this.user.username : ''}'s profile / Comet`
         },
         {
           hid: 'og:site_name',
@@ -145,7 +219,9 @@ export default {
         {
           hid: 'og:description',
           property: 'og:description',
-          content: `${this.user.postCount} Posts and ${this.user.commentCount} Comments`
+          content: `${this.user ? this.user.postCount : ''} Posts and ${
+            this.user ? this.user.commentCount : ''
+          } Comments`
         }
       ]
     }

@@ -40,40 +40,15 @@
           class="text--primary pt-2 pb-0 px-2"
           style="font-size: 1rem"
         >
-          <div v-if="idState.editing">
-            <div class="overline text--secondary">EDIT</div>
-            <div
-              class="pt-4 pb-1 px-4"
-              :style="{
-                'background-color': $vuetify.theme.dark ? '#202124' : '#FAFAFA'
-              }"
-              style="border-radius: 10px"
+          <div v-if="showPostTitle" class="mb-1">
+            <nuxt-link
+              :to="`/p/${comment.post.id}/${postUrlName}`"
+              class="caption font-weight-medium text--secondary"
+              >{{ comment.post.title }}</nuxt-link
             >
-              <Editor v-model="idState.editHTML" editable />
-              <v-row>
-                <v-spacer />
-                <v-btn
-                  small
-                  text
-                  color="primary"
-                  @click="idState.editing = false"
-                  >Cancel</v-btn
-                >
-                <v-btn
-                  small
-                  text
-                  color="primary"
-                  :loading="idState.editBtnLoading"
-                  :disabled="isEditEmpty"
-                  @click="editComment"
-                  >Done</v-btn
-                >
-              </v-row>
-            </div>
           </div>
 
           <TextContent
-            v-else
             :dark="$vuetify.theme.dark"
             :text-content="comment.textContent"
           />
@@ -200,78 +175,80 @@
       />
     </div>
 
-    <v-dialog
-      v-model="idState.replyDialog"
-      persistent
-      width="50%"
-      :fullscreen="!$device.isDesktop"
-      :transition="
-        $device.isDesktop ? 'dialog-transition' : 'dialog-bottom-transition'
-      "
-    >
-      <v-card
-        :tile="!$device.isDesktop"
-        :min-height="$device.isDesktop ? '400' : ''"
+    <client-only>
+      <v-dialog
+        v-model="idState.replyDialog"
+        persistent
+        width="50%"
+        :fullscreen="!$device.isDesktop"
+        :transition="
+          $device.isDesktop ? 'dialog-transition' : 'dialog-bottom-transition'
+        "
       >
-        <div
-          style="display: flex"
-          :style="{
-            'background-color': $vuetify.theme.dark ? '#202124' : '#F5F5F5',
-            'border-bottom-width': '1px',
-            'border-bottom-color': 'rgba(0, 0, 0, 0.12)',
-            'border-bottom-style': $vuetify.theme.dark ? 'none' : 'solid'
-          }"
+        <v-card
+          :tile="!$device.isDesktop"
+          :min-height="$device.isDesktop ? '400' : ''"
         >
-          <v-btn
-            text
-            tile
-            class="flex-grow-1"
-            height="50"
-            @click="closeReplyDialog"
+          <div
+            style="display: flex"
+            :style="{
+              'background-color': $vuetify.theme.dark ? '#202124' : '#F5F5F5',
+              'border-bottom-width': '1px',
+              'border-bottom-color': 'rgba(0, 0, 0, 0.12)',
+              'border-bottom-style': $vuetify.theme.dark ? 'none' : 'solid'
+            }"
           >
-            <v-icon class="mr-2">{{
-              $vuetify.icons.values.mdiCloseCircleOutline
-            }}</v-icon>
-            Discard
-          </v-btn>
-          <v-btn
-            text
-            tile
-            class="flex-grow-1"
-            height="50"
-            :disabled="isReplyEmpty"
-            :loading="idState.submitBtnLoading"
-            @click="submitReply"
-          >
-            <v-icon class="mr-2">{{
-              $vuetify.icons.values.mdiCheckCircleOutline
-            }}</v-icon>
-            Done
-          </v-btn>
-        </div>
+            <v-btn
+              text
+              tile
+              class="flex-grow-1"
+              height="50"
+              @click="closeReplyDialog"
+            >
+              <v-icon class="mr-2">{{
+                $vuetify.icons.values.mdiCloseCircleOutline
+              }}</v-icon>
+              Discard
+            </v-btn>
+            <v-btn
+              text
+              tile
+              class="flex-grow-1"
+              height="50"
+              :disabled="isReplyEmpty"
+              :loading="idState.submitBtnLoading"
+              @click="submitReply"
+            >
+              <v-icon class="mr-2">{{
+                $vuetify.icons.values.mdiCheckCircleOutline
+              }}</v-icon>
+              Done
+            </v-btn>
+          </div>
 
-        <div
-          style="font-size: 1rem; max-height: 200px; border-bottom-width: 1px; border-bottom-style: solid"
-          class="pa-2"
-          :style="{
-            'border-bottom-color': $vuetify.theme.dark
-              ? 'rgba(255, 255, 255, 0.12)'
-              : 'rgba(0, 0, 0, 0.12)'
-          }"
-          v-html="comment.textContent"
-        ></div>
-        <div style="font-size: 1rem">
-          <Editor
-            v-model="idState.replyHTML"
-            editable
-            autofocus
-            :style="$device.isDesktop ? 'max-height: 600px' : ''"
-            style="overflow-y: auto"
+          <div
+            style="font-size: 1rem; max-height: 200px; border-bottom-width: 1px; border-bottom-style: solid"
             class="pa-2"
-          />
-        </div>
-      </v-card>
-    </v-dialog>
+            :style="{
+              'border-bottom-color': $vuetify.theme.dark
+                ? 'rgba(255, 255, 255, 0.12)'
+                : 'rgba(0, 0, 0, 0.12)'
+            }"
+            v-html="comment.textContent"
+          ></div>
+          <div style="font-size: 1rem">
+            <Editor
+              v-model="idState.replyHTML"
+              editable
+              autofocus
+              :style="$device.isDesktop ? 'max-height: 600px' : ''"
+              style="overflow-y: auto"
+              class="pa-2"
+            />
+          </div>
+        </v-card>
+      </v-dialog>
+    </client-only>
   </div>
 </template>
 
@@ -290,6 +267,7 @@ import TextContent from '../TextContent'
 import { isEditorEmpty } from '@/util/isEditorEmpty'
 import { timeSince } from '@/util/timeSince'
 import Username from '~/components/user/Username'
+import { urlName } from '@/util/urlName'
 
 export default {
   name: 'Comment',
@@ -314,6 +292,10 @@ export default {
     }
   },
   props: {
+    showPostTitle: {
+      type: Boolean,
+      default: false
+    },
     comment: {
       type: Object,
       required: true
@@ -340,6 +322,10 @@ export default {
       return this.$device.isDesktop
         ? formatDistanceToNowStrict(new Date(this.comment.createdAt)) + ' ago'
         : timeSince(new Date(this.comment.createdAt))
+    },
+    postUrlName() {
+      if (!this.comment.post) return ''
+      return urlName(this.comment.post.title)
     },
     isEditEmpty() {
       return isEditorEmpty(this.idState.editHTML)
@@ -451,7 +437,6 @@ export default {
           { type: 'paragraph', content: [{ text: '[deleted]', type: 'text' }] }
         ]
       }
-      this.comment.authorId = null
       this.comment.author = null
       this.idState.deleted = true
       await this.$apollo.mutate({
@@ -483,22 +468,25 @@ export default {
             parentCommentId: this.comment.id
           },
           update: (store, { data: { submitComment } }) => {
-            const data = store.readQuery({
-              query: postCommentsGql,
-              variables: {
-                postId: this.comment.postId
-                // sort: this.sort.sort.toUpperCase()
-              }
-            })
-            data.postComments.unshift(submitComment)
-            store.writeQuery({
-              query: postCommentsGql,
-              variables: {
-                postId: this.comment.postId
-                // sort: this.sort.sort.toUpperCase()
-              },
-              data
-            })
+            if (this.$route.name === 'p-id-title') {
+              const data = store.readQuery({
+                query: postCommentsGql,
+                variables: {
+                  postId: this.comment.postId
+                  // sort: this.sort.sort.toUpperCase()
+                }
+              })
+              data.postComments.unshift(submitComment)
+              store.writeQuery({
+                query: postCommentsGql,
+                variables: {
+                  postId: this.comment.postId
+                  // sort: this.sort.sort.toUpperCase()
+                },
+                data
+              })
+            }
+
             this.idState.replyHTML = null
             this.idState.replyDialog = false
             if (!this.comment.childComments) this.comment.childComments = []

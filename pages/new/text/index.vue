@@ -42,55 +42,69 @@
       </v-row>
     </v-col>
 
-    <v-dialog
-      v-if="$store.state.currentUser"
-      v-model="dialog"
-      persistent
-      width="50%"
-      :fullscreen="!$device.isDesktop"
-      :transition="
-        $device.isDesktop ? 'dialog-transition' : 'dialog-bottom-transition'
-      "
-    >
-      <v-card
-        :tile="!$device.isDesktop"
-        :min-height="$device.isDesktop ? '400' : ''"
+    <client-only>
+      <v-dialog
+        v-if="$store.state.currentUser"
+        v-model="dialog"
+        persistent
+        width="50%"
+        :fullscreen="!$device.isDesktop"
+        :transition="
+          $device.isDesktop ? 'dialog-transition' : 'dialog-bottom-transition'
+        "
       >
-        <div
-          style="display: flex"
-          :style="{
-            'background-color': $vuetify.theme.dark ? '#202124' : '#F5F5F5',
-            'border-bottom-width': '1px',
-            'border-bottom-color': 'rgba(0, 0, 0, 0.12)',
-            'border-bottom-style': $vuetify.theme.dark ? 'none' : 'solid'
-          }"
+        <v-card
+          :tile="!$device.isDesktop"
+          :min-height="$device.isDesktop ? '400' : ''"
         >
-          <v-btn text tile class="flex-grow-1" height="50" @click="closeDialog">
-            <v-icon class="mr-2">{{
-              $vuetify.icons.values.mdiCloseCircleOutline
-            }}</v-icon>
-            Discard
-          </v-btn>
-          <v-btn text tile class="flex-grow-1" height="50" @click="hideDialog">
-            <v-icon class="mr-2">{{
-              $vuetify.icons.values.mdiCheckCircleOutline
-            }}</v-icon>
-            Done
-          </v-btn>
-        </div>
+          <div
+            style="display: flex"
+            :style="{
+              'background-color': $vuetify.theme.dark ? '#202124' : '#F5F5F5',
+              'border-bottom-width': '1px',
+              'border-bottom-color': 'rgba(0, 0, 0, 0.12)',
+              'border-bottom-style': $vuetify.theme.dark ? 'none' : 'solid'
+            }"
+          >
+            <v-btn
+              text
+              tile
+              class="flex-grow-1"
+              height="50"
+              @click="closeDialog"
+            >
+              <v-icon class="mr-2">{{
+                $vuetify.icons.values.mdiCloseCircleOutline
+              }}</v-icon>
+              Discard
+            </v-btn>
+            <v-btn
+              text
+              tile
+              class="flex-grow-1"
+              height="50"
+              @click="hideDialog"
+            >
+              <v-icon class="mr-2">{{
+                $vuetify.icons.values.mdiCheckCircleOutline
+              }}</v-icon>
+              Done
+            </v-btn>
+          </div>
 
-        <div style="font-size: 1rem">
-          <Editor
-            v-model="textContent"
-            editable
-            autofocus
-            :style="$device.isDesktop ? 'max-height: 600px' : ''"
-            style="overflow-y: auto"
-            class="pa-2"
-          />
-        </div>
-      </v-card>
-    </v-dialog>
+          <div style="font-size: 1rem">
+            <Editor
+              v-model="textContent"
+              editable
+              autofocus
+              :style="$device.isDesktop ? 'max-height: 600px' : ''"
+              style="overflow-y: auto"
+              class="pa-2"
+            />
+          </div>
+        </v-card>
+      </v-dialog>
+    </client-only>
   </v-row>
 </template>
 
