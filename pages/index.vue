@@ -99,7 +99,8 @@ export default {
     return {
       feed: [],
       globalStickies: [],
-      hasMore: true
+      hasMore: true,
+      page: 0
     }
   },
   computed: {
@@ -120,14 +121,6 @@ export default {
               .map((t) => t.toUpperCase())
           : []
       }
-    },
-    page: {
-      get() {
-        return this.$store.state.homeFeedPage
-      },
-      set(val) {
-        this.$store.commit('setHomeFeedPage', val)
-      }
     }
   },
   watch: {
@@ -144,7 +137,7 @@ export default {
           ) {
             this.feed = []
             this.$store.commit('setHomeQuery', this.$route.query)
-            this.$store.commit('setHomeFeedPage', 0)
+            this.page = 0
             if (process.client) {
               window.scrollTo(0, 0)
             }

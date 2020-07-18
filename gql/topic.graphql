@@ -1,4 +1,4 @@
-query topic($topicName: String!) {
+query topic($topicName: ID!) {
   topic(topicName: $topicName) {
     capitalizedName
     isFollowing

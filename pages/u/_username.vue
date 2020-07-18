@@ -99,6 +99,14 @@
           </DynamicScrollerItem>
         </template>
       </DynamicScroller>
+
+      <v-progress-linear
+        v-show="
+          $apollo.queries.userPosts.loading ||
+            $apollo.queries.userComments.loading
+        "
+        indeterminate
+      />
     </v-col>
   </v-row>
 </template>
@@ -128,7 +136,9 @@ export default {
     return {
       user: null,
       userPosts: [],
-      userComments: []
+      userComments: [],
+      hasMore: true,
+      page: 0
     }
   },
   computed: {
@@ -140,12 +150,46 @@ export default {
       return format(new Date(this.user.createdAt), 'MM/dd/yyyy')
     },
     items() {
-      return this.userPosts
-        .concat(this.userComments)
-        .sort(
-          (a, b) =>
-            new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
-        )
+      if (!this.$route.query || !this.$route.query.view) {
+        const arr = this.userPosts.concat(this.userComments)
+        if (this.$route.query && this.$route.query.sort === 'top') {
+          return arr.sort((a, b) => b.endorsementCount - a.endorsementCount)
+        } else {
+          return arr.sort(
+            (a, b) =>
+              new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+          )
+        }
+      } else if (this.$route.query && this.$route.query.view === 'posts') {
+        return this.userPosts
+      } else if (this.$route.query && this.$route.query.view === 'comments') {
+        return this.userComments
+      } else return []
+    },
+    postVars() {
+      return {
+        sort: this.$store.state.userQuery.sort
+          ? this.$store.state.userQuery.sort.toUpperCase()
+          : 'NEW',
+        time: this.$store.state.userQuery.time
+          ? this.$store.state.userQuery.time.toUpperCase()
+          : 'ALL',
+        types: this.$store.state.userQuery.types
+          ? this.$store.state.userQuery.types
+              .split('-')
+              .map((t) => t.toUpperCase())
+          : []
+      }
+    },
+    commentVars() {
+      return {
+        sort: this.$store.state.userQuery.sort
+          ? this.$store.state.userQuery.sort.toUpperCase()
+          : 'NEW',
+        time: this.$store.state.userQuery.time
+          ? this.$store.state.userQuery.time.toUpperCase()
+          : 'ALL'
+      }
     }
   },
   apollo: {
@@ -164,7 +208,8 @@ export default {
       query: userPostsGql,
       variables() {
         return {
-          username: this.username
+          username: this.username,
+          ...this.postVars
         }
       },
       skip() {
@@ -175,7 +220,8 @@ export default {
       query: userCommentsGql,
       variables() {
         return {
-          username: this.username
+          username: this.username,
+          ...this.commentVars
         }
       },
       skip() {
@@ -183,7 +229,93 @@ export default {
       }
     }
   },
+  watch: {
+    username() {
+      this.page = 0
+    },
+    $route: {
+      deep: true,
+      handler() {
+        if (this.$route.name === 'u-username') {
+          const oldQuery = this.$store.state.userQuery
+          if (
+            oldQuery.sort !== this.$route.query.sort ||
+            oldQuery.time !== this.$route.query.time ||
+            oldQuery.types !== this.$route.query.types
+          ) {
+            this.userPosts = []
+            this.userComments = []
+            this.$store.commit('setUserQuery', this.$route.query)
+            this.page = 0
+            if (process.client) {
+              window.scrollTo(0, 0)
+            }
+          }
+        }
+      }
+    }
+  },
+  activated() {
+    window.addEventListener('scroll', this.handleScroll)
+  },
+  deactivated() {
+    window.addEventListener('scroll', this.handleScroll)
+  },
+  created() {
+    if (this.$route.name === 'u-username') {
+      this.$store.commit('setUserQuery', this.$route.query)
+    }
+  },
   methods: {
+    handleScroll(e) {
+      if (!process.client) return
+      const totalPageHeight = document.body.scrollHeight
+      const scrollPoint = window.scrollY + window.innerHeight
+      if (scrollPoint >= totalPageHeight - 200) {
+        this.showMore()
+      }
+    },
+    showMore() {
+      if (
+        this.$apollo.queries.userPosts.loading ||
+        this.$apollo.queries.userComments.loading ||
+        !this.hasMore ||
+        this.$route.name !== 'u-username'
+      )
+        return
+      this.page++
+      this.$apollo.queries.userPosts.fetchMore({
+        query: userPostsGql,
+        variables: {
+          page: this.page,
+          username: this.username,
+          ...this.postVars
+        },
+        updateQuery: (previousResult, { fetchMoreResult }) => {
+          const newPosts = fetchMoreResult.userPosts
+          if (newPosts.length === 0) this.hasMore = false
+          return {
+            userPosts: [...previousResult.userPosts, ...newPosts]
+          }
+        }
+      })
+
+      this.$apollo.queries.userComments.fetchMore({
+        query: userCommentsGql,
+        variables: {
+          page: this.page,
+          username: this.username,
+          ...this.commentVars
+        },
+        updateQuery: (previousResult, { fetchMoreResult }) => {
+          const newPosts = fetchMoreResult.userComments
+          if (newPosts.length === 0) this.hasMore = false
+          return {
+            userComments: [...previousResult.userComments, ...newPosts]
+          }
+        }
+      })
+    },
     chooseAll() {
       const query = Object.assign({}, this.$route.query)
       delete query.view

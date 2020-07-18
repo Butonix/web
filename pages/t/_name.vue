@@ -167,7 +167,8 @@ export default {
     return {
       topic: null,
       feed: [],
-      hasMore: true
+      hasMore: true,
+      page: 0
     }
   },
   computed: {
@@ -188,20 +189,12 @@ export default {
               .map((t) => t.toUpperCase())
           : []
       }
-    },
-    page: {
-      get() {
-        return this.$store.state.topicFeedPage[this.topicName]
-      },
-      set(val) {
-        this.$store.commit('setTopicFeedPage', {
-          topicName: this.topicName,
-          page: val
-        })
-      }
     }
   },
   watch: {
+    topicName() {
+      this.page = 0
+    },
     $route: {
       deep: true,
       handler() {
@@ -214,7 +207,7 @@ export default {
           ) {
             this.feed = []
             this.$store.commit('setTopicQuery', this.$route.query)
-            this.$store.commit('setTopicFeedPage', 0)
+            this.page = 0
             if (process.client) {
               window.scrollTo(0, 0)
             }

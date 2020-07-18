@@ -1,5 +1,5 @@
-query userComments($username: String!) {
-  userComments(username: $username) {
+query userComments($username: String!, $page: Int, $pageSize: Int, $sort: CommentSort, $time: Time) {
+  userComments(username: $username, page: $page, pageSize: $pageSize, sort: $sort, time: $time) {
     __typename
     textContent
     createdAt

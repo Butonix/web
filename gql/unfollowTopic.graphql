@@ -1,3 +1,3 @@
-mutation unfollowTopic($topicName: String!) {
+mutation unfollowTopic($topicName: ID!) {
   unfollowTopic(topicName: $topicName)
 }

@@ -1,5 +1,5 @@
-query userPosts($username: String!) {
-  userPosts(username: $username) {
+query userPosts($username: String!, $page: Int, $pageSize: Int, $sort: CommentSort, $time: Time, $types: [Type!]) {
+  userPosts(username: $username, page: $page, pageSize: $pageSize, sort: $sort, time: $time, types: $types) {
     __typename
     commentCount
     createdAt

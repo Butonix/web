@@ -2,8 +2,6 @@ import currentUserGql from '../gql/currentUser.graphql'
 
 export const state = () => ({
   currentUser: null,
-  homeFeedPage: 0,
-  topicFeedPage: {},
   topicSidebarSelected: 'Popular',
   topicSidebarSearchText: '',
   snackbarEnabled: false,
@@ -12,6 +10,7 @@ export const state = () => ({
   searchPage: 0,
   homeQuery: {},
   topicQuery: {},
+  userQuery: {},
   expandedCommentId: ''
 })
 
@@ -28,11 +27,8 @@ export const mutations = {
   setTopicQuery(state, query) {
     state.topicQuery = query
   },
-  setHomeFeedPage(state, page) {
-    state.homeFeedPage = page
-  },
-  setTopicFeedPage(state, obj) {
-    state.topicFeedPage[obj.topicName] = obj.page
+  setUserQuery(state, query) {
+    state.userQuery = query
   },
   setTopicSidebarSelected(state, selected) {
     state.topicSidebarSelected = selected

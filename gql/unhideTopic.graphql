@@ -1,3 +1,3 @@
-mutation unhideTopic($topicName: String!) {
+mutation unhideTopic($topicName: ID!) {
   unhideTopic(topicName: $topicName)
 }
