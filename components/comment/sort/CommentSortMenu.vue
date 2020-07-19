@@ -3,7 +3,6 @@
     <template v-slot:activator="{ on }">
       <v-btn
         aria-label="Sort Comments"
-        small
         outlined
         rounded
         class="font-weight-regular"
@@ -15,15 +14,12 @@
         "
         v-on="on"
       >
-        <v-icon v-if="!$route.query.sort" size="20" class="mr-2">{{
+        <v-icon v-if="!$route.query.sort" class="mr-2">{{
           $vuetify.icons.values.mdiFormatListNumbered
         }}</v-icon>
-        <v-icon
-          v-else-if="$route.query.sort === 'new'"
-          size="20"
-          class="mr-2"
-          >{{ $vuetify.icons.values.mdiClockTimeOneOutline }}</v-icon
-        >
+        <v-icon v-else-if="$route.query.sort === 'new'" class="mr-2">{{
+          $vuetify.icons.values.mdiClockTimeOneOutline
+        }}</v-icon>
 
         <span v-if="!$route.query.sort">Top</span>
         <span v-else-if="$route.query.sort === 'new'">New</span>
@@ -37,7 +33,6 @@
     <template v-slot:activator="{ on }">
       <v-btn
         aria-label="Sort Comments"
-        small
         outlined
         rounded
         class="font-weight-regular"
@@ -49,15 +44,12 @@
         "
         v-on="on"
       >
-        <v-icon v-if="!$route.query.sort" size="20" class="mr-2">{{
+        <v-icon v-if="!$route.query.sort" class="mr-2">{{
           $vuetify.icons.values.mdiFormatListNumbered
         }}</v-icon>
-        <v-icon
-          v-else-if="$route.query.sort === 'new'"
-          size="20"
-          class="mr-2"
-          >{{ $vuetify.icons.values.mdiClockTimeOneOutline }}</v-icon
-        >
+        <v-icon v-else-if="$route.query.sort === 'new'" class="mr-2">{{
+          $vuetify.icons.values.mdiClockTimeOneOutline
+        }}</v-icon>
 
         <span v-if="!$route.query.sort">Top</span>
         <span v-else-if="$route.query.sort === 'new'">New</span>

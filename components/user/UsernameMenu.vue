@@ -1,22 +1,43 @@
 <template>
-  <v-menu v-model="menu" offset-y open-on-hover :close-on-content-click="false">
+  <v-menu
+    v-if="$device.isDesktop"
+    v-model="menu"
+    offset-y
+    open-on-hover
+    :close-on-content-click="false"
+  >
     <template v-slot:activator="{ on }">
       <span v-on="on">
         <Username :user-data="userData" />
       </span>
     </template>
 
-    <template>
-      <UserSummaryCard v-if="user" is-hover :user="user" />
-      <v-card v-else width="400">
-        <div class="pa-4">
-          <v-row align="center" justify="center">
-            <v-progress-circular indeterminate />
-          </v-row>
-        </div>
-      </v-card>
-    </template>
+    <UserSummaryCard v-if="user" is-hover :user="user" />
+    <v-card v-else width="400">
+      <div class="pa-4">
+        <v-row align="center" justify="center">
+          <v-progress-circular indeterminate />
+        </v-row>
+      </div>
+    </v-card>
   </v-menu>
+
+  <v-bottom-sheet v-else v-model="menu">
+    <template v-slot:activator="{ on }">
+      <span v-on="on">
+        <Username :user-data="userData" />
+      </span>
+    </template>
+
+    <UserSummaryCard v-if="user" show-view-profile-btn :user="user" />
+    <v-card v-else>
+      <div class="pa-4">
+        <v-row align="center" justify="center">
+          <v-progress-circular indeterminate />
+        </v-row>
+      </div>
+    </v-card>
+  </v-bottom-sheet>
 </template>
 
 <script>
@@ -58,6 +79,11 @@ export default {
   },
   methods: {
     doNothing() {},
+    handleClick() {
+      if (this.$device.isDesktop) {
+        this.$router.push(`/u/${this.userData.username}`)
+      }
+    },
     toggleBlock() {
       if (this.user.isBlocking) this.unblockUser()
       else this.blockUser()
@@ -110,8 +136,4 @@ export default {
 }
 </script>
 
-<style scoped>
-.v-menu__content {
-  border-radius: 10px;
-}
-</style>
+<style scoped></style>

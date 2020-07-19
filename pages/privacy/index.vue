@@ -1,21 +1,26 @@
 <template>
   <v-row>
-    <v-col>
-      <div class="headline">Privacy Policy</div>
+    <v-col
+      :cols="$device.isDesktop ? 9 : 12"
+      :class="
+        $vuetify.theme.dark ? 'editor-dark__content' : 'editor-light__content'
+      "
+    >
+      <h1>Privacy Policy</h1>
 
-      <div class="title">
-        Your information is not shared with any third party.
-      </div>
-      <div class="subtitle-1">Exceptions:</div>
+      <p>
+        Your information (including email) is not shared with any third party,
+        unless:
+      </p>
       <ul>
         <li>United States law requires your information</li>
         <li>
-          Your data may be exposed to our hosting services (Heroku, Amazon Web
-          Services, and Cloudflare)
-        </li>
-        <li>
           There is good reason (at Comet's discretion) to share your information
           with United States law enforcement
+        </li>
+        <li>
+          Your data may be exposed to our hosting services (Heroku, Amazon Web
+          Services, and Cloudflare)
         </li>
       </ul>
     </v-col>

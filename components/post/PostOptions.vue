@@ -9,8 +9,6 @@
         :post="post"
         :hidden="hidden"
         :reported="reported"
-        @hidden="$emit('hidden')"
-        @unhidden="$emit('unhidden')"
         @reported="$emit('reported')"
         @selected="menuOpen = false"
         @edit="openDialog"
@@ -26,8 +24,6 @@
         :post="post"
         :hidden="hidden"
         :reported="reported"
-        @hidden="$emit('hidden')"
-        @unhidden="$emit('unhidden')"
         @reported="$emit('reported')"
         @edit="openDialog"
       />
@@ -36,6 +32,7 @@
     <client-only>
       <v-dialog
         v-model="dialog"
+        :retain-focus="false"
         persistent
         width="50%"
         :fullscreen="!$device.isDesktop"

@@ -30,6 +30,7 @@
     "tiptap": "^1.29.1",
     "tiptap-extensions": "^1.31.1",
     "vue-clipboard2": "^0.3.1",
+    "vue-instagram-embed": "^1.0.0",
     "vue-tweet-embed": "^2.4.0",
     "vue-virtual-scroller": "^1.0.10",
     "vue-youtube": "^1.4.0",

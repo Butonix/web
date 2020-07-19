@@ -36,11 +36,18 @@
         </v-text-field>
         <v-row no-gutters>
           <v-spacer />
-          <v-btn depressed text class="text--secondary mr-2" nuxt to="/signup"
+          <v-btn
+            depressed
+            rounded
+            text
+            class="text--secondary mr-2"
+            nuxt
+            to="/signup"
             >Don't have an account?</v-btn
           >
           <v-btn
             depressed
+            rounded
             color="primary"
             :disabled="!username || !password"
             :loading="loading"

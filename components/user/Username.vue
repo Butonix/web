@@ -1,5 +1,12 @@
 <template>
-  <nuxt-link :to="link ? `/u/${userData.username}` : ''" class="text--primary">
+  <nuxt-link
+    :to="
+      $device.isDesktop
+        ? `/u/${userData.username}`
+        : { path: this.$route.path, query: this.$route.query }
+    "
+    class="text--primary"
+  >
     <v-avatar size="28">
       <img alt="Profile picture" :src="userData.profilePicUrl" />
     </v-avatar>

@@ -72,7 +72,7 @@
         indeterminate
       />
 
-      <v-row v-else justify="center" no-gutters>
+      <v-row v-else justify="center" class="pt-4" no-gutters>
         No one has commented yet. Will you be the first?
       </v-row>
 
@@ -83,6 +83,7 @@
       <v-dialog
         v-if="$store.state.currentUser"
         v-model="commentDialog"
+        :retain-focus="false"
         persistent
         width="50%"
         :fullscreen="!$device.isDesktop"

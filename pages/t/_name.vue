@@ -121,7 +121,12 @@
             :size-dependencies="[item.title, item.textContent]"
           >
             <div class="pb-3">
-              <Post :post="item" :index="index" :active="active" />
+              <Post
+                :post="item"
+                :index="index"
+                :active="active"
+                @togglehidden="toggleHidden"
+              />
             </div>
           </DynamicScrollerItem>
         </template>
@@ -220,7 +225,7 @@ export default {
     window.addEventListener('scroll', this.handleScroll)
   },
   deactivated() {
-    window.addEventListener('scroll', this.handleScroll)
+    window.removeEventListener('scroll', this.handleScroll)
   },
   apollo: {
     topic: {
@@ -253,6 +258,15 @@ export default {
     }
   },
   methods: {
+    async toggleHidden() {
+      await this.$apollo.provider.defaultClient.cache.writeQuery({
+        query: feedGql,
+        variables: {
+          ...this.vars
+        },
+        data: { feed: this.feed.filter((p) => !p.isHidden) }
+      })
+    },
     handleScroll(e) {
       if (!process.client) return
       const totalPageHeight = document.body.scrollHeight

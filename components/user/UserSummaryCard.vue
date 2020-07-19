@@ -1,11 +1,13 @@
 <template>
   <v-card
     :flat="$vuetify.theme.dark"
-    :outlined="!$vuetify.theme.dark"
-    :style="
-      $vuetify.theme.dark ? '' : 'background-color: #F5F5F5; border-width: 1px'
-    "
+    :outlined="!$vuetify.theme.dark && !showViewProfileBtn"
     :width="isHover ? 400 : undefined"
+    :tile="showViewProfileBtn"
+    :style="{
+      'background-color': $vuetify.theme.dark ? '' : '#F5F5F5',
+      'border-width': '1px'
+    }"
   >
     <v-list-item>
       <v-list-item-avatar size="64">
@@ -36,7 +38,7 @@
 
             <v-spacer />
 
-            <template v-if="isHover && !user.isCurrentUser">
+            <template v-if="showButtons && !user.isCurrentUser">
               <v-tooltip bottom>
                 <template v-slot:activator="{ on }">
                   <v-btn
@@ -84,6 +86,12 @@
           style="white-space: normal; font-size: 1rem"
           >{{ user.bio }}</v-list-item-subtitle
         >
+        <v-list-item-subtitle
+          class="mt-1 mb-0 caption"
+          :class="lastOnlineString === 'Online' ? 'primary--text' : ''"
+          style="white-space: normal"
+          >{{ lastOnlineString }}</v-list-item-subtitle
+        >
       </v-list-item-content>
     </v-list-item>
 
@@ -124,19 +132,81 @@
         <v-icon small left>{{ $vuetify.icons.values.mdiPost }}</v-icon>
         {{ user.postCount }}
       </v-chip>
+
+      <template v-if="user.isCurrentUser && allowEdit">
+        <v-spacer />
+
+        <v-dialog
+          v-model="editDialog"
+          width="35%"
+          :fullscreen="!$device.isDesktop"
+          :transition="
+            $device.isDesktop ? 'dialog-transition' : 'dialog-bottom-transition'
+          "
+        >
+          <template v-slot:activator="{ on }">
+            <v-btn text small rounded class="text--secondary" v-on="on">
+              <v-icon size="20" class="mr-2">{{
+                $vuetify.icons.values.mdiPencil
+              }}</v-icon>
+              Edit Profile
+            </v-btn>
+          </template>
+
+          <v-card class="pa-4">
+            <v-textarea
+              v-model="editBio"
+              label="Bio"
+              solo
+              flat
+              background-color="grey lighten-2"
+              no-resize
+              rows="3"
+              :counter="160"
+            />
+            <div class="overline text--secondary">AVATAR</div>
+            <AvatarEditor
+              button-text="Done"
+              show-cancel
+              :disabled="editBio.length > 160"
+              @finished="closeDialog"
+              @cancelled="cancelDialog"
+            />
+            <div class="caption text--secondary mt-3">
+              Note: Changes to avatar may take some time to take effect
+            </div>
+          </v-card>
+        </v-dialog>
+      </template>
     </v-row>
+
+    <div v-if="showViewProfileBtn">
+      <v-list-item nuxt :to="`/u/${user.username}`">
+        <v-list-item-icon
+          ><v-icon>{{
+            $vuetify.icons.values.mdiOpenInNew
+          }}</v-icon></v-list-item-icon
+        >
+        <v-list-item-content>
+          <v-list-item-title>View profile</v-list-item-title>
+        </v-list-item-content>
+      </v-list-item>
+    </div>
   </v-card>
 </template>
 
 <script>
-import userGql from '../../gql/user.graphql'
+import { formatDistanceToNowStrict } from 'date-fns'
 import blockUserGql from '../../gql/blockUser.graphql'
 import unblockUserGql from '../../gql/unblockUser.graphql'
 import followUserGql from '../../gql/followUser.graphql'
 import unfollowUserGql from '../../gql/unfollowUser.graphql'
+import setBioGql from '../../gql/setBio.graphql'
+import AvatarEditor from '@/components/AvatarEditor'
 
 export default {
   name: 'UserSummaryCard',
+  components: { AvatarEditor },
   props: {
     user: {
       type: Object,
@@ -145,22 +215,54 @@ export default {
     isHover: {
       type: Boolean,
       default: false
+    },
+    showButtons: {
+      type: Boolean,
+      default: true
+    },
+    showViewProfileBtn: {
+      type: Boolean,
+      default: false
+    },
+    allowEdit: {
+      type: Boolean,
+      default: false
     }
   },
-  apollo: {
-    user: {
-      query: userGql,
-      variables() {
-        return {
-          username: this.userData.username
-        }
-      },
-      skip() {
-        return !this.menu
+  data() {
+    return {
+      editDialog: false,
+      editBio: this.user.bio
+    }
+  },
+  computed: {
+    lastOnlineString() {
+      if (!this.user) return ''
+      if (this.user.username === 'Comet') return 'Online'
+      const lastLogin = new Date(this.user.lastLogin)
+      const now = new Date()
+      if (now - lastLogin < 15 * 60 * 1000) {
+        return 'Online'
+      } else {
+        return 'Last online ' + formatDistanceToNowStrict(lastLogin) + ' ago'
       }
     }
   },
   methods: {
+    closeDialog() {
+      this.editDialog = false
+      this.$apollo.mutate({
+        mutation: setBioGql,
+        variables: {
+          bio: this.editBio
+        }
+      })
+      this.user.bio = this.editBio
+    },
+    cancelDialog() {
+      this.editDialog = false
+      this.editBio = this.user.bio
+    },
     toggleBlock() {
       if (this.user.isBlocking) this.unblockUser()
       else this.blockUser()

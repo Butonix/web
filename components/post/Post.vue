@@ -71,6 +71,7 @@
               class="mr-1 px-2"
               nuxt
               :to="`/t/${topic.name}`"
+              @click.stop.prevent="doNothing"
             >
               <span>{{ topic.capitalizedName }}</span>
             </v-chip>
@@ -97,8 +98,7 @@
 
     <v-card-actions class="pt-0 pb-2">
       <span v-if="!post.author" class="text--secondary">[deleted]</span>
-      <UsernameMenu v-else-if="$device.isDesktop" :user-data="post.author" />
-      <Username v-else :link="false" :user-data="post.author" />
+      <UsernameMenu v-else :user-data="post.author" />
 
       <span :title="editedTimeSince" class="text--secondary caption ml-2">{{
         timeSince
@@ -110,10 +110,7 @@
 
       <PostOptions
         :post="post"
-        :hidden="idState.hidden"
         :reported="idState.reported"
-        @hidden="idState.hidden = true"
-        @unhidden="idState.hidden = false"
         @reported="idState.reported = true"
       />
     </v-card-actions>
@@ -124,7 +121,6 @@
 import { IdState } from 'vue-virtual-scroller'
 import { formatDistanceToNowStrict } from 'date-fns'
 import UsernameMenu from '../user/UsernameMenu'
-import Username from '../user/Username'
 import PostThumbnail from './PostThumbnail'
 import { timeSince } from '~/util/timeSince'
 import PostPreview from '~/components/post/PostPreview'
@@ -138,7 +134,6 @@ export default {
     PostOptions,
     PostActions,
     PostPreview,
-    Username,
     UsernameMenu,
     PostThumbnail
   },
@@ -190,6 +185,11 @@ export default {
       )
     }
   },
+  watch: {
+    'post.isHidden'() {
+      this.$emit('togglehidden')
+    }
+  },
   mounted() {
     if (this.isPostView) return
     if (this.$refs.textcontent) {
@@ -201,7 +201,6 @@ export default {
       viewingMore: false,
       textContentHeight: 0,
       imagePreview: false,
-      hidden: false,
       reported: false
     }
   },

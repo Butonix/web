@@ -47,7 +47,9 @@
     </div>
 
     <div
-      v-else-if="isYoutubeLink || isTweetLink || isSpotifyLink"
+      v-else-if="
+        isYoutubeLink || isTweetLink || isSpotifyLink || isInstagramLink
+      "
       class="pb-2 px-2"
     >
       <client-only>
@@ -66,6 +68,11 @@
           allowtransparency="true"
           allow="encrypted-media"
         />
+        <instagram-embed
+          v-else-if="isInstagramLink"
+          :url="post.link"
+          :max-width="500"
+        />
       </client-only>
     </div>
   </div>
@@ -74,11 +81,12 @@
 <script>
 import { getIdFromUrl, Youtube } from 'vue-youtube'
 import { Tweet } from 'vue-tweet-embed'
+import InstagramEmbed from 'vue-instagram-embed'
 import TextContent from '~/components/TextContent'
 
 export default {
   name: 'PostPreview',
-  components: { TextContent, Youtube, Tweet },
+  components: { TextContent, Youtube, Tweet, InstagramEmbed },
   props: {
     post: {
       type: Object,
@@ -123,6 +131,12 @@ export default {
       return (
         this.post.type === 'LINK' &&
         this.post.link.startsWith('https://open.spotify.com/')
+      )
+    },
+    isInstagramLink() {
+      return (
+        this.post.type === 'LINK' &&
+        this.post.link.startsWith('https://www.instagram.com/p/')
       )
     },
     spotifyUrl() {

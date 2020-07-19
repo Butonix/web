@@ -24,7 +24,7 @@ export default {
         'select',
         {
           style: {
-            'background-color': this.$vuetify.theme.dark ? '#313235' : '#FFFFFF'
+            'background-color': this.$vuetify.theme.dark ? '#313235' : '#F5F5F5'
           },
           class: 'text--primary',
           domProps: {

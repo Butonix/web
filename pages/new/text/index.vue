@@ -46,6 +46,7 @@
       <v-dialog
         v-if="$store.state.currentUser"
         v-model="dialog"
+        :retain-focus="false"
         persistent
         width="50%"
         :fullscreen="!$device.isDesktop"

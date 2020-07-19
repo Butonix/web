@@ -11,7 +11,12 @@
   >
     <v-container class="pa-0">
       <v-row class="ma-0" align="center" no-gutters>
-        <CometLogo v-if="$device.isDesktop || $route.name !== 't-name'" />
+        <CometLogo
+          v-if="
+            $device.isDesktop ||
+              ($route.name !== 't-name' && $route.name !== 'u-username')
+          "
+        />
 
         <span
           v-if="$route.name === 't-name'"
@@ -22,10 +27,20 @@
           >{{ capitalizedName }}</span
         >
 
+        <span
+          v-else-if="$route.name === 'u-username' && !$device.isDesktop"
+          style="font-size: 1.286rem; cursor: pointer"
+          class="ml-4 unselectable"
+          @click="scrollToTop"
+        >
+          {{ $route.params.username }}
+        </span>
+
         <v-spacer />
 
         <template v-if="$device.isDesktop">
           <v-text-field
+            v-model="searchText"
             hide-details
             flat
             dense
@@ -36,6 +51,7 @@
             rounded
             label="Search"
             :append-icon="$vuetify.icons.values.mdiMagnify"
+            @keydown.enter="doSearch"
           />
 
           <div class="mr-4">
@@ -138,7 +154,13 @@ export default {
   },
   data() {
     return {
-      notifications: []
+      notifications: [],
+      searchText:
+        this.$route.name === 'search' &&
+        this.$route.query &&
+        this.$route.query.q
+          ? this.$route.query.q
+          : ''
     }
   },
   computed: {
@@ -150,6 +172,11 @@ export default {
   methods: {
     scrollToTop() {
       window.scrollTo(0, 0)
+    },
+    doSearch() {
+      const query = {}
+      if (this.searchText) query.q = this.searchText
+      this.$router.push({ path: '/search', query })
     }
   },
   apollo: {
@@ -165,11 +192,4 @@ export default {
 }
 </script>
 
-<style scoped>
-.unselectable {
-  -webkit-user-select: none; /* Safari */
-  -moz-user-select: none; /* Firefox */
-  -ms-user-select: none; /* IE10+/Edge */
-  user-select: none; /* Standard */
-}
-</style>
+<style scoped></style>

@@ -1,7 +1,15 @@
 <template>
   <v-row>
-    <v-col>
-      <div class="headline">Content Policy</div>
+    <v-col
+      :cols="$device.isDesktop ? 9 : 12"
+      :class="
+        $vuetify.theme.dark ? 'editor-dark__content' : 'editor-light__content'
+      "
+    >
+      <h1>Content Policy</h1>
+      <p>
+        Please refer to the following rules when posting or commenting.
+      </p>
       <ol>
         <li>
           <span class="font-weight-bold">Follow U.S. law.</span> Posts that
@@ -10,7 +18,7 @@
           <ul>
             <li>Copyright law</li>
             <li>
-              No selling/distribution of drugs or other illegal substances
+              No selling/distribution of illegal drugs or substances
             </li>
             <li>
               Do not incite, threaten, or glorify violence or other unlawful
@@ -52,7 +60,8 @@
           >
           For the safety of Comet users, please report any security
           vulnerabilities that you find directly to Dan#7457 on
-          <a href="https://discord.gg/NPCMGSm">Discord</a>.
+          <a href="https://discord.gg/NPCMGSm">Discord</a>, or email
+          <a href="mailto:support@getcomet.net">support@getcomet.net</a>.
         </li>
         <li>
           <span class="font-weight-bold">No pornography.</span> Pornographic

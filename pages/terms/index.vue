@@ -1,19 +1,25 @@
 <template>
   <v-row>
-    <v-col class="px-6" cols="9">
-      <p class="headline">Comet Terms of Service</p>
-      <p class="subtitle-1">Effective June 8, 2020</p>
+    <v-col
+      class="px-6"
+      :cols="$device.isDesktop ? 9 : 12"
+      :class="
+        $vuetify.theme.dark ? 'editor-dark__content' : 'editor-light__content'
+      "
+    >
+      <h1>Comet Terms of Service</h1>
+      <p>Effective June 8, 2020</p>
       <p>
         This Comet User Agreement ("Terms") applies to your access to and use of
         getcomet.net ("Comet," "we," or "us"). By accessing or using Comet, you
         agree to be bound by these Terms. If you do not agree to these Terms,
         you may not access or use Comet.
       </p>
-      <p class="title">Age</p>
+      <h2>Age</h2>
       <p>
         You must be 13 years of age or older to access and use Comet.
       </p>
-      <p class="title">Your Account</p>
+      <h2>Your Account</h2>
       <p>
         To use certain features of Comet, you may be required to create a Comet
         account (an "Account") and provide us with a username and password. By
@@ -31,9 +37,9 @@
         You will not license, sell, or transfer your Account without our prior
         written approval.
       </p>
-      <p class="title">
+      <h2>
         Your Content
-      </p>
+      </h2>
       <p>
         Comet may contain information, text, links, graphics, photos, videos, or
         other materials (“Content”), including Content created with or submitted
@@ -78,7 +84,7 @@
         violation of our Content Policy, or if you otherwise create liability
         for us.
       </p>
-      <p class="title">Third-Party Content</p>
+      <h2>Third-Party Content</h2>
       <p>
         Comet may contain links to third-party websites, products, or services,
         which may be posted by other users (“Third-Party Content”). Third-Party
@@ -88,7 +94,7 @@
         necessary before proceeding with any transaction in connection with such
         Third-Party Content.
       </p>
-      <p class="title">Usage</p>
+      <h2>Usage</h2>
       <p>
         When accessing or using Comet, you must respect others and their rights,
         including by following these Terms and the
@@ -145,7 +151,7 @@
           parameters set forth in our robots.txt file.
         </li>
       </ul>
-      <p class="title">Copyright, the DMCA & Takedowns</p>
+      <h2>Copyright, the DMCA & Takedowns</h2>
       <p>
         Comet respects the intellectual property of others and requires that
         users of Comet do the same. We have a policy that includes the removal
@@ -160,7 +166,7 @@
         or material on Comet is infringing, you may be liable to Comet for
         certain costs and damages.
       </p>
-      <p class="title">Indemnity</p>
+      <h2>Indemnity</h2>
       <p>
         Except to the extent prohibited by law, you agree to defend, indemnify,
         and hold Comet harmless, including costs and attorneys’ fees, from any
@@ -171,7 +177,7 @@
         indemnify us, and you agree to cooperate with our defense of these
         claims.
       </p>
-      <p class="title">Disclaimers</p>
+      <h2>Disclaimers</h2>
       <p>
         COMET IS PROVIDED "AS IS" AND "AS AVAILABLE" WITHOUT WARRANTIES OF ANY
         KIND, EITHER EXPRESS OR IMPLIED, INCLUDING, BUT NOT LIMITED TO, IMPLIED
@@ -184,7 +190,7 @@
         ACCESS TO AND USE OF COMET SAFE, WE DO NOT REPRESENT OR WARRANT THAT
         COMET OR ITS SERVERS ARE FREE OF VIRUSES OR OTHER HARMFUL COMPONENTS.
       </p>
-      <p class="title">Limitation of Liability</p>
+      <h2>Limitation of Liability</h2>
       <p>
         IN NO EVENT AND UNDER NO THEORY OF LIABILITY, INCLUDING CONTRACT, TORT,
         NEGLIGENCE, STRICT LIABILITY, WARRANTY, OR OTHERWISE, WILL COMET BE
@@ -206,7 +212,7 @@
         LIMITATION OF LIABILITY WILL APPLY TO THE FULLEST EXTENT PERMITTED BY
         LAW IN THE APPLICABLE JURISDICTION.
       </p>
-      <p class="title">Governing Law and Venue</p>
+      <h2>Governing Law and Venue</h2>
       <p>
         Except for the government entities listed below: any claims arising out
         of or relating to these Terms or Comet will be governed by the laws of
@@ -229,7 +235,7 @@
         law. All disputes related to these Terms or Comet will be brought solely
         in the federal or state courts located in Morristown, New Jersey.
       </p>
-      <p class="title">Changes to these Terms</p>
+      <h2>Changes to these Terms</h2>
       <p>
         We may make changes to these Terms from time to time. If we make
         changes, we will post the amended Terms to Comet and update the
@@ -242,7 +248,7 @@
         to the revised Terms, you must stop accessing and using Comet before the
         changes become effective.
       </p>
-      <p class="title">Miscellaneous</p>
+      <h2>Miscellaneous</h2>
       <p>
         These Terms constitute the entire agreement between you and us regarding
         your access to and use of Comet. Our failure to exercise or enforce any

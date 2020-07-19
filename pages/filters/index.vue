@@ -65,7 +65,27 @@
         </v-tab-item>
 
         <v-tab-item>
-          <div v-if="hiddenPosts.length > 0"></div>
+          <div v-if="hiddenPosts.length > 0">
+            <DynamicScroller page-mode :items="hiddenPosts" :min-item-size="54">
+              <template v-slot="{ item, index, active }">
+                <DynamicScrollerItem
+                  :item="item"
+                  :active="active"
+                  :index="index"
+                  :size-dependencies="[item.title, item.textContent]"
+                >
+                  <div class="pb-3">
+                    <Post
+                      :post="item"
+                      :index="index"
+                      :active="active"
+                      @togglehidden="filterPosts"
+                    />
+                  </div>
+                </DynamicScrollerItem>
+              </template>
+            </DynamicScroller>
+          </div>
           <v-list v-else>
             <v-list-item>
               <v-list-item-content>
@@ -92,8 +112,10 @@ import hiddenTopicsGql from '../../gql/hiddenTopics.graphql'
 import hideTopicGql from '../../gql/hideTopic.graphql'
 import unhideTopicGql from '../../gql/unhideTopic.graphql'
 import hiddenPostsGql from '../../gql/hiddenPosts.graphql'
+import Post from '@/components/post/Post'
 
 export default {
+  components: { Post },
   async asyncData(context) {
     const client = context.app.apolloProvider.defaultClient
     const hiddenTopicsData = await client.query({
@@ -126,6 +148,9 @@ export default {
     }
   },
   methods: {
+    filterPosts() {
+      this.hiddenPosts = this.hiddenPosts.filter((p) => p.isHidden)
+    },
     toggleHide(topic) {
       if (topic.isHidden) this.unhideTopic(topic)
       else this.hideTopic(topic)

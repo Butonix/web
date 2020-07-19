@@ -18,28 +18,6 @@
       </v-list-item-content>
     </v-list-item>
 
-    <v-list-item
-      v-if="!$device.isDesktop"
-      nuxt
-      :to="`/u/${post.author.username}`"
-    >
-      <v-list-item-avatar v-if="post.author.profilePicUrl" size="24">
-        <v-avatar>
-          <v-img width="24" height="24" :src="post.author.profilePicUrl" />
-        </v-avatar>
-      </v-list-item-avatar>
-
-      <v-list-item-icon v-else>
-        <v-icon>{{ $vuetify.icons.values.mdiAccountOutline }}</v-icon>
-      </v-list-item-icon>
-
-      <v-list-item-content>
-        <v-list-item-title
-          >{{ post.author.username }}'s profile</v-list-item-title
-        >
-      </v-list-item-content>
-    </v-list-item>
-
     <template
       v-if="
         $store.state.currentUser && post.author && !post.author.isCurrentUser
@@ -48,14 +26,14 @@
       <v-list-item @click="toggleHide">
         <v-list-item-icon>
           <v-icon>{{
-            hidden
+            post.isHidden
               ? $vuetify.icons.values.mdiEye
               : $vuetify.icons.values.mdiEyeOff
           }}</v-icon>
         </v-list-item-icon>
         <v-list-item-content>
           <v-list-item-title>{{
-            hidden ? 'Post will be hidden upon refresh' : 'Hide'
+            post.isHidden ? 'Unhide' : 'Hide'
           }}</v-list-item-title>
         </v-list-item-content>
       </v-list-item>
@@ -127,10 +105,6 @@ export default {
       type: Object,
       required: true
     },
-    hidden: {
-      type: Boolean,
-      default: false
-    },
     reported: {
       type: Boolean,
       default: false
@@ -165,12 +139,12 @@ export default {
       })
     },
     async toggleHide() {
-      if (this.hidden) await this.unhidePost()
+      if (this.post.isHidden) await this.unhidePost()
       else await this.hidePost()
     },
     async hidePost() {
-      this.$emit('hidden')
       this.$emit('selected')
+      this.post.isHidden = true
       await this.$apollo.mutate({
         mutation: hidePostGql,
         variables: {
@@ -179,8 +153,8 @@ export default {
       })
     },
     async unhidePost() {
-      this.$emit('unhidden')
       this.$emit('selected')
+      this.post.isHidden = false
       await this.$apollo.mutate({
         mutation: unhidePostGql,
         variables: {

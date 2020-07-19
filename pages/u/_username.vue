@@ -1,12 +1,15 @@
 <template>
   <v-row>
     <v-col v-if="$device.isDesktop" cols="3">
-      <UserSummaryCard v-if="user" :user="user" />
+      <div class="sticky">
+        <UserSummaryCard v-if="user" :user="user" allow-edit />
+      </div>
     </v-col>
     <v-col :cols="$device.isDesktop ? 6 : 12">
       <UserSummaryCard
         v-if="!$device.isDesktop && user"
         :user="user"
+        allow-edit
         class="mb-3"
       />
 
@@ -87,6 +90,7 @@
                 :post="item"
                 :index="index"
                 :active="active"
+                @togglehidden="toggleHidden"
               />
               <Comment
                 v-else-if="item.__typename === 'Comment'"
@@ -102,19 +106,34 @@
 
       <v-progress-linear
         v-show="
-          $apollo.queries.userPosts.loading ||
-            $apollo.queries.userComments.loading
+          $apollo.queries.feed.loading || $apollo.queries.userComments.loading
         "
         indeterminate
       />
     </v-col>
+
+    <!--<v-col v-if="$device.isDesktop" cols="3">
+      <v-card :outlined="!$vuetify.theme.dark" flat>
+        <v-card-title>{{ username }}'s Links</v-card-title>
+        <v-card-text style="font-size: 1rem" class="text&#45;&#45;primary">
+          <div>
+            <v-icon size="20" class="mr-2">{{
+              $vuetify.icons.values.mdiDiscord
+            }}</v-icon>
+            <span style="cursor: pointer" class="hoverable">
+              Dan#7457
+            </span>
+          </div>
+        </v-card-text>
+      </v-card>
+    </v-col>-->
   </v-row>
 </template>
 
 <script>
 import { format } from 'date-fns'
 import userGql from '../../gql/user.graphql'
-import userPostsGql from '../../gql/userPosts.graphql'
+import feedGql from '../../gql/feed.graphql'
 import userCommentsGql from '../../gql/userComments.graphql'
 import UserSummaryCard from '@/components/user/UserSummaryCard'
 import Post from '@/components/post/Post'
@@ -135,7 +154,7 @@ export default {
   data() {
     return {
       user: null,
-      userPosts: [],
+      feed: [],
       userComments: [],
       hasMore: true,
       page: 0
@@ -151,7 +170,7 @@ export default {
     },
     items() {
       if (!this.$route.query || !this.$route.query.view) {
-        const arr = this.userPosts.concat(this.userComments)
+        const arr = this.feed.concat(this.userComments)
         if (this.$route.query && this.$route.query.sort === 'top') {
           return arr.sort((a, b) => b.endorsementCount - a.endorsementCount)
         } else {
@@ -161,7 +180,7 @@ export default {
           )
         }
       } else if (this.$route.query && this.$route.query.view === 'posts') {
-        return this.userPosts
+        return this.feed
       } else if (this.$route.query && this.$route.query.view === 'comments') {
         return this.userComments
       } else return []
@@ -204,8 +223,8 @@ export default {
         return this.$route.name !== 'u-username'
       }
     },
-    userPosts: {
-      query: userPostsGql,
+    feed: {
+      query: feedGql,
       variables() {
         return {
           username: this.username,
@@ -243,7 +262,7 @@ export default {
             oldQuery.time !== this.$route.query.time ||
             oldQuery.types !== this.$route.query.types
           ) {
-            this.userPosts = []
+            this.feed = []
             this.userComments = []
             this.$store.commit('setUserQuery', this.$route.query)
             this.page = 0
@@ -255,11 +274,11 @@ export default {
       }
     }
   },
-  activated() {
+  mounted() {
     window.addEventListener('scroll', this.handleScroll)
   },
-  deactivated() {
-    window.addEventListener('scroll', this.handleScroll)
+  beforeDestroy() {
+    window.removeEventListener('scroll', this.handleScroll)
   },
   created() {
     if (this.$route.name === 'u-username') {
@@ -267,6 +286,16 @@ export default {
     }
   },
   methods: {
+    async toggleHidden() {
+      await this.$apollo.provider.defaultClient.cache.writeQuery({
+        query: feedGql,
+        variables: {
+          username: this.username,
+          ...this.postVars
+        },
+        data: { feed: this.feed.filter((p) => !p.isHidden) }
+      })
+    },
     handleScroll(e) {
       if (!process.client) return
       const totalPageHeight = document.body.scrollHeight
@@ -277,25 +306,25 @@ export default {
     },
     showMore() {
       if (
-        this.$apollo.queries.userPosts.loading ||
+        this.$apollo.queries.feed.loading ||
         this.$apollo.queries.userComments.loading ||
         !this.hasMore ||
         this.$route.name !== 'u-username'
       )
         return
       this.page++
-      this.$apollo.queries.userPosts.fetchMore({
-        query: userPostsGql,
+      this.$apollo.queries.feed.fetchMore({
+        query: feedGql,
         variables: {
           page: this.page,
           username: this.username,
           ...this.postVars
         },
         updateQuery: (previousResult, { fetchMoreResult }) => {
-          const newPosts = fetchMoreResult.userPosts
+          const newPosts = fetchMoreResult.feed
           if (newPosts.length === 0) this.hasMore = false
           return {
-            userPosts: [...previousResult.userPosts, ...newPosts]
+            feed: [...previousResult.feed, ...newPosts]
           }
         }
       })

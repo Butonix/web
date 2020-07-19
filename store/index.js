@@ -7,7 +7,6 @@ export const state = () => ({
   snackbarEnabled: false,
   snackbarMessage: '',
   snackbarSuccess: false,
-  searchPage: 0,
   homeQuery: {},
   topicQuery: {},
   userQuery: {},
@@ -44,9 +43,6 @@ export const mutations = {
   },
   setSnackbarSuccess(state, success) {
     state.snackbarSuccess = success
-  },
-  setSearchPage(state, page) {
-    state.searchPage = page
   }
 }
 

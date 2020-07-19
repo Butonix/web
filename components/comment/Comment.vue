@@ -11,7 +11,7 @@
           ? '1px solid rgba(0, 0, 0, 0.12)'
           : '',
       'border-radius': '10px',
-      'background-color': $vuetify.theme.dark ? '#313235' : '#FAFAFA'
+      'background-color': $vuetify.theme.dark ? '#313235' : '#FFFFFF'
     }"
   >
     <div
@@ -22,8 +22,8 @@
             ? '#414245'
             : '#313235'
           : idState.expanded
-          ? '#FFEBEE'
-          : '#FAFAFA',
+          ? '#F5F5F5'
+          : '#FFFFFF',
         'border-radius': '9px'
       }"
     >
@@ -55,15 +55,7 @@
         </v-card-text>
 
         <v-card-actions class="px-2 py-2">
-          <UsernameMenu
-            v-if="comment.author && $device.isDesktop"
-            :user-data="comment.author"
-          />
-          <Username
-            v-else-if="comment.author && !$device.isDesktop"
-            :user-data="comment.author"
-            :link="false"
-          />
+          <UsernameMenu v-if="comment.author" :user-data="comment.author" />
           <span v-else-if="!comment.author" class="text--secondary"
             >[deleted]</span
           >
@@ -126,7 +118,7 @@
       :style="
         $vuetify.theme.dark
           ? 'background-color: #313235'
-          : 'background-color: #FAFAFA'
+          : 'background-color: #FFFFFF'
       "
       style="border-bottom-left-radius: 9px; border-bottom-right-radius: 9px; display: flex"
     >
@@ -178,6 +170,7 @@
     <client-only>
       <v-dialog
         v-model="idState.replyDialog"
+        :retain-focus="false"
         persistent
         width="50%"
         :fullscreen="!$device.isDesktop"
@@ -266,12 +259,11 @@ import deleteCommentGql from '../../gql/deleteComment.graphql'
 import TextContent from '../TextContent'
 import { isEditorEmpty } from '@/util/isEditorEmpty'
 import { timeSince } from '@/util/timeSince'
-import Username from '~/components/user/Username'
 import { urlName } from '@/util/urlName'
 
 export default {
   name: 'Comment',
-  components: { Username, TextContent, Editor, UsernameMenu },
+  components: { TextContent, Editor, UsernameMenu },
   mixins: [
     IdState({
       idProp: (vm) => vm.comment.id

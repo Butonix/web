@@ -6,6 +6,7 @@ query user($username: String!) {
     postCount
     endorsementCount
     createdAt
+    lastLogin
     isBlocking
     isBlocked
     isCurrentUser

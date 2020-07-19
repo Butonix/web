@@ -3,6 +3,7 @@
     <v-col v-if="$device.isDesktop" cols="3">
       <div class="sticky">
         <UserSideCard />
+        <Tip class="mt-2" />
       </div>
     </v-col>
     <v-col>
@@ -57,7 +58,12 @@
             :size-dependencies="[item.title, item.textContent]"
           >
             <div class="pb-3">
-              <Post :post="item" :index="index" :active="active" />
+              <Post
+                :post="item"
+                :index="index"
+                :active="active"
+                @togglehidden="toggleHidden"
+              />
             </div>
           </DynamicScrollerItem>
         </template>
@@ -83,11 +89,13 @@ import Post from '../components/post/Post'
 import UserSideCard from '../components/user/UserSideCard'
 import TypeMenu from '../components/buttons/type/TypeMenu'
 import SortMenu from '../components/buttons/home_sort/SortMenu'
+import Tip from '@/components/Tip'
 
 export default {
   name: 'Index',
   scrollToTop: false,
   components: {
+    Tip,
     SortMenu,
     TypeMenu,
     UserSideCard,
@@ -155,7 +163,7 @@ export default {
     window.addEventListener('scroll', this.handleScroll)
   },
   deactivated() {
-    window.addEventListener('scroll', this.handleScroll)
+    window.removeEventListener('scroll', this.handleScroll)
   },
   apollo: {
     feed: {
@@ -177,6 +185,15 @@ export default {
     }
   },
   methods: {
+    async toggleHidden() {
+      await this.$apollo.provider.defaultClient.cache.writeQuery({
+        query: feedGql,
+        variables: {
+          ...this.vars
+        },
+        data: { feed: this.feed.filter((p) => !p.isHidden) }
+      })
+    },
     chooseAll() {
       const query = Object.assign({}, this.$route.query)
       delete query.feed

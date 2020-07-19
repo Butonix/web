@@ -1,24 +1,43 @@
 <template>
-  <v-row>
-    <v-col>
+  <v-row justify="center">
+    <v-col :cols="$device.isDesktop ? 6 : 12">
       <v-text-field
+        v-if="!$device.isDesktop"
         v-model="searchText"
-        :style="$device.isDesktop ? 'max-width: 35%' : ''"
-        filled
+        solo
+        flat
         label="Search"
+        :append-icon="$vuetify.icons.values.mdiMagnify"
+        autofocus
+        hide-details
+        class="mb-3"
+        @keydown.enter="changeSearch"
       />
-      <v-row class="mx-0 mb-2" align="center">
-        <div class="title mr-2">
-          Search: {{ $route.query.q ? $route.query.q : '' }}
-        </div>
 
-        <SortMenu
-          v-model="sort"
-          :hot-enabled="false"
-          :new-enabled="false"
-          relevance-enabled
-        />
-      </v-row>
+      <div
+        v-if="!$route.query || !$route.query.q"
+        style="text-align: center"
+        class="text-h6"
+      >
+        No search entered.
+      </div>
+
+      <div v-else class="text-h6 pb-3">Searching for: {{ $route.query.q }}</div>
+
+      <DynamicScroller page-mode :items="searchPosts" :min-item-size="54">
+        <template v-slot="{ item, index, active }">
+          <DynamicScrollerItem
+            :item="item"
+            :active="active"
+            :index="index"
+            :size-dependencies="[item.title, item.textContent]"
+          >
+            <div class="pb-3">
+              <Post :post="item" :index="index" :active="active" />
+            </div>
+          </DynamicScrollerItem>
+        </template>
+      </DynamicScroller>
 
       <v-progress-linear
         v-show="$apollo.queries.searchPosts.loading"
@@ -30,69 +49,24 @@
 
 <script>
 import searchPostsGql from '../../gql/searchPosts.graphql'
-import SortMenu from '../../components/buttons/home_sort/SortMenu'
+import Post from '@/components/post/Post'
 
 export default {
-  components: { SortMenu },
+  components: { Post },
   data() {
     return {
       searchPosts: [],
       searchText: this.$route.query.q,
       hasMore: true,
-      sort: {
-        sort:
-          this.$route.query.sort &&
-          ['top', 'relevance'].includes(this.$route.query.sort)
-            ? this.$route.query.sort
-            : 'relevance',
-        time:
-          this.$route.query.time &&
-          ['hour', 'day', 'week', 'month', 'year', 'all'].includes(
-            this.$route.query.time
-          )
-            ? this.$route.query.time
-            : 'all'
-      }
-    }
-  },
-  computed: {
-    page: {
-      get() {
-        return this.$store.state.searchPage
-      },
-      set(val) {
-        this.$store.commit('setSearchPage', val)
-      }
+      page: 0
     }
   },
   watch: {
-    searchText() {
-      if (this.$route.query.q === this.searchText) return
-      this.$router.push({
-        path: this.$route.path,
-        query: { ...this.$route.query, q: this.searchText }
-      })
-    },
     $route: {
       handler() {
-        this.searchText = this.$route.query.q
-      },
-      deep: true
-    },
-    sort: {
-      handler(val) {
-        let query
-        if (val.sort === 'top')
-          query = {
-            sort: val.sort,
-            time: val.time
-          }
-        else query = { sort: val.sort }
-        if (this.$route.query.q) query.q = this.$route.query.q
-        this.$router.push({
-          path: '/search',
-          query
-        })
+        if (this.$route.query && this.$route.query.q !== this.searchText) {
+          this.searchText = this.$route.query.q
+        }
       },
       deep: true
     }
@@ -102,19 +76,29 @@ export default {
       query: searchPostsGql,
       variables() {
         return {
-          search: this.$route.query.q,
-          sort: this.sort.sort.toUpperCase(),
-          time: this.sort.time.toUpperCase()
+          search:
+            this.$route.query && this.$route.query.q ? this.$route.query.q : ''
         }
       },
       skip() {
-        return !this.$route.query.q
-      },
-      debounce: 300,
-      fetchPolicy: 'cache-and-network'
+        return this.$route.name !== 'search'
+      }
     }
   },
   methods: {
+    changeSearch() {
+      if (this.searchText) {
+        this.$router.push({
+          path: this.$route.path,
+          query: { ...this.$route.query, q: this.searchText }
+        })
+      } else {
+        this.searchPosts = []
+        const query = Object.assign({}, this.$route.query)
+        delete query.q
+        this.$router.push({ path: this.$route.path, query })
+      }
+    },
     showMore() {
       if (!this.hasMore) return
       this.page++
@@ -122,9 +106,7 @@ export default {
         query: searchPostsGql,
         variables: {
           search: this.$route.query.q,
-          page: this.page,
-          sort: this.sort.sort.toUpperCase(),
-          time: this.sort.time.toUpperCase()
+          page: this.page
         },
         updateQuery: (previousResult, { fetchMoreResult }) => {
           const newPosts = fetchMoreResult.searchPosts

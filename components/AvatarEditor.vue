@@ -46,7 +46,7 @@
           <v-toolbar
             flat
             dense
-            :color="$vuetify.theme.dark ? '#313235' : '#FFFFFF'"
+            :color="$vuetify.theme.dark ? '#313235' : '#F5F5F5'"
           >
             <v-spacer />
             <v-toolbar-items>
@@ -170,15 +170,27 @@
       :rules="uploadRules"
     />
 
-    <v-btn
-      rounded
-      depressed
-      color="primary"
-      :loading="loading"
-      :disabled="!imageValid"
-      @click="changeProfilePic"
-      >{{ buttonText }}</v-btn
-    >
+    <v-row no-gutters>
+      <v-btn
+        rounded
+        depressed
+        color="primary"
+        :loading="loading"
+        :disabled="!imageValid || disabled"
+        @click="changeProfilePic"
+        >{{ buttonText }}</v-btn
+      >
+
+      <v-btn
+        v-if="showCancel"
+        rounded
+        depressed
+        text
+        class="ml-1"
+        @click="$emit('cancelled')"
+        >Cancel</v-btn
+      >
+    </v-row>
   </div>
 </template>
 
@@ -207,6 +219,14 @@ export default {
     buttonText: {
       type: String,
       default: 'Continue'
+    },
+    showCancel: {
+      type: Boolean,
+      default: false
+    },
+    disabled: {
+      type: Boolean,
+      default: false
     }
   },
   data() {

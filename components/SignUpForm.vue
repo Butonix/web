@@ -89,7 +89,6 @@
     </div>
 
     <v-btn
-      small
       class="mr-1"
       rounded
       depressed
@@ -100,7 +99,7 @@
       >Continue</v-btn
     >
 
-    <v-btn small rounded text class="text--secondary" nuxt to="/login"
+    <v-btn rounded text class="text--secondary" nuxt to="/login"
       >Already have an account?</v-btn
     >
   </v-form>
