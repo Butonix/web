@@ -101,7 +101,11 @@ export default {
         name: 'description',
         content: process.env.npm_package_description || ''
       },
-      { name: 'theme-color', content: '#F5F5F5' }
+      { name: 'theme-color', content: '#F5F5F5' },
+      {
+        name: 'apple-mobile-web-app-status-bar-style',
+        content: 'black-translucent'
+      }
     ],
     link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }]
   },

@@ -111,22 +111,6 @@
         indeterminate
       />
     </v-col>
-
-    <!--<v-col v-if="$device.isDesktop" cols="3">
-      <v-card :outlined="!$vuetify.theme.dark" flat>
-        <v-card-title>{{ username }}'s Links</v-card-title>
-        <v-card-text style="font-size: 1rem" class="text&#45;&#45;primary">
-          <div>
-            <v-icon size="20" class="mr-2">{{
-              $vuetify.icons.values.mdiDiscord
-            }}</v-icon>
-            <span style="cursor: pointer" class="hoverable">
-              Dan#7457
-            </span>
-          </div>
-        </v-card-text>
-      </v-card>
-    </v-col>-->
   </v-row>
 </template>
 
