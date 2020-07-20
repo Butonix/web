@@ -1,5 +1,6 @@
 <template>
   <v-app-bar
+    short
     app
     flat
     :color="$vuetify.theme.dark ? '#202124' : ''"

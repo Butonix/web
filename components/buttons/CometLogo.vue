@@ -2,12 +2,8 @@
   <div style="cursor: pointer" @click="clickCometLogo">
     <v-img
       alt="Comet logo"
-      :src="
-        $vuetify.theme.dark
-          ? require('~/assets/comet_logo2.png')
-          : require('~/assets/comet_logo2.png')
-      "
-      width="96"
+      :src="require('~/assets/logo.png')"
+      width="128"
       contain
     />
   </div>

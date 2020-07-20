@@ -107,14 +107,7 @@ export default {
         content: 'black-translucent'
       }
     ],
-    link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }],
-    script: [
-      {
-        charset: 'utf-8',
-        src:
-          'https://cdn.polyfill.io/v2/polyfill.min.js?features=IntersectionObserver,IntersectionObserverEntry'
-      }
-    ]
+    link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }]
   },
   /*
    ** Customize the progress-bar color
@@ -176,18 +169,7 @@ export default {
       theme_color: '#F5F5F5'
     },
     workbox: {
-      runtimeCaching: [
-        {
-          urlPattern: 'https://i.getcomet.net/*',
-          handler: 'cacheFirst',
-          method: 'GET'
-        },
-        {
-          urlPattern: 'https://i.getcomet.net/thumbs/*',
-          handler: 'cacheFirst',
-          method: 'GET'
-        }
-      ]
+      dev: process.env.NODE_ENV !== 'production'
     }
   },
 
