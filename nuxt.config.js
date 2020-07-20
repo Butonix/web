@@ -116,7 +116,11 @@ export default {
   /*
    ** Plugins to load before mounting the App
    */
-  plugins: ['~/plugins/vue-clipboard2', '~/plugins/vue-virtual-scroller'],
+  plugins: [
+    '~/plugins/vue-clipboard2',
+    '~/plugins/vue-virtual-scroller',
+    '~/plugins/vue-friendly-iframe'
+  ],
   /*
    ** Nuxt.js dev-modules
    */

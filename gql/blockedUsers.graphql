@@ -1,10 +1,20 @@
 query blockedUsers {
   blockedUsers {
-    username
     id
+    username
+    commentCount
+    postCount
+    endorsementCount
+    createdAt
+    lastLogin
     isBlocking
+    isBlocked
+    isFollowing
+    isFollowed
+    isCurrentUser
     tag
     tagColor
     profilePicUrl
+    bio
   }
 }

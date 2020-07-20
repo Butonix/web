@@ -38,7 +38,11 @@
 
             <v-spacer />
 
-            <template v-if="showButtons && !user.isCurrentUser">
+            <template
+              v-if="
+                showButtons && $store.state.currentUser && !user.isCurrentUser
+              "
+            >
               <v-tooltip bottom>
                 <template v-slot:activator="{ on }">
                   <v-btn
@@ -55,7 +59,7 @@
                     }}</v-icon>
                   </v-btn>
                 </template>
-                <span>Block</span>
+                <span>{{ user.isBlocking ? 'Unblock' : 'Block' }}</span>
               </v-tooltip>
 
               <v-tooltip bottom>
@@ -75,7 +79,7 @@
                     }}</v-icon>
                   </v-btn>
                 </template>
-                <span>Follow</span>
+                <span>{{ user.isFollowing ? 'Unfollow' : 'Follow' }}</span>
               </v-tooltip>
             </template>
           </v-row>
@@ -153,28 +157,47 @@
             </v-btn>
           </template>
 
-          <v-card class="pa-4">
-            <v-textarea
-              v-model="editBio"
-              label="Bio"
-              solo
-              flat
-              background-color="grey lighten-2"
-              no-resize
-              rows="3"
-              :counter="160"
-            />
-            <div class="overline text--secondary">AVATAR</div>
-            <AvatarEditor
-              button-text="Done"
-              show-cancel
-              :disabled="editBio.length > 160"
-              @finished="closeDialog"
-              @cancelled="cancelDialog"
-            />
-            <div class="caption text--secondary mt-3">
-              Note: Changes to avatar may take some time to take effect
+          <v-card>
+            <div class="pa-4">
+              <div class="overline text--secondary">CHANGE BIO</div>
+              <v-textarea
+                v-model="editBio"
+                label="Bio"
+                solo
+                flat
+                background-color="grey lighten-2"
+                no-resize
+                rows="3"
+                :counter="160"
+              />
+              <v-btn
+                depressed
+                rounded
+                color="primary"
+                class="mb-4"
+                :disabled="editBio.length > 160"
+                @click="changeBio"
+                >Change Bio</v-btn
+              >
+
+              <v-divider />
+
+              <div class="overline text--secondary">CHANGE AVATAR</div>
+              <AvatarEditor
+                :dialog-open="editDialog"
+                button-text="Change Avatar"
+                @finished="editDialog = false"
+                @cancelled="cancelDialog"
+              />
+              <div class="caption text--secondary mt-3">
+                Note: Changes to avatar may take some time to take effect
+              </div>
             </div>
+
+            <v-card-actions>
+              <v-spacer />
+              <v-btn text rounded @click="cancelDialog">Discard Changes</v-btn>
+            </v-card-actions>
           </v-card>
         </v-dialog>
       </template>
@@ -232,7 +255,7 @@ export default {
   data() {
     return {
       editDialog: false,
-      editBio: this.user.bio
+      editBio: this.user.bio ? this.user.bio : ''
     }
   },
   computed: {
@@ -249,7 +272,7 @@ export default {
     }
   },
   methods: {
-    closeDialog() {
+    changeBio() {
       this.editDialog = false
       this.$apollo.mutate({
         mutation: setBioGql,
@@ -264,10 +287,14 @@ export default {
       this.editBio = this.user.bio
     },
     toggleBlock() {
+      this.$emit('toggleblock')
       if (this.user.isBlocking) this.unblockUser()
       else this.blockUser()
     },
     blockUser() {
+      this.$store.dispatch('displaySnackbar', {
+        message: `Blocked ${this.user.username}`
+      })
       this.user.isBlocking = true
       this.$forceUpdate()
       this.$apollo.mutate({
@@ -278,6 +305,9 @@ export default {
       })
     },
     unblockUser() {
+      this.$store.dispatch('displaySnackbar', {
+        message: `Unblocked ${this.user.username}`
+      })
       this.user.isBlocking = false
       this.$forceUpdate()
       this.$apollo.mutate({

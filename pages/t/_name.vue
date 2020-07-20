@@ -126,6 +126,7 @@
                 :index="index"
                 :active="active"
                 @togglehidden="toggleHidden"
+                @toggleblock="toggleBlock"
               />
             </div>
           </DynamicScrollerItem>
@@ -265,6 +266,15 @@ export default {
           ...this.vars
         },
         data: { feed: this.feed.filter((p) => !p.isHidden) }
+      })
+    },
+    async toggleBlock() {
+      await this.$apollo.provider.defaultClient.cache.writeQuery({
+        query: feedGql,
+        variables: {
+          ...this.vars
+        },
+        data: { feed: this.feed.filter((p) => !p.author.isBlocking) }
       })
     },
     handleScroll(e) {

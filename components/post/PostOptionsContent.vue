@@ -143,6 +143,11 @@ export default {
       else await this.hidePost()
     },
     async hidePost() {
+      this.$store.dispatch('displaySnackbar', {
+        message: `Hid "${this.post.title.substring(0, 50)}${
+          this.post.title.length > 50 ? '...' : ''
+        }"`
+      })
       this.$emit('selected')
       this.post.isHidden = true
       await this.$apollo.mutate({
@@ -153,6 +158,11 @@ export default {
       })
     },
     async unhidePost() {
+      this.$store.dispatch('displaySnackbar', {
+        message: `Unhid "${this.post.title.substring(0, 50)}${
+          this.post.title.length > 50 ? '...' : ''
+        }"`
+      })
       this.$emit('selected')
       this.post.isHidden = false
       await this.$apollo.mutate({

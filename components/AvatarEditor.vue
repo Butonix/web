@@ -227,6 +227,10 @@ export default {
     disabled: {
       type: Boolean,
       default: false
+    },
+    dialogOpen: {
+      type: Boolean,
+      default: false
     }
   },
   data() {
@@ -293,9 +297,48 @@ export default {
         }
         fr.readAsDataURL(imageData)
       }
+    },
+    dialogOpen() {
+      if (this.dialogOpen) this.init()
     }
   },
+  mounted() {
+    this.init()
+  },
   methods: {
+    init() {
+      this.imageData = null
+      const currentUser = this.$store.state.currentUser
+      if (currentUser && currentUser.profilePicUrl) {
+        const profilePicUrl = currentUser.profilePicUrl
+        if (profilePicUrl.startsWith('https://api.getcomet.net/avataaar/')) {
+          this.previewUrl = ''
+          this.topType = profilePicUrl.split('&topType=')[1].split('&')[0]
+          this.accessoriesType = profilePicUrl
+            .split('&accessoriesType=')[1]
+            .split('&')[0]
+          this.hairColor = profilePicUrl.split('&hairColor=')[1].split('&')[0]
+          this.facialHairType = profilePicUrl
+            .split('&facialHairType=')[1]
+            .split('&')[0]
+          this.facialHairColor = profilePicUrl
+            .split('&facialHairColor=')[1]
+            .split('&')[0]
+          this.clotheType = profilePicUrl.split('&clotheType=')[1].split('&')[0]
+          this.clotheColor = profilePicUrl
+            .split('&clotheColor=')[1]
+            .split('&')[0]
+          this.eyeType = profilePicUrl.split('&eyeType=')[1].split('&')[0]
+          this.eyebrowType = profilePicUrl
+            .split('&eyebrowType=')[1]
+            .split('&')[0]
+          this.mouthType = profilePicUrl.split('&mouthType=')[1].split('&')[0]
+          this.skinColor = profilePicUrl.split('&skinColor=')[1].split('&')[0]
+        } else {
+          this.previewUrl = profilePicUrl
+        }
+      }
+    },
     randomizeAvataaar() {
       this.topType = randomFromArr(topTypes)
       this.accessoriesType = randomFromArr(accessoriesTypes)

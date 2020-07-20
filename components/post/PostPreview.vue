@@ -59,7 +59,7 @@
           style="max-width: 100%"
         />
         <Tweet v-else-if="isTweetLink" :id="tweetId" style="max-width: 100%" />
-        <iframe
+        <vue-friendly-iframe
           v-else-if="isSpotifyLink"
           :src="spotifyUrl"
           width="300"
@@ -162,5 +162,10 @@ export default {
   overflow: hidden;
   -webkit-mask-image: linear-gradient(180deg, #000 60%, transparent);
   mask-image: linear-gradient(180deg, #000 60%, transparent);
+}
+
+.vue-friendly-iframe >>> iframe {
+  width: 300px;
+  height: 380px;
 }
 </style>

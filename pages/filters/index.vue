@@ -1,10 +1,32 @@
 <template>
-  <v-row v-if="$store.state.currentUser">
+  <v-row justify="center">
     <v-col :cols="$device.isDesktop ? 6 : 12">
-      <v-tabs v-model="tab" background-color="transparent">
-        <v-tab>Blocked Users</v-tab>
-        <v-tab>Hidden Topics</v-tab>
-        <v-tab>Hidden Posts</v-tab>
+      <v-tabs
+        v-model="tab"
+        grow
+        :show-arrows="false"
+        background-color="transparent"
+      >
+        <v-tab
+          style="letter-spacing: normal; text-transform: none; font-size: 1rem"
+        >
+          <v-icon class="mr-2">{{
+            $vuetify.icons.values.mdiAccountCancelOutline
+          }}</v-icon>
+          Blocked Users</v-tab
+        >
+        <v-tab
+          style="letter-spacing: normal; text-transform: none; font-size: 1rem"
+        >
+          <v-icon class="mr-2">{{ $vuetify.icons.values.mdiNewspaper }}</v-icon>
+          Hidden Topics</v-tab
+        >
+        <v-tab
+          style="letter-spacing: normal; text-transform: none; font-size: 1rem"
+        >
+          <v-icon class="mr-2">{{ $vuetify.icons.values.mdiPost }}</v-icon>
+          Hidden Posts</v-tab
+        >
       </v-tabs>
 
       <v-tabs-items
@@ -12,22 +34,32 @@
         class="mt-2"
         style="background-color: transparent"
       >
-        <v-tab-item>
-          <v-list v-if="blockedUsers.length > 0">
-            <v-list-item v-for="user in blockedUsers" :key="user.id">
-              <v-list-item-content>
-                <v-list-item-title>@{{ user.username }}</v-list-item-title>
-              </v-list-item-content>
-              <v-list-item-action>
-                <v-btn
-                  aria-label="Unblock User"
-                  text
-                  @click="toggleBlock(user)"
-                  >{{ user.isBlocking ? 'Unblock' : 'Block' }}</v-btn
+        <v-tab-item eager>
+          <div v-if="blockedUsers.length > 0">
+            <DynamicScroller
+              page-mode
+              :items="blockedUsers"
+              :min-item-size="54"
+            >
+              <template v-slot="{ item, index, active }">
+                <DynamicScrollerItem
+                  :item="item"
+                  :active="active"
+                  :index="index"
+                  :size-dependencies="[item.bio]"
                 >
-              </v-list-item-action>
-            </v-list-item>
-          </v-list>
+                  <div class="pb-3">
+                    <UserSummaryCard
+                      :user="item"
+                      :index="index"
+                      :active="active"
+                      @toggleblock="updateBlockedUsers"
+                    />
+                  </div>
+                </DynamicScrollerItem>
+              </template>
+            </DynamicScroller>
+          </div>
           <v-list v-else>
             <v-list-item>
               <v-list-item-content>
@@ -37,7 +69,7 @@
           </v-list>
         </v-tab-item>
 
-        <v-tab-item>
+        <v-tab-item eager>
           <v-list v-if="hiddenTopics.length > 0">
             <v-list-item v-for="topic in hiddenTopics" :key="topic.name">
               <v-list-item-content>
@@ -64,7 +96,7 @@
           </v-list>
         </v-tab-item>
 
-        <v-tab-item>
+        <v-tab-item eager>
           <div v-if="hiddenPosts.length > 0">
             <DynamicScroller page-mode :items="hiddenPosts" :min-item-size="54">
               <template v-slot="{ item, index, active }">
@@ -97,15 +129,10 @@
       </v-tabs-items>
     </v-col>
   </v-row>
-  <v-row v-else>
-    <v-col>
-      <div class="headline">Must log in to access this page</div>
-    </v-col>
-  </v-row>
 </template>
 
 <script>
-import blockedUserGql from '../../gql/blockedUsers.graphql'
+import blockedUsersGql from '../../gql/blockedUsers.graphql'
 import blockUserGql from '../../gql/blockUser.graphql'
 import unblockUserGql from '../../gql/unblockUser.graphql'
 import hiddenTopicsGql from '../../gql/hiddenTopics.graphql'
@@ -113,32 +140,10 @@ import hideTopicGql from '../../gql/hideTopic.graphql'
 import unhideTopicGql from '../../gql/unhideTopic.graphql'
 import hiddenPostsGql from '../../gql/hiddenPosts.graphql'
 import Post from '@/components/post/Post'
+import UserSummaryCard from '@/components/user/UserSummaryCard'
 
 export default {
-  components: { Post },
-  async asyncData(context) {
-    const client = context.app.apolloProvider.defaultClient
-    const hiddenTopicsData = await client.query({
-      query: hiddenTopicsGql,
-      fetchPolicy: 'network-only'
-    })
-
-    const blockedUsersData = await client.query({
-      query: blockedUserGql,
-      fetchPolicy: 'network-only'
-    })
-
-    const hiddenPostsData = await client.query({
-      query: hiddenPostsGql,
-      fetchPolicy: 'network-only'
-    })
-
-    return {
-      hiddenTopics: hiddenTopicsData.data.hiddenTopics,
-      blockedUsers: blockedUsersData.data.blockedUsers,
-      hiddenPosts: hiddenPostsData.data.hiddenPosts
-    }
-  },
+  components: { UserSummaryCard, Post },
   data() {
     return {
       tab: null,
@@ -147,13 +152,40 @@ export default {
       hiddenPosts: []
     }
   },
+  apollo: {
+    hiddenTopics: {
+      query: hiddenTopicsGql,
+      fetchPolicy: 'cache-and-network'
+    },
+    blockedUsers: {
+      query: blockedUsersGql,
+      fetchPolicy: 'cache-and-network'
+    },
+    hiddenPosts: {
+      query: hiddenPostsGql,
+      fetchPolicy: 'cache-and-network'
+    }
+  },
   methods: {
+    updateBlockedUsers() {
+      this.$apollo.provider.defaultClient.cache.writeQuery({
+        query: blockedUsersGql,
+        data: { blockedUsers: this.blockedUsers.filter((u) => !u.isBlocking) }
+      })
+    },
     filterPosts() {
-      this.hiddenPosts = this.hiddenPosts.filter((p) => p.isHidden)
+      this.$apollo.provider.defaultClient.cache.writeQuery({
+        query: hiddenPostsGql,
+        data: { hiddenPosts: this.hiddenPosts.filter((p) => p.isHidden) }
+      })
     },
     toggleHide(topic) {
       if (topic.isHidden) this.unhideTopic(topic)
       else this.hideTopic(topic)
+      this.$apollo.provider.defaultClient.cache.writeQuery({
+        query: hiddenTopicsGql,
+        data: { hiddenTopics: this.hiddenTopics.filter((t) => !t.isHidden) }
+      })
     },
     hideTopic(topic) {
       this.$apollo.mutate({
@@ -167,6 +199,9 @@ export default {
       })
     },
     unhideTopic(topic) {
+      this.$store.dispatch('displaySnackbar', {
+        message: `Unhid ${topic.capitalizedName}`
+      })
       this.$apollo.mutate({
         mutation: unhideTopicGql,
         variables: {
@@ -191,6 +226,9 @@ export default {
       })
     },
     unblockUser(user) {
+      this.$store.dispatch('displaySnackbar', {
+        message: `Unblocked ${user.username}`
+      })
       this.$apollo.mutate({
         mutation: unblockUserGql,
         variables: {

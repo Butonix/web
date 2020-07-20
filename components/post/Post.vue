@@ -98,7 +98,11 @@
 
     <v-card-actions class="pt-0 pb-2">
       <span v-if="!post.author" class="text--secondary">[deleted]</span>
-      <UsernameMenu v-else :user-data="post.author" />
+      <UsernameMenu
+        v-else
+        :user-data="post.author"
+        @toggleblock="toggleBlock"
+      />
 
       <span :title="editedTimeSince" class="text--secondary caption ml-2">{{
         timeSince
@@ -206,6 +210,10 @@ export default {
   },
   methods: {
     doNothing() {},
+    toggleBlock() {
+      this.post.author.isBlocking = !this.post.author.isBlocking
+      this.$emit('toggleblock')
+    },
     goToIfMobile() {
       if (this.$device.isDesktop || this.isPostView) return
       this.$router.push(`/p/${this.post.id}/${this.urlName}`)
