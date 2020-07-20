@@ -176,4 +176,24 @@ export default {
   padding: 0;
   margin: 0;
 }
+
+.v-app-bar >>> .v-app-bar--fixed {
+  top: initial !important;
+  bottom: 0 !important;
+}
+
+.v-app-bar.v-app-bar--fixed {
+  top: initial !important;
+  bottom: 0 !important;
+}
+
+.v-app-bar--fixed {
+  top: initial !important;
+  bottom: 0 !important;
+}
+
+.v-app-bar {
+  top: initial !important;
+  bottom: 0 !important;
+}
 </style>
