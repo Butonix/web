@@ -59,45 +59,9 @@
             <NewPostButton />
           </div>
 
-          <v-menu
-            v-if="$store.state.currentUser"
-            offset-y
-            transition="slide-y-transition"
-            :close-on-content-click="false"
-          >
-            <template v-slot:activator="{ on }">
-              <v-btn icon class="ml-4 mr-1" v-on="on">
-                <v-badge v-if="notifications.length > 0" overlap content="1">
-                  <v-icon>{{ $vuetify.icons.values.mdiBellOutline }}</v-icon>
-                </v-badge>
-                <v-icon v-else>{{
-                  $vuetify.icons.values.mdiBellOutline
-                }}</v-icon>
-              </v-btn>
-            </template>
-
-            <v-card class="pa-2" width="300">
-              <v-card outlined class="mb-2">
-                <v-list-item>
-                  <v-list-item-content>
-                    <v-list-item-subtitle
-                      >This is a notification</v-list-item-subtitle
-                    >
-                  </v-list-item-content>
-                </v-list-item>
-                <v-card-actions>
-                  <UsernameMenu :user-data="$store.state.currentUser" />
-                </v-card-actions>
-              </v-card>
-
-              <div
-                style="display: flex; justify-content: center"
-                class="caption text--secondary"
-              >
-                That's all!
-              </div>
-            </v-card>
-          </v-menu>
+          <div class="mr-1">
+            <NotificationsMenu />
+          </div>
         </template>
 
         <ProfileMenu />
@@ -138,19 +102,18 @@
 </template>
 
 <script>
-import notificationsGql from '../../gql/notifications.graphql'
 import ProfileMenu from '../buttons/profile/ProfileMenu'
-import UsernameMenu from '../user/UsernameMenu'
 import NewPostButton from '../buttons/new_post/NewPostButton'
 import CometLogo from '../buttons/CometLogo'
 import { capitalizedName } from '~/util/capitalizedName'
+import NotificationsMenu from '@/components/notifications/NotificationsMenu'
 
 export default {
   name: 'AppBar',
   components: {
+    NotificationsMenu,
     CometLogo,
     NewPostButton,
-    UsernameMenu,
     ProfileMenu
   },
   data() {
@@ -179,18 +142,17 @@ export default {
       if (this.searchText) query.q = this.searchText
       this.$router.push({ path: '/search', query })
     }
-  },
-  apollo: {
-    notifications: {
-      query: notificationsGql,
-      variables() {
-        return {
-          unreadOnly: true
-        }
-      }
-    }
   }
 }
 </script>
 
-<style scoped></style>
+<style scoped>
+.v-menu__content::-webkit-scrollbar {
+  width: 0 !important;
+}
+
+.v-menu__content {
+  overflow: -moz-scrollbars-none !important;
+  -ms-overflow-style: none !important;
+}
+</style>

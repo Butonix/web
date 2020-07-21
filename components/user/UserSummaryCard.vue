@@ -92,7 +92,7 @@
         >
         <v-list-item-subtitle
           class="mt-1 mb-0 caption"
-          :class="lastOnlineString === 'Online' ? 'primary--text' : ''"
+          :class="lastOnlineString === 'Online' ? 'green--text' : ''"
           style="white-space: normal"
           >{{ lastOnlineString }}</v-list-item-subtitle
         >
@@ -165,7 +165,9 @@
                 label="Bio"
                 solo
                 flat
-                background-color="grey lighten-2"
+                :background-color="
+                  $vuetify.theme.dark ? '#202124' : 'grey lighten-2'
+                "
                 no-resize
                 rows="3"
                 :counter="160"

@@ -69,8 +69,8 @@
               >
                 <v-icon size="20" class="mr-2">{{
                   topic.isHidden
-                    ? $vuetify.icons.values.mdiEye
-                    : $vuetify.icons.values.mdiEyeOff
+                    ? $vuetify.icons.values.mdiEyeOff
+                    : $vuetify.icons.values.mdiEye
                 }}</v-icon>
                 {{ topic.isHidden ? 'Hiding Topic' : 'Hide Topic' }}
               </v-btn>

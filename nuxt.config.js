@@ -82,7 +82,8 @@ import {
   mdiNewspaperPlus,
   mdiNewspaperMinus,
   mdiTrendingUp,
-  mdiCheckCircleOutline
+  mdiCheckCircleOutline,
+  mdiCheckAll
 } from '@mdi/js'
 
 export default {
@@ -167,9 +168,6 @@ export default {
       name: 'Comet',
       description: 'Create and browse posts and comments on Comet',
       theme_color: '#F5F5F5'
-    },
-    workbox: {
-      dev: process.env.NODE_ENV !== 'production'
     }
   },
 
@@ -308,7 +306,8 @@ export default {
         mdiNewspaperPlus,
         mdiNewspaperMinus,
         mdiTrendingUp,
-        mdiCheckCircleOutline
+        mdiCheckCircleOutline,
+        mdiCheckAll
       }
     },
     theme: {

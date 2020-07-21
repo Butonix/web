@@ -25,15 +25,6 @@
   user-select: none; /* Standard */
 }
 
-.hidescroll::-webkit-scrollbar {
-  width: 0 !important;
-}
-
-.hidescroll {
-  overflow: -moz-scrollbars-none !important;
-  -ms-overflow-style: none !important;
-}
-
 .ProseMirror:focus {
   outline: none !important;
 }

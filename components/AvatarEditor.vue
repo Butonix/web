@@ -300,6 +300,9 @@ export default {
     },
     dialogOpen() {
       if (this.dialogOpen) this.init()
+    },
+    avataaarUrl() {
+      if (this.avataaarUrl) this.previewUrl = null
     }
   },
   mounted() {
@@ -351,6 +354,7 @@ export default {
       this.eyebrowType = randomFromArr(eyebrowTypes)
       this.mouthType = randomFromArr(mouthTypes)
       this.skinColor = randomFromArr(skinColors)
+      this.previewUrl = null
     },
     async changeProfilePic() {
       this.loading = true
