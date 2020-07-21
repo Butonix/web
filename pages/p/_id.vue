@@ -150,6 +150,8 @@
 </template>
 
 <script>
+import 'vue-virtual-scroller/dist/vue-virtual-scroller.css'
+import { DynamicScroller, DynamicScrollerItem } from 'vue-virtual-scroller'
 import postGql from '../../gql/post.graphql'
 import postCommentsGql from '../../gql/postComments.graphql'
 import submitCommentGql from '../../gql/submitComment.graphql'
@@ -160,8 +162,6 @@ import CommentSortMenu from '../../components/comment/sort/CommentSortMenu'
 import { urlName } from '~/util/urlName'
 import { isEditorEmpty } from '@/util/isEditorEmpty'
 import Post from '@/components/post/Post'
-import 'vue-virtual-scroller/dist/vue-virtual-scroller.css'
-import { DynamicScroller, DynamicScrollerItem } from 'vue-virtual-scroller'
 
 export default {
   components: {

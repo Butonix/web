@@ -38,23 +38,21 @@ export default {
     }
   },
   mounted() {
-    const mq = window.matchMedia('(prefers-color-scheme: dark)')
+    // const mq = window.matchMedia('(prefers-color-scheme: dark)')
 
     const dark = localStorage.getItem('dark')
 
     if (dark) {
-      setTimeout(() => (this.$vuetify.theme.dark = dark === 'true'), 0)
-    } else if (mq.matches) {
-      setTimeout(() => (this.$vuetify.theme.dark = true), 0)
+      this.$vuetify.theme.dark = dark === 'true'
     } else {
-      setTimeout(() => (this.$vuetify.theme.dark = false), 0)
+      this.$vuetify.theme.dark = true
     }
 
-    mq.addEventListener('change', (e) => {
+    /* mq.addEventListener('change', (e) => {
       if (!localStorage.getItem('dark')) {
         this.$vuetify.theme.dark = e.matches
       }
-    })
+    }) */
 
     document.documentElement.style.backgroundColor = this.$vuetify.theme.dark
       ? '#202124'

@@ -120,6 +120,8 @@
 </template>
 
 <script>
+import 'vue-virtual-scroller/dist/vue-virtual-scroller.css'
+import { DynamicScroller, DynamicScrollerItem } from 'vue-virtual-scroller'
 import { format } from 'date-fns'
 import userGql from '../../gql/user.graphql'
 import feedGql from '../../gql/feed.graphql'
@@ -130,8 +132,6 @@ import Comment from '@/components/comment/Comment'
 import TypeMenu from '@/components/buttons/type/TypeMenu'
 import UserSortMenu from '@/components/buttons/user_sort/UserSortMenu'
 import UserViewMenu from '@/components/buttons/user_view/UserViewMenu'
-import 'vue-virtual-scroller/dist/vue-virtual-scroller.css'
-import { DynamicScroller, DynamicScrollerItem } from 'vue-virtual-scroller'
 
 export default {
   components: {

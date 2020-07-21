@@ -150,6 +150,8 @@
 </template>
 
 <script>
+import 'vue-virtual-scroller/dist/vue-virtual-scroller.css'
+import { DynamicScroller, DynamicScrollerItem } from 'vue-virtual-scroller'
 import TopicsSidebar from '../../components/topic/TopicsSidebar'
 import followedTopicsGql from '../../gql/followedTopics.graphql'
 import followTopicGql from '../../gql/followTopic.graphql'
@@ -163,8 +165,6 @@ import TypeMenu from '~/components/buttons/type/TypeMenu'
 import SortMenu from '~/components/buttons/home_sort/SortMenu'
 import hideTopicGql from '~/gql/hideTopic'
 import unhideTopicGql from '~/gql/unhideTopic'
-import 'vue-virtual-scroller/dist/vue-virtual-scroller.css'
-import { DynamicScroller, DynamicScrollerItem } from 'vue-virtual-scroller'
 
 export default {
   name: 'T',

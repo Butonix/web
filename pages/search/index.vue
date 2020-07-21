@@ -48,10 +48,10 @@
 </template>
 
 <script>
-import searchPostsGql from '../../gql/searchPosts.graphql'
-import Post from '@/components/post/Post'
 import 'vue-virtual-scroller/dist/vue-virtual-scroller.css'
 import { DynamicScroller, DynamicScrollerItem } from 'vue-virtual-scroller'
+import searchPostsGql from '../../gql/searchPosts.graphql'
+import Post from '@/components/post/Post'
 
 export default {
   components: { Post, DynamicScroller, DynamicScrollerItem },

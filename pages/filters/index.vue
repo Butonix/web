@@ -132,6 +132,8 @@
 </template>
 
 <script>
+import 'vue-virtual-scroller/dist/vue-virtual-scroller.css'
+import { DynamicScroller, DynamicScrollerItem } from 'vue-virtual-scroller'
 import blockedUsersGql from '../../gql/blockedUsers.graphql'
 import blockUserGql from '../../gql/blockUser.graphql'
 import unblockUserGql from '../../gql/unblockUser.graphql'
@@ -141,8 +143,6 @@ import unhideTopicGql from '../../gql/unhideTopic.graphql'
 import hiddenPostsGql from '../../gql/hiddenPosts.graphql'
 import Post from '@/components/post/Post'
 import UserSummaryCard from '@/components/user/UserSummaryCard'
-import 'vue-virtual-scroller/dist/vue-virtual-scroller.css'
-import { DynamicScroller, DynamicScrollerItem } from 'vue-virtual-scroller'
 
 export default {
   components: { UserSummaryCard, Post, DynamicScroller, DynamicScrollerItem },

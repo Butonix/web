@@ -1,4 +1,3 @@
-import colors from 'vuetify/lib/util/colors'
 import redirectSSL from 'redirect-ssl'
 import {
   mdiImage,
@@ -102,7 +101,7 @@ export default {
         name: 'description',
         content: process.env.npm_package_description || ''
       },
-      { name: 'theme-color', content: '#F5F5F5' },
+      { name: 'theme-color', content: '#202124' },
       {
         name: 'apple-mobile-web-app-status-bar-style',
         content: 'black-translucent'
@@ -146,13 +145,13 @@ export default {
       name: 'Comet',
       short_name: 'Comet',
       description: 'Create and browse posts and comments on Comet',
-      theme_color: '#F5F5F5',
-      background_color: '#F5F5F5'
+      theme_color: '#202124',
+      background_color: '#202124'
     },
     meta: {
       name: 'Comet',
       description: 'Create and browse posts and comments on Comet',
-      theme_color: '#F5F5F5'
+      theme_color: '#202124'
     }
   },
 
@@ -290,25 +289,17 @@ export default {
       options: {
         customProperties: true
       },
-      dark: false,
+      dark: true,
       themes: {
         dark: {
-          primary: colors.red.lighten1,
-          accent: colors.red.lighten2,
-          secondary: colors.amber.darken3,
-          info: colors.teal.lighten1,
-          warning: colors.amber.base,
-          error: colors.red.base,
-          success: colors.green.darken1
+          primary: '#EF5350',
+          error: '#F44336',
+          success: '#43A047'
         },
         light: {
-          primary: colors.red.lighten1,
-          accent: colors.red.lighten2,
-          secondary: colors.amber.darken3,
-          info: colors.teal.lighten1,
-          warning: colors.amber.base,
-          error: colors.red.base,
-          success: colors.green.darken1
+          primary: '#EF5350',
+          error: '#F44336',
+          success: '#43A047'
         }
       }
     }

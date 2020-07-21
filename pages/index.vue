@@ -83,6 +83,8 @@
 </template>
 
 <script>
+import 'vue-virtual-scroller/dist/vue-virtual-scroller.css'
+import { DynamicScroller, DynamicScrollerItem } from 'vue-virtual-scroller'
 import TopicsSidebar from '../components/topic/TopicsSidebar'
 import InfoLinks from '../components/InfoLinks'
 import feedGql from '../gql/feed.graphql'
@@ -92,8 +94,6 @@ import UserSideCard from '../components/user/UserSideCard'
 import TypeMenu from '../components/buttons/type/TypeMenu'
 import SortMenu from '../components/buttons/home_sort/SortMenu'
 import Tip from '@/components/Tip'
-import 'vue-virtual-scroller/dist/vue-virtual-scroller.css'
-import { DynamicScroller, DynamicScrollerItem } from 'vue-virtual-scroller'
 
 export default {
   name: 'Index',
