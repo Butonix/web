@@ -250,7 +250,6 @@ import { formatDistanceToNowStrict } from 'date-fns'
 import { IdState } from 'vue-virtual-scroller'
 import UsernameMenu from '../user/UsernameMenu'
 import toggleCommentEndorsementGql from '../../gql/toggleCommentEndorsement.graphql'
-import Editor from '../editor/Editor'
 import submitCommentGql from '../../gql/submitComment.graphql'
 import postCommentsGql from '../../gql/postComments.graphql'
 import recordPostViewGql from '../../gql/recordPostView.graphql'
@@ -263,7 +262,11 @@ import { urlName } from '@/util/urlName'
 
 export default {
   name: 'Comment',
-  components: { TextContent, Editor, UsernameMenu },
+  components: {
+    TextContent,
+    Editor: () => import('@/components/editor/Editor'),
+    UsernameMenu
+  },
   mixins: [
     IdState({
       idProp: (vm) => vm.comment.id

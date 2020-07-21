@@ -112,7 +112,12 @@
         <SortMenu />
       </v-row>
 
-      <DynamicScroller page-mode :items="feed" :min-item-size="54">
+      <DynamicScroller
+        page-mode
+        :items="feed"
+        :min-item-size="54"
+        :prerender="20"
+      >
         <template v-slot="{ item, index, active }">
           <DynamicScrollerItem
             :item="item"
@@ -158,6 +163,8 @@ import TypeMenu from '~/components/buttons/type/TypeMenu'
 import SortMenu from '~/components/buttons/home_sort/SortMenu'
 import hideTopicGql from '~/gql/hideTopic'
 import unhideTopicGql from '~/gql/unhideTopic'
+import 'vue-virtual-scroller/dist/vue-virtual-scroller.css'
+import { DynamicScroller, DynamicScrollerItem } from 'vue-virtual-scroller'
 
 export default {
   name: 'T',
@@ -167,7 +174,9 @@ export default {
     InfoLinks,
     Post,
     UserSideCard,
-    TopicsSidebar
+    TopicsSidebar,
+    DynamicScroller,
+    DynamicScrollerItem
   },
   data() {
     return {

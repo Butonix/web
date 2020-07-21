@@ -110,14 +110,16 @@
 </template>
 
 <script>
-import Editor from '../../../components/editor/Editor'
 import TopicCombobox from '~/components/TopicCombobox'
 import submitPostGql from '~/gql/submitPost'
 import { urlName } from '~/util/urlName'
 import { isEditorEmpty } from '@/util/isEditorEmpty'
 
 export default {
-  components: { TopicCombobox, Editor },
+  components: {
+    TopicCombobox,
+    Editor: () => import('@/components/editor/Editor')
+  },
   data() {
     return {
       prevRoute: null,

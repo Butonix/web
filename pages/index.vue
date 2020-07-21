@@ -49,6 +49,7 @@
         page-mode
         :items="globalStickies.concat(feed)"
         :min-item-size="54"
+        :prerender="20"
       >
         <template v-slot="{ item, index, active }">
           <DynamicScrollerItem
@@ -91,6 +92,8 @@ import UserSideCard from '../components/user/UserSideCard'
 import TypeMenu from '../components/buttons/type/TypeMenu'
 import SortMenu from '../components/buttons/home_sort/SortMenu'
 import Tip from '@/components/Tip'
+import 'vue-virtual-scroller/dist/vue-virtual-scroller.css'
+import { DynamicScroller, DynamicScrollerItem } from 'vue-virtual-scroller'
 
 export default {
   name: 'Index',
@@ -102,7 +105,9 @@ export default {
     UserSideCard,
     Post,
     InfoLinks,
-    TopicsSidebar
+    TopicsSidebar,
+    DynamicScroller,
+    DynamicScrollerItem
   },
   data() {
     return {

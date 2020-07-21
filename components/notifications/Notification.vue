@@ -27,15 +27,19 @@
       <v-card-actions class="pt-0">
         <UsernameMenu :user-data="notif.fromUser" />
         <v-spacer />
-        <v-btn text small class="text--secondary">Dismiss</v-btn>
+        <v-btn text small class="text--secondary" @click="markRead"
+          >Dismiss</v-btn
+        >
       </v-card-actions>
     </v-card>
   </div>
 </template>
 
 <script>
+import markNotificationReadGql from '../../gql/markNotificationRead.graphql'
 import UsernameMenu from '@/components/user/UsernameMenu'
 import { urlName } from '@/util/urlName'
+import notificationsGql from '@/gql/notifications'
 
 export default {
   name: 'Notification',
@@ -43,6 +47,10 @@ export default {
   props: {
     notif: {
       type: Object,
+      required: true
+    },
+    unreadOnly: {
+      type: Boolean,
       required: true
     }
   },
@@ -52,7 +60,20 @@ export default {
     }
   },
   methods: {
-    markRead() {}
+    async markRead() {
+      await this.$apollo.mutate({
+        mutation: markNotificationReadGql,
+        variables: {
+          id: this.notif.id
+        },
+        refetchQueries: [
+          {
+            query: notificationsGql,
+            variables: { unreadOnly: this.unreadOnly }
+          }
+        ]
+      })
+    }
   }
 }
 </script>

@@ -121,30 +121,15 @@ export default {
   /*
    ** Plugins to load before mounting the App
    */
-  plugins: [
-    '~/plugins/vue-clipboard2',
-    '~/plugins/vue-virtual-scroller',
-    '~/plugins/vue-friendly-iframe'
-  ],
+  plugins: ['~/plugins/vue-clipboard2'],
   /*
    ** Nuxt.js dev-modules
    */
-  buildModules: [
-    // Doc: https://github.com/nuxt-community/eslint-module
-    '@nuxtjs/eslint-module',
-    '@nuxtjs/vuetify',
-    '@nuxtjs/pwa'
-  ],
+  buildModules: ['@nuxtjs/eslint-module', '@nuxtjs/vuetify', '@nuxtjs/pwa'],
   /*
    ** Nuxt.js modules
    */
-  modules: [
-    // Doc: https://axios.nuxtjs.org/usage
-    '@nuxtjs/axios',
-    '@nuxtjs/apollo',
-    '@nuxtjs/device',
-    'nuxt-webfontloader'
-  ],
+  modules: ['@nuxtjs/axios', '@nuxtjs/apollo', '@nuxtjs/device'],
   /*
    ** Axios module configuration
    ** See https://axios.nuxtjs.org/options
@@ -202,15 +187,6 @@ export default {
         // You need to pass a `wsEndpoint` for this to work
         websocketsOnly: false // Optional
       }
-    }
-  },
-
-  webfontloader: {
-    custom: {
-      families: ['Roboto'],
-      urls: [
-        'https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap'
-      ]
     }
   },
 

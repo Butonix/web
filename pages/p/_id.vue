@@ -52,6 +52,7 @@
         page-mode
         :items="threadedComments"
         :min-item-size="54"
+        :prerender="20"
       >
         <template v-slot="{ item, index, active }">
           <DynamicScrollerItem
@@ -157,17 +158,20 @@ import UserSideCard from '../../components/user/UserSideCard'
 import Comment from '../../components/comment/Comment'
 import CommentSortMenu from '../../components/comment/sort/CommentSortMenu'
 import { urlName } from '~/util/urlName'
-import Editor from '@/components/editor/Editor'
 import { isEditorEmpty } from '@/util/isEditorEmpty'
 import Post from '@/components/post/Post'
+import 'vue-virtual-scroller/dist/vue-virtual-scroller.css'
+import { DynamicScroller, DynamicScrollerItem } from 'vue-virtual-scroller'
 
 export default {
   components: {
     Post,
-    Editor,
+    Editor: () => import('@/components/editor/Editor'),
     CommentSortMenu,
     Comment,
-    UserSideCard
+    UserSideCard,
+    DynamicScroller,
+    DynamicScrollerItem
   },
   data() {
     return {

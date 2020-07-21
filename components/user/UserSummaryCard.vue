@@ -227,11 +227,10 @@ import unblockUserGql from '../../gql/unblockUser.graphql'
 import followUserGql from '../../gql/followUser.graphql'
 import unfollowUserGql from '../../gql/unfollowUser.graphql'
 import setBioGql from '../../gql/setBio.graphql'
-import AvatarEditor from '@/components/AvatarEditor'
 
 export default {
   name: 'UserSummaryCard',
-  components: { AvatarEditor },
+  components: { AvatarEditor: () => import('@/components/AvatarEditor') },
   props: {
     user: {
       type: Object,

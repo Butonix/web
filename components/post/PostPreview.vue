@@ -82,11 +82,18 @@
 import { getIdFromUrl, Youtube } from 'vue-youtube'
 import { Tweet } from 'vue-tweet-embed'
 import InstagramEmbed from 'vue-instagram-embed'
+import VueFriendlyIframe from 'vue-friendly-iframe'
 import TextContent from '~/components/TextContent'
 
 export default {
   name: 'PostPreview',
-  components: { TextContent, Youtube, Tweet, InstagramEmbed },
+  components: {
+    TextContent,
+    Youtube,
+    Tweet,
+    InstagramEmbed,
+    'vue-friendly-iframe': VueFriendlyIframe
+  },
   props: {
     post: {
       type: Object,

@@ -101,11 +101,14 @@ import editPostGql from '../../gql/editPost.graphql'
 import PostOptionsBtn from './PostOptionsBtn'
 import PostOptionsContent from './PostOptionsContent'
 import { isEditorEmpty } from '@/util/isEditorEmpty'
-import Editor from '@/components/editor/Editor'
 
 export default {
   name: 'PostOptions',
-  components: { Editor, PostOptionsContent, PostOptionsBtn },
+  components: {
+    Editor: () => import('@/components/editor/Editor'),
+    PostOptionsContent,
+    PostOptionsBtn
+  },
   props: {
     post: {
       type: Object,

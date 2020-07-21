@@ -146,13 +146,4 @@ export default {
 }
 </script>
 
-<style scoped>
-.v-menu__content::-webkit-scrollbar {
-  width: 0 !important;
-}
-
-.v-menu__content {
-  overflow: -moz-scrollbars-none !important;
-  -ms-overflow-style: none !important;
-}
-</style>
+<style scoped></style>

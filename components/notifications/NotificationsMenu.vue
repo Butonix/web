@@ -36,17 +36,28 @@
         >
         <v-spacer />
         <v-toolbar-items>
-          <v-btn text>Dismiss all</v-btn>
+          <v-btn text @click="markAllAsRead">Dismiss all</v-btn>
         </v-toolbar-items>
       </v-toolbar>
 
-      <div class="pb-0 pt-3 px-3">
+      <div v-if="notifications.length > 0" class="pb-0 pt-3 px-3">
         <Notification
           v-for="notif in notifications"
           :key="notif.id"
+          :unread-only="unreadOnly"
           :notif="notif"
         />
       </div>
+
+      <v-row
+        v-else
+        no-gutters
+        justify="center"
+        align="center"
+        class="pb-3 pt-3 px-3"
+      >
+        <span class="text-h6">No new notifications</span>
+      </v-row>
     </v-card>
   </v-menu>
 </template>
@@ -54,13 +65,28 @@
 <script>
 import notificationsGql from '@/gql/notifications'
 import Notification from '@/components/notifications/Notification'
+import markAllNotificationsReadGql from '@/gql/markAllNotificationsRead'
 
 export default {
   name: 'NotificationsMenu',
   components: { Notification },
   data() {
     return {
-      notifications: []
+      notifications: [],
+      unreadOnly: true
+    }
+  },
+  methods: {
+    async markAllAsRead() {
+      await this.$apollo.mutate({
+        mutation: markAllNotificationsReadGql,
+        refetchQueries: [
+          {
+            query: notificationsGql,
+            variables: { unreadOnly: this.unreadOnly }
+          }
+        ]
+      })
     }
   },
   apollo: {
@@ -68,7 +94,7 @@ export default {
       query: notificationsGql,
       variables() {
         return {
-          unreadOnly: true
+          unreadOnly: this.unreadOnly
         }
       }
     }
@@ -76,4 +102,13 @@ export default {
 }
 </script>
 
-<style scoped></style>
+<style scoped>
+.v-menu__content::-webkit-scrollbar {
+  width: 0 !important;
+}
+
+.v-menu__content {
+  overflow: -moz-scrollbars-none !important;
+  -ms-overflow-style: none !important;
+}
+</style>

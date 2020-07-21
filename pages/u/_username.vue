@@ -75,7 +75,12 @@
         <UserSortMenu />
       </v-row>
 
-      <DynamicScroller page-mode :items="items" :min-item-size="54">
+      <DynamicScroller
+        page-mode
+        :items="items"
+        :min-item-size="54"
+        :prerender="20"
+      >
         <template v-slot="{ item, index, active }">
           <DynamicScrollerItem
             :item="item"
@@ -125,6 +130,8 @@ import Comment from '@/components/comment/Comment'
 import TypeMenu from '@/components/buttons/type/TypeMenu'
 import UserSortMenu from '@/components/buttons/user_sort/UserSortMenu'
 import UserViewMenu from '@/components/buttons/user_view/UserViewMenu'
+import 'vue-virtual-scroller/dist/vue-virtual-scroller.css'
+import { DynamicScroller, DynamicScrollerItem } from 'vue-virtual-scroller'
 
 export default {
   components: {
@@ -133,7 +140,9 @@ export default {
     TypeMenu,
     Comment,
     Post,
-    UserSummaryCard
+    UserSummaryCard,
+    DynamicScroller,
+    DynamicScrollerItem
   },
   data() {
     return {

@@ -26,12 +26,24 @@
 
         <v-list-item-title style="white-space: normal">
           <nuxt-link
+            v-if="$route.name !== 'p-id-title' || post.type === 'TEXT'"
             class="text--primary mr-1"
             style="font-size: 1.125rem; font-weight: 400"
             :to="`/p/${post.id}/${urlName}`"
           >
             {{ post.title }}
           </nuxt-link>
+
+          <a
+            v-else
+            class="text--primary mr-1"
+            style="font-size: 1.125rem; font-weight: 400"
+            :href="post.link"
+            target="_blank"
+            rel="noopener"
+          >
+            {{ post.title }}
+          </a>
 
           <template v-if="$device.isDesktop">
             <nuxt-link

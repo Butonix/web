@@ -1,6 +1,8 @@
 <template>
   <v-app id="app">
-    <AppBar />
+    <client-only>
+      <AppBar />
+    </client-only>
 
     <v-main>
       <v-container class="pt-0">
@@ -9,7 +11,9 @@
       <Snackbar />
     </v-main>
 
-    <BottomNavBar v-if="!$device.isDesktop" />
+    <client-only>
+      <BottomNavBar v-if="!$device.isDesktop" />
+    </client-only>
   </v-app>
 </template>
 
