@@ -146,7 +146,8 @@ export default {
       short_name: 'Comet',
       description: 'Create and browse posts and comments on Comet',
       theme_color: '#202124',
-      background_color: '#202124'
+      background_color: '#202124',
+      fileName: 'manifest.[ext]?[hash]'
     },
     meta: {
       name: 'Comet',
