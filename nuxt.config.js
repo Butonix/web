@@ -139,16 +139,11 @@ export default {
   /*
    ** Plugins to load before mounting the App
    */
-  plugins: ['~/plugins/vue-clipboard2'],
+  plugins: ['~/plugins/vue-clipboard2.client.js'],
   /*
    ** Nuxt.js dev-modules
    */
-  buildModules: [
-    '@nuxtjs/eslint-module',
-    '@nuxtjs/vuetify',
-    '@nuxtjs/pwa',
-    'nuxt-purgecss'
-  ],
+  buildModules: ['@nuxtjs/eslint-module', '@nuxtjs/vuetify', '@nuxtjs/pwa'],
   /*
    ** Nuxt.js modules
    */
@@ -360,16 +355,5 @@ export default {
     parallel: true,
     cache: true,
     hardSource: true
-  },
-
-  purgeCSS: {
-    paths: [
-      './pages/**/*.vue',
-      './layouts/**/*.vue',
-      './components/**/*.vue',
-      './node_modules/vuetify/dist/vuetify.js'
-    ],
-    whitelist: ['html', 'body', 'nuxt-progress'],
-    whitelistPatterns: [/(col|row)/]
   }
 }

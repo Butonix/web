@@ -33,15 +33,16 @@ export default {
         : '#F1F3F4'
     }
   },
-  mounted() {
+  beforeCreate() {
     // const mq = window.matchMedia('(prefers-color-scheme: dark)')
 
-    const dark = localStorage.getItem('dark')
-
-    if (dark) {
-      this.$vuetify.theme.dark = dark === 'true'
-    } else {
-      this.$vuetify.theme.dark = true
+    if (process.client) {
+      const dark = localStorage.getItem('dark')
+      if (dark) {
+        this.$vuetify.theme.dark = dark === 'true'
+      } else {
+        this.$vuetify.theme.dark = true
+      }
     }
 
     /* mq.addEventListener('change', (e) => {
@@ -49,7 +50,8 @@ export default {
         this.$vuetify.theme.dark = e.matches
       }
     }) */
-
+  },
+  beforeMount() {
     document.documentElement.style.backgroundColor = this.$vuetify.theme.dark
       ? '#202124'
       : '#F1F3F4'
