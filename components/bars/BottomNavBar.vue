@@ -4,9 +4,14 @@
     app
     bottom
     class="bottomappbar"
-    height="56"
+    :height="$device.isIos ? 80 : 56"
+    :color="$vuetify.theme.dark ? '#35363A' : '#FFFFFF'"
   >
-    <v-bottom-navigation grow color="#8D8D8D">
+    <v-bottom-navigation
+      grow
+      color="#8D8D8D"
+      :class="$device.isIos ? 'elevation-0 mb-6' : ''"
+    >
       <v-btn
         aria-label="Home"
         class="font-weight-regular"
