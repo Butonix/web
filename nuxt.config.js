@@ -101,14 +101,15 @@ export default {
         name: 'description',
         content: process.env.npm_package_description || ''
       },
-      { name: 'theme-color', content: '#202124' },
-      {
+      { name: 'theme-color', content: '#202124' }
+      /* {
         name: 'apple-mobile-web-app-status-bar-style',
         content: 'black-translucent'
-      }
+      } */
     ],
     link: [
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
+      { rel: 'apple-touch-icon', href: '/apple-touch-icon.png' },
       {
         rel: 'icon',
         type: 'image/png',
