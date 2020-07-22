@@ -48,6 +48,9 @@ export const mutations = {
 
 export const actions = {
   async nuxtServerInit({ commit }, context) {
+    const newrelic = await import('newrelic')
+    newrelic.setTransactionName(context.route.matched[0].path)
+
     if (!context.app.$apolloHelpers.getToken()) return
     const client = context.app.apolloProvider.defaultClient
     const { data } = await client.query({ query: currentUserGql })

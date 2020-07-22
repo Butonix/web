@@ -91,3 +91,5 @@ sw.*
 
 .graphqlconfig
 schema.graphql
+
+newrelic_agent.log

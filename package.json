@@ -24,6 +24,7 @@
     "email-validator": "^2.0.4",
     "graphql-tag": "^2.10.4",
     "is-url": "^1.2.4",
+    "newrelic": "^6.11.0",
     "nuxt": "^2.13.3",
     "nuxt-webfontloader": "^1.1.0",
     "redirect-ssl": "^2.0.0",

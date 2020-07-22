@@ -354,6 +354,9 @@ export default {
   build: {
     parallel: true,
     cache: true,
-    hardSource: true
+    hardSource: true,
+    extend(config, ctx) {
+      config.externals = [{ newrelic: 'newrelic' }]
+    }
   }
 }
