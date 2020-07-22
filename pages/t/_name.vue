@@ -116,7 +116,7 @@
         page-mode
         :items="feed"
         :min-item-size="54"
-        :prerender="20"
+        :prerender="feed.length < 20 ? feed.length : 20"
       >
         <template v-slot="{ item, index, active }">
           <DynamicScrollerItem

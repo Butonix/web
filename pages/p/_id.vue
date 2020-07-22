@@ -52,7 +52,7 @@
         page-mode
         :items="threadedComments"
         :min-item-size="54"
-        :prerender="20"
+        :prerender="threadedComments.length < 20 ? threadedComments.length : 20"
       >
         <template v-slot="{ item, index, active }">
           <DynamicScrollerItem

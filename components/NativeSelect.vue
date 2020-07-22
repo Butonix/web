@@ -24,7 +24,7 @@ export default {
         'select',
         {
           style: {
-            'background-color': this.$vuetify.theme.dark ? '#313235' : '#F5F5F5'
+            'background-color': this.$vuetify.theme.dark ? '#35363A' : '#F5F5F5'
           },
           class: 'text--primary',
           domProps: {
@@ -69,7 +69,7 @@ select {
   z-index: 1;
   width: 100%;
   height: 75%;
-  background-color: #313235;
+  background-color: #35363a;
   cursor: pointer;
 }
 

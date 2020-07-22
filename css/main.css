@@ -49,5 +49,5 @@ body {
 .sticky {
   position: -webkit-sticky; /* Safari */
   position: sticky;
-  top: 76px;
+  top: 68px;
 }

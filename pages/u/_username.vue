@@ -79,7 +79,7 @@
         page-mode
         :items="items"
         :min-item-size="54"
-        :prerender="20"
+        :prerender="items.length < 20 ? items.length : 20"
       >
         <template v-slot="{ item, index, active }">
           <DynamicScrollerItem

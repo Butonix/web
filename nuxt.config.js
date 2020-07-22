@@ -147,12 +147,16 @@ export default {
       description: 'Create and browse posts and comments on Comet',
       theme_color: '#202124',
       background_color: '#202124',
-      fileName: 'manifest.[ext]?[hash]'
+      fileName: 'manifest.[ext]?[hash]',
+      start_url: '/'
     },
     meta: {
       name: 'Comet',
       description: 'Create and browse posts and comments on Comet',
       theme_color: '#202124'
+    },
+    icon: {
+      purpose: ['any', 'maskable']
     }
   },
 

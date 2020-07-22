@@ -46,7 +46,7 @@
           <v-toolbar
             flat
             dense
-            :color="$vuetify.theme.dark ? '#313235' : '#F5F5F5'"
+            :color="$vuetify.theme.dark ? '#35363A' : '#F5F5F5'"
           >
             <v-spacer />
             <v-toolbar-items>

@@ -11,7 +11,7 @@
           ? '1px solid rgba(0, 0, 0, 0.12)'
           : '',
       'border-radius': '10px',
-      'background-color': $vuetify.theme.dark ? '#313235' : '#FFFFFF'
+      'background-color': $vuetify.theme.dark ? '#35363A' : '#FFFFFF'
     }"
   >
     <div
@@ -20,7 +20,7 @@
         'background-color': $vuetify.theme.dark
           ? idState.expanded
             ? '#414245'
-            : '#313235'
+            : '#35363A'
           : idState.expanded
           ? '#F5F5F5'
           : '#FFFFFF',
@@ -117,7 +117,7 @@
       v-if="!$device.isDesktop && idState.expanded"
       :style="
         $vuetify.theme.dark
-          ? 'background-color: #313235'
+          ? 'background-color: #35363A'
           : 'background-color: #FFFFFF'
       "
       style="border-bottom-left-radius: 9px; border-bottom-right-radius: 9px; display: flex"
