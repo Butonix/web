@@ -10,7 +10,8 @@
     <v-bottom-navigation
       grow
       :color="$vuetify.theme.dark ? '#35363A' : '#FFFFFF'"
-      :class="$device.isIos ? 'elevation-0 mb-6' : ''"
+      :class="$device.isIos ? 'elevation-0' : ''"
+      :style="$device.isIos ? 'margin-bottom: 34px' : ''"
     >
       <v-btn
         aria-label="Home"

@@ -123,9 +123,10 @@ export default {
       rules: {
         usernameRules: [
           (v) => v.length >= 3 || 'Username must be at least 3 characters',
-          (v) => v.length <= 20 || 'Maximum username length is 20 characters',
+          (v) => v.length <= 15 || 'Maximum username length is 15 characters',
           (v) =>
-            (v.match(/^[a-z0-9]+$/i) && v.match(/^[a-z0-9]+$/i).length > 0) ||
+            (v.match(/^[a-zA-Z0-9_]+$/) &&
+              v.match(/^[a-zA-Z0-9_]+$/).length > 0) ||
             'Username must be alphanumeric'
         ],
         emailRules: [(v) => EmailValidator.validate(v) || 'Invalid email'],

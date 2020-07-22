@@ -33,17 +33,18 @@
           <div>
             <FollowTopicChip
               v-for="topicName in [
-                'news',
-                'politics',
                 'gaming',
                 'science',
                 'programming',
                 'technology',
-                'conspiracy',
+                'news',
+                'politics',
                 'videos',
                 'television',
                 'movies',
                 'sports',
+                'nba',
+                'nfl',
                 'music',
                 'hip_hop_music',
                 'indie_music'

@@ -13,7 +13,7 @@
         clearable
       />
 
-      <v-btn depressed @click="openDialog">
+      <v-btn depressed color="primary" @click="openDialog">
         <v-icon class="mr-2">{{ $vuetify.icons.values.mdiPencil }}</v-icon>
         Open Editor
       </v-btn>

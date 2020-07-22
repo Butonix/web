@@ -108,17 +108,21 @@
       @togglemore="idState.viewingMore = !idState.viewingMore"
     />
 
-    <v-card-actions class="pt-0 pb-2">
+    <v-row align="center" no-gutters class="pt-0 pb-2 pl-2 pr-0">
       <span v-if="!post.author" class="text--secondary">[deleted]</span>
       <UsernameMenu
         v-else
         :user-data="post.author"
+        :op="isPostView"
         @toggleblock="toggleBlock"
       />
 
-      <span :title="editedTimeSince" class="text--secondary caption ml-2">{{
-        timeSince
-      }}</span>
+      <span
+        :title="editedTimeSince"
+        class="text--secondary caption"
+        style="margin-left: 6px"
+        >{{ timeSince }}</span
+      >
 
       <v-spacer />
 
@@ -129,7 +133,7 @@
         :reported="idState.reported"
         @reported="idState.reported = true"
       />
-    </v-card-actions>
+    </v-row>
   </v-card>
 </template>
 

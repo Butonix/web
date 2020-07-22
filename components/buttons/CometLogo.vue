@@ -2,8 +2,12 @@
   <div style="cursor: pointer" @click="clickCometLogo">
     <v-img
       alt="Comet logo"
-      :src="require('~/assets/logo.png')"
-      width="128"
+      :src="
+        $device.isDesktop
+          ? require('~/assets/logo.png')
+          : require('~/assets/logo_mobile.png')
+      "
+      :width="$device.isDesktop ? 128 : 48"
       contain
     />
   </div>

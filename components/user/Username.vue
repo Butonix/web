@@ -7,19 +7,28 @@
     "
     class="text--primary"
   >
-    <v-avatar size="28">
+    <v-avatar :size="$device.isDesktop ? 24 : 24">
       <img alt="Profile picture" :src="userData.profilePicUrl" />
     </v-avatar>
-    <span class="ml-1">
+    <span class="ml-1" style="line-height: 2; font-size: 0.93rem">
       {{ userData.username }}
     </span>
+    <v-chip
+      v-if="op && userData.username !== 'Comet'"
+      dark
+      x-small
+      label
+      color="indigo"
+      class="ml-1 px-1"
+      >OP</v-chip
+    >
     <v-chip
       v-if="userData.tag"
       dark
       x-small
       label
       :color="userData.tagColor"
-      class="ml-1"
+      class="ml-1 px-2"
       >{{ userData.tag }}</v-chip
     >
   </nuxt-link>
@@ -36,6 +45,10 @@ export default {
     link: {
       type: Boolean,
       default: true
+    },
+    op: {
+      type: Boolean,
+      default: false
     }
   }
 }

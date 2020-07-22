@@ -30,6 +30,8 @@ export default {
   },
   computed: {
     capitalizedName() {
+      if (this.topicName === 'nba') return 'NBA'
+      else if (this.topicName === 'nfl') return 'NFL'
       return capitalizedName(this.topicName)
     }
   },

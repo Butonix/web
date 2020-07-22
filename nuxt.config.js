@@ -353,9 +353,7 @@ export default {
   ],
 
   build: {
-    parallel: true,
-    cache: true,
-    hardSource: true,
+    hardSource: process.env.NODE_ENV !== 'production',
     extend(config, ctx) {
       config.externals = [{ newrelic: 'newrelic' }]
     }

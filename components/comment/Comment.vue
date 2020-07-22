@@ -55,7 +55,11 @@
         </v-card-text>
 
         <v-card-actions class="px-2 py-2">
-          <UsernameMenu v-if="comment.author" :user-data="comment.author" />
+          <UsernameMenu
+            v-if="comment.author"
+            :user-data="comment.author"
+            :op="post && post.author.id === comment.author.id"
+          />
           <span v-else-if="!comment.author" class="text--secondary"
             >[deleted]</span
           >
@@ -310,6 +314,11 @@ export default {
     level: {
       type: Number,
       default: 0
+    },
+    post: {
+      type: Object,
+      required: false,
+      default: null
     }
   },
   computed: {

@@ -61,7 +61,7 @@
             :size-dependencies="[item.textContent]"
           >
             <div class="pb-3">
-              <Comment :post-view="postView" :comment="item" />
+              <Comment :post="post" :post-view="postView" :comment="item" />
             </div>
           </DynamicScrollerItem>
         </template>

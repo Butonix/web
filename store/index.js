@@ -79,6 +79,6 @@ export const actions = {
     commit('setSnackbarSuccess', success)
     setTimeout(() => {
       commit('setSnackbarEnabled', false)
-    }, 5000)
+    }, 2500)
   }
 }

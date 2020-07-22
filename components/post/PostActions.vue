@@ -4,7 +4,7 @@
       small
       rounded
       text
-      class="mr-2 ml-0 text--secondary"
+      class="text--secondary px-2 mr-1"
       :to="`/p/${post.id}/${urlName}`"
       nuxt
       :title="
@@ -21,10 +21,10 @@
     </v-btn>
 
     <v-btn
+      class="px-2 mr-1"
       small
       rounded
       text
-      class="mr-2 ml-0 "
       :class="post.isEndorsed ? '' : 'text--secondary'"
       :color="post.isEndorsed ? 'primary' : ''"
       :title="

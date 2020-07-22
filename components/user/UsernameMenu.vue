@@ -8,7 +8,7 @@
   >
     <template v-slot:activator="{ on }">
       <span v-on="on">
-        <Username :user-data="userData" />
+        <Username :user-data="userData" :op="op" />
       </span>
     </template>
 
@@ -30,7 +30,7 @@
   <v-bottom-sheet v-else v-model="menu">
     <template v-slot:activator="{ on }">
       <span v-on="on">
-        <Username :user-data="userData" />
+        <Username :user-data="userData" :op="op" />
       </span>
     </template>
 
@@ -62,6 +62,10 @@ export default {
     userData: {
       type: Object,
       required: true
+    },
+    op: {
+      type: Boolean,
+      default: false
     }
   },
   data() {
