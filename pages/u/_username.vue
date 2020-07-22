@@ -75,12 +75,7 @@
         <UserSortMenu />
       </v-row>
 
-      <DynamicScroller
-        page-mode
-        :items="items"
-        :min-item-size="54"
-        :prerender="items.length < 20 ? items.length : 20"
-      >
+      <DynamicScroller page-mode :items="items" :min-item-size="54">
         <template v-slot="{ item, index, active }">
           <DynamicScrollerItem
             :item="item"

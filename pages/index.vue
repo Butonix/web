@@ -49,7 +49,6 @@
         page-mode
         :items="globalStickies.concat(feed)"
         :min-item-size="54"
-        :prerender="feed.length < 20 ? feed.length : 20"
       >
         <template v-slot="{ item, index, active }">
           <DynamicScrollerItem
