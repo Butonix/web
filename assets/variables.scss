@@ -1,7 +1,7 @@
 @import '~vuetify/src/styles/settings/variables';
 
-$body-font-family: -apple-system, BlinkMacSystemFont, "segoe ui", Roboto, Helvetica, Arial, sans-serif, "apple color emoji", "segoe ui emoji", "segoe ui symbol";
-$heading-font-family: -apple-system, BlinkMacSystemFont, "segoe ui", Roboto, Helvetica, Arial, sans-serif, "apple color emoji", "segoe ui emoji", "segoe ui symbol";
+$body-font-family: Roboto, -apple-system, BlinkMacSystemFont, "segoe ui", Helvetica, Arial, sans-serif, "apple color emoji", "segoe ui emoji", "segoe ui symbol";
+$heading-font-family: Roboto, -apple-system, BlinkMacSystemFont, "segoe ui", Helvetica, Arial, sans-serif, "apple color emoji", "segoe ui emoji", "segoe ui symbol";
 
 $font-size-root: 14px;
 $border-radius-root: 10px;
@@ -16,16 +16,17 @@ $material-dark: (
   'bottom-navigation': #35363A,
   'cards': #35363A,
   'text': (
-    'secondary': #8D8D8D
+    'primary': #E8EAED,
+    'secondary': #9AA0A6
   )
 );
 
 $material-light: (
   'text': (
-    'primary': #000000,
-    'secondary': #8D8D8D
+    'primary': #202124,
+    'secondary': #5F6368
   ),
-  'cards': #F5F5F5,
+  'cards': #F1F3F4
 );
 
 $container-max-widths: (

@@ -5,7 +5,7 @@
 
       <v-text-field
         v-model="title"
-        :background-color="$vuetify.theme.dark ? '' : '#F5F5F5'"
+        :background-color="$vuetify.theme.dark ? '' : '#F1F3F4'"
         solo
         flat
         label="Title"
@@ -16,7 +16,7 @@
 
       <v-text-field
         v-model="link"
-        :background-color="$vuetify.theme.dark ? '' : '#F5F5F5'"
+        :background-color="$vuetify.theme.dark ? '' : '#F1F3F4'"
         solo
         flat
         label="Link URL"

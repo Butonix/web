@@ -5,7 +5,7 @@
 
       <v-text-field
         v-model="title"
-        :background-color="$vuetify.theme.dark ? '' : '#F5F5F5'"
+        :background-color="$vuetify.theme.dark ? '' : '#F1F3F4'"
         solo
         flat
         label="Title"
@@ -17,7 +17,7 @@
       <v-file-input
         ref="fileInput"
         v-model="image"
-        :background-color="$vuetify.theme.dark ? '' : '#F5F5F5'"
+        :background-color="$vuetify.theme.dark ? '' : '#F1F3F4'"
         solo
         flat
         label="Choose an image"

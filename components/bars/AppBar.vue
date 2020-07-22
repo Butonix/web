@@ -3,7 +3,7 @@
     short
     app
     flat
-    :color="$vuetify.theme.dark ? '#202124' : ''"
+    :color="$vuetify.theme.dark ? '#202124' : '#F1F3F4'"
     :style="
       $vuetify.theme.dark
         ? 'border-bottom: 1px solid rgba(255, 255, 255, .12)'
@@ -47,7 +47,7 @@
             dense
             class="mr-6"
             style="max-width: 25%"
-            :background-color="$vuetify.theme.dark ? '' : 'grey lighten-2'"
+            :background-color="$vuetify.theme.dark ? '' : '#DEE1E6'"
             solo
             rounded
             label="Search"

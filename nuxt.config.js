@@ -107,7 +107,26 @@ export default {
         content: 'black-translucent'
       }
     ],
-    link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }]
+    link: [
+      { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
+      {
+        rel: 'icon',
+        type: 'image/png',
+        sizes: '32x32',
+        href: '/favicon-32x32.png'
+      },
+      {
+        rel: 'icon',
+        type: 'image/png',
+        sizes: '16x16',
+        href: '/favicon-16x16.png'
+      },
+      {
+        rel: 'preconnect',
+        href: 'https://fonts.googleapis.com',
+        crossorigin: true
+      }
+    ]
   },
   /*
    ** Customize the progress-bar color
@@ -124,11 +143,31 @@ export default {
   /*
    ** Nuxt.js dev-modules
    */
-  buildModules: ['@nuxtjs/eslint-module', '@nuxtjs/vuetify', '@nuxtjs/pwa'],
+  buildModules: [
+    '@nuxtjs/eslint-module',
+    '@nuxtjs/vuetify',
+    '@nuxtjs/pwa',
+    'nuxt-purgecss'
+  ],
   /*
    ** Nuxt.js modules
    */
-  modules: ['@nuxtjs/axios', '@nuxtjs/apollo', '@nuxtjs/device'],
+  modules: [
+    'nuxt-webfontloader',
+    '@nuxtjs/axios',
+    '@nuxtjs/apollo',
+    '@nuxtjs/device'
+  ],
+
+  webfontloader: {
+    custom: {
+      families: ['Roboto'],
+      urls: [
+        'https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap'
+      ]
+    }
+  },
+
   /*
    ** Axios module configuration
    ** See https://axios.nuxtjs.org/options
@@ -153,7 +192,8 @@ export default {
     meta: {
       name: 'Comet',
       description: 'Create and browse posts and comments on Comet',
-      theme_color: '#202124'
+      theme_color: '#202124',
+      favicon: false
     },
     icon: {
       purpose: ['any', 'maskable']
@@ -314,5 +354,22 @@ export default {
     redirectSSL.create({
       enabled: process.env.NODE_ENV === 'production'
     })
-  ]
+  ],
+
+  build: {
+    parallel: true,
+    cache: true,
+    hardSource: true
+  },
+
+  purgeCSS: {
+    paths: [
+      './pages/**/*.vue',
+      './layouts/**/*.vue',
+      './components/**/*.vue',
+      './node_modules/vuetify/dist/vuetify.js'
+    ],
+    whitelist: ['html', 'body', 'nuxt-progress'],
+    whitelistPatterns: [/(col|row)/]
+  }
 }

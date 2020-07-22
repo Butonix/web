@@ -3,7 +3,7 @@
     v-if="post.type !== 'TEXT'"
     style="border-radius: 10px; align-self: start"
     size="64"
-    :color="$vuetify.theme.dark ? '#35363A' : 'grey lighten-2'"
+    :color="$vuetify.theme.dark ? '#35363A' : '#DEE1E6'"
   >
     <a
       :href="post.link"

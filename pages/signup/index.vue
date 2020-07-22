@@ -8,7 +8,7 @@
         :style="
           $vuetify.theme.dark
             ? 'background-color: #35363A'
-            : 'background-color: #F5F5F5; border-style: solid'
+            : 'background-color: #F1F3F4; border-style: solid'
         "
         style="border-width: 1px; border-color: rgba(0, 0, 0, 0.12)"
       >

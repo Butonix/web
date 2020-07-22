@@ -35,8 +35,7 @@ export default {
         'Add topics to "My Topics" by going to the topic page and clicking "Add to My Topics"',
         'Choose "My Topics" to only see posts from topics you have added to "My Topics"',
         'You receive notifications when someone responds to your posts or comments',
-        'Toggle dark mode by clicking your username or "Log In" at the top right of the page and clicking "Dark Mode"',
-        'ɟlǝsɯᴉɥ llᴉʞ ʇ,upᴉp uᴉǝʇsdƎ'
+        'Toggle dark mode by clicking your username or "Log In" at the top right of the page and clicking "Dark Mode"'
       ],
       tipIndex: 0
     }

@@ -99,7 +99,7 @@
           <div
             style="display: flex"
             :style="{
-              'background-color': $vuetify.theme.dark ? '#202124' : '#F5F5F5',
+              'background-color': $vuetify.theme.dark ? '#202124' : '#F1F3F4',
               'border-bottom-width': '1px',
               'border-bottom-color': 'rgba(0, 0, 0, 0.12)',
               'border-bottom-style': $vuetify.theme.dark ? 'none' : 'solid'

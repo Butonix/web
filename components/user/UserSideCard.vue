@@ -6,7 +6,7 @@
     :flat="$vuetify.theme.dark"
     :outlined="!$vuetify.theme.dark"
     :style="
-      $vuetify.theme.dark ? '' : 'background-color: #F5F5F5; border-width: 1px'
+      $vuetify.theme.dark ? '' : 'background-color: #F1F3F4; border-width: 1px'
     "
   >
     <v-card-title style="word-break: normal"

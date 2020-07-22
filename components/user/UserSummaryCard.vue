@@ -5,7 +5,7 @@
     :width="isHover ? 400 : undefined"
     :tile="showViewProfileBtn"
     :style="{
-      'background-color': $vuetify.theme.dark ? '' : '#F5F5F5',
+      'background-color': $vuetify.theme.dark ? '' : '#F1F3F4',
       'border-width': '1px'
     }"
   >
@@ -165,9 +165,7 @@
                 label="Bio"
                 solo
                 flat
-                :background-color="
-                  $vuetify.theme.dark ? '#202124' : 'grey lighten-2'
-                "
+                :background-color="$vuetify.theme.dark ? '#202124' : '#DEE1E6'"
                 no-resize
                 rows="3"
                 :counter="160"

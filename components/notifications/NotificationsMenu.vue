@@ -29,7 +29,7 @@
             : 'rgba(0, 0, 0, 0.12)'
         }"
         flat
-        :color="$vuetify.theme.dark ? '#35363A' : '#F5F5F5'"
+        :color="$vuetify.theme.dark ? '#35363A' : '#F1F3F4'"
       >
         <v-toolbar-title
           >{{ notifications.length }} Unread Notifications</v-toolbar-title

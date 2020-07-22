@@ -8,7 +8,7 @@
           solo
           flat
           dense
-          :background-color="$vuetify.theme.dark ? '' : 'grey lighten-2'"
+          :background-color="$vuetify.theme.dark ? '' : '#DEE1E6'"
           label="Username"
         />
         <v-text-field
@@ -16,7 +16,7 @@
           solo
           flat
           dense
-          :background-color="$vuetify.theme.dark ? '' : 'grey lighten-2'"
+          :background-color="$vuetify.theme.dark ? '' : '#DEE1E6'"
           :type="showPassword ? 'text' : 'password'"
           label="Password"
         >

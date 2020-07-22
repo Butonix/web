@@ -4,7 +4,7 @@
     :style="
       $vuetify.theme.dark
         ? 'background-color: transparent'
-        : 'background-color: #F5F5F5'
+        : 'background-color: #F1F3F4'
     "
     style="border-width: 1px"
   >
@@ -118,7 +118,7 @@
             flat
             dense
             hide-details
-            :background-color="$vuetify.theme.dark ? '' : 'grey lighten-2'"
+            :background-color="$vuetify.theme.dark ? '' : '#DEE1E6'"
             label="Search topics"
           />
         </div>

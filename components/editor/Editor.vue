@@ -14,7 +14,7 @@
       :editor="editor"
       style="position: absolute; width: 100%; bottom: 0; left: 0; right: 0; padding-bottom: 8px; padding-left: 8px; padding-right: 8px"
       :style="{
-        'background-color': $vuetify.theme.dark ? '#202124' : '#F5F5F5',
+        'background-color': $vuetify.theme.dark ? '#202124' : '#F1F3F4',
         'border-top-width': '1px',
         'border-top-color': 'rgba(0, 0, 0, 0.12)',
         'border-top-style': $vuetify.theme.dark ? 'none' : 'solid'

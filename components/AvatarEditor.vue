@@ -46,7 +46,7 @@
           <v-toolbar
             flat
             dense
-            :color="$vuetify.theme.dark ? '#35363A' : '#F5F5F5'"
+            :color="$vuetify.theme.dark ? '#35363A' : '#F1F3F4'"
           >
             <v-spacer />
             <v-toolbar-items>
@@ -165,7 +165,7 @@
       label="Use an image instead"
       class="mt-3 ml-2 fileupload"
       :prepend-icon="$vuetify.icons.values.mdiImage"
-      :background-color="$vuetify.theme.dark ? '#202124' : 'grey lighten-2'"
+      :background-color="$vuetify.theme.dark ? '#202124' : '#DEE1E6'"
       :style="$device.isDesktop ? 'max-width: 300px' : ''"
       :rules="uploadRules"
     />
