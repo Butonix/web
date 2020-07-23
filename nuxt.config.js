@@ -82,7 +82,8 @@ import {
   mdiNewspaperMinus,
   mdiTrendingUp,
   mdiCheckCircleOutline,
-  mdiCheckAll
+  mdiCheckAll,
+  mdiMusic
 } from '@mdi/js'
 
 export default {
@@ -121,11 +122,6 @@ export default {
         type: 'image/png',
         sizes: '16x16',
         href: '/favicon-16x16.png'
-      },
-      {
-        rel: 'preconnect',
-        href: 'https://fonts.googleapis.com',
-        crossorigin: true
       }
     ]
   },
@@ -136,7 +132,7 @@ export default {
   /*
    ** Global CSS
    */
-  css: ['~/css/main.css', '~/css/main.scss'],
+  css: ['~/css/fonts.css', '~/css/main.css', '~/css/main.scss'],
   /*
    ** Plugins to load before mounting the App
    */
@@ -148,21 +144,7 @@ export default {
   /*
    ** Nuxt.js modules
    */
-  modules: [
-    'nuxt-webfontloader',
-    '@nuxtjs/axios',
-    '@nuxtjs/apollo',
-    '@nuxtjs/device'
-  ],
-
-  webfontloader: {
-    custom: {
-      families: ['Roboto'],
-      urls: [
-        'https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap'
-      ]
-    }
-  },
+  modules: ['@nuxtjs/axios', '@nuxtjs/apollo', '@nuxtjs/device'],
 
   /*
    ** Axios module configuration
@@ -323,7 +305,8 @@ export default {
         mdiNewspaperMinus,
         mdiTrendingUp,
         mdiCheckCircleOutline,
-        mdiCheckAll
+        mdiCheckAll,
+        mdiMusic
       }
     },
     theme: {

@@ -127,7 +127,7 @@ export default {
           (v) =>
             (v.match(/^[a-zA-Z0-9_]+$/) &&
               v.match(/^[a-zA-Z0-9_]+$/).length > 0) ||
-            'Username must be alphanumeric'
+            'Username can only have letters, numbers, and underscores.'
         ],
         emailRules: [(v) => EmailValidator.validate(v) || 'Invalid email'],
         passwordRules: [

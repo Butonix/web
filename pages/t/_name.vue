@@ -6,104 +6,6 @@
       </div>
     </v-col>
     <v-col>
-      <v-card
-        v-if="topic"
-        :flat="$vuetify.theme.dark"
-        :outlined="!$vuetify.theme.dark"
-        class="mb-3"
-      >
-        <v-row no-gutters class="px-4 py-2">
-          <div>
-            <div class="overline text--secondary" style="line-height: 1.3rem">
-              TOPIC
-            </div>
-            <div style="font-size: 1.43rem; line-height: 1.4">
-              {{ topic.capitalizedName }}
-            </div>
-          </div>
-
-          <v-spacer />
-
-          <div v-if="$store.state.currentUser" style="text-align: end">
-            <div>
-              <v-btn
-                text
-                rounded
-                small
-                :color="
-                  topic.isFollowing
-                    ? $vuetify.theme.dark
-                      ? 'red lighten-2'
-                      : 'primary'
-                    : ''
-                "
-                :disabled="topic.isHidden"
-                @click="toggleFollow"
-              >
-                <v-icon size="20" class="mr-2">{{
-                  topic.isFollowing
-                    ? $vuetify.icons.values.mdiNewspaper
-                    : $vuetify.icons.values.mdiNewspaperPlus
-                }}</v-icon>
-                {{
-                  topic.isFollowing ? 'Added to My Topics' : 'Add to My Topics'
-                }}
-              </v-btn>
-            </div>
-
-            <div class="mt-1">
-              <v-btn
-                text
-                rounded
-                small
-                :color="
-                  topic.isHidden
-                    ? $vuetify.theme.dark
-                      ? 'red lighten-2'
-                      : 'primary'
-                    : ''
-                "
-                :class="topic.isHidden ? '' : 'text--secondary'"
-                :disabled="topic.isFollowing"
-                @click="toggleHide"
-              >
-                <v-icon size="20" class="mr-2">{{
-                  topic.isHidden
-                    ? $vuetify.icons.values.mdiEyeOff
-                    : $vuetify.icons.values.mdiEye
-                }}</v-icon>
-                {{ topic.isHidden ? 'Hiding Topic' : 'Hide Topic' }}
-              </v-btn>
-            </div>
-          </div>
-        </v-row>
-
-        <v-row align="center" justify="start" no-gutters class="px-4 pb-2">
-          <v-chip
-            small
-            outlined
-            :title="`${topic.followerCount} Added to My Topics`"
-          >
-            <v-icon small left>{{
-              $vuetify.icons.values.mdiAccountMultiple
-            }}</v-icon>
-            {{ topic.followerCount }}
-          </v-chip>
-
-          <v-chip
-            small
-            outlined
-            class="ml-2"
-            :title="
-              `${topic.postCount} Post${topic.postCount === 1 ? '' : 's'}`
-            "
-          >
-            <v-icon small left>{{ $vuetify.icons.values.mdiPost }}</v-icon>
-            {{ topic.postCount }}
-          </v-chip>
-        </v-row>
-      </v-card>
-
       <v-row no-gutters class="pb-3">
         <v-spacer />
 
@@ -137,8 +39,20 @@
     </v-col>
     <v-col v-if="$device.isDesktop" cols="3">
       <div class="sticky">
-        <TopicsSidebar />
-        <InfoLinks class="mt-2" />
+        <v-card flat>
+          <v-list-item>
+            <v-list-item-avatar>
+              <v-icon>{{ $vuetify.icons.values.mdiMusic }}</v-icon>
+            </v-list-item-avatar>
+
+            <v-list-item-content>
+              <v-list-item-title>Music</v-list-item-title>
+              <v-list-item-subtitle
+                >General Discussion of Music</v-list-item-subtitle
+              >
+            </v-list-item-content>
+          </v-list-item>
+        </v-card>
       </div>
     </v-col>
   </v-row>
@@ -147,7 +61,6 @@
 <script>
 import 'vue-virtual-scroller/dist/vue-virtual-scroller.css'
 import { DynamicScroller, DynamicScrollerItem } from 'vue-virtual-scroller'
-import TopicsSidebar from '../../components/topic/TopicsSidebar'
 import followedTopicsGql from '../../gql/followedTopics.graphql'
 import followTopicGql from '../../gql/followTopic.graphql'
 import unfollowTopicGql from '../../gql/unfollowTopic.graphql'
@@ -155,7 +68,6 @@ import topicGql from '../../gql/topic.graphql'
 import feedGql from '../../gql/feed.graphql'
 import UserSideCard from '../../components/user/UserSideCard'
 import Post from '../../components/post/Post'
-import InfoLinks from '../../components/InfoLinks'
 import TypeMenu from '~/components/buttons/type/TypeMenu'
 import SortMenu from '~/components/buttons/home_sort/SortMenu'
 import hideTopicGql from '~/gql/hideTopic'
@@ -166,10 +78,8 @@ export default {
   components: {
     SortMenu,
     TypeMenu,
-    InfoLinks,
     Post,
     UserSideCard,
-    TopicsSidebar,
     DynamicScroller,
     DynamicScrollerItem
   },

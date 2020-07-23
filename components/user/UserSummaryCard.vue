@@ -43,7 +43,7 @@
                 showButtons && $store.state.currentUser && !user.isCurrentUser
               "
             >
-              <v-tooltip bottom>
+              <v-tooltip bottom transition="fade-transition">
                 <template v-slot:activator="{ on }">
                   <v-btn
                     class="mr-2"
@@ -62,7 +62,7 @@
                 <span>{{ user.isBlocking ? 'Unblock' : 'Block' }}</span>
               </v-tooltip>
 
-              <v-tooltip bottom>
+              <v-tooltip bottom transition="fade-transition">
                 <template v-slot:activator="{ on }">
                   <v-btn
                     :color="user.isFollowing ? 'primary' : ''"
