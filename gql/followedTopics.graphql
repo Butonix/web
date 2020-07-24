@@ -1,7 +1,0 @@
-query followedTopics {
-  followedTopics {
-    capitalizedName
-    name
-    postCount
-  }
-}

@@ -1,0 +1,3 @@
+mutation filterPlanet($planetName: ID!) {
+  filterPlanet(planetName: $planetName)
+}

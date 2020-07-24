@@ -33,11 +33,6 @@ body {
   outline: none !important;
 }
 
-.bettercard {
-  background-color: transparent !important;
-  border-width: 1px !important;
-}
-
 .v-btn--active::before {
   opacity: 0 !important;
 }

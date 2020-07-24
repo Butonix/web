@@ -20,9 +20,13 @@ query post($postId: ID!) {
       thumbnailUrl
       title
       type
-      topics {
-        capitalizedName
+      planet {
         name
+        fullName
+        description
+        userCount
+        joined
+        filtered
       }
       postView {
         lastCommentCount

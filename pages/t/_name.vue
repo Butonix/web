@@ -1,5 +1,5 @@
 <template>
-  <v-row>
+  <v-row v-if="planet">
     <v-col v-if="$device.isDesktop" cols="3">
       <div class="sticky">
         <UserSideCard />
@@ -39,17 +39,121 @@
     </v-col>
     <v-col v-if="$device.isDesktop" cols="3">
       <div class="sticky">
-        <v-card flat>
+        <v-card flat :outlined="!$vuetify.theme.dark">
+          <v-img
+            alt="Planet cover image"
+            src="https://i.getcomet.net/vJ6klShd-.png"
+            height="250"
+          />
           <v-list-item>
-            <v-list-item-avatar>
-              <v-icon>{{ $vuetify.icons.values.mdiMusic }}</v-icon>
+            <v-list-item-avatar color="white">
+              <v-img src="https://i.getcomet.net/8WFZHrSHF.png" />
             </v-list-item-avatar>
 
             <v-list-item-content>
-              <v-list-item-title>Music</v-list-item-title>
-              <v-list-item-subtitle
-                >General Discussion of Music</v-list-item-subtitle
+              <v-list-item-title
+                style="font-size: 1.43rem; font-weight: 500"
+                class="mb-0"
+                >Bon Iver
+                <span class="text--secondary ml-2" style="font-size: 0.93rem"
+                  >/p/boniver</span
+                ></v-list-item-title
               >
+              <v-list-item-subtitle class="mt-1" style="font-size: 1rem"
+                >Discussion of Bon Iver and related music</v-list-item-subtitle
+              >
+            </v-list-item-content>
+          </v-list-item>
+
+          <v-card-actions>
+            <v-chip outlined>
+              <v-icon left>{{
+                $vuetify.icons.values.mdiAccountMultipleOutline
+              }}</v-icon>
+              {{ planet.userCount }} User{{ planet.userCount === 1 ? '' : 's' }}
+            </v-chip>
+
+            <v-spacer />
+
+            <v-chip
+              close
+              :close-icon="$vuetify.icons.values.mdiPlus"
+              color="primary"
+              >Join</v-chip
+            >
+          </v-card-actions>
+
+          <v-card-actions class="pt-0">
+            <v-chip outlined small>
+              <v-avatar left>
+                <v-icon small>{{ $vuetify.icons.values.mdiMusic }}</v-icon>
+              </v-avatar>
+              Music
+            </v-chip>
+          </v-card-actions>
+        </v-card>
+
+        <v-card class="mt-3" flat :outlined="!$vuetify.theme.dark">
+          <v-list-item>
+            <v-list-item-content>
+              <v-list-item-title
+                style="font-size: 1.143rem; font-weight: 500"
+                class="mb-0"
+                >p/boniver Rules</v-list-item-title
+              >
+              <v-list-item-subtitle class="mt-2" style="font-size: 1rem">
+                <ol>
+                  <li>Don't be a dick</li>
+                </ol>
+              </v-list-item-subtitle>
+            </v-list-item-content>
+          </v-list-item>
+        </v-card>
+
+        <v-card class="mt-3" flat :outlined="!$vuetify.theme.dark">
+          <v-list-item>
+            <v-list-item-content>
+              <v-list-item-title
+                style="font-size: 1.143rem; font-weight: 500"
+                class="mb-0"
+                >Moderators</v-list-item-title
+              >
+              <div class="mt-2">
+                <v-list-item
+                  v-for="mod in planet.moderators"
+                  :key="mod.id"
+                  class="px-0"
+                >
+                  <v-list-item-avatar size="28" class="mr-2">
+                    <v-img :src="mod.profilePicUrl" />
+                  </v-list-item-avatar>
+                  <v-list-item-content>
+                    <v-list-item-title style="font-size: 1.143rem">
+                      {{ mod.username }}
+                      <v-chip
+                        v-if="mod.tag"
+                        dark
+                        small
+                        :color="mod.tagColor"
+                        class="ml-1"
+                        style="border-radius: 12px !important;"
+                      >
+                        {{ mod.tag }}
+                      </v-chip>
+                      <v-chip
+                        v-if="mod.id === planet.creatorId"
+                        dark
+                        small
+                        color="teal"
+                        class="ml-1"
+                        style="border-radius: 12px !important;"
+                      >
+                        Creator
+                      </v-chip>
+                    </v-list-item-title>
+                  </v-list-item-content>
+                </v-list-item>
+              </div>
             </v-list-item-content>
           </v-list-item>
         </v-card>
@@ -61,17 +165,14 @@
 <script>
 import 'vue-virtual-scroller/dist/vue-virtual-scroller.css'
 import { DynamicScroller, DynamicScrollerItem } from 'vue-virtual-scroller'
-import followedTopicsGql from '../../gql/followedTopics.graphql'
-import followTopicGql from '../../gql/followTopic.graphql'
-import unfollowTopicGql from '../../gql/unfollowTopic.graphql'
-import topicGql from '../../gql/topic.graphql'
+import joinPlanetGql from '../../gql/joinPlanet.graphql'
+import leavePlanetGql from '../../gql/leavePlanet.graphql'
+import planetGql from '../../gql/planet.graphql'
 import feedGql from '../../gql/feed.graphql'
 import UserSideCard from '../../components/user/UserSideCard'
 import Post from '../../components/post/Post'
 import TypeMenu from '~/components/buttons/type/TypeMenu'
 import SortMenu from '~/components/buttons/home_sort/SortMenu'
-import hideTopicGql from '~/gql/hideTopic'
-import unhideTopicGql from '~/gql/unhideTopic'
 
 export default {
   name: 'T',
@@ -85,14 +186,14 @@ export default {
   },
   data() {
     return {
-      topic: null,
+      planet: null,
       feed: [],
       hasMore: true,
       page: 0
     }
   },
   computed: {
-    topicName() {
+    planetName() {
       return this.$route.params.name
     },
     vars() {
@@ -112,7 +213,7 @@ export default {
     }
   },
   watch: {
-    topicName() {
+    planetName() {
       this.page = 0
     },
     $route: {
@@ -143,11 +244,11 @@ export default {
     window.removeEventListener('scroll', this.handleScroll)
   },
   apollo: {
-    topic: {
-      query: topicGql,
+    planet: {
+      query: planetGql,
       variables() {
         return {
-          topicName: this.topicName
+          planetName: this.planetName
         }
       },
       skip() {
@@ -158,7 +259,7 @@ export default {
       query: feedGql,
       variables() {
         return {
-          topicName: this.topicName,
+          planetName: this.planetName,
           ...this.vars
         }
       },
@@ -199,52 +300,26 @@ export default {
         this.showMore()
       }
     },
-    toggleHide() {
-      if (this.topic.isHidden) this.unhideTopic()
-      else this.hideTopic()
+    toggleJoin() {
+      if (this.planet.joined) this.leavePlanet()
+      else this.joinPlanet()
     },
-    hideTopic() {
+    joinPlanet() {
       this.$apollo.mutate({
-        mutation: hideTopicGql,
+        mutation: joinPlanetGql,
         variables: {
-          topicName: this.topic.name
+          planetName: this.planetName
         },
-        update: () => {
-          this.topic.isHidden = true
-        }
+        update: () => (this.planet.joined = true)
       })
     },
-    unhideTopic() {
+    leavePlanet() {
       this.$apollo.mutate({
-        mutation: unhideTopicGql,
+        mutation: leavePlanetGql,
         variables: {
-          topicName: this.topic.name
+          planetName: this.planetName
         },
-        update: () => (this.topic.isHidden = false)
-      })
-    },
-    toggleFollow() {
-      if (this.topic.isFollowing) this.unfollowTopic()
-      else this.followTopic()
-    },
-    followTopic() {
-      this.$apollo.mutate({
-        mutation: followTopicGql,
-        variables: {
-          topicName: this.topicName
-        },
-        refetchQueries: [{ query: followedTopicsGql }],
-        update: () => (this.topic.isFollowing = true)
-      })
-    },
-    unfollowTopic() {
-      this.$apollo.mutate({
-        mutation: unfollowTopicGql,
-        variables: {
-          topicName: this.topicName
-        },
-        refetchQueries: [{ query: followedTopicsGql }],
-        update: () => (this.topic.isFollowing = false)
+        update: () => (this.planet.joined = false)
       })
     },
     showMore() {
@@ -259,7 +334,7 @@ export default {
         query: feedGql,
         variables: {
           page: this.page,
-          topicName: this.topicName,
+          planetName: this.planetName,
           ...this.vars
         },
         updateQuery: (previousResult, { fetchMoreResult }) => {
@@ -274,12 +349,12 @@ export default {
   },
   head() {
     return {
-      title: this.topic ? this.topic.capitalizedName : '',
+      title: this.planet ? this.planet.fullName : '',
       meta: [
         {
           hid: 'og:title',
           property: 'og:title',
-          content: `Topic: ${this.topicName}`
+          content: this.planet ? this.planet.fullName : ''
         },
         {
           hid: 'og:site_name',
@@ -289,7 +364,7 @@ export default {
         {
           hid: 'og:description',
           property: 'og:description',
-          content: `View all posts in the ${this.topicName} topic`
+          content: `View all posts in p/${this.planetName}`
         }
       ]
     }

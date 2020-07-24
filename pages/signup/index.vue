@@ -28,30 +28,10 @@
           <AvatarEditor @finished="step = 3" />
         </v-stepper-content>
 
-        <v-stepper-step step="3">Follow topics</v-stepper-step>
+        <v-stepper-step step="3">Join planets</v-stepper-step>
         <v-stepper-content step="3">
           <div>
-            <FollowTopicChip
-              v-for="topicName in [
-                'gaming',
-                'science',
-                'programming',
-                'technology',
-                'news',
-                'politics',
-                'videos',
-                'television',
-                'movies',
-                'sports',
-                'nba',
-                'nfl',
-                'music',
-                'hip_hop_music',
-                'indie_music'
-              ]"
-              :key="topicName"
-              :topic-name="topicName"
-            />
+            Recent and recommended planets here
           </div>
 
           <v-btn
@@ -69,12 +49,11 @@
 </template>
 
 <script>
-import FollowTopicChip from '../../components/topic/FollowTopicChip'
 import SignUpForm from '../../components/SignUpForm'
 import AvatarEditor from '../../components/AvatarEditor'
 
 export default {
-  components: { AvatarEditor, SignUpForm, FollowTopicChip },
+  components: { AvatarEditor, SignUpForm },
   data() {
     return {
       step: 1

@@ -22,10 +22,6 @@
         label="Link URL"
       />
 
-      <div>
-        <TopicCombobox v-model="selectedTopics" :prev-route="prevRoute" />
-      </div>
-
       <v-row no-gutters>
         <v-spacer />
         <v-btn
@@ -49,12 +45,10 @@
 <script>
 import isUrl from 'is-url'
 import gql from 'graphql-tag'
-import TopicCombobox from '~/components/TopicCombobox'
 import { urlName } from '~/util/urlName'
 import submitPostGql from '~/gql/submitPost'
 
 export default {
-  components: { TopicCombobox },
   data() {
     return {
       prevRoute: null,

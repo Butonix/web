@@ -1,0 +1,32 @@
+query planet($planetName: ID!) {
+  planet(planetName: $planetName) {
+    name
+    fullName
+    joined
+    filtered
+    userCount
+    description
+    defaultSort
+    defaultCommentSort
+    allowImagePosts
+    allowLinkPosts
+    allowTextPosts
+    creatorId
+    moderators {
+      id
+      username
+      endorsementCount
+      createdAt
+      lastLogin
+      isBlocking
+      isBlocked
+      isFollowing
+      isFollowed
+      isCurrentUser
+      tag
+      tagColor
+      profilePicUrl
+      bio
+    }
+  }
+}

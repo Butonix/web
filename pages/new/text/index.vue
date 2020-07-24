@@ -20,10 +20,6 @@
 
       <div v-if="!isEditorEmpty" class="pt-6" v-html="textContent" />
 
-      <div class="pt-6">
-        <TopicCombobox v-model="selectedTopics" :prev-route="prevRoute" />
-      </div>
-
       <v-row no-gutters>
         <v-spacer />
         <v-btn
@@ -110,14 +106,12 @@
 </template>
 
 <script>
-import TopicCombobox from '~/components/TopicCombobox'
 import submitPostGql from '~/gql/submitPost'
 import { urlName } from '~/util/urlName'
 import { isEditorEmpty } from '@/util/isEditorEmpty'
 
 export default {
   components: {
-    TopicCombobox,
     Editor: () => import('@/components/editor/Editor')
   },
   data() {

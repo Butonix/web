@@ -20,9 +20,13 @@ query searchPosts($search: String!, $page: Int, $pageSize: Int, $sort: Sort, $ti
       tagColor
       profilePicUrl
     }
-    topics {
-      capitalizedName
+    planet {
       name
+      fullName
+      description
+      userCount
+      joined
+      filtered
     }
     postView {
       lastCommentCount

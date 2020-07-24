@@ -1,9 +1,8 @@
 <template>
   <v-card
     outlined
-    class="bettercard"
     :ripple="false"
-    style="cursor: auto"
+    style="cursor: auto; background-color: transparent; border-width: 1px"
     @click="goToIfMobile"
   >
     <v-list-item class="px-2">
@@ -75,17 +74,15 @@
         <v-list-item-subtitle style="white-space: normal" class="pt-1">
           <div>
             <v-chip
-              v-for="topic in post.topics"
-              :key="topic.name"
               outlined
               label
               small
               class="mr-1 px-2"
               nuxt
-              :to="`/t/${topic.name}`"
+              :to="`/t/${post.planet.name}`"
               @click.stop.prevent="doNothing"
             >
-              <span>{{ topic.capitalizedName }}</span>
+              <span>{{ post.planet.name }}</span>
             </v-chip>
           </div>
         </v-list-item-subtitle>

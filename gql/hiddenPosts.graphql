@@ -21,9 +21,13 @@ query hiddenPosts {
       title
       type
       isHidden
-      topics {
-        capitalizedName
+      planet {
         name
+        fullName
+        description
+        userCount
+        joined
+        filtered
       }
       postView {
         lastCommentCount

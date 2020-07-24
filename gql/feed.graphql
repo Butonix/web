@@ -1,5 +1,5 @@
-query feed($page: Int, $sort: Sort, $time: Time, $filter: Filter, $types: [Type!], $topicName: String, $username: String) {
-  feed(page: $page, sort: $sort, time: $time, filter: $filter, types: $types, topicName: $topicName, username: $username) {
+query feed($page: Int, $sort: Sort, $time: Time, $filter: Filter, $types: [Type!], $planetName: String, $username: String) {
+  feed(page: $page, sort: $sort, time: $time, filter: $filter, types: $types, planetName: $planetName, username: $username) {
     commentCount
     createdAt
     editedAt
@@ -21,9 +21,13 @@ query feed($page: Int, $sort: Sort, $time: Time, $filter: Filter, $types: [Type!
       tagColor
       profilePicUrl
     }
-    topics {
-      capitalizedName
+    planet {
       name
+      fullName
+      description
+      userCount
+      joined
+      filtered
     }
     postView {
       lastCommentCount

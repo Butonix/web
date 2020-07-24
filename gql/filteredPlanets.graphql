@@ -1,0 +1,9 @@
+query filteredPlanets {
+  filteredPlanets {
+    name
+    fullName
+    filtered
+    userCount
+    description
+  }
+}

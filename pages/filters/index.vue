@@ -19,7 +19,7 @@
           style="letter-spacing: normal; text-transform: none; font-size: 1rem"
         >
           <v-icon class="mr-2">{{ $vuetify.icons.values.mdiNewspaper }}</v-icon>
-          Hidden Topics</v-tab
+          Filtered Planets</v-tab
         >
         <v-tab
           style="letter-spacing: normal; text-transform: none; font-size: 1rem"
@@ -137,9 +137,9 @@ import { DynamicScroller, DynamicScrollerItem } from 'vue-virtual-scroller'
 import blockedUsersGql from '../../gql/blockedUsers.graphql'
 import blockUserGql from '../../gql/blockUser.graphql'
 import unblockUserGql from '../../gql/unblockUser.graphql'
-import hiddenTopicsGql from '../../gql/hiddenTopics.graphql'
-import hideTopicGql from '../../gql/hideTopic.graphql'
-import unhideTopicGql from '../../gql/unhideTopic.graphql'
+import hiddenTopicsGql from '../../gql/filteredPlanets.graphql'
+import hideTopicGql from '../../gql/filterPlanet.graphql'
+import unhideTopicGql from '../../gql/unfilterPlanet.graphql'
 import hiddenPostsGql from '../../gql/hiddenPosts.graphql'
 import Post from '@/components/post/Post'
 import UserSummaryCard from '@/components/user/UserSummaryCard'

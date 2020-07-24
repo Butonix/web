@@ -1,7 +1,0 @@
-query popularTopics {
-  popularTopics {
-    capitalizedName
-    name
-    postCount
-  }
-}

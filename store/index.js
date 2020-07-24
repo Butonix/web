@@ -2,8 +2,6 @@ import currentUserGql from '../gql/currentUser.graphql'
 
 export const state = () => ({
   currentUser: null,
-  topicSidebarSelected: 'Popular',
-  topicSidebarSearchText: '',
   snackbarEnabled: false,
   snackbarMessage: '',
   snackbarSuccess: false,
@@ -28,12 +26,6 @@ export const mutations = {
   },
   setUserQuery(state, query) {
     state.userQuery = query
-  },
-  setTopicSidebarSelected(state, selected) {
-    state.topicSidebarSelected = selected
-  },
-  setTopicSidebarSearchText(state, searchText) {
-    state.topicSidebarSearchText = searchText
   },
   setSnackbarEnabled(state, enabled) {
     state.snackbarEnabled = enabled

@@ -45,11 +45,7 @@
         <SortMenu />
       </v-row>
 
-      <DynamicScroller
-        page-mode
-        :items="globalStickies.concat(feed)"
-        :min-item-size="54"
-      >
+      <DynamicScroller page-mode :items="feed" :min-item-size="54">
         <template v-slot="{ item, index, active }">
           <DynamicScrollerItem
             :item="item"
@@ -74,7 +70,6 @@
     </v-col>
     <v-col v-if="$device.isDesktop" cols="3">
       <div class="sticky">
-        <TopicsSidebar />
         <InfoLinks class="mt-2" />
       </div>
     </v-col>
@@ -84,10 +79,8 @@
 <script>
 import 'vue-virtual-scroller/dist/vue-virtual-scroller.css'
 import { DynamicScroller, DynamicScrollerItem } from 'vue-virtual-scroller'
-import TopicsSidebar from '../components/topic/TopicsSidebar'
 import InfoLinks from '../components/InfoLinks'
 import feedGql from '../gql/feed.graphql'
-import globalStickiesGql from '../gql/globalStickies.graphql'
 import Post from '../components/post/Post'
 import UserSideCard from '../components/user/UserSideCard'
 import TypeMenu from '../components/buttons/type/TypeMenu'
@@ -104,14 +97,12 @@ export default {
     UserSideCard,
     Post,
     InfoLinks,
-    TopicsSidebar,
     DynamicScroller,
     DynamicScrollerItem
   },
   data() {
     return {
       feed: [],
-      globalStickies: [],
       hasMore: true,
       page: 0
     }
@@ -178,12 +169,6 @@ export default {
           ...this.vars
         }
       },
-      skip() {
-        return this.$route.name !== 'index'
-      }
-    },
-    globalStickies: {
-      query: globalStickiesGql,
       skip() {
         return this.$route.name !== 'index'
       }

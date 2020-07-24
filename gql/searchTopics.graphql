@@ -1,6 +1,0 @@
-query searchTopics($search: String!) {
-  searchTopics(search: $search) {
-    capitalizedName
-    name
-  }
-}
