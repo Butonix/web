@@ -7,6 +7,24 @@
       </div>
     </v-col>
     <v-col>
+      <v-row no-gutters align="center" class="pb-3">
+        <v-text-field
+          :background-color="$vuetify.theme.dark ? '' : '#DEE1E6'"
+          solo
+          flat
+          hide-details
+          dense
+          label="New post"
+          @focus="$router.push('/new/text')"
+        />
+        <v-btn icon class="ml-2">
+          <v-icon>{{ $vuetify.icons.values.mdiLink }}</v-icon>
+        </v-btn>
+        <v-btn icon class="ml-2">
+          <v-icon>{{ $vuetify.icons.values.mdiImage }}</v-icon>
+        </v-btn>
+      </v-row>
+
       <v-row no-gutters class="pb-3">
         <v-btn
           small
@@ -70,6 +88,9 @@
     </v-col>
     <v-col v-if="$device.isDesktop" cols="3">
       <div class="sticky">
+        <div class="pb-3">
+          <PopularPlanetsCard />
+        </div>
         <InfoLinks class="mt-2" />
       </div>
     </v-col>
@@ -86,11 +107,13 @@ import UserSideCard from '../components/user/UserSideCard'
 import TypeMenu from '../components/buttons/type/TypeMenu'
 import SortMenu from '../components/buttons/home_sort/SortMenu'
 import Tip from '@/components/Tip'
+import PopularPlanetsCard from '@/components/PopularPlanetsCard'
 
 export default {
   name: 'Index',
   scrollToTop: false,
   components: {
+    PopularPlanetsCard,
     Tip,
     SortMenu,
     TypeMenu,

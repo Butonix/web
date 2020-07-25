@@ -3,7 +3,7 @@ query planet($planetName: ID!) {
     name
     fullName
     joined
-    filtered
+    blocking
     userCount
     description
     defaultSort
@@ -11,7 +11,14 @@ query planet($planetName: ID!) {
     allowImagePosts
     allowLinkPosts
     allowTextPosts
+    cardImageUrl
+    avatarImageUrl
     creatorId
+    galaxy {
+      name
+      fullName
+      icon
+    }
     moderators {
       id
       username

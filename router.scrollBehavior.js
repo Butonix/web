@@ -37,7 +37,7 @@ export default function(to, from, savedPosition) {
     // wait for the out transition to complete (if necessary)
     nuxt.$once('triggerScroll', () => {
       // coords will be used if no selector is provided,
-      // or if the selector didn't match any element.
+      // or if the selector didn'p match any element.
       if (to.hash) {
         let hash = to.hash
         // CSS.escape() is not supported with IE and Edge.

@@ -472,7 +472,7 @@ export default {
             parentCommentId: this.comment.id
           },
           update: (store, { data: { submitComment } }) => {
-            if (this.$route.name === 'p-id-title') {
+            if (this.$route.name === 'post-id-title') {
               const data = store.readQuery({
                 query: postCommentsGql,
                 variables: {

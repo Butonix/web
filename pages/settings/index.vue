@@ -1,5 +1,5 @@
 <template>
-  <v-row v-if="$store.state.currentUser">
+  <v-row>
     <v-col :cols="$device.isDesktop ? 6 : 12">
       <v-form ref="form" v-model="valid" @submit.prevent="changePassword">
         <div class="title mb-2">Change password</div>
@@ -86,18 +86,15 @@
       </v-form>
     </v-col>
   </v-row>
-
-  <v-row v-else>
-    <v-col>
-      <div class="headline">Must be logged in to access this page</div>
-    </v-col>
-  </v-row>
 </template>
 
 <script>
 import changePasswordGql from '../../gql/changePassword.graphql'
 
 export default {
+  middleware({ redirect }) {
+    return redirect('/settings/account')
+  },
   data() {
     return {
       currentPassword: '',

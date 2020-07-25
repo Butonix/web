@@ -27,7 +27,8 @@ query hiddenPosts {
         description
         userCount
         joined
-        filtered
+        blocking
+        avatarImageUrl
       }
       postView {
         lastCommentCount

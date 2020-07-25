@@ -1,0 +1,3 @@
+mutation unblockPlanet($planetName: ID!) {
+  unblockPlanet(planetName: $planetName)
+}

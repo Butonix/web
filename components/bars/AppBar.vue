@@ -15,12 +15,12 @@
         <CometLogo
           v-if="
             $device.isDesktop ||
-              ($route.name !== 't-name' && $route.name !== 'u-username')
+              ($route.name !== 'p-name' && $route.name !== 'u-username')
           "
         />
 
         <span
-          v-if="$route.name === 't-name'"
+          v-if="$route.name === 'p-name'"
           :class="$device.isDesktop ? 'ml-4' : ''"
           style="font-size: 1.286rem; cursor: pointer"
           class="unselectable"
@@ -129,7 +129,7 @@ export default {
   },
   computed: {
     capitalizedName() {
-      if (this.$route.name !== 't-name') return ''
+      if (this.$route.name !== 'p-name') return ''
       return capitalizedName(this.$route.params.name)
     }
   },

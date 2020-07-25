@@ -26,7 +26,8 @@ query searchPosts($search: String!, $page: Int, $pageSize: Int, $sort: Sort, $ti
       description
       userCount
       joined
-      filtered
+      blocking
+      avatarImageUrl
     }
     postView {
       lastCommentCount

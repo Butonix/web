@@ -41,27 +41,32 @@
       <div class="sticky">
         <v-card flat :outlined="!$vuetify.theme.dark">
           <v-img
+            v-if="planet.cardImageUrl"
             alt="Planet cover image"
-            src="https://i.getcomet.net/vJ6klShd-.png"
+            :src="planet.cardImageUrl"
             height="250"
           />
           <v-list-item>
-            <v-list-item-avatar color="white">
-              <v-img src="https://i.getcomet.net/8WFZHrSHF.png" />
+            <v-list-item-avatar>
+              <v-img
+                v-if="planet.avatarImageUrl"
+                :src="planet.avatarImageUrl"
+              />
+              <v-icon v-else>{{ $vuetify.icons.values.mdiEarth }}</v-icon>
             </v-list-item-avatar>
 
             <v-list-item-content>
               <v-list-item-title
                 style="font-size: 1.43rem; font-weight: 500"
                 class="mb-0"
-                >Bon Iver
+                >{{ planet.fullName }}
                 <span class="text--secondary ml-2" style="font-size: 0.93rem"
-                  >/p/boniver</span
+                  >p/{{ planet.name }}</span
                 ></v-list-item-title
               >
-              <v-list-item-subtitle class="mt-1" style="font-size: 1rem"
-                >Discussion of Bon Iver and related music</v-list-item-subtitle
-              >
+              <v-list-item-subtitle class="mt-1" style="font-size: 1rem">{{
+                planet.description
+              }}</v-list-item-subtitle>
             </v-list-item-content>
           </v-list-item>
 
@@ -77,18 +82,26 @@
 
             <v-chip
               close
-              :close-icon="$vuetify.icons.values.mdiPlus"
+              :close-icon="planet.joined ? '' : $vuetify.icons.values.mdiPlus"
               color="primary"
-              >Join</v-chip
+              @click="toggleJoin"
+              @click:close="toggleJoin"
+              >{{ planet.joined ? 'Joined' : 'Join' }}</v-chip
             >
           </v-card-actions>
 
           <v-card-actions class="pt-0">
-            <v-chip outlined small>
-              <v-avatar left>
-                <v-icon small>{{ $vuetify.icons.values.mdiMusic }}</v-icon>
-              </v-avatar>
-              Music
+            <v-chip
+              outlined
+              small
+              class="mr-2"
+              nuxt
+              :to="`/g/${planet.galaxy.name}`"
+            >
+              <v-icon small class="mr-2">{{
+                $vuetify.icons.values[planet.galaxy.icon]
+              }}</v-icon>
+              {{ planet.galaxy.fullName }}
             </v-chip>
           </v-card-actions>
         </v-card>
@@ -219,7 +232,7 @@ export default {
     $route: {
       deep: true,
       handler() {
-        if (this.$route.name === 't-name') {
+        if (this.$route.name === 'p-name') {
           const oldQuery = this.$store.state.topicQuery
           if (
             oldQuery.sort !== this.$route.query.sort ||
@@ -252,7 +265,7 @@ export default {
         }
       },
       skip() {
-        return this.$route.name !== 't-name'
+        return this.$route.name !== 'p-name'
       }
     },
     feed: {
@@ -264,12 +277,12 @@ export default {
         }
       },
       skip() {
-        return this.$route.name !== 't-name'
+        return this.$route.name !== 'p-name'
       }
     }
   },
   created() {
-    if (this.$route.name === 't-name') {
+    if (this.$route.name === 'p-name') {
       this.$store.commit('setTopicQuery', this.$route.query)
     }
   },
@@ -305,28 +318,34 @@ export default {
       else this.joinPlanet()
     },
     joinPlanet() {
+      if (!this.$store.state.currentUser) {
+        this.$router.push('/signup')
+        return
+      }
+      this.planet.joined = true
+      this.planet.userCount++
       this.$apollo.mutate({
         mutation: joinPlanetGql,
         variables: {
           planetName: this.planetName
-        },
-        update: () => (this.planet.joined = true)
+        }
       })
     },
     leavePlanet() {
+      this.planet.joined = false
+      this.planet.userCount--
       this.$apollo.mutate({
         mutation: leavePlanetGql,
         variables: {
           planetName: this.planetName
-        },
-        update: () => (this.planet.joined = false)
+        }
       })
     },
     showMore() {
       if (
         this.$apollo.queries.feed.loading ||
         !this.hasMore ||
-        this.$route.name !== 't-name'
+        this.$route.name !== 'p-name'
       )
         return
       this.page++

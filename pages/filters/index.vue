@@ -19,7 +19,7 @@
           style="letter-spacing: normal; text-transform: none; font-size: 1rem"
         >
           <v-icon class="mr-2">{{ $vuetify.icons.values.mdiNewspaper }}</v-icon>
-          Filtered Planets</v-tab
+          Blocked Planets</v-tab
         >
         <v-tab
           style="letter-spacing: normal; text-transform: none; font-size: 1rem"
@@ -135,11 +135,9 @@
 import 'vue-virtual-scroller/dist/vue-virtual-scroller.css'
 import { DynamicScroller, DynamicScrollerItem } from 'vue-virtual-scroller'
 import blockedUsersGql from '../../gql/blockedUsers.graphql'
-import blockUserGql from '../../gql/blockUser.graphql'
 import unblockUserGql from '../../gql/unblockUser.graphql'
-import hiddenTopicsGql from '../../gql/filteredPlanets.graphql'
-import hideTopicGql from '../../gql/filterPlanet.graphql'
-import unhideTopicGql from '../../gql/unfilterPlanet.graphql'
+import blockedPlanetsGql from '../../gql/blockedPlanets.graphql'
+import unblockPlanetGql from '../../gql/unblockPlanet.graphql'
 import hiddenPostsGql from '../../gql/hiddenPosts.graphql'
 import Post from '@/components/post/Post'
 import UserSummaryCard from '@/components/user/UserSummaryCard'
@@ -149,14 +147,14 @@ export default {
   data() {
     return {
       tab: null,
-      hiddenTopics: [],
+      blockedPlanets: [],
       blockedUsers: [],
       hiddenPosts: []
     }
   },
   apollo: {
     hiddenTopics: {
-      query: hiddenTopicsGql,
+      query: blockedPlanetsGql,
       fetchPolicy: 'cache-and-network'
     },
     blockedUsers: {
@@ -181,50 +179,16 @@ export default {
         data: { hiddenPosts: this.hiddenPosts.filter((p) => p.isHidden) }
       })
     },
-    toggleHide(topic) {
-      if (topic.isHidden) this.unhideTopic(topic)
-      else this.hideTopic(topic)
-      this.$apollo.provider.defaultClient.cache.writeQuery({
-        query: hiddenTopicsGql,
-        data: { hiddenTopics: this.hiddenTopics.filter((t) => !t.isHidden) }
-      })
-    },
-    hideTopic(topic) {
-      this.$apollo.mutate({
-        mutation: hideTopicGql,
-        variables: {
-          topicName: topic.name
-        },
-        update: () => {
-          topic.isHidden = true
-        }
-      })
-    },
-    unhideTopic(topic) {
+    unblockPlanet(planet) {
       this.$store.dispatch('displaySnackbar', {
-        message: `Unhid ${topic.capitalizedName}`
+        message: `Unblocked p/${planet.name}`
       })
       this.$apollo.mutate({
-        mutation: unhideTopicGql,
+        mutation: unblockPlanetGql,
         variables: {
-          topicName: topic.name
+          planetName: planet.name
         },
-        update: () => (topic.isHidden = false)
-      })
-    },
-    toggleBlock(user) {
-      if (user.isBlocking) this.unblockUser(user)
-      else this.blockUser(user)
-    },
-    blockUser(user) {
-      this.$apollo.mutate({
-        mutation: blockUserGql,
-        variables: {
-          blockedId: user.id
-        },
-        update: () => {
-          user.isBlocking = true
-        }
+        update: () => (planet.blocked = false)
       })
     },
     unblockUser(user) {

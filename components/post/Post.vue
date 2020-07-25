@@ -25,7 +25,7 @@
 
         <v-list-item-title style="white-space: normal">
           <nuxt-link
-            v-if="$route.name !== 'p-id-title' || post.type === 'TEXT'"
+            v-if="$route.name !== 'post-id-title' || post.type === 'TEXT'"
             class="text--primary mr-1"
             style="font-size: 1.125rem; font-weight: 400"
             :to="`/p/${post.id}/${urlName}`"

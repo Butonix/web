@@ -1,0 +1,10 @@
+query popularPlanets {
+  popularPlanets {
+    name
+    fullName
+    description
+    userCount
+    joined
+    blocking
+  }
+}

@@ -111,6 +111,12 @@
         indeterminate
       />
     </v-col>
+
+    <v-col v-if="$device.isDesktop">
+      <v-card flat :outlined="!$vuetify.theme.dark">
+        <v-card-title>Dan's Favorite Planets</v-card-title>
+      </v-card>
+    </v-col>
   </v-row>
 </template>
 

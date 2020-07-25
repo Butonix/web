@@ -151,14 +151,14 @@
 <script>
 import 'vue-virtual-scroller/dist/vue-virtual-scroller.css'
 import { DynamicScroller, DynamicScrollerItem } from 'vue-virtual-scroller'
-import postGql from '../../gql/post.graphql'
-import postCommentsGql from '../../gql/postComments.graphql'
-import submitCommentGql from '../../gql/submitComment.graphql'
-import recordPostViewGql from '../../gql/recordPostView.graphql'
-import UserSideCard from '../../components/user/UserSideCard'
-import Comment from '../../components/comment/Comment'
-import CommentSortMenu from '../../components/comment/sort/CommentSortMenu'
-import { urlName } from '~/util/urlName'
+import postGql from '../../../gql/post.graphql'
+import postCommentsGql from '../../../gql/postComments.graphql'
+import submitCommentGql from '../../../gql/submitComment.graphql'
+import recordPostViewGql from '../../../gql/recordPostView.graphql'
+import UserSideCard from '../../../components/user/UserSideCard'
+import Comment from '../../../components/comment/Comment'
+import CommentSortMenu from '../../../components/comment/sort/CommentSortMenu'
+import { urlName } from '@/util/urlName'
 import { isEditorEmpty } from '@/util/isEditorEmpty'
 import Post from '@/components/post/Post'
 
@@ -314,7 +314,7 @@ export default {
         }
       },
       skip() {
-        return this.$route.name !== 'p-id-title'
+        return this.$route.name !== 'post-id-title'
       }
     },
     postComments: {
@@ -325,7 +325,7 @@ export default {
         }
       },
       skip() {
-        return this.$route.name !== 'p-id-title'
+        return this.$route.name !== 'post-id-title'
       }
     }
   },

@@ -1,5 +1,5 @@
 <template>
-  <v-row v-if="$store.state.currentUser">
+  <v-row>
     <v-col>
       <div class="headline">
         Notifications
@@ -38,11 +38,6 @@
       <div v-if="notifications.length === 0" class="title">
         No {{ unreadOnly ? 'new ' : '' }}notifications
       </div>
-    </v-col>
-  </v-row>
-  <v-row v-else>
-    <v-col>
-      <div class="headline">Must be logged in to access this page.</div>
     </v-col>
   </v-row>
 </template>

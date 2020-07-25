@@ -27,7 +27,8 @@ query feed($page: Int, $sort: Sort, $time: Time, $filter: Filter, $types: [Type!
       description
       userCount
       joined
-      filtered
+      blocking
+      avatarImageUrl
     }
     postView {
       lastCommentCount

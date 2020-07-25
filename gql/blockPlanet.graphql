@@ -1,0 +1,3 @@
+mutation blockPlanet($planetName: ID!) {
+  blockPlanet(planetName: $planetName)
+}

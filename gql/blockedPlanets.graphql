@@ -1,8 +1,8 @@
-query filteredPlanets {
-  filteredPlanets {
+query blockedPlanets {
+  blockedPlanets {
     name
     fullName
-    filtered
+    blocking
     userCount
     description
   }

@@ -204,7 +204,8 @@ export default {
         }
       })
       this.post.author = null
-      if (this.post.type === 'TEXT') this.post.textContent = '<p>[deleted]</p>'
+      if (this.post.type === 'TEXT')
+        this.post.textContent = '<post>[deleted]</post>'
     }
   }
 }

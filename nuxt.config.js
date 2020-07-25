@@ -83,7 +83,29 @@ import {
   mdiTrendingUp,
   mdiCheckCircleOutline,
   mdiCheckAll,
-  mdiMusic
+  mdiMusic,
+  mdiEarth,
+  mdiEarthPlus,
+  mdiControllerClassic,
+  mdiCamera,
+  mdiEmoticonExcited,
+  mdiMovie,
+  mdiPill,
+  mdiWeightLifter,
+  mdiCommentTextMultiple,
+  mdiDevices,
+  mdiCashUsdOutline,
+  mdiNaturePeople,
+  mdiBasketball,
+  mdiFood,
+  mdiMicroscope,
+  mdiFeather,
+  mdiImageFrame,
+  mdiSchool,
+  mdiBookshelf,
+  mdiTshirtCrew,
+  mdiCity,
+  mdiHelpCircle
 } from '@mdi/js'
 
 export default {
@@ -306,7 +328,29 @@ export default {
         mdiTrendingUp,
         mdiCheckCircleOutline,
         mdiCheckAll,
-        mdiMusic
+        mdiMusic,
+        mdiEarth,
+        mdiEarthPlus,
+        mdiControllerClassic,
+        mdiCamera,
+        mdiEmoticonExcited,
+        mdiMovie,
+        mdiPill,
+        mdiWeightLifter,
+        mdiCommentTextMultiple,
+        mdiDevices,
+        mdiCashUsdOutline,
+        mdiNaturePeople,
+        mdiBasketball,
+        mdiFood,
+        mdiMicroscope,
+        mdiFeather,
+        mdiImageFrame,
+        mdiSchool,
+        mdiBookshelf,
+        mdiTshirtCrew,
+        mdiCity,
+        mdiHelpCircle
       }
     },
     theme: {
@@ -336,7 +380,8 @@ export default {
   ],
 
   build: {
-    hardSource: process.env.NODE_ENV !== 'production',
+    cache: true,
+    parallel: true,
     extend(config, ctx) {
       config.externals = [{ newrelic: 'newrelic' }]
     }
