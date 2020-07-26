@@ -17,12 +17,13 @@
         aria-label="Home"
         class="font-weight-regular"
         style="letter-spacing: normal"
-        :to="{ path: '/', query: $store.state.homeQuery }"
+        :to="{ path: '/' }"
         nuxt
         @click.stop.prevent="clickHomeButton"
       >
-        <span :class="$route.name === 'index' ? 'primary--text' : ''"
-          >Home</span
+        <span
+          :class="$route.name === 'index' ? 'primary--text' : 'text--secondary'"
+          >Posts</span
         >
         <v-icon :color="$route.name === 'index' ? 'primary' : ''">{{
           $vuetify.icons.values.mdiHome
@@ -36,7 +37,10 @@
         class="font-weight-regular"
         style="letter-spacing: normal"
       >
-        <span :class="$route.name === 'search' ? 'primary--text' : ''"
+        <span
+          :class="
+            $route.name === 'search' ? 'primary--text' : 'text--secondary'
+          "
           >Search</span
         >
         <v-icon :color="$route.name === 'search' ? 'primary' : ''">{{
@@ -44,78 +48,53 @@
         }}</v-icon>
       </v-btn>
 
-      <v-bottom-sheet v-model="newPostBottomSheet">
+      <v-btn class="font-weight-regular" style="letter-spacing: normal">
+        <v-img contain width="44" src="/logo_mobile.png" />
+      </v-btn>
+
+      <v-bottom-sheet v-model="planetsBottomSheet" scrollable>
         <template v-slot:activator="{ on }">
           <v-btn
-            aria-label="New Post"
-            class="font-weight-regular"
+            aria-label="Planets"
+            class="font-weight-regular text--secondary"
             style="letter-spacing: normal"
             v-on="on"
           >
-            <span :class="$route.name.startsWith('new') ? 'primary--text' : ''"
-              >Post</span
-            >
-            <v-icon :color="$route.name.startsWith('new') ? 'primary' : ''">{{
-              $vuetify.icons.values.mdiPlusBox
-            }}</v-icon>
+            <span>Planets</span>
+            <v-icon>{{ $vuetify.icons.values.mdiEarth }}</v-icon>
           </v-btn>
         </template>
 
-        <NewPostButtonContent @selected="newPostBottomSheet = false" />
+        <v-card>
+          <v-card-text class="pa-0">
+            <NavDrawerContents @selected="planetsBottomSheet = false" />
+          </v-card-text>
+        </v-card>
       </v-bottom-sheet>
 
       <v-btn
-        aria-label="Topics"
-        to="/topics"
+        aria-label="Messages"
+        to="/messages"
         nuxt
         class="font-weight-regular"
         style="letter-spacing: normal"
       >
-        <span :class="$route.name === 'topics' ? 'primary--text' : ''"
-          >Topics</span
-        >
-        <v-icon :color="$route.name === 'topics' ? 'primary' : ''">{{
-          $vuetify.icons.values.mdiNewspaper
-        }}</v-icon>
-      </v-btn>
-
-      <v-btn
-        v-if="$store.state.currentUser"
-        aria-label="Notificatinos"
-        to="/notifications"
-        nuxt
-        class="font-weight-regular"
-        style="letter-spacing: normal"
-      >
-        <span :class="$route.name === 'notifications' ? 'primary--text' : ''"
-          >Notifications</span
+        <span
+          :class="
+            $route.name === 'messages' ? 'primary--text' : 'text--secondary'
+          "
+          >Messages</span
         >
         <v-badge v-if="notifications.length > 0" overlap content="1">
-          <v-icon :color="$route.name === 'notifications' ? 'primary' : ''">{{
-            $vuetify.icons.values.mdiBellOutline
+          <v-icon :color="$route.name === 'messages' ? 'primary' : ''">{{
+            $vuetify.icons.values.mdiEmailOutline
           }}</v-icon>
         </v-badge>
         <v-icon
           v-else
           :color="$route.name === 'notifications' ? 'primary' : ''"
-          >{{ $vuetify.icons.values.mdiBellOutline }}</v-icon
+          >{{ $vuetify.icons.values.mdiEmailOutline }}</v-icon
         >
-      </v-btn>
-
-      <v-btn
-        v-else
-        aria-label="Sign Up"
-        to="/signup"
-        nuxt
-        class="font-weight-regular"
-        style="letter-spacing: normal"
-      >
-        <span :class="$route.name === 'signup' ? 'primary--text' : ''"
-          >Sign Up</span
-        >
-        <v-icon :color="$route.name === 'signup' ? 'primary' : ''">
-          {{ $vuetify.icons.values.mdiClipboardAccount }}
-        </v-icon>
       </v-btn>
     </v-bottom-navigation>
   </v-app-bar>
@@ -123,15 +102,16 @@
 
 <script>
 import notificationsGql from '../../gql/notifications.graphql'
-import NewPostButtonContent from '../buttons/new_post/NewPostButtonContent'
+import NavDrawerContents from '@/components/bars/NavDrawerContents'
 
 export default {
   name: 'BottomNavBar',
-  components: { NewPostButtonContent },
+  components: { NavDrawerContents },
   data() {
     return {
       notifications: [],
-      newPostBottomSheet: false
+      newPostBottomSheet: false,
+      planetsBottomSheet: false
     }
   },
   apollo: {
@@ -170,7 +150,7 @@ export default {
       if (this.$route.path === '/') {
         window.scrollTo(0, 0)
       } else {
-        this.$router.push({ path: '/', query: this.$store.state.homeQuery })
+        this.$router.push({ path: '/' })
       }
     }
   }

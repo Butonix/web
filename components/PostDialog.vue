@@ -1,11 +1,38 @@
 <template>
-  <v-dialog v-model="dialogOpen" :fullscreen="!$device.isDesktop" width="70%">
+  <v-dialog
+    v-model="dialogOpen"
+    :fullscreen="!$device.isDesktop"
+    width="70%"
+    :transition="
+      !dialogOpen && !$device.isDesktop
+        ? 'dialog-bottom-transition'
+        : 'dialog-transition'
+    "
+    @click:outside="goBack"
+  >
     <div
       :style="{
         'background-color': $vuetify.theme.dark ? '#202124' : '#F8F9FA'
       }"
     >
-      <v-row no-gutters>
+      <v-app-bar
+        v-if="!$device.isDesktop"
+        fixed
+        flat
+        :style="
+          $vuetify.theme.dark
+            ? 'border-bottom: 1px solid rgba(255, 255, 255, .12); background-color: #202124'
+            : 'border-bottom: 1px solid rgba(0, 0, 0, .12); background-color: #F1F3F4'
+        "
+      >
+        <v-app-bar-nav-icon @click="goBack">
+          <v-icon>{{ $vuetify.icons.values.mdiArrowLeft }}</v-icon>
+        </v-app-bar-nav-icon>
+
+        <v-toolbar-title>p/{{ post ? post.planet.name : '' }}</v-toolbar-title>
+      </v-app-bar>
+
+      <v-row no-gutters :style="$device.isDesktop ? '' : 'padding-top: 60px'">
         <v-col>
           <div class="mb-3">
             <v-skeleton-loader
@@ -162,7 +189,6 @@
 <script>
 import 'vue-virtual-scroller/dist/vue-virtual-scroller.css'
 import { DynamicScroller, DynamicScrollerItem } from 'vue-virtual-scroller'
-import postGql from '../gql/post.graphql'
 import postCommentsGql from '../gql/postComments.graphql'
 import submitCommentGql from '../gql/submitComment.graphql'
 import recordPostViewGql from '../gql/recordPostView.graphql'
@@ -183,9 +209,9 @@ export default {
     DynamicScrollerItem
   },
   props: {
-    postId: {
-      type: String,
-      default: ''
+    post: {
+      type: Object,
+      default: null
     },
     value: {
       type: Boolean,
@@ -194,10 +220,8 @@ export default {
   },
   data() {
     return {
-      post: null,
       postComments: [],
       postView: null,
-      submitCommentErr: '',
       commentHTML: null,
       submitBtnLoading: false,
       commentDialog: false,
@@ -206,6 +230,9 @@ export default {
     }
   },
   computed: {
+    postId() {
+      return this.post ? this.post.id : ''
+    },
     urlName() {
       if (!this.post) return ''
       return urlName(this.post.title)
@@ -248,7 +275,7 @@ export default {
         this.addedEventListener = true
       }
 
-      if (this.dialogOpen && this.postId) {
+      if (this.$store.state.currentUser && this.dialogOpen && this.postId) {
         const { data } = await this.$apollo.mutate({
           mutation: recordPostViewGql,
           variables: {
@@ -281,8 +308,11 @@ export default {
     }
   },
   methods: {
+    goBack() {
+      this.dialogOpen = false
+      window.history.pushState({}, null, this.$route.path)
+    },
     handleHistoryChange(e) {
-      console.log(e)
       if (
         e.target.location.href.includes('/p/') &&
         e.target.location.href.includes('/comments/')
@@ -354,23 +384,14 @@ export default {
           }
         })
       } catch (e) {
-        this.submitCommentErr = e.message.split('GraphQL error: ')[1]
+        this.$store.dispatch('displaySnackbar', {
+          message: e.message.split('GraphQL error: ')[1]
+        })
       }
       this.submitBtnLoading = false
     }
   },
   apollo: {
-    post: {
-      query: postGql,
-      variables() {
-        return {
-          postId: this.postId
-        }
-      },
-      skip() {
-        return !this.dialogOpen || !this.postId
-      }
-    },
     postComments: {
       query: postCommentsGql,
       variables() {

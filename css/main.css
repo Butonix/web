@@ -33,14 +33,6 @@ body {
   outline: none !important;
 }
 
-.v-btn--active::before {
-  opacity: 0 !important;
-}
-
-.v-btn--active:hover::before {
-  opacity: 0.08 !important;
-}
-
 .sticky {
   position: -webkit-sticky; /* Safari */
   position: sticky;

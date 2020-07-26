@@ -105,7 +105,9 @@ import {
   mdiBookshelf,
   mdiTshirtCrew,
   mdiCity,
-  mdiHelpCircle
+  mdiHelpCircle,
+  mdiArrowLeft,
+  mdiEmailOutline
 } from '@mdi/js'
 
 export default {
@@ -350,7 +352,9 @@ export default {
         mdiBookshelf,
         mdiTshirtCrew,
         mdiCity,
-        mdiHelpCircle
+        mdiHelpCircle,
+        mdiArrowLeft,
+        mdiEmailOutline
       }
     },
     theme: {

@@ -1,196 +1,26 @@
 <template>
   <v-row justify="center">
-    <v-col>
-      <v-toolbar
-        dense
-        flat
-        :style="{
-          'border-width': '1px',
-          'border-color': $vuetify.theme.dark
-            ? 'rgba(255, 255, 255, 0.12)'
-            : 'rgba(0, 0, 0, 0.12)',
-          'border-style': 'solid'
-        }"
-        outlined
-        style="border-radius: 10px; background-color: transparent"
-        class="mb-3"
-      >
-        <v-toolbar-items>
-          <v-btn
-            text
-            nuxt
-            :to="{
-              query: {}
-            }"
-            :color="
-              !$route.query.sort || $route.query.sort === 'hot' ? 'primary' : ''
-            "
-          >
-            <v-icon class="mr-2">{{ $vuetify.icons.values.mdiFire }}</v-icon>
-            Hot
-          </v-btn>
-          <v-btn
-            text
-            nuxt
-            :to="{
-              query: {
-                sort: 'new'
-              }
-            }"
-            :color="$route.query.sort === 'new' ? 'primary' : ''"
-          >
-            <v-icon class="mr-2">{{
-              $vuetify.icons.values.mdiClockTimeOneOutline
-            }}</v-icon>
-            New
-          </v-btn>
-          <v-btn
-            text
-            nuxt
-            :to="{
-              query: {
-                sort: 'top'
-              }
-            }"
-            :color="$route.query.sort === 'top' ? 'primary' : ''"
-          >
-            <v-icon class="mr-2">{{
-              $vuetify.icons.values.mdiFormatListNumbered
-            }}</v-icon>
-            Top
-          </v-btn>
+    <v-col :class="$device.isDesktop ? '' : 'px-0'">
+      <div class="mb-3">
+        <SortBar v-if="$device.isDesktop" />
 
-          <v-menu offset-y transition="slide-y-transition">
-            <template v-slot:activator="{ on }">
-              <v-btn
-                v-show="$route.query.sort === 'top'"
-                text
-                class="text--secondary"
-                v-on="on"
-              >
-                {{
-                  $route.query.t
-                    ? $route.query.t.substring(0, 1).toUpperCase() +
-                      $route.query.t.substring(1).toLowerCase()
-                    : 'Day'
-                }}
-              </v-btn>
-            </template>
-
-            <v-list>
-              <v-list-item
-                :color="$route.query.t === 'hour' ? 'primary' : ''"
-                nuxt
-                :to="{
-                  query: {
-                    ...$route.query,
-                    t: 'hour'
-                  }
-                }"
-              >
-                <v-list-item-content>
-                  <v-list-item-title>Hour</v-list-item-title>
-                </v-list-item-content>
-              </v-list-item>
-
-              <v-list-item
-                :color="
-                  !$route.query.t || $route.query.t === 'day' ? 'primary' : ''
-                "
-                nuxt
-                :to="{
-                  query: {
-                    ...$route.query,
-                    t: 'day'
-                  }
-                }"
-              >
-                <v-list-item-content>
-                  <v-list-item-title
-                    :style="
-                      !$route.query.t || $route.query.t === 'day'
-                        ? 'color: var(--v-primary-base) !important;'
-                        : ''
-                    "
-                    >Day</v-list-item-title
-                  >
-                </v-list-item-content>
-              </v-list-item>
-
-              <v-list-item
-                :color="$route.query.t === 'week' ? 'primary' : ''"
-                nuxt
-                :to="{
-                  query: {
-                    ...$route.query,
-                    t: 'week'
-                  }
-                }"
-              >
-                <v-list-item-content>
-                  <v-list-item-title>Week</v-list-item-title>
-                </v-list-item-content>
-              </v-list-item>
-
-              <v-list-item
-                :color="$route.query.t === 'month' ? 'primary' : ''"
-                nuxt
-                :to="{
-                  query: {
-                    ...$route.query,
-                    t: 'month'
-                  }
-                }"
-              >
-                <v-list-item-content>
-                  <v-list-item-title>Month</v-list-item-title>
-                </v-list-item-content>
-              </v-list-item>
-
-              <v-list-item
-                :color="$route.query.t === 'year' ? 'primary' : ''"
-                nuxt
-                :to="{
-                  query: {
-                    ...$route.query,
-                    t: 'year'
-                  }
-                }"
-              >
-                <v-list-item-content>
-                  <v-list-item-title>Year</v-list-item-title>
-                </v-list-item-content>
-              </v-list-item>
-
-              <v-list-item
-                :color="$route.query.t === 'all' ? 'primary' : ''"
-                nuxt
-                :to="{
-                  query: {
-                    ...$route.query,
-                    t: 'all'
-                  }
-                }"
-              >
-                <v-list-item-content>
-                  <v-list-item-title>All</v-list-item-title>
-                </v-list-item-content>
-              </v-list-item>
-            </v-list>
-          </v-menu>
-        </v-toolbar-items>
-      </v-toolbar>
+        <v-row v-else no-gutters class="px-3">
+          <v-spacer />
+          <SortMenu />
+        </v-row>
+      </div>
 
       <div
         :style="{
-          'border-style': 'solid',
+          'border-style': $device.isDesktop ? 'solid' : 'none',
           'border-width': '1px',
           'border-color': $vuetify.theme.dark
             ? 'rgba(255, 255, 255, 0.12)'
             : 'rgba(0, 0, 0, 0.12)',
-          'border-top-left-radius': '10px',
-          'border-top-right-radius': '10px',
-          'border-bottom-style': 'none'
+          'border-top-left-radius': $device.isDesktop ? '10px' : '0',
+          'border-top-right-radius': $device.isDesktop ? '10px' : '0',
+          'border-bottom-style': 'none',
+          'border-top-style': 'solid'
         }"
       >
         <DynamicScroller
@@ -244,7 +74,7 @@
       </div>
     </v-col>
 
-    <PostDialog v-model="dialog" :post-id="dialogPostId" />
+    <PostDialog v-model="dialog" :post="selectedPost" />
   </v-row>
 </template>
 
@@ -256,11 +86,15 @@ import feedGql from '../gql/feed.graphql'
 import Post from '../components/post/Post'
 import PopularPlanetsCard from '@/components/PopularPlanetsCard'
 import PostDialog from '@/components/PostDialog'
+import SortBar from '@/components/bars/SortBar'
+import SortMenu from '@/components/buttons/home_sort/SortMenu'
 
 export default {
   name: 'Index',
   scrollToTop: false,
   components: {
+    SortMenu,
+    SortBar,
     PostDialog,
     PopularPlanetsCard,
     Post,
@@ -275,11 +109,10 @@ export default {
       page: 0,
       query: {},
       dialog: false,
-      dialogPostId: ''
+      selectedPost: null
     }
   },
   beforeRouteLeave(to, from, next) {
-    console.log({ to, from, dialog: this.dialog })
     if (to.name === 'p-name-comments-id-title') {
       if (!this.dialog) {
         this.displayDialog(to)
@@ -342,18 +175,10 @@ export default {
     displayDialog(route) {
       window.history.pushState({}, null, route.path)
       this.dialog = true
-      this.dialogPostId = route.params.id
+      this.selectedPost = this.feed.find((p) => p.id === route.params.id)
     },
     hideDialog() {
-      /* if (
-        location.href.includes('/p/') &&
-        location.href.includes('/comments/')
-      ) {
-        window.history.back()
-      } */
       this.dialog = false
-      this.dialogPostId = ''
-      // window.history.pushState({}, null, this.$route.path)
     },
     toggleHidden() {
       this.$apollo.provider.defaultClient.cache.writeQuery({

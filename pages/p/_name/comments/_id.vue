@@ -1,5 +1,5 @@
 <template>
-  <PostDialog v-model="dialog" :post-id="$route.params.id" />
+  <PostDialog v-model="dialog" :post="post" />
 </template>
 
 <script>

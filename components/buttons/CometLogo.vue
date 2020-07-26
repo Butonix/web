@@ -17,7 +17,7 @@ export default {
       if (this.$route.path === '/') {
         window.scrollTo(0, 0)
       } else {
-        this.$router.push({ path: '/', query: this.$store.state.homeQuery })
+        this.$router.push({ path: '/' })
       }
     }
   }
