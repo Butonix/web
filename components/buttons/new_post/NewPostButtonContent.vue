@@ -2,7 +2,7 @@
   <v-list>
     <v-list-item
       nuxt
-      :to="$store.state.currentUser ? '/new/text' : '/signup'"
+      :to="$store.state.currentUser ? '/submit/text' : '/signup'"
       @click="$emit('selected')"
     >
       <v-list-item-icon>
@@ -15,7 +15,7 @@
 
     <v-list-item
       nuxt
-      :to="$store.state.currentUser ? '/new/link' : '/signup'"
+      :to="$store.state.currentUser ? '/submit/link' : '/signup'"
       @click="$emit('selected')"
     >
       <v-list-item-icon>
@@ -28,7 +28,7 @@
 
     <v-list-item
       nuxt
-      :to="$store.state.currentUser ? '/new/image' : '/signup'"
+      :to="$store.state.currentUser ? '/submit/image' : '/signup'"
       @click="$emit('selected')"
     >
       <v-list-item-icon>

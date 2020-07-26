@@ -36,7 +36,7 @@
         >
       </v-row>
       <div v-if="notifications.length === 0" class="title">
-        No {{ unreadOnly ? 'new ' : '' }}notifications
+        No {{ unreadOnly ? 'submit ' : '' }}notifications
       </div>
     </v-col>
   </v-row>

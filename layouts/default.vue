@@ -2,9 +2,11 @@
   <v-app id="app">
     <AppBar />
 
+    <NavDrawer />
+
     <v-main>
       <v-container class="pt-0">
-        <nuxt keep-alive :keep-alive-props="{ include: ['Index', 'T'] }" />
+        <nuxt keep-alive :keep-alive-props="{ include: ['Index'] }" />
       </v-container>
       <Snackbar />
     </v-main>
@@ -17,10 +19,12 @@
 import Snackbar from '../components/bars/Snackbar'
 import AppBar from '../components/bars/AppBar'
 import BottomNavBar from '../components/bars/BottomNavBar'
+import NavDrawer from '@/components/bars/NavDrawer'
 
 export default {
   name: 'Default',
   components: {
+    NavDrawer,
     BottomNavBar,
     AppBar,
     Snackbar

@@ -44,7 +44,7 @@
         hint='Explain what your Planet is all about (e.g. "Discussion of the Comet platform")'
       />
 
-      <v-autocomplete
+      <v-select
         ref="galaxyMenu"
         v-model="selectedGalaxy"
         :items="galaxies"
@@ -79,7 +79,7 @@
             <v-list-item-title>{{ data.item.fullName }}</v-list-item-title>
           </v-list-item-content>
         </template>
-      </v-autocomplete>
+      </v-select>
 
       <v-btn
         depressed

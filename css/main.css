@@ -44,5 +44,15 @@ body {
 .sticky {
   position: -webkit-sticky; /* Safari */
   position: sticky;
-  top: 68px;
+  top: 60px;
+}
+
+.disable-scrollbars *::-webkit-scrollbar {
+  width: 0;
+  background: transparent; /* Chrome/Safari/Webkit */
+}
+
+.disable-scrollbars * {
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none;  /* IE 10+ */
 }

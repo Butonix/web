@@ -380,8 +380,6 @@ export default {
   ],
 
   build: {
-    cache: true,
-    parallel: true,
     extend(config, ctx) {
       config.externals = [{ newrelic: 'newrelic' }]
     }

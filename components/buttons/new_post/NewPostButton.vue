@@ -10,6 +10,7 @@
         depressed
         class="white--text"
         :color="$vuetify.theme.dark ? 'primary' : 'primary'"
+        height="34"
         v-on="on"
       >
         <v-icon class="mr-2">{{ $vuetify.icons.values.mdiPlusBox }}</v-icon>
@@ -28,6 +29,7 @@
     :color="$vuetify.theme.dark ? 'primary' : 'primary'"
     nuxt
     to="/signup"
+    height="34"
   >
     <v-icon class="mr-2">{{ $vuetify.icons.values.mdiPlusBox }}</v-icon>
     New Post

@@ -1,10 +1,5 @@
 <template>
   <v-row v-if="planet">
-    <v-col v-if="$device.isDesktop" cols="3">
-      <div class="sticky">
-        <UserSideCard />
-      </div>
-    </v-col>
     <v-col>
       <v-row no-gutters class="pb-3">
         <v-spacer />
@@ -178,14 +173,14 @@
 <script>
 import 'vue-virtual-scroller/dist/vue-virtual-scroller.css'
 import { DynamicScroller, DynamicScrollerItem } from 'vue-virtual-scroller'
-import joinPlanetGql from '../../gql/joinPlanet.graphql'
-import leavePlanetGql from '../../gql/leavePlanet.graphql'
-import planetGql from '../../gql/planet.graphql'
-import feedGql from '../../gql/feed.graphql'
-import UserSideCard from '../../components/user/UserSideCard'
-import Post from '../../components/post/Post'
-import TypeMenu from '~/components/buttons/type/TypeMenu'
-import SortMenu from '~/components/buttons/home_sort/SortMenu'
+import joinPlanetGql from '../../../gql/joinPlanet.graphql'
+import leavePlanetGql from '../../../gql/leavePlanet.graphql'
+import joinedPlanetsGql from '../../../gql/joinedPlanets.graphql'
+import planetGql from '../../../gql/planet.graphql'
+import feedGql from '../../../gql/feed.graphql'
+import Post from '../../../components/post/Post'
+import TypeMenu from '@/components/buttons/type/TypeMenu'
+import SortMenu from '@/components/buttons/home_sort/SortMenu'
 
 export default {
   name: 'T',
@@ -193,7 +188,6 @@ export default {
     SortMenu,
     TypeMenu,
     Post,
-    UserSideCard,
     DynamicScroller,
     DynamicScrollerItem
   },
@@ -328,7 +322,8 @@ export default {
         mutation: joinPlanetGql,
         variables: {
           planetName: this.planetName
-        }
+        },
+        refetchQueries: [{ query: joinedPlanetsGql }]
       })
     },
     leavePlanet() {
@@ -338,7 +333,8 @@ export default {
         mutation: leavePlanetGql,
         variables: {
           planetName: this.planetName
-        }
+        },
+        refetchQueries: [{ query: joinedPlanetsGql }]
       })
     },
     showMore() {

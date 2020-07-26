@@ -2,7 +2,8 @@
   <v-list-item-avatar
     v-if="post.type !== 'TEXT'"
     style="border-radius: 10px; align-self: start"
-    size="64"
+    height="60"
+    width="80"
     :color="$vuetify.theme.dark ? '#35363A' : '#DEE1E6'"
   >
     <a

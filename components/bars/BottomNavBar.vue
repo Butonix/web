@@ -159,7 +159,7 @@ export default {
     },
     openCompose() {
       if (this.$store.state.currentUser) {
-        this.$router.push('/new')
+        this.$router.push('/submit')
       } else {
         this.$store.dispatch('displaySnackbar', {
           message: 'Must log in to submit a post'

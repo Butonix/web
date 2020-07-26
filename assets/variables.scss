@@ -33,7 +33,7 @@ $material-light: (
 $container-max-widths: (
   'md': 100%,
   'lg': 100%,
-  'xl': map-get($grid-breakpoints, 'xl') * 0.85
+  'xl': map-get($grid-breakpoints, 'xl') * 0.7
 );
 
 $chip-outlined-active-opacity: 0;

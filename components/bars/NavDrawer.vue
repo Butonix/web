@@ -1,0 +1,210 @@
+<template>
+  <v-navigation-drawer
+    app
+    clipped
+    :color="$vuetify.theme.dark ? 'transparent' : '#F1F3F4'"
+    :mini="mini"
+    class="disable-scrollbars"
+  >
+    <div style="font-size: 0.86rem" class="text--secondary px-4 pt-4 pb-2">
+      Feeds
+    </div>
+    <v-list class="py-0">
+      <v-list-item
+        active-class="linkactive"
+        dense
+        nuxt
+        to="/"
+        title="Posts from Planets I have joined"
+      >
+        <v-list-item-avatar size="24">
+          <v-icon
+            size="20"
+            :style="
+              $route.path === '/'
+                ? 'color: var(--v-primary-base) !important;'
+                : ''
+            "
+            >{{ $vuetify.icons.values.mdiEarth }}</v-icon
+          >
+        </v-list-item-avatar>
+
+        <v-list-item-content>
+          <v-list-item-title
+            :style="
+              $route.path === '/'
+                ? 'color: var(--v-primary-base) !important;'
+                : ''
+            "
+            style="font-size: 1rem"
+            >My Planets</v-list-item-title
+          >
+        </v-list-item-content>
+      </v-list-item>
+
+      <v-list-item
+        active-class="linkactive"
+        dense
+        nuxt
+        to="/universe"
+        title="Posts from every Planet"
+      >
+        <v-list-item-avatar size="24">
+          <v-icon size="20">{{ $vuetify.icons.values.mdiInfinity }}</v-icon>
+        </v-list-item-avatar>
+
+        <v-list-item-content>
+          <v-list-item-title style="font-size: 1rem"
+            >Universe</v-list-item-title
+          >
+        </v-list-item-content>
+      </v-list-item>
+
+      <v-list-item dense @click="showGalaxies = !showGalaxies">
+        <v-list-item-avatar size="24">
+          <v-icon size="20">{{
+            showGalaxies
+              ? $vuetify.icons.values.mdiChevronUp
+              : $vuetify.icons.values.mdiChevronDown
+          }}</v-icon>
+        </v-list-item-avatar>
+
+        <v-list-item-content>
+          <v-list-item-title style="font-size: 1rem"
+            >Galaxies</v-list-item-title
+          >
+        </v-list-item-content>
+      </v-list-item>
+    </v-list>
+
+    <v-expand-transition>
+      <div v-show="showGalaxies">
+        <v-list class="py-0">
+          <v-list-item
+            v-for="galaxy in galaxies"
+            :key="galaxy.name"
+            active-class="linkactive"
+            dense
+            nuxt
+            :to="`/g/${galaxy.name}`"
+            class="pl-8"
+          >
+            <v-list-item-avatar size="24">
+              <v-icon size="20">{{
+                $vuetify.icons.values[galaxy.icon]
+              }}</v-icon>
+            </v-list-item-avatar>
+
+            <v-list-item-content>
+              <v-list-item-title style="font-size: 1rem">{{
+                galaxy.fullName
+              }}</v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
+        </v-list>
+      </div>
+    </v-expand-transition>
+
+    <div style="font-size: 0.86rem" class="text--secondary px-4 pt-4 pb-2">
+      My Planets
+    </div>
+
+    <v-text-field
+      solo
+      flat
+      dense
+      label="Filter"
+      hide-details
+      class="mx-2 mb-2"
+      style="height: 34px"
+      :background-color="$vuetify.theme.dark ? '' : '#DEE1E6'"
+    />
+
+    <v-list class="py-0">
+      <v-list-item
+        v-for="planet in joinedPlanets"
+        :key="planet.name"
+        active-class="planetactive"
+        nuxt
+        :to="`/p/${planet.name}`"
+      >
+        <v-list-item-avatar
+          :color="planet.themeColor ? planet.themeColor : 'primary'"
+        >
+          <v-img v-if="planet.avatarImageUrl" :src="planet.avatarImageUrl" />
+          <v-icon v-else>{{ $vuetify.icons.values.mdiEarth }}</v-icon>
+        </v-list-item-avatar>
+
+        <v-list-item-content>
+          <v-list-item-title>
+            {{ planet.fullName }}
+            <span
+              class="ml-1 text--secondary"
+              style="font-size: 0.93rem; font-weight: 500"
+              >p/{{ planet.name }}</span
+            >
+          </v-list-item-title>
+          <v-list-item-subtitle style="font-weight: 500">
+            {{ planet.postCount }} posts today
+          </v-list-item-subtitle>
+        </v-list-item-content>
+      </v-list-item>
+    </v-list>
+  </v-navigation-drawer>
+</template>
+
+<script>
+import gql from 'graphql-tag'
+import joinedPlanetsGql from '../../gql/joinedPlanets.graphql'
+
+export default {
+  name: 'NavDrawer',
+  data() {
+    return {
+      mini: false,
+      joinedPlanets: [],
+      showGalaxies: false,
+      galaxies: []
+    }
+  },
+  apollo: {
+    joinedPlanets: {
+      query: joinedPlanetsGql
+    },
+    galaxies: {
+      query: gql`
+        query {
+          galaxies {
+            fullName
+            name
+            icon
+          }
+        }
+      `
+    }
+  }
+}
+</script>
+
+<style scoped>
+.linkactive {
+  color: var(--v-primary-base) !important;
+}
+
+.linkactive:before {
+  opacity: 0 !important;
+}
+
+.planetactive:before {
+  opacity: 0.06 !important;
+}
+
+>>> .v-input__control {
+  min-height: 34px !important;
+  height: 34px !important;
+}
+
+>>> .v-label {
+  font-size: 1rem;
+}
+</style>

@@ -1,6 +1,7 @@
 <template>
   <v-app-bar
-    short
+    clipped-left
+    dense
     app
     flat
     :color="$vuetify.theme.dark ? '#202124' : '#F1F3F4'"
@@ -10,94 +11,72 @@
         : 'border-bottom: 1px solid rgba(0, 0, 0, .12)'
     "
   >
-    <v-container class="pa-0">
-      <v-row class="ma-0" align="center" no-gutters>
-        <CometLogo
-          v-if="
-            $device.isDesktop ||
-              ($route.name !== 'p-name' && $route.name !== 'u-username')
-          "
-        />
+    <v-row class="ma-0" align="center" no-gutters>
+      <CometLogo />
 
-        <span
-          v-if="$route.name === 'p-name'"
-          :class="$device.isDesktop ? 'ml-4' : ''"
-          style="font-size: 1.286rem; cursor: pointer"
-          class="unselectable"
-          @click="scrollToTop"
-          >{{ capitalizedName }}</span
+      <v-spacer />
+
+      <template v-if="$device.isDesktop">
+        <v-text-field
+          v-model="searchText"
+          hide-details
+          flat
+          class="mr-6"
+          style="max-width: 25%; height: 34px"
+          :background-color="$vuetify.theme.dark ? '' : '#DEE1E6'"
+          solo
+          label="Search"
+          @keydown.enter="doSearch"
         >
+          <template v-slot:append>
+            <v-icon size="20" class="text--secondary">{{
+              $vuetify.icons.values.mdiMagnify
+            }}</v-icon>
+          </template>
+        </v-text-field>
 
-        <span
-          v-else-if="$route.name === 'u-username' && !$device.isDesktop"
-          style="font-size: 1.286rem; cursor: pointer"
-          class="ml-4 unselectable"
-          @click="scrollToTop"
-        >
-          {{ $route.params.username }}
-        </span>
+        <div class="mr-4">
+          <NewPostButton />
+        </div>
 
-        <v-spacer />
+        <div class="mr-1">
+          <NotificationsMenu />
+        </div>
+      </template>
 
-        <template v-if="$device.isDesktop">
-          <v-text-field
-            v-model="searchText"
-            hide-details
-            flat
-            dense
-            class="mr-6"
-            style="max-width: 25%"
-            :background-color="$vuetify.theme.dark ? '' : '#DEE1E6'"
-            solo
-            rounded
-            label="Search"
-            :append-icon="$vuetify.icons.values.mdiMagnify"
-            @keydown.enter="doSearch"
-          />
+      <ProfileMenu />
 
-          <div class="mr-4">
-            <NewPostButton />
-          </div>
+      <template v-if="$device.isDesktop">
+        <client-only>
+          <v-menu offset-y transition="slide-y-transition">
+            <template v-slot:activator="{ on }">
+              <v-btn
+                class="ml-1"
+                icon
+                :color="$vuetify.theme.dark ? '' : '#7289da'"
+                aria-label="Discord"
+                v-on="on"
+              >
+                <v-icon>{{ $vuetify.icons.values.mdiDiscord }}</v-icon>
+              </v-btn>
+            </template>
 
-          <div class="mr-1">
-            <NotificationsMenu />
-          </div>
-        </template>
-
-        <ProfileMenu />
-
-        <template v-if="$device.isDesktop">
-          <client-only>
-            <v-menu offset-y transition="slide-y-transition">
-              <template v-slot:activator="{ on }">
-                <v-btn
-                  class="ml-1"
-                  icon
-                  :color="$vuetify.theme.dark ? '' : '#7289da'"
-                  aria-label="Discord"
-                  v-on="on"
-                >
-                  <v-icon>{{ $vuetify.icons.values.mdiDiscord }}</v-icon>
-                </v-btn>
-              </template>
-
-              <iframe
-                title="Discord widget"
-                :src="
-                  `https://discordapp.com/widget?id=653652395959648314${
-                    $vuetify.theme.dark ? '&theme=dark' : '&theme=light'
-                  }`
-                "
-                class="frame"
-                height="500"
-                allowtransparency="true"
-                frameborder="0"
-              />
-            </v-menu>
-          </client-only>
-        </template>
-      </v-row>
-    </v-container>
+            <iframe
+              title="Discord widget"
+              :src="
+                `https://discordapp.com/widget?id=653652395959648314${
+                  $vuetify.theme.dark ? '&theme=dark' : '&theme=light'
+                }`
+              "
+              class="frame"
+              height="500"
+              allowtransparency="true"
+              frameborder="0"
+            />
+          </v-menu>
+        </client-only>
+      </template>
+    </v-row>
   </v-app-bar>
 </template>
 
@@ -146,4 +125,13 @@ export default {
 }
 </script>
 
-<style scoped></style>
+<style scoped>
+>>> .v-input__control {
+  min-height: 34px !important;
+  height: 34px !important;
+}
+
+>>> .v-label {
+  font-size: 1rem;
+}
+</style>

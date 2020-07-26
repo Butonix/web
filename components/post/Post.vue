@@ -1,10 +1,5 @@
 <template>
-  <v-card
-    outlined
-    :ripple="false"
-    style="cursor: auto; background-color: transparent; border-width: 1px"
-    @click="goToIfMobile"
-  >
+  <div class="pa-2" @click="goToIfMobile">
     <v-list-item class="px-2">
       <PostThumbnail
         v-if="$device.isDesktop"
@@ -13,7 +8,7 @@
       />
 
       <v-list-item-content
-        style="align-self: start; align-content: start"
+        style="align-content: space-between; min-height: 76px"
         class="py-2"
       >
         <span v-if="post.sticky">
@@ -28,7 +23,7 @@
             v-if="$route.name !== 'post-id-title' || post.type === 'TEXT'"
             class="text--primary mr-1"
             style="font-size: 1.125rem; font-weight: 400"
-            :to="`/p/${post.id}/${urlName}`"
+            :to="`/p/${post.planet.name}/comments/${post.id}/${urlName}`"
           >
             {{ post.title }}
           </nuxt-link>
@@ -47,7 +42,7 @@
           <template v-if="$device.isDesktop">
             <nuxt-link
               v-if="post.type === 'TEXT'"
-              :to="`/p/${post.id}/${urlName}`"
+              :to="`/p/${post.planet.name}/comments/${post.id}/${urlName}`"
               class="text--secondary caption hoverable"
             >
               (text post)
@@ -71,21 +66,14 @@
             >
           </template>
         </v-list-item-title>
-        <v-list-item-subtitle style="white-space: normal" class="pt-1">
-          <div>
-            <v-chip
-              outlined
-              label
-              small
-              class="mr-1 px-2"
-              nuxt
-              :to="`/t/${post.planet.name}`"
-              @click.stop.prevent="doNothing"
-            >
-              <span>{{ post.planet.name }}</span>
-            </v-chip>
-          </div>
-        </v-list-item-subtitle>
+
+        <PostPlanet v-if="!$device.isDesktop" :post="post" class="mt-2" />
+
+        <PostBottomBar
+          v-if="$device.isDesktop"
+          :post="post"
+          :is-post-view="isPostView"
+        />
       </v-list-item-content>
 
       <PostThumbnail
@@ -95,7 +83,7 @@
       />
     </v-list-item>
 
-    <PostPreview
+    <!--<PostPreview
       ref="textcontent"
       :is-post-view="isPostView"
       :post="post"
@@ -103,55 +91,30 @@
       :viewing-more="idState.viewingMore"
       :text-content-height="idState.textContentHeight"
       @togglemore="idState.viewingMore = !idState.viewingMore"
+    />-->
+
+    <PostBottomBar
+      v-if="!$device.isDesktop"
+      :post="post"
+      :is-post-view="isPostView"
     />
-
-    <v-row align="center" no-gutters class="pt-0 pb-2 pl-2 pr-0">
-      <span v-if="!post.author" class="text--secondary">[deleted]</span>
-      <UsernameMenu
-        v-else
-        :user-data="post.author"
-        :op="isPostView"
-        @toggleblock="toggleBlock"
-      />
-
-      <span
-        :title="editedTimeSince"
-        class="text--secondary caption"
-        style="margin-left: 6px"
-        >{{ timeSince }}</span
-      >
-
-      <v-spacer />
-
-      <PostActions :post="post" />
-
-      <PostOptions
-        :post="post"
-        :reported="idState.reported"
-        @reported="idState.reported = true"
-      />
-    </v-row>
-  </v-card>
+  </div>
 </template>
 
 <script>
 import { IdState } from 'vue-virtual-scroller'
 import { formatDistanceToNowStrict } from 'date-fns'
-import UsernameMenu from '../user/UsernameMenu'
 import PostThumbnail from './PostThumbnail'
 import { timeSince } from '~/util/timeSince'
-import PostPreview from '~/components/post/PostPreview'
-import PostActions from '~/components/post/PostActions'
-import PostOptions from '~/components/post/PostOptions'
 import { urlName } from '~/util/urlName'
+import PostBottomBar from '@/components/post/PostBottomBar'
+import PostPlanet from '@/components/post/PostPlanet'
 
 export default {
   name: 'Post',
   components: {
-    PostOptions,
-    PostActions,
-    PostPreview,
-    UsernameMenu,
+    PostPlanet,
+    PostBottomBar,
     PostThumbnail
   },
   mixins: [
@@ -229,7 +192,9 @@ export default {
     },
     goToIfMobile() {
       if (this.$device.isDesktop || this.isPostView) return
-      this.$router.push(`/p/${this.post.id}/${this.urlName}`)
+      this.$router.push(
+        `/p/${this.post.planet.name}/comments/${this.post.id}/${this.urlName}`
+      )
     },
     toggleEmbed() {
       if (

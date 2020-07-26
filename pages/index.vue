@@ -1,90 +1,239 @@
 <template>
-  <v-row>
-    <v-col v-if="$device.isDesktop" cols="3">
-      <div class="sticky">
-        <UserSideCard />
-        <Tip class="mt-2" />
-      </div>
-    </v-col>
+  <v-row justify="center">
     <v-col>
-      <v-row no-gutters align="center" class="pb-3">
-        <v-text-field
-          :background-color="$vuetify.theme.dark ? '' : '#DEE1E6'"
-          solo
-          flat
-          hide-details
-          dense
-          label="New post"
-          @focus="$router.push('/new/text')"
-        />
-        <v-btn icon class="ml-2">
-          <v-icon>{{ $vuetify.icons.values.mdiLink }}</v-icon>
-        </v-btn>
-        <v-btn icon class="ml-2">
-          <v-icon>{{ $vuetify.icons.values.mdiImage }}</v-icon>
-        </v-btn>
-      </v-row>
-
-      <v-row no-gutters class="pb-3">
-        <v-btn
-          small
-          text
-          rounded
-          class="mr-1 font-weight-regular"
-          :color="!$route.query || !$route.query.feed ? 'primary' : ''"
-          @click="chooseAll"
-        >
-          <v-icon size="20" class="mr-2">{{
-            $vuetify.icons.values.mdiInfinity
-          }}</v-icon>
-          All
-        </v-btn>
-
-        <v-btn
-          small
-          text
-          rounded
-          class="font-weight-regular"
-          :color="
-            $route.query && $route.query.feed === 'mytopics' ? 'primary' : ''
-          "
-          @click="chooseMyTopics"
-        >
-          <v-icon size="20" class="mr-2">{{
-            $vuetify.icons.values.mdiNewspaper
-          }}</v-icon>
-          My Topics
-        </v-btn>
-
-        <v-spacer />
-
-        <TypeMenu v-if="$device.isDesktop" />
-
-        <SortMenu />
-      </v-row>
-
-      <DynamicScroller page-mode :items="feed" :min-item-size="54">
-        <template v-slot="{ item, index, active }">
-          <DynamicScrollerItem
-            :item="item"
-            :active="active"
-            :index="index"
-            :size-dependencies="[item.title, item.textContent]"
+      <v-toolbar
+        dense
+        flat
+        :style="{
+          'border-width': '1px',
+          'border-color': $vuetify.theme.dark
+            ? 'rgba(255, 255, 255, 0.12)'
+            : 'rgba(0, 0, 0, 0.12)',
+          'border-style': 'solid'
+        }"
+        outlined
+        style="border-radius: 10px; background-color: transparent"
+        class="mb-3"
+      >
+        <v-toolbar-items>
+          <v-btn
+            text
+            nuxt
+            :to="{
+              query: {}
+            }"
+            :color="
+              !$route.query.sort || $route.query.sort === 'hot' ? 'primary' : ''
+            "
           >
-            <div class="pb-3">
-              <Post
-                :post="item"
-                :index="index"
-                :active="active"
-                @togglehidden="toggleHidden"
-                @toggleblock="toggleBlock"
-              />
-            </div>
-          </DynamicScrollerItem>
-        </template>
-      </DynamicScroller>
+            <v-icon class="mr-2">{{ $vuetify.icons.values.mdiFire }}</v-icon>
+            Hot
+          </v-btn>
+          <v-btn
+            text
+            nuxt
+            :to="{
+              query: {
+                sort: 'new'
+              }
+            }"
+            :color="$route.query.sort === 'new' ? 'primary' : ''"
+          >
+            <v-icon class="mr-2">{{
+              $vuetify.icons.values.mdiClockTimeOneOutline
+            }}</v-icon>
+            New
+          </v-btn>
+          <v-btn
+            text
+            nuxt
+            :to="{
+              query: {
+                sort: 'top'
+              }
+            }"
+            :color="$route.query.sort === 'top' ? 'primary' : ''"
+          >
+            <v-icon class="mr-2">{{
+              $vuetify.icons.values.mdiFormatListNumbered
+            }}</v-icon>
+            Top
+          </v-btn>
 
-      <v-progress-linear v-show="$apollo.queries.feed.loading" indeterminate />
+          <v-menu offset-y transition="slide-y-transition">
+            <template v-slot:activator="{ on }">
+              <v-btn
+                v-show="$route.query.sort === 'top'"
+                text
+                class="text--secondary"
+                v-on="on"
+              >
+                {{
+                  $route.query.t
+                    ? $route.query.t.substring(0, 1).toUpperCase() +
+                      $route.query.t.substring(1).toLowerCase()
+                    : 'Day'
+                }}
+              </v-btn>
+            </template>
+
+            <v-list>
+              <v-list-item
+                :color="$route.query.t === 'hour' ? 'primary' : ''"
+                nuxt
+                :to="{
+                  query: {
+                    ...$route.query,
+                    t: 'hour'
+                  }
+                }"
+              >
+                <v-list-item-content>
+                  <v-list-item-title>Hour</v-list-item-title>
+                </v-list-item-content>
+              </v-list-item>
+
+              <v-list-item
+                :color="
+                  !$route.query.t || $route.query.t === 'day' ? 'primary' : ''
+                "
+                nuxt
+                :to="{
+                  query: {
+                    ...$route.query,
+                    t: 'day'
+                  }
+                }"
+              >
+                <v-list-item-content>
+                  <v-list-item-title
+                    :style="
+                      !$route.query.t || $route.query.t === 'day'
+                        ? 'color: var(--v-primary-base) !important;'
+                        : ''
+                    "
+                    >Day</v-list-item-title
+                  >
+                </v-list-item-content>
+              </v-list-item>
+
+              <v-list-item
+                :color="$route.query.t === 'week' ? 'primary' : ''"
+                nuxt
+                :to="{
+                  query: {
+                    ...$route.query,
+                    t: 'week'
+                  }
+                }"
+              >
+                <v-list-item-content>
+                  <v-list-item-title>Week</v-list-item-title>
+                </v-list-item-content>
+              </v-list-item>
+
+              <v-list-item
+                :color="$route.query.t === 'month' ? 'primary' : ''"
+                nuxt
+                :to="{
+                  query: {
+                    ...$route.query,
+                    t: 'month'
+                  }
+                }"
+              >
+                <v-list-item-content>
+                  <v-list-item-title>Month</v-list-item-title>
+                </v-list-item-content>
+              </v-list-item>
+
+              <v-list-item
+                :color="$route.query.t === 'year' ? 'primary' : ''"
+                nuxt
+                :to="{
+                  query: {
+                    ...$route.query,
+                    t: 'year'
+                  }
+                }"
+              >
+                <v-list-item-content>
+                  <v-list-item-title>Year</v-list-item-title>
+                </v-list-item-content>
+              </v-list-item>
+
+              <v-list-item
+                :color="$route.query.t === 'all' ? 'primary' : ''"
+                nuxt
+                :to="{
+                  query: {
+                    ...$route.query,
+                    t: 'all'
+                  }
+                }"
+              >
+                <v-list-item-content>
+                  <v-list-item-title>All</v-list-item-title>
+                </v-list-item-content>
+              </v-list-item>
+            </v-list>
+          </v-menu>
+        </v-toolbar-items>
+      </v-toolbar>
+
+      <div
+        :style="{
+          'border-style': 'solid',
+          'border-width': '1px',
+          'border-color': $vuetify.theme.dark
+            ? 'rgba(255, 255, 255, 0.12)'
+            : 'rgba(0, 0, 0, 0.12)',
+          'border-top-left-radius': '10px',
+          'border-top-right-radius': '10px',
+          'border-bottom-style': 'none'
+        }"
+      >
+        <DynamicScroller
+          page-mode
+          :items="feed"
+          :min-item-size="54"
+          :buffer="500"
+        >
+          <template v-slot="{ item, index, active }">
+            <DynamicScrollerItem
+              :item="item"
+              :active="active"
+              :index="index"
+              :size-dependencies="[item.title, item.textContent]"
+            >
+              <div
+                :style="{
+                  'border-bottom-style': 'solid',
+                  'border-bottom-width': '1px',
+                  'border-bottom-color': $vuetify.theme.dark
+                    ? 'rgba(255, 255, 255, 0.12)'
+                    : 'rgba(0, 0, 0, 0.12)'
+                }"
+              >
+                <Post
+                  :post="item"
+                  :index="index"
+                  :active="active"
+                  @togglehidden="toggleHidden"
+                  @toggleblock="toggleBlock"
+                />
+              </div>
+            </DynamicScrollerItem>
+          </template>
+        </DynamicScroller>
+      </div>
+
+      <div class="pt-3">
+        <v-progress-linear
+          v-show="$apollo.queries.feed.loading"
+          indeterminate
+        />
+      </div>
     </v-col>
     <v-col v-if="$device.isDesktop" cols="3">
       <div class="sticky">
@@ -94,6 +243,8 @@
         <InfoLinks class="mt-2" />
       </div>
     </v-col>
+
+    <PostDialog :dialog="dialog" :post-id="dialogPostId" @closed="hideDialog" />
   </v-row>
 </template>
 
@@ -103,21 +254,15 @@ import { DynamicScroller, DynamicScrollerItem } from 'vue-virtual-scroller'
 import InfoLinks from '../components/InfoLinks'
 import feedGql from '../gql/feed.graphql'
 import Post from '../components/post/Post'
-import UserSideCard from '../components/user/UserSideCard'
-import TypeMenu from '../components/buttons/type/TypeMenu'
-import SortMenu from '../components/buttons/home_sort/SortMenu'
-import Tip from '@/components/Tip'
 import PopularPlanetsCard from '@/components/PopularPlanetsCard'
+import PostDialog from '@/components/PostDialog'
 
 export default {
   name: 'Index',
   scrollToTop: false,
   components: {
+    PostDialog,
     PopularPlanetsCard,
-    Tip,
-    SortMenu,
-    TypeMenu,
-    UserSideCard,
     Post,
     InfoLinks,
     DynamicScroller,
@@ -127,58 +272,45 @@ export default {
     return {
       feed: [],
       hasMore: true,
-      page: 0
+      page: 0,
+      query: {},
+      dialog: false,
+      dialogPostId: ''
+    }
+  },
+  beforeRouteLeave(to, from, next) {
+    if (to.name === 'p-name-comments-id-title') {
+      this.displayDialog(to)
+    } else {
+      next()
     }
   },
   computed: {
     vars() {
       return {
-        sort: this.$store.state.homeQuery.sort
-          ? this.$store.state.homeQuery.sort.toUpperCase()
-          : 'HOT',
-        time: this.$store.state.homeQuery.time
-          ? this.$store.state.homeQuery.time.toUpperCase()
-          : 'ALL',
-        filter: this.$store.state.homeQuery.feed
-          ? this.$store.state.homeQuery.feed.toUpperCase()
-          : 'ALL',
-        types: this.$store.state.homeQuery.types
-          ? this.$store.state.homeQuery.types
-              .split('-')
-              .map((t) => t.toUpperCase())
-          : []
+        sort:
+          this.query && this.query.sort ? this.query.sort.toUpperCase() : 'HOT',
+        time: this.query && this.query.t ? this.query.t.toUpperCase() : 'ALL',
+        filter: this.$route.name === 'universe' ? 'ALL' : 'MYPLANETS',
+        types:
+          this.query && this.query.types
+            ? this.query.types.split('-').map((t) => t.toUpperCase())
+            : []
       }
     }
   },
   watch: {
-    $route: {
+    '$route.query': {
       deep: true,
       handler() {
-        if (this.$route.path === '/') {
-          const oldQuery = this.$store.state.homeQuery
-          if (
-            oldQuery.sort !== this.$route.query.sort ||
-            oldQuery.time !== this.$route.query.time ||
-            oldQuery.feed !== this.$route.query.feed ||
-            oldQuery.types !== this.$route.query.types
-          ) {
-            this.feed = []
-            this.$store.commit('setHomeQuery', this.$route.query)
-            this.page = 0
-            if (process.client) {
-              window.scrollTo(0, 0)
-            }
-          }
+        if (this.$route.name === 'index' || this.$route.name === 'universe') {
+          this.query = this.$route.query
         }
       }
     }
   },
-  created() {
-    if (this.$route.path === '/') {
-      this.$store.commit('setHomeQuery', this.$route.query)
-    }
-  },
   activated() {
+    this.query = this.$route.query
     window.addEventListener('scroll', this.handleScroll)
   },
   deactivated() {
@@ -193,11 +325,22 @@ export default {
         }
       },
       skip() {
-        return this.$route.name !== 'index'
+        return this.$route.name !== 'index' && this.$route.name !== 'universe'
       }
     }
   },
   methods: {
+    displayDialog(route) {
+      console.log('displayDialog')
+      window.history.pushState({}, null, route.path)
+      this.dialog = true
+      this.dialogPostId = route.params.id
+    },
+    hideDialog() {
+      console.log('hideDialog')
+      this.dialog = false
+      this.dialogPostId = ''
+    },
     toggleHidden() {
       this.$apollo.provider.defaultClient.cache.writeQuery({
         query: feedGql,
@@ -273,13 +416,7 @@ export default {
 </script>
 
 <style scoped>
-.friendlyframe >>> iframe {
-  width: 100%;
-  height: 400px;
-}
-
-.frame {
-  width: 100%;
-  height: 400px;
+>>> .v-list-item--link:before {
+  opacity: 0 !important;
 }
 </style>

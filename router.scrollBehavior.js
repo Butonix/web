@@ -28,7 +28,7 @@ export default function(to, from, savedPosition) {
 
   const nuxt = window.$nuxt
 
-  // triggerScroll is only fired when a new component is loaded
+  // triggerScroll is only fired when a submit component is loaded
   if (to.path === from.path && to.hash !== from.hash) {
     nuxt.$nextTick(() => nuxt.$emit('triggerScroll'))
   }

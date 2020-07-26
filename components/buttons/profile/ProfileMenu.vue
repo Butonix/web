@@ -6,6 +6,7 @@
         aria-label="Account"
         text
         rounded
+        height="34"
         v-on="on"
       >
         <v-avatar
@@ -43,6 +44,7 @@
         aria-label="Account"
         text
         rounded
+        height="34"
         v-on="on"
       >
         <v-avatar

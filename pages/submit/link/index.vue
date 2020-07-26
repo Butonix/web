@@ -1,45 +1,37 @@
 <template>
-  <v-row justify="center">
-    <v-col :cols="$device.isDesktop ? 6 : 12">
-      <div class="text-h6 pt-2 pb-4 text--secondary">New Link Post</div>
+  <div>
+    <v-text-field
+      v-model="title"
+      :background-color="$vuetify.theme.dark ? '' : '#F1F3F4'"
+      solo
+      flat
+      label="Title"
+      :rules="titleRules"
+      :loading="detectTitleLoading"
+      clearable
+    />
 
-      <v-text-field
-        v-model="title"
-        :background-color="$vuetify.theme.dark ? '' : '#F1F3F4'"
-        solo
-        flat
-        label="Title"
-        :rules="titleRules"
-        :loading="detectTitleLoading"
-        clearable
-      />
+    <v-text-field
+      v-model="link"
+      :background-color="$vuetify.theme.dark ? '' : '#F1F3F4'"
+      solo
+      flat
+      label="Link URL"
+    />
 
-      <v-text-field
-        v-model="link"
-        :background-color="$vuetify.theme.dark ? '' : '#F1F3F4'"
-        solo
-        flat
-        label="Link URL"
-      />
-
-      <v-row no-gutters>
-        <v-spacer />
-        <v-btn
-          color="primary"
-          :loading="loading"
-          :disabled="
-            !title ||
-              title.length > 300 ||
-              selectedTopics.length === 0 ||
-              selectedTopics.length > 10 ||
-              !link
-          "
-          @click="submitPost"
-          >Post</v-btn
-        >
-      </v-row>
-    </v-col>
-  </v-row>
+    <v-row no-gutters class="mt-4">
+      <PlanetSelector v-model="planet" :prev-route="prevRoute" />
+      <v-btn
+        class="ml-4"
+        color="primary"
+        :loading="loading"
+        :disabled="!title || title.length > 300 || !link || !planet"
+        height="48"
+        @click="submitPost"
+        >Post</v-btn
+      >
+    </v-row>
+  </div>
 </template>
 
 <script>
@@ -47,8 +39,10 @@ import isUrl from 'is-url'
 import gql from 'graphql-tag'
 import { urlName } from '~/util/urlName'
 import submitPostGql from '~/gql/submitPost'
+import PlanetSelector from '@/components/PlanetSelector'
 
 export default {
+  components: { PlanetSelector },
   data() {
     return {
       prevRoute: null,
@@ -57,9 +51,9 @@ export default {
       titleRules: [
         (v) => v.length <= 300 || 'Title must be 300 characters or less'
       ],
-      selectedTopics: [],
       loading: false,
-      detectTitleLoading: false
+      detectTitleLoading: false,
+      planet: null
     }
   },
   computed: {
@@ -100,10 +94,12 @@ export default {
             title: this.title,
             type: 'LINK',
             link: this.link,
-            topics: this.selectedTopics
+            planet: this.planet.name
           },
           update: (store, { data: { submitPost } }) => {
-            this.$router.push(`/p/${submitPost.id}/${this.urlName}`)
+            this.$router.push(
+              `/p/${this.planet.name}/comments/${submitPost.id}/${this.urlName}`
+            )
           }
         })
       } catch (e) {

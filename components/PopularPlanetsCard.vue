@@ -32,7 +32,10 @@
         :color="$vuetify.theme.dark ? '#202124' : '#DEE1E6'"
         nuxt
         to="/planets/explore"
-        >Explore more Planets</v-btn
+        >Explore more Planets
+        <v-icon size="20" class="ml-2">{{
+          $vuetify.icons.values.mdiTelescope
+        }}</v-icon></v-btn
       >
     </v-card-actions>
 

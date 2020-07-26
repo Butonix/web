@@ -1,42 +1,21 @@
 <template>
-  <v-row justify="center">
-    <v-col :cols="$device.isDesktop ? 6 : 12">
-      <div class="text-h6 pt-2 pb-4 text--secondary">New Text Post</div>
+  <div>
+    <v-text-field
+      v-model="title"
+      :background-color="$vuetify.theme.dark ? '' : '#F1F3F4'"
+      solo
+      flat
+      label="Title"
+      :rules="titleRules"
+      clearable
+    />
 
-      <v-text-field
-        v-model="title"
-        :background-color="$vuetify.theme.dark ? '' : '#F1F3F4'"
-        solo
-        flat
-        label="Title"
-        :rules="titleRules"
-        clearable
-      />
+    <v-btn depressed color="primary" @click="openDialog">
+      <v-icon class="mr-2">{{ $vuetify.icons.values.mdiPencil }}</v-icon>
+      Open Editor
+    </v-btn>
 
-      <v-btn depressed color="primary" @click="openDialog">
-        <v-icon class="mr-2">{{ $vuetify.icons.values.mdiPencil }}</v-icon>
-        Open Editor
-      </v-btn>
-
-      <div v-if="!isEditorEmpty" class="pt-6" v-html="textContent" />
-
-      <v-row no-gutters>
-        <v-spacer />
-        <v-btn
-          depressed
-          color="primary"
-          :loading="loading"
-          :disabled="
-            !title ||
-              title.length > 300 ||
-              selectedTopics.length === 0 ||
-              selectedTopics.length > 10
-          "
-          @click="submitPost"
-          >Post</v-btn
-        >
-      </v-row>
-    </v-col>
+    <div v-if="!isEditorEmpty" class="pt-6" v-html="textContent" />
 
     <client-only>
       <v-dialog
@@ -102,16 +81,32 @@
         </v-card>
       </v-dialog>
     </client-only>
-  </v-row>
+
+    <v-row no-gutters class="mt-4">
+      <PlanetSelector v-model="planet" :prev-route="prevRoute" />
+      <v-btn
+        class="ml-4"
+        depressed
+        color="primary"
+        :loading="loading"
+        :disabled="!title || title.length > 300 || !planet"
+        height="48"
+        @click="submitPost"
+        >Post</v-btn
+      >
+    </v-row>
+  </div>
 </template>
 
 <script>
 import submitPostGql from '~/gql/submitPost'
 import { urlName } from '~/util/urlName'
 import { isEditorEmpty } from '@/util/isEditorEmpty'
+import PlanetSelector from '@/components/PlanetSelector'
 
 export default {
   components: {
+    PlanetSelector,
     Editor: () => import('@/components/editor/Editor')
   },
   data() {
@@ -122,9 +117,9 @@ export default {
       titleRules: [
         (v) => v.length <= 300 || 'Title must be 300 characters or less'
       ],
-      selectedTopics: [],
       loading: false,
-      dialog: false
+      dialog: false,
+      planet: null
     }
   },
   computed: {
@@ -189,10 +184,12 @@ export default {
             title: this.title,
             type: 'TEXT',
             textContent: this.textContent,
-            topics: this.selectedTopics
+            planet: this.planet.name
           },
           update: (store, { data: { submitPost } }) => {
-            this.$router.push(`/p/${submitPost.id}/${this.urlName}`)
+            this.$router.push(
+              `/p/${this.planet.name}/comments/${submitPost.id}/${this.urlName}`
+            )
           }
         })
       } catch (e) {

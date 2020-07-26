@@ -1,61 +1,50 @@
 <template>
-  <v-row justify="center">
-    <v-col :cols="$device.isDesktop ? 6 : 12">
-      <div class="text-h6 pt-2 pb-4 text--secondary">New Image Upload</div>
+  <div>
+    <v-text-field
+      v-model="title"
+      :background-color="$vuetify.theme.dark ? '' : '#F1F3F4'"
+      solo
+      flat
+      label="Title"
+      :rules="titleRules"
+      clearable
+    />
 
-      <v-text-field
-        v-model="title"
-        :background-color="$vuetify.theme.dark ? '' : '#F1F3F4'"
-        solo
-        flat
-        label="Title"
-        :rules="titleRules"
-        :loading="detectTitleLoading"
-        clearable
-      />
+    <v-file-input
+      ref="fileInput"
+      v-model="image"
+      :background-color="$vuetify.theme.dark ? '' : '#F1F3F4'"
+      solo
+      flat
+      label="Choose an image"
+    />
 
-      <v-file-input
-        ref="fileInput"
-        v-model="image"
-        :background-color="$vuetify.theme.dark ? '' : '#F1F3F4'"
-        solo
-        flat
-        label="Choose an image"
-      />
+    <img v-if="image" ref="imagePreview" style="max-width: 100%" class="pb-6" />
 
-      <img
-        v-if="image"
-        ref="imagePreview"
-        style="max-width: 100%"
-        class="pb-6"
-      />
-
-      <v-row no-gutters>
-        <v-spacer />
-        <v-btn
-          color="primary"
-          :loading="loading"
-          :disabled="
-            !title ||
-              title.length > 300 ||
-              selectedTopics.length === 0 ||
-              selectedTopics.length > 10 ||
-              !image ||
-              !uploadValid
-          "
-          @click="submitPost"
-          >Post</v-btn
-        >
-      </v-row>
-    </v-col>
-  </v-row>
+    <v-row no-gutters class="mt-4">
+      <PlanetSelector v-model="planet" :prev-route="prevRoute" />
+      <v-btn
+        class="ml-4"
+        color="primary"
+        :loading="loading"
+        :disabled="
+          !title || title.length > 300 || !image || !uploadValid || !planet
+        "
+        height="48"
+        @click="submitPost"
+        >Post</v-btn
+      >
+    </v-row>
+  </div>
 </template>
 
 <script>
 import { urlName } from '~/util/urlName'
 import submitPostGql from '~/gql/submitPost'
+import PlanetSelector from '@/components/PlanetSelector'
 
 export default {
+  components: { PlanetSelector },
   data() {
     return {
       prevRoute: null,
@@ -70,9 +59,8 @@ export default {
           (v && (v.type === 'image/jpeg' || v.type === 'image/png')) ||
           'Image must be PNG or JPEG'
       ],
-      selectedTopics: [],
       loading: false,
-      detectTitleLoading: false
+      planet: null
     }
   },
   computed: {
@@ -133,10 +121,12 @@ export default {
             title: this.title,
             type: 'IMAGE',
             link: response.link,
-            topics: this.selectedTopics
+            planet: this.planet.name
           },
           update: (store, { data: { submitPost } }) => {
-            this.$router.push(`/p/${submitPost.id}/${this.urlName}`)
+            this.$router.push(
+              `/p/${this.planet.name}/comments/${submitPost.id}/${this.urlName}`
+            )
           }
         })
       } catch (e) {
