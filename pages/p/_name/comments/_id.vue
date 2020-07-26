@@ -1,9 +1,5 @@
 <template>
-  <PostDialog
-    :post-id="$route.params.id"
-    :dialog="dialog"
-    @closed="dialog = false"
-  />
+  <PostDialog v-model="dialog" :post-id="$route.params.id" />
 </template>
 
 <script>

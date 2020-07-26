@@ -187,7 +187,7 @@ export default {
       type: String,
       default: ''
     },
-    dialog: {
+    value: {
       type: Boolean,
       required: true
     }
@@ -201,7 +201,8 @@ export default {
       commentHTML: null,
       submitBtnLoading: false,
       commentDialog: false,
-      dialogOpen: this.dialog
+      dialogOpen: this.value,
+      addedEventListener: false
     }
   },
   computed: {
@@ -236,42 +237,57 @@ export default {
         }
       }
     },
-    dialogOpen() {
-      if (!this.dialogOpen) {
-        // this.$emit('closed')
+    async dialogOpen() {
+      this.$emit('input', this.dialogOpen)
+
+      if (!this.dialogOpen && this.addedEventListener) {
         window.removeEventListener('popstate', this.handleHistoryChange)
+        this.addedEventListener = false
+      } else if (!this.addedEventListener) {
+        window.addEventListener('popstate', this.handleHistoryChange)
+        this.addedEventListener = true
+      }
+
+      if (this.dialogOpen && this.postId) {
+        const { data } = await this.$apollo.mutate({
+          mutation: recordPostViewGql,
+          variables: {
+            postId: this.postId
+          }
+        })
+        this.postView = data.recordPostView
       }
     },
-    dialog() {
-      console.log(this.dialog)
-      this.dialogOpen = this.dialog
+    value() {
+      this.dialogOpen = this.value
     }
   },
   destroyed() {
-    console.log('destroyed')
-    window.removeEventListener('popstate', this.handleHistoryChange)
+    if (this.addedEventListener) {
+      window.removeEventListener('popstate', this.handleHistoryChange)
+      this.addedEventListener = false
+    }
   },
   async mounted() {
-    console.log('mounted')
-    window.addEventListener('popstate', this.handleHistoryChange)
+    if (!this.addedEventListener) {
+      window.addEventListener('popstate', this.handleHistoryChange)
+      this.addedEventListener = true
+    }
 
     if (this.$route.query && this.$route.query.replying) {
       const query = Object.assign({}, this.$route.query)
       delete query.replying
       this.$router.push({ path: this.$route.path, query })
     }
-
-    const { data } = await this.$apollo.mutate({
-      mutation: recordPostViewGql,
-      variables: {
-        postId: this.postId
-      }
-    })
-    this.postView = data.recordPostView
   },
   methods: {
     handleHistoryChange(e) {
       console.log(e)
+      if (
+        e.target.location.href.includes('/p/') &&
+        e.target.location.href.includes('/comments/')
+      )
+        return
       this.dialogOpen = false
     },
     openCommentDialog() {
@@ -352,7 +368,7 @@ export default {
         }
       },
       skip() {
-        return !this.dialog || !this.postId
+        return !this.dialogOpen || !this.postId
       }
     },
     postComments: {
@@ -363,7 +379,7 @@ export default {
         }
       },
       skip() {
-        return !this.dialog || !this.postId
+        return !this.dialogOpen || !this.postId
       }
     }
   }

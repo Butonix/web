@@ -5,12 +5,12 @@
         ? `/u/${userData.username}`
         : { path: this.$route.path, query: this.$route.query }
     "
-    class="text--primary"
+    class="text--secondary"
   >
-    <v-avatar :size="$device.isDesktop ? 24 : 24">
+    <v-avatar size="20">
       <img alt="Profile picture" :src="userData.profilePicUrl" />
     </v-avatar>
-    <span class="ml-1" style="line-height: 2; font-size: 0.93rem">
+    <span class="ml-1 caption">
       {{ userData.username }}
     </span>
     <v-chip

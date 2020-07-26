@@ -244,7 +244,7 @@
       </div>
     </v-col>
 
-    <PostDialog :dialog="dialog" :post-id="dialogPostId" @closed="hideDialog" />
+    <PostDialog v-model="dialog" :post-id="dialogPostId" />
   </v-row>
 </template>
 
@@ -279,8 +279,14 @@ export default {
     }
   },
   beforeRouteLeave(to, from, next) {
+    console.log({ to, from, dialog: this.dialog })
     if (to.name === 'p-name-comments-id-title') {
-      this.displayDialog(to)
+      if (!this.dialog) {
+        this.displayDialog(to)
+      } else if (this.$device.isDesktop) {
+        window.history.back()
+        this.hideDialog()
+      }
     } else {
       next()
     }
@@ -307,6 +313,9 @@ export default {
           this.query = this.$route.query
         }
       }
+    },
+    dialog() {
+      if (!this.dialog) this.hideDialog()
     }
   },
   activated() {
@@ -331,15 +340,20 @@ export default {
   },
   methods: {
     displayDialog(route) {
-      console.log('displayDialog')
       window.history.pushState({}, null, route.path)
       this.dialog = true
       this.dialogPostId = route.params.id
     },
     hideDialog() {
-      console.log('hideDialog')
+      /* if (
+        location.href.includes('/p/') &&
+        location.href.includes('/comments/')
+      ) {
+        window.history.back()
+      } */
       this.dialog = false
       this.dialogPostId = ''
+      // window.history.pushState({}, null, this.$route.path)
     },
     toggleHidden() {
       this.$apollo.provider.defaultClient.cache.writeQuery({

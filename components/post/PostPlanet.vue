@@ -1,6 +1,6 @@
 <template>
-  <span style="font-size: 0.93rem" class="text--secondary">
-    <v-avatar size="24">
+  <span class="text--secondary caption">
+    <v-avatar size="20">
       <v-img
         v-if="post.planet.avatarImageUrl"
         :src="post.planet.avatarImageUrl"

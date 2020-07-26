@@ -129,6 +129,7 @@
         :to="`/p/${planet.name}`"
       >
         <v-list-item-avatar
+          size="32"
           :color="planet.themeColor ? planet.themeColor : 'primary'"
         >
           <v-img v-if="planet.avatarImageUrl" :src="planet.avatarImageUrl" />

@@ -1,5 +1,5 @@
 <template>
-  <div class="pa-2" @click="goToIfMobile">
+  <div class="pa-1" @click="goToIfMobile">
     <v-list-item class="px-2">
       <PostThumbnail
         v-if="$device.isDesktop"
@@ -9,7 +9,7 @@
 
       <v-list-item-content
         style="align-content: space-between; min-height: 76px"
-        class="py-2"
+        class="pt-2 pb-1"
       >
         <span v-if="post.sticky">
           <v-icon color="primary" size="13" class="mr-1">{{
