@@ -2,7 +2,7 @@ body {
   font-family: Roboto, -apple-system, BlinkMacSystemFont, "segoe ui", Helvetica, Arial, sans-serif, "apple color emoji", "segoe ui emoji", "segoe ui symbol" !important;
 }
 
-.page-enter-active,
+/*.page-enter-active,
 .page-leave-active {
   transition-property: opacity;
   transition-timing-function: ease-in-out;
@@ -11,7 +11,7 @@ body {
 .page-enter,
 .page-leave-to {
   opacity: 0;
-}
+}*/
 
 .hoverable:hover {
   text-decoration: underline !important;
@@ -31,6 +31,14 @@ body {
 
 .ProseMirror:focus {
   outline: none !important;
+}
+
+.v-btn--active::before {
+  opacity: 0 !important;
+}
+
+.v-btn--active:hover::before {
+  opacity: 0.08 !important;
 }
 
 .sticky {

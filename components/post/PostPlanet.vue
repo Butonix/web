@@ -1,17 +1,24 @@
 <template>
-  <span class="text--secondary caption">
+  <nuxt-link
+    :to="
+      $device.isDesktop
+        ? `/p/${post.planet.name}`
+        : { path: this.$route.path, query: this.$route.query }
+    "
+    class="text--secondary"
+  >
     <v-avatar size="20">
-      <v-img
+      <img
         v-if="post.planet.avatarImageUrl"
+        alt="Profile picture"
         :src="post.planet.avatarImageUrl"
       />
-      <v-icon v-else class="text--secondary">{{
+      <v-icon v-else class="text--secondary" size="20">{{
         $vuetify.icons.values.mdiEarth
       }}</v-icon>
     </v-avatar>
-
-    <span class="ml-1">p/{{ post.planet.name }}</span>
-  </span>
+    <span class="ml-1 caption"> p/{{ post.planet.name }} </span>
+  </nuxt-link>
 </template>
 
 <script>

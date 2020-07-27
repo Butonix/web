@@ -102,11 +102,15 @@
       </div>
     </v-expand-transition>
 
-    <div style="font-size: 0.86rem" class="text--secondary px-4 pt-4 pb-2">
+    <div
+      v-if="joinedPlanets.length > 0"
+      style="font-size: 0.86rem"
+      class="text--secondary px-4 pt-4 pb-2"
+    >
       My Planets
     </div>
 
-    <v-text-field
+    <!--<v-text-field
       solo
       flat
       dense
@@ -115,7 +119,7 @@
       class="mx-2 mb-2"
       style="height: 34px"
       :background-color="$vuetify.theme.dark ? '' : '#DEE1E6'"
-    />
+    />-->
 
     <v-list class="py-0">
       <v-list-item
@@ -184,4 +188,25 @@ export default {
 }
 </script>
 
-<style scoped></style>
+<style scoped>
+.linkactive {
+  color: var(--v-primary-base) !important;
+}
+
+.linkactive:before {
+  opacity: 0 !important;
+}
+
+.planetactive:before {
+  opacity: 0.06 !important;
+}
+
+>>> .v-input__control {
+  min-height: 34px !important;
+  height: 34px !important;
+}
+
+>>> .v-label {
+  font-size: 1rem;
+}
+</style>

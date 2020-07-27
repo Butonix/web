@@ -4,6 +4,7 @@ query popularPlanets {
     fullName
     description
     userCount
+    postCount
     joined
     blocking
   }

@@ -1,10 +1,10 @@
 <template>
   <span>
     <v-btn
+      class="px-2 mr-1 text--secondary"
       small
       rounded
       text
-      class="text--secondary px-2 mr-1"
       :to="`/p/${post.id}/${urlName}`"
       nuxt
       :title="

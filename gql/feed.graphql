@@ -26,9 +26,12 @@ query feed($page: Int, $sort: Sort, $time: Time, $filter: Filter, $types: [Type!
       fullName
       description
       userCount
-      joined
-      blocking
       avatarImageUrl
+      galaxy {
+        name
+        fullName
+        icon
+      }
     }
     postView {
       lastCommentCount

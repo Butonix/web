@@ -1,6 +1,6 @@
 <template>
-  <div class="pa-1" @click="goToIfMobile">
-    <v-list-item class="px-2">
+  <div @click="goToIfMobile">
+    <v-list-item class="px-0">
       <PostThumbnail
         v-if="$device.isDesktop"
         :post="post"
@@ -8,8 +8,9 @@
       />
 
       <v-list-item-content
-        style="align-content: space-between; min-height: 76px"
-        class="pt-2 pb-1"
+        class="pa-0"
+        style="align-content: space-between"
+        :style="$device.isDesktop ? 'min-height: 60px' : ''"
       >
         <span v-if="post.sticky">
           <v-icon color="primary" size="13" class="mr-1">{{
@@ -67,12 +68,25 @@
           </template>
         </v-list-item-title>
 
-        <PostPlanet v-if="!$device.isDesktop" :post="post" class="mt-2" />
+        <PostPlanet v-if="!$device.isDesktop" :post="post" class="mt-1" />
+
+        <PostPreview
+          v-if="$device.isDesktop"
+          v-show="active && expandedView"
+          :key="post.id"
+          ref="textcontent"
+          :expanded-view="expandedView"
+          :post="post"
+          :viewing-more="idState.viewingMore"
+          :text-content-height="idState.textContentHeight"
+          @togglemore="idState.viewingMore = !idState.viewingMore"
+        />
 
         <PostBottomBar
           v-if="$device.isDesktop"
           :post="post"
           :is-post-view="isPostView"
+          class="mt-2"
         />
       </v-list-item-content>
 
@@ -83,18 +97,21 @@
       />
     </v-list-item>
 
-    <!--<PostPreview
+    <PostPreview
+      v-if="!$device.isDesktop"
+      v-show="active && expandedView"
+      :key="post.id"
       ref="textcontent"
-      :is-post-view="isPostView"
+      :expanded-view="expandedView"
       :post="post"
-      :image-preview="idState.imagePreview"
       :viewing-more="idState.viewingMore"
       :text-content-height="idState.textContentHeight"
       @togglemore="idState.viewingMore = !idState.viewingMore"
-    />-->
+    />
 
     <PostBottomBar
       v-if="!$device.isDesktop"
+      class="mt-2"
       :post="post"
       :is-post-view="isPostView"
     />
@@ -109,10 +126,12 @@ import { timeSince } from '~/util/timeSince'
 import { urlName } from '~/util/urlName'
 import PostBottomBar from '@/components/post/PostBottomBar'
 import PostPlanet from '@/components/post/PostPlanet'
+import PostPreview from '@/components/post/PostPreview'
 
 export default {
   name: 'Post',
   components: {
+    PostPreview,
     PostPlanet,
     PostBottomBar,
     PostThumbnail
@@ -136,6 +155,10 @@ export default {
       default: true
     },
     isPostView: {
+      type: Boolean,
+      default: false
+    },
+    expandedView: {
       type: Boolean,
       default: false
     }

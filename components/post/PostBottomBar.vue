@@ -1,9 +1,5 @@
 <template>
-  <v-row
-    align="center"
-    no-gutters
-    :class="$device.isDesktop ? 'mt-2' : 'px-2 pb-2 pt-0'"
-  >
+  <v-row align="center" no-gutters>
     <span v-if="!post.author" class="text--secondary">[deleted]</span>
     <UsernameMenu v-else :user-data="post.author" :op="isPostView" />
 

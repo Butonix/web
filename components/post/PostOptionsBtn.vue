@@ -2,7 +2,7 @@
   <v-btn
     small
     icon
-    class="text--secondary ml-0 mr-0"
+    class="text--secondary"
     aria-label="Post Options"
     :ripple="false"
     @click.stop.prevent="click"

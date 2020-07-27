@@ -107,7 +107,9 @@ import {
   mdiCity,
   mdiHelpCircle,
   mdiArrowLeft,
-  mdiEmailOutline
+  mdiEmailOutline,
+  mdiArrowExpand,
+  mdiArrowCollapse
 } from '@mdi/js'
 
 export default {
@@ -160,7 +162,10 @@ export default {
   /*
    ** Plugins to load before mounting the App
    */
-  plugins: ['~/plugins/vue-clipboard2.client.js'],
+  plugins: [
+    '~/plugins/vue-clipboard2.client.js',
+    '~/plugins/vue-friendly-iframe.client.js'
+  ],
   /*
    ** Nuxt.js dev-modules
    */
@@ -354,7 +359,9 @@ export default {
         mdiCity,
         mdiHelpCircle,
         mdiArrowLeft,
-        mdiEmailOutline
+        mdiEmailOutline,
+        mdiArrowExpand,
+        mdiArrowCollapse
       }
     },
     theme: {

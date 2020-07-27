@@ -12,15 +12,28 @@
     outlined
     style="border-radius: 10px; background-color: transparent"
   >
-    <v-toolbar-items>
+    <v-toolbar-items class="flex-grow-1">
       <v-btn
         text
         nuxt
         :to="{
-          query: {}
+          path: (
+            $route.path
+              .replace('/hot', '')
+              .replace('/top', '')
+              .replace('/new', '')
+              .replace('/hour', '')
+              .replace('/day', '')
+              .replace('/week', '')
+              .replace('/month', '')
+              .replace('/year', '')
+              .replace('/all', '') + '/'
+          ).replace('//', '/')
         }"
         :color="
-          !$route.query.sort || $route.query.sort === 'hot' ? 'primary' : ''
+          !$route.path.includes('/top') && !$route.path.includes('/new')
+            ? 'primary'
+            : ''
         "
       >
         <v-icon class="mr-2">{{ $vuetify.icons.values.mdiFire }}</v-icon>
@@ -30,11 +43,20 @@
         text
         nuxt
         :to="{
-          query: {
-            sort: 'new'
-          }
+          path: (
+            $route.path
+              .replace('/hot', '')
+              .replace('/top', '')
+              .replace('/new', '')
+              .replace('/hour', '')
+              .replace('/day', '')
+              .replace('/week', '')
+              .replace('/month', '')
+              .replace('/year', '')
+              .replace('/all', '') + '/new'
+          ).replace('//', '/')
         }"
-        :color="$route.query.sort === 'new' ? 'primary' : ''"
+        :color="$route.path.includes('/new') ? 'primary' : ''"
       >
         <v-icon class="mr-2">{{
           $vuetify.icons.values.mdiClockTimeOneOutline
@@ -45,11 +67,20 @@
         text
         nuxt
         :to="{
-          query: {
-            sort: 'top'
-          }
+          path: (
+            $route.path
+              .replace('/hot', '')
+              .replace('/top', '')
+              .replace('/new', '')
+              .replace('/hour', '')
+              .replace('/day', '')
+              .replace('/week', '')
+              .replace('/month', '')
+              .replace('/year', '')
+              .replace('/all', '') + '/top/day'
+          ).replace('//', '/')
         }"
-        :color="$route.query.sort === 'top' ? 'primary' : ''"
+        :color="$route.path.includes('/top') ? 'primary' : ''"
       >
         <v-icon class="mr-2">{{
           $vuetify.icons.values.mdiFormatListNumbered
@@ -60,15 +91,17 @@
       <v-menu offset-y transition="slide-y-transition">
         <template v-slot:activator="{ on }">
           <v-btn
-            v-show="$route.query.sort === 'top'"
+            v-show="$route.path.includes('/top')"
             text
             class="text--secondary"
             v-on="on"
           >
             {{
-              $route.query.t
-                ? $route.query.t.substring(0, 1).toUpperCase() +
-                  $route.query.t.substring(1).toLowerCase()
+              $route.path.includes('/top/')
+                ? $route.path
+                    .split('/top/')[1]
+                    .charAt(0)
+                    .toUpperCase() + $route.path.split('/top/')[1].substring(1)
                 : 'Day'
             }}
           </v-btn>
@@ -76,13 +109,10 @@
 
         <v-list>
           <v-list-item
-            :color="$route.query.t === 'hour' ? 'primary' : ''"
+            :color="$route.params.time === 'hour' ? 'primary' : ''"
             nuxt
             :to="{
-              query: {
-                ...$route.query,
-                t: 'hour'
-              }
+              params: { time: 'hour' }
             }"
           >
             <v-list-item-content>
@@ -92,20 +122,19 @@
 
           <v-list-item
             :color="
-              !$route.query.t || $route.query.t === 'day' ? 'primary' : ''
+              !$route.params.time || $route.params.time === 'day'
+                ? 'primary'
+                : ''
             "
             nuxt
             :to="{
-              query: {
-                ...$route.query,
-                t: 'day'
-              }
+              params: { time: 'day' }
             }"
           >
             <v-list-item-content>
               <v-list-item-title
                 :style="
-                  !$route.query.t || $route.query.t === 'day'
+                  !$route.params.time || $route.params.time === 'day'
                     ? 'color: var(--v-primary-base) !important;'
                     : ''
                 "
@@ -115,13 +144,10 @@
           </v-list-item>
 
           <v-list-item
-            :color="$route.query.t === 'week' ? 'primary' : ''"
+            :color="$route.params.time === 'week' ? 'primary' : ''"
             nuxt
             :to="{
-              query: {
-                ...$route.query,
-                t: 'week'
-              }
+              params: { time: 'week' }
             }"
           >
             <v-list-item-content>
@@ -130,13 +156,10 @@
           </v-list-item>
 
           <v-list-item
-            :color="$route.query.t === 'month' ? 'primary' : ''"
+            :color="$route.params.time === 'month' ? 'primary' : ''"
             nuxt
             :to="{
-              query: {
-                ...$route.query,
-                t: 'month'
-              }
+              params: { time: 'month' }
             }"
           >
             <v-list-item-content>
@@ -145,13 +168,10 @@
           </v-list-item>
 
           <v-list-item
-            :color="$route.query.t === 'year' ? 'primary' : ''"
+            :color="$route.params.time === 'year' ? 'primary' : ''"
             nuxt
             :to="{
-              query: {
-                ...$route.query,
-                t: 'year'
-              }
+              params: { time: 'year' }
             }"
           >
             <v-list-item-content>
@@ -160,13 +180,10 @@
           </v-list-item>
 
           <v-list-item
-            :color="$route.query.t === 'all' ? 'primary' : ''"
+            :color="$route.params.time === 'all' ? 'primary' : ''"
             nuxt
             :to="{
-              query: {
-                ...$route.query,
-                t: 'all'
-              }
+              params: { time: 'all' }
             }"
           >
             <v-list-item-content>
@@ -175,6 +192,29 @@
           </v-list-item>
         </v-list>
       </v-menu>
+
+      <v-spacer />
+
+      <v-btn
+        text
+        nuxt
+        :to="
+          $route.query.view === 'expanded'
+            ? { query: { ...$route.query, view: 'collapsed' } }
+            : { query: { ...$route.query, view: 'expanded' } }
+        "
+      >
+        <v-icon class="mr-2">
+          {{
+            $route.query.view === 'expanded'
+              ? $vuetify.icons.values.mdiArrowCollapse
+              : $vuetify.icons.values.mdiArrowExpand
+          }}
+        </v-icon>
+        {{
+          $route.query.view === 'expanded' ? 'Collapse Posts' : 'Expand Posts'
+        }}
+      </v-btn>
     </v-toolbar-items>
   </v-toolbar>
 </template>
@@ -185,4 +225,9 @@ export default {
 }
 </script>
 
-<style scoped></style>
+<style scoped>
+>>> .v-toolbar__content {
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+}
+</style>

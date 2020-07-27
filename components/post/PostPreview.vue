@@ -1,16 +1,6 @@
 <template>
-  <div v-if="!isPostView">
-    <div v-if="imagePreview" style="max-width: none" class="pa-2">
-      <a :href="post.link" rel="noopener" target="_blank">
-        <img
-          alt="Image preview"
-          :src="post.link"
-          :style="$device.isDesktop ? 'max-width: 75%' : 'max-width: 100%'"
-        />
-      </a>
-    </div>
-
-    <div v-if="post.type === 'TEXT' && post.textContent" class="px-2 pb-3 pt-1">
+  <div>
+    <div v-if="post.type === 'TEXT' && post.textContent">
       <div
         :class="viewingMore || textContentHeight <= 90 ? '' : 'textcontent'"
         :style="textContentHeight <= 90 ? '' : 'cursor: pointer'"
@@ -22,43 +12,39 @@
         />
       </div>
     </div>
-  </div>
 
-  <div v-else>
-    <div v-if="post.type === 'TEXT' && post.textContent" class="px-2 pb-3 pt-1">
-      <TextContent
-        :dark="$vuetify.theme.dark"
-        :text-content="post.textContent"
-      />
-    </div>
-
-    <div
-      v-else-if="post.type === 'IMAGE' && isEmbeddableImage"
-      style="max-width: none"
-      class="pa-2"
+    <v-row
+      v-else-if="expandedView && post.type === 'IMAGE' && isEmbeddableImage"
+      class="mt-2"
+      no-gutters
+      justify="start"
     >
       <a :href="post.link" rel="noopener" target="_blank">
-        <img
-          alt="Image preview"
-          :src="post.link"
-          :style="$device.isDesktop ? 'max-width: 75%' : 'max-width: 100%'"
-        />
+        <img alt="Image preview" :src="post.link" style="max-height: 500px" />
       </a>
-    </div>
+    </v-row>
 
-    <div
+    <v-row
       v-else-if="
-        isYoutubeLink || isTweetLink || isSpotifyLink || isInstagramLink
+        expandedView &&
+          (isYoutubeLink || isTweetLink || isSpotifyLink || isInstagramLink)
       "
-      class="pb-2 px-2"
+      no-gutters
+      justify="start"
+      class="mt-2"
     >
       <client-only>
-        <Youtube
-          v-if="isYoutubeLink"
-          :video-id="youtubeId"
-          style="max-width: 100%"
-        />
-        <Tweet v-else-if="isTweetLink" :id="tweetId" style="max-width: 100%" />
+        <div v-if="isYoutubeLink" class="youtubecontainer">
+          <iframe
+            :src="`https://www.youtube.com/embed/${youtubeId}`"
+            frameborder="0"
+            allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+            allowfullscreen
+            class="youtube"
+          />
+        </div>
+
+        <!--<Tweet v-else-if="isTweetLink" :id="tweetId" />-->
         <vue-friendly-iframe
           v-else-if="isSpotifyLink"
           :src="spotifyUrl"
@@ -67,6 +53,7 @@
           frameborder="0"
           allowtransparency="true"
           allow="encrypted-media"
+          class="spotifyframe"
         />
         <instagram-embed
           v-else-if="isInstagramLink"
@@ -74,29 +61,24 @@
           :max-width="500"
         />
       </client-only>
-    </div>
+    </v-row>
   </div>
 </template>
 
 <script>
 import { getIdFromUrl } from 'vue-youtube'
+import InstagramEmbed from 'vue-instagram-embed'
+import TextContent from '@/components/TextContent'
 
 export default {
   name: 'PostPreview',
   components: {
-    TextContent: () => import('../TextContent'),
-    Youtube: () => import('vue-youtube'),
-    Tweet: () => import('vue-tweet-embed'),
-    InstagramEmbed: () => import('vue-instagram-embed'),
-    'vue-friendly-iframe': () => import('vue-friendly-iframe')
+    TextContent,
+    InstagramEmbed
   },
   props: {
     post: {
       type: Object,
-      required: true
-    },
-    imagePreview: {
-      type: Boolean,
       required: true
     },
     viewingMore: {
@@ -107,7 +89,7 @@ export default {
       type: Number,
       default: 0
     },
-    isPostView: {
+    expandedView: {
       type: Boolean,
       default: false
     }
@@ -167,8 +149,23 @@ export default {
   mask-image: linear-gradient(180deg, #000 60%, transparent);
 }
 
-.vue-friendly-iframe >>> iframe {
+.spotifyframe >>> iframe {
   width: 300px;
   height: 380px;
+}
+
+.youtubecontainer {
+  position: relative;
+  width: 100%;
+  padding-bottom: 56.25%;
+}
+
+.youtube {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
 }
 </style>

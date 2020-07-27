@@ -24,25 +24,4 @@ export default {
 }
 </script>
 
-<style scoped>
-.linkactive {
-  color: var(--v-primary-base) !important;
-}
-
-.linkactive:before {
-  opacity: 0 !important;
-}
-
-.planetactive:before {
-  opacity: 0.06 !important;
-}
-
->>> .v-input__control {
-  min-height: 34px !important;
-  height: 34px !important;
-}
-
->>> .v-label {
-  font-size: 1rem;
-}
-</style>
+<style scoped></style>

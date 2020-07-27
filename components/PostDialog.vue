@@ -1,188 +1,273 @@
 <template>
   <v-dialog
+    ref="dialogref"
     v-model="dialogOpen"
-    :fullscreen="!$device.isDesktop"
-    width="70%"
+    fullscreen
     :transition="
       !dialogOpen && !$device.isDesktop
         ? 'dialog-bottom-transition'
         : 'dialog-transition'
     "
-    @click:outside="goBack"
+    hide-overlay
+    :retain-focus="false"
   >
     <div
-      :style="{
-        'background-color': $vuetify.theme.dark ? '#202124' : '#F8F9FA'
-      }"
+      style="background-color: rgba(0, 0, 0, 0.4)"
+      :style="
+        $device.isDesktop ? 'height: auto; min-height: 100%; display: flex' : ''
+      "
+      @click="goBack"
     >
-      <v-app-bar
-        v-if="!$device.isDesktop"
-        fixed
-        flat
+      <div
         :style="
-          $vuetify.theme.dark
-            ? 'border-bottom: 1px solid rgba(255, 255, 255, .12); background-color: #202124'
-            : 'border-bottom: 1px solid rgba(0, 0, 0, .12); background-color: #F1F3F4'
+          $device.isDesktop
+            ? 'max-width: 1280px; width: calc(100% - 160px); margin: 0 auto; display: flex; justify-content: center'
+            : ''
         "
       >
-        <v-app-bar-nav-icon @click="goBack">
-          <v-icon>{{ $vuetify.icons.values.mdiArrowLeft }}</v-icon>
-        </v-app-bar-nav-icon>
+        <div
+          v-if="post"
+          :style="{
+            'background-color': $vuetify.theme.dark ? '#202124' : '#F8F9FA',
+            height: $device.isDesktop ? 'auto' : '',
+            'min-height': $device.isDesktop ? '100%' : '',
+            width: $device.isDesktop ? '100%' : ''
+          }"
+          class="elevation-6"
+          @click.stop.prevent="doNothing"
+        >
+          <v-app-bar
+            v-if="!$device.isDesktop"
+            fixed
+            flat
+            :style="
+              $vuetify.theme.dark
+                ? 'border-bottom: 1px solid rgba(255, 255, 255, .12); background-color: #202124'
+                : 'border-bottom: 1px solid rgba(0, 0, 0, .12); background-color: #F1F3F4'
+            "
+          >
+            <v-app-bar-nav-icon @click="goBack">
+              <v-icon>{{ $vuetify.icons.values.mdiArrowLeft }}</v-icon>
+            </v-app-bar-nav-icon>
 
-        <v-toolbar-title>p/{{ post ? post.planet.name : '' }}</v-toolbar-title>
-      </v-app-bar>
-
-      <v-row no-gutters :style="$device.isDesktop ? '' : 'padding-top: 60px'">
-        <v-col>
-          <div class="mb-3">
-            <v-skeleton-loader
-              v-if="!post"
-              transition="fade-transition"
-              type="list-item-avatar-three-line"
-              height="134"
-            />
-            <Post v-else is-post-view :post="post" />
-          </div>
-
-          <v-row no-gutters>
-            <v-btn
-              v-if="$store.state.currentUser"
-              rounded
-              depressed
-              color="primary"
-              class="mb-3 white--text"
-              @click="openCommentDialog"
+            <div
+              style="position: fixed; top: 14px; left: 50%; transform: translateX(-50%); font-size: 21px; font-weight: 500"
             >
-              <v-icon class="mr-2">{{
-                $vuetify.icons.values.mdiPencil
-              }}</v-icon>
-              <span class="mr-2">New Comment</span>
-            </v-btn>
+              p/{{ post ? post.planet.name : '' }}
+            </div>
+          </v-app-bar>
 
-            <v-btn
-              v-if="!$store.state.currentUser"
-              rounded
-              depressed
-              color="primary"
-              class="mb-3 white--text"
-              to="/login"
-              nuxt
+          <v-app-bar
+            v-else
+            fixed
+            flat
+            dense
+            class="pr-4"
+            style="max-width: 1280px; width: calc(100% - 177px); left: auto; right: auto"
+            :style="
+              $vuetify.theme.dark
+                ? 'border-bottom: 1px solid rgba(255, 255, 255, .12); background-color: #202124'
+                : 'border-bottom: 1px solid rgba(0, 0, 0, .12); background-color: #F1F3F4'
+            "
+          >
+            <v-toolbar-title
+              class="text--secondary"
+              style="font-size: 1rem; font-weight: bold; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: calc(100% - 324px); width: 100%"
+              >{{ post.title }}</v-toolbar-title
             >
-              <v-icon class="mr-2">{{
-                $vuetify.icons.values.mdiPencil
-              }}</v-icon>
-              Log in to comment
-            </v-btn>
 
             <v-spacer />
 
-            <CommentSortMenu />
-          </v-row>
+            <v-btn text class="text--secondary" @click="goBack">
+              <v-icon size="20" class="mr-2">{{
+                $vuetify.icons.values.close
+              }}</v-icon>
+              Close
+            </v-btn>
+          </v-app-bar>
 
-          <DynamicScroller
-            v-if="postComments.length > 0"
-            page-mode
-            :items="threadedComments"
-            :min-item-size="54"
-          >
-            <template v-slot="{ item, index, active }">
-              <DynamicScrollerItem
-                :item="item"
-                :active="active"
-                :index="index"
-                :size-dependencies="[item.textContent]"
-              >
-                <div class="pb-3">
-                  <Comment :post="post" :post-view="postView" :comment="item" />
-                </div>
-              </DynamicScrollerItem>
-            </template>
-          </DynamicScroller>
-
-          <v-progress-linear
-            v-else-if="$apollo.queries.postComments.loading"
-            indeterminate
-          />
-
-          <v-row v-else justify="center" class="pt-4" no-gutters>
-            No one has commented yet. Will you be the first?
-          </v-row>
-
-          <div style="height: 600px" />
-        </v-col>
-
-        <client-only>
-          <v-dialog
-            v-if="$store.state.currentUser"
-            v-model="commentDialog"
-            :retain-focus="false"
-            persistent
-            width="50%"
-            :fullscreen="!$device.isDesktop"
-            :transition="
-              $device.isDesktop
-                ? 'dialog-transition'
-                : 'dialog-bottom-transition'
-            "
-          >
-            <v-card
-              :tile="!$device.isDesktop"
-              :min-height="$device.isDesktop ? '400' : ''"
+          <v-container>
+            <v-row
+              :style="
+                $device.isDesktop ? 'padding-top: 36px' : 'padding-top: 44px'
+              "
             >
-              <div
-                style="display: flex"
-                :style="{
-                  'background-color': $vuetify.theme.dark
-                    ? '#202124'
-                    : '#F1F3F4',
-                  'border-bottom-width': '1px',
-                  'border-bottom-color': 'rgba(0, 0, 0, 0.12)',
-                  'border-bottom-style': $vuetify.theme.dark ? 'none' : 'solid'
-                }"
-              >
-                <v-btn
-                  text
-                  tile
-                  class="flex-grow-1"
-                  height="50"
-                  @click="closeCommentDialog"
+              <v-col :class="$device.isDesktop ? '' : 'px-0'">
+                <div
+                  v-if="$device.isDesktop"
+                  class="mb-3 pa-3"
+                  :style="{
+                    'border-radius': '10px',
+                    'border-style': 'solid',
+                    'border-width': '1px',
+                    'border-color': $vuetify.theme.dark
+                      ? 'rgba(255, 255, 255, 0.12)'
+                      : 'rgba(0, 0, 0, 0.12)'
+                  }"
                 >
-                  <v-icon class="mr-2">{{
-                    $vuetify.icons.values.mdiCloseCircleOutline
-                  }}</v-icon>
-                  Discard
-                </v-btn>
-                <v-btn
-                  text
-                  tile
-                  class="flex-grow-1"
-                  height="50"
-                  :disabled="isCommentEmpty"
-                  :loading="submitBtnLoading"
-                  @click="submitComment"
-                >
-                  <v-icon class="mr-2">{{
-                    $vuetify.icons.values.mdiCheckCircleOutline
-                  }}</v-icon>
-                  Done
-                </v-btn>
-              </div>
+                  <Post is-post-view expanded-view :post="post" />
+                </div>
 
-              <div style="font-size: 1rem">
-                <Editor
-                  v-model="commentHTML"
-                  editable
-                  autofocus
-                  :style="$device.isDesktop ? 'max-height: 600px' : ''"
-                  style="overflow-y: auto"
-                  class="pa-2"
+                <div
+                  v-else
+                  class="mb-3 px-3 pb-3"
+                  :style="{
+                    'border-bottom-style': 'solid',
+                    'border-bottom-width': '1px',
+                    'border-bottom-color': $vuetify.theme.dark
+                      ? 'rgba(255, 255, 255, 0.12)'
+                      : 'rgba(0, 0, 0, 0.12)'
+                  }"
+                >
+                  <Post is-post-view expanded-view :post="post" />
+                </div>
+
+                <v-row no-gutters>
+                  <v-btn
+                    v-if="$store.state.currentUser"
+                    rounded
+                    depressed
+                    color="primary"
+                    class="mb-3 white--text"
+                    @click="openCommentDialog"
+                  >
+                    <v-icon class="mr-2">{{
+                      $vuetify.icons.values.mdiPencil
+                    }}</v-icon>
+                    <span class="mr-2">New Comment</span>
+                  </v-btn>
+
+                  <v-btn
+                    v-if="!$store.state.currentUser"
+                    rounded
+                    depressed
+                    color="primary"
+                    class="mb-3 white--text"
+                    to="/login"
+                    nuxt
+                  >
+                    <v-icon class="mr-2">{{
+                      $vuetify.icons.values.mdiPencil
+                    }}</v-icon>
+                    Log in to comment
+                  </v-btn>
+
+                  <v-spacer />
+
+                  <CommentSortMenu />
+                </v-row>
+
+                <DynamicScroller
+                  v-if="postComments.length > 0"
+                  page-mode
+                  :items="threadedComments"
+                  :min-item-size="54"
+                >
+                  <template v-slot="{ item, index, active }">
+                    <DynamicScrollerItem
+                      :item="item"
+                      :active="active"
+                      :index="index"
+                      :size-dependencies="[item.textContent]"
+                    >
+                      <div class="pb-3">
+                        <Comment
+                          :post="post"
+                          :post-view="postView"
+                          :comment="item"
+                        />
+                      </div>
+                    </DynamicScrollerItem>
+                  </template>
+                </DynamicScroller>
+
+                <v-progress-linear
+                  v-else-if="$apollo.queries.postComments.loading"
+                  indeterminate
                 />
-              </div>
-            </v-card>
-          </v-dialog>
-        </client-only>
-      </v-row>
+
+                <v-row v-else justify="center" class="pt-4" no-gutters>
+                  No one has commented yet. Will you be the first?
+                </v-row>
+
+                <div style="height: 600px" />
+              </v-col>
+
+              <v-col v-if="$device.isDesktop" cols="3">
+                <PlanetInfoCard :planet="post.planet" />
+              </v-col>
+            </v-row>
+          </v-container>
+        </div>
+      </div>
     </div>
+
+    <client-only>
+      <v-dialog
+        v-if="$store.state.currentUser"
+        v-model="commentDialog"
+        :retain-focus="false"
+        persistent
+        width="50%"
+        :fullscreen="!$device.isDesktop"
+        :transition="
+          $device.isDesktop ? 'dialog-transition' : 'dialog-bottom-transition'
+        "
+      >
+        <v-card
+          :tile="!$device.isDesktop"
+          :min-height="$device.isDesktop ? '400' : ''"
+        >
+          <div
+            style="display: flex"
+            :style="{
+              'background-color': $vuetify.theme.dark ? '#202124' : '#F1F3F4',
+              'border-bottom-width': '1px',
+              'border-bottom-color': 'rgba(0, 0, 0, 0.12)',
+              'border-bottom-style': $vuetify.theme.dark ? 'none' : 'solid'
+            }"
+          >
+            <v-btn
+              text
+              tile
+              class="flex-grow-1"
+              height="50"
+              @click="closeCommentDialog"
+            >
+              <v-icon class="mr-2">{{
+                $vuetify.icons.values.mdiCloseCircleOutline
+              }}</v-icon>
+              Discard
+            </v-btn>
+            <v-btn
+              text
+              tile
+              class="flex-grow-1"
+              height="50"
+              :disabled="isCommentEmpty"
+              :loading="submitBtnLoading"
+              @click="submitComment"
+            >
+              <v-icon class="mr-2">{{
+                $vuetify.icons.values.mdiCheckCircleOutline
+              }}</v-icon>
+              Done
+            </v-btn>
+          </div>
+
+          <div style="font-size: 1rem">
+            <Editor
+              v-model="commentHTML"
+              editable
+              autofocus
+              :style="$device.isDesktop ? 'max-height: 600px' : ''"
+              style="overflow-y: auto"
+              class="pa-2"
+            />
+          </div>
+        </v-card>
+      </v-dialog>
+    </client-only>
   </v-dialog>
 </template>
 
@@ -197,10 +282,12 @@ import CommentSortMenu from '../components/comment/sort/CommentSortMenu'
 import { urlName } from '@/util/urlName'
 import { isEditorEmpty } from '@/util/isEditorEmpty'
 import Post from '@/components/post/Post'
+import PlanetInfoCard from '@/components/planet/PlanetInfoCard'
 
 export default {
   name: 'PostDialog',
   components: {
+    PlanetInfoCard,
     Post,
     Editor: () => import('@/components/editor/Editor'),
     CommentSortMenu,
@@ -256,6 +343,12 @@ export default {
     }
   },
   watch: {
+    post: {
+      deep: true,
+      handler() {
+        this.$nextTick(() => this.$refs.dialogref.$refs.dialog.scrollTo(0, 0))
+      }
+    },
     $route: {
       deep: true,
       handler() {
@@ -308,6 +401,7 @@ export default {
     }
   },
   methods: {
+    doNothing() {},
     goBack() {
       this.dialogOpen = false
       window.history.pushState({}, null, this.$route.path)

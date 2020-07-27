@@ -4,6 +4,7 @@
     style="border-radius: 10px; align-self: start"
     height="60"
     width="80"
+    class="my-0"
     :color="$vuetify.theme.dark ? '#35363A' : '#DEE1E6'"
   >
     <a
@@ -21,7 +22,7 @@
       />
       <div
         v-else
-        style="height: 64px; width: 64px; display: flex; justify-content: center; align-items: center"
+        style="height: 60px; width: 80px; display: flex; justify-content: center; align-items: center"
       >
         <v-icon size="32" class="text--secondary">{{
           $vuetify.icons.values.mdiWeb

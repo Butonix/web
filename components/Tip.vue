@@ -48,9 +48,6 @@ export default {
   created() {
     this.tipIndex = Math.floor(Math.random() * this.tips.length)
   },
-  activated() {
-    this.nextTip()
-  },
   methods: {
     nextTip() {
       let newIndex = Math.floor(Math.random() * this.tips.length)

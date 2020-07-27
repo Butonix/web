@@ -27,7 +27,7 @@
           page-mode
           :items="feed"
           :min-item-size="54"
-          :buffer="500"
+          :buffer="3000"
         >
           <template v-slot="{ item, index, active }">
             <DynamicScrollerItem
@@ -44,11 +44,13 @@
                     ? 'rgba(255, 255, 255, 0.12)'
                     : 'rgba(0, 0, 0, 0.12)'
                 }"
+                class="pa-3"
               >
                 <Post
                   :post="item"
                   :index="index"
                   :active="active"
+                  :expanded-view="$route.query.view === 'expanded'"
                   @togglehidden="toggleHidden"
                   @toggleblock="toggleBlock"
                 />
@@ -67,9 +69,40 @@
     </v-col>
     <v-col v-if="$device.isDesktop" cols="3">
       <div class="sticky">
-        <div class="pb-3">
+        <template v-if="$route.name === 'u-username'">
+          <UserSummaryCard v-if="user" :user="user" />
+        </template>
+
+        <template v-else-if="$route.name === 'p-name'">
+          <div v-if="planet">
+            <PlanetInfoCard class="mb-3" :planet="planet" />
+            <PlanetRulesCard class="mb-3" :planet="planet" />
+            <PlanetModsCard :planet="planet" />
+          </div>
+        </template>
+
+        <template v-else>
+          <v-card
+            v-if="!$store.state.currentUser"
+            flat
+            :outlined="!$vuetify.theme.dark"
+            class="mb-3"
+          >
+            <v-card-title>Customize your Planets</v-card-title>
+            <v-card-subtitle
+              >Sign up on Comet to join Planets and create your personalized
+              feed.</v-card-subtitle
+            >
+            <v-card-actions>
+              <v-spacer />
+              <v-btn depressed text class="mr-2">Log In</v-btn>
+              <v-btn depressed color="primary">Sign Up</v-btn>
+            </v-card-actions>
+          </v-card>
+
           <PopularPlanetsCard />
-        </div>
+        </template>
+
         <InfoLinks class="mt-2" />
       </div>
     </v-col>
@@ -83,16 +116,26 @@ import 'vue-virtual-scroller/dist/vue-virtual-scroller.css'
 import { DynamicScroller, DynamicScrollerItem } from 'vue-virtual-scroller'
 import InfoLinks from '../components/InfoLinks'
 import feedGql from '../gql/feed.graphql'
+import userGql from '../gql/user.graphql'
+import planetGql from '../gql/planet.graphql'
 import Post from '../components/post/Post'
 import PopularPlanetsCard from '@/components/PopularPlanetsCard'
 import PostDialog from '@/components/PostDialog'
 import SortBar from '@/components/bars/SortBar'
 import SortMenu from '@/components/buttons/home_sort/SortMenu'
+import UserSummaryCard from '@/components/user/UserSummaryCard'
+import PlanetInfoCard from '@/components/planet/PlanetInfoCard'
+import PlanetRulesCard from '@/components/planet/PlanetRulesCard'
+import PlanetModsCard from '@/components/planet/PlanetModsCard'
 
 export default {
   name: 'Index',
   scrollToTop: false,
   components: {
+    PlanetModsCard,
+    PlanetRulesCard,
+    PlanetInfoCard,
+    UserSummaryCard,
     SortMenu,
     SortBar,
     PostDialog,
@@ -107,9 +150,10 @@ export default {
       feed: [],
       hasMore: true,
       page: 0,
-      query: {},
       dialog: false,
-      selectedPost: null
+      selectedPost: null,
+      user: null,
+      planet: null
     }
   },
   beforeRouteLeave(to, from, next) {
@@ -126,36 +170,36 @@ export default {
   },
   computed: {
     vars() {
+      let sort = 'HOT'
+      if (this.$route.name.includes('new')) sort = 'NEW'
+      else if (this.$route.name.includes('top-time')) sort = 'TOP'
+
+      let time = 'ALL'
+      if (this.$route.name.includes('top-time'))
+        time = this.$route.params.time.toUpperCase()
+
       return {
-        sort:
-          this.query && this.query.sort ? this.query.sort.toUpperCase() : 'HOT',
-        time: this.query && this.query.t ? this.query.t.toUpperCase() : 'ALL',
-        filter: this.$route.name === 'universe' ? 'ALL' : 'MYPLANETS',
+        sort,
+        time,
+        filter: this.$route.name === 'index' ? 'MYPLANETS' : 'ALL',
         types:
-          this.query && this.query.types
-            ? this.query.types.split('-').map((t) => t.toUpperCase())
-            : []
+          this.$route.query && this.$route.query.types
+            ? this.$route.query.types.split('-').map((t) => t.toUpperCase())
+            : [],
+        username: this.$route.params.username,
+        planetName: this.$route.params.name
       }
     }
   },
   watch: {
-    '$route.query': {
-      deep: true,
-      handler() {
-        if (this.$route.name === 'index' || this.$route.name === 'universe') {
-          this.query = this.$route.query
-        }
-      }
-    },
     dialog() {
       if (!this.dialog) this.hideDialog()
     }
   },
-  activated() {
-    this.query = this.$route.query
+  mounted() {
     window.addEventListener('scroll', this.handleScroll)
   },
-  deactivated() {
+  destroyed() {
     window.removeEventListener('scroll', this.handleScroll)
   },
   apollo: {
@@ -166,8 +210,28 @@ export default {
           ...this.vars
         }
       },
+      fetchPolicy: 'network-only'
+    },
+    user: {
+      query: userGql,
+      variables() {
+        return {
+          username: this.$route.params.username
+        }
+      },
       skip() {
-        return this.$route.name !== 'index' && this.$route.name !== 'universe'
+        return !this.$route.params.username
+      }
+    },
+    planet: {
+      query: planetGql,
+      variables() {
+        return {
+          planetName: this.$route.params.name
+        }
+      },
+      skip() {
+        return !this.$route.params.name
       }
     }
   },
@@ -198,39 +262,16 @@ export default {
         data: { feed: this.feed.filter((p) => !p.author.isBlocking) }
       })
     },
-    chooseAll() {
-      const query = Object.assign({}, this.$route.query)
-      delete query.feed
-      this.$router.push({ path: this.$route.path, query })
-    },
-    chooseMyTopics() {
-      if (!this.$store.state.currentUser) {
-        this.$store.dispatch('displaySnackbar', {
-          message: 'Must log in to view My Topics'
-        })
-        return
-      }
-
-      this.$router.push({
-        path: this.$route.path,
-        query: { ...this.$route.query, feed: 'mytopics' }
-      })
-    },
     handleScroll(e) {
       if (!process.client) return
       const totalPageHeight = document.body.scrollHeight
       const scrollPoint = window.scrollY + window.innerHeight
-      if (scrollPoint >= totalPageHeight - 200) {
+      if (scrollPoint >= totalPageHeight - 3000) {
         this.showMore()
       }
     },
     showMore() {
-      if (
-        this.$apollo.queries.feed.loading ||
-        !this.hasMore ||
-        this.$route.path !== '/'
-      )
-        return
+      if (this.$apollo.queries.feed.loading || !this.hasMore) return
       this.page++
       this.$apollo.queries.feed.fetchMore({
         query: feedGql,

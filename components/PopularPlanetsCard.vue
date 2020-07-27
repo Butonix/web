@@ -5,21 +5,32 @@
       <v-icon class="ml-2">{{ $vuetify.icons.values.mdiTrendingUp }}</v-icon>
     </v-card-title>
     <v-list>
-      <v-list-item nuxt to="/p/Music">
-        <v-list-item-avatar color="primary" size="32">
-          <v-icon size="24">{{ $vuetify.icons.values.mdiMusic }}</v-icon>
+      <v-list-item
+        v-for="planet in popularPlanets"
+        :key="planet.name"
+        nuxt
+        :to="`/p/${planet.name}`"
+      >
+        <v-list-item-avatar
+          :color="planet.avatarImageUrl ? 'primary' : ''"
+          size="32"
+        >
+          <v-img v-if="planet.avatarImageUrl" :src="planet.avatarImageUrl" />
+          <v-icon v-else size="32" class="text--secondary">{{
+            $vuetify.icons.values.mdiEarth
+          }}</v-icon>
         </v-list-item-avatar>
         <v-list-item-content>
           <v-list-item-title>
-            Music
+            {{ planet.fullName }}
             <span
               class="ml-1 text--secondary"
               style="font-size: 0.93rem; font-weight: 500"
-              >p/Music</span
+              >p/{{ planet.name }}</span
             >
           </v-list-item-title>
           <v-list-item-subtitle style="font-weight: 500">
-            22 posts today
+            {{ planet.postCount }} posts today
           </v-list-item-subtitle>
         </v-list-item-content>
       </v-list-item>

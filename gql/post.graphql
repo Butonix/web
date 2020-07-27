@@ -25,9 +25,12 @@ query post($postId: ID!) {
         fullName
         description
         userCount
-        joined
-        blocking
         avatarImageUrl
+        galaxy {
+          name
+          fullName
+          icon
+        }
       }
       postView {
         lastCommentCount

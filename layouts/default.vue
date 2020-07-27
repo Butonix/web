@@ -6,7 +6,7 @@
 
     <v-main>
       <v-container class="pt-0">
-        <nuxt keep-alive :keep-alive-props="{ include: ['Index'] }" />
+        <nuxt />
       </v-container>
       <Snackbar />
     </v-main>
