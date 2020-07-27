@@ -53,7 +53,7 @@
             <div
               style="position: fixed; top: 14px; left: 50%; transform: translateX(-50%); font-size: 21px; font-weight: 500"
             >
-              p/{{ post ? post.planet.name : '' }}
+              {{ post ? post.planet.name : '' }}
             </div>
           </v-app-bar>
 

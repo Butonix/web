@@ -39,7 +39,7 @@
           }}</v-icon></span
         >
         <span v-else-if="$route.name === 'u-username'">
-          u/{{ $route.params.username }}</span
+          {{ $route.params.username }}</span
         >
         <span v-else-if="$route.name === 'search'">Search</span>
       </div>
