@@ -15,8 +15,7 @@
     >
       <v-btn
         aria-label="Home"
-        class="font-weight-regular"
-        style="letter-spacing: normal"
+        class="navbtn"
         :to="{ path: '/' }"
         nuxt
         @click.stop.prevent="clickHomeButton"
@@ -30,13 +29,7 @@
         }}</v-icon>
       </v-btn>
 
-      <v-btn
-        aria-label="Search"
-        to="/search"
-        nuxt
-        class="font-weight-regular"
-        style="letter-spacing: normal"
-      >
+      <v-btn aria-label="Search" to="/search" nuxt class="navbtn">
         <span
           :class="
             $route.name === 'search' ? 'primary--text' : 'text--secondary'
@@ -48,18 +41,13 @@
         }}</v-icon>
       </v-btn>
 
-      <v-btn class="font-weight-regular" style="letter-spacing: normal">
+      <v-btn class="navbtn">
         <v-img contain width="44" src="/logo_mobile.png" />
       </v-btn>
 
       <v-bottom-sheet v-model="planetsBottomSheet" scrollable>
         <template v-slot:activator="{ on }">
-          <v-btn
-            aria-label="Planets"
-            class="font-weight-regular text--secondary"
-            style="letter-spacing: normal"
-            v-on="on"
-          >
+          <v-btn aria-label="Planets" class="navbtn" v-on="on">
             <span>Planets</span>
             <v-icon>{{ $vuetify.icons.values.mdiEarth }}</v-icon>
           </v-btn>
@@ -72,13 +60,7 @@
         </v-card>
       </v-bottom-sheet>
 
-      <v-btn
-        aria-label="Messages"
-        to="/messages"
-        nuxt
-        class="font-weight-regular"
-        style="letter-spacing: normal"
-      >
+      <v-btn aria-label="Messages" to="/messages" nuxt class="navbtn">
         <span
           :class="
             $route.name === 'messages' ? 'primary--text' : 'text--secondary'
@@ -181,5 +163,11 @@ export default {
 .v-app-bar {
   top: initial !important;
   bottom: 0 !important;
+}
+
+.navbtn {
+  font-weight: 400;
+  min-width: 0 !important;
+  letter-spacing: normal;
 }
 </style>
