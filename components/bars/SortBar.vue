@@ -17,6 +17,11 @@
       <template v-if="$device.isDesktop">
         <v-btn
           v-show="!$route.name.includes('u-username')"
+          :style="
+            $device.isDesktop
+              ? 'border-top-left-radius: 10px; border-bottom-left-radius: 10px'
+              : ''
+          "
           small
           text
           nuxt
@@ -258,6 +263,11 @@
           $route.query.view === 'expanded'
             ? { query: { ...$route.query, view: 'collapsed' } }
             : { query: { ...$route.query, view: 'expanded' } }
+        "
+        :style="
+          $device.isDesktop
+            ? 'border-top-right-radius: 10px; border-bottom-right-radius: 10px'
+            : ''
         "
       >
         <v-icon size="20">

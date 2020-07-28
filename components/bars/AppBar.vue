@@ -4,11 +4,10 @@
     app
     flat
     :dense="$device.isDesktop"
-    :color="$vuetify.theme.dark ? '#202124' : '#F1F3F4'"
     :style="
       $vuetify.theme.dark
-        ? 'border-bottom: 1px solid rgba(255, 255, 255, .12); background-color: #202124'
-        : 'border-bottom: 1px solid rgba(0, 0, 0, .12); background-color: #F1F3F4'
+        ? 'border-bottom: 1px solid rgba(255, 255, 255, .12)'
+        : 'border-bottom: 1px solid rgba(0, 0, 0, .12)'
     "
   >
     <v-row class="ma-0" align="center" no-gutters>
@@ -17,6 +16,8 @@
       <div
         v-if="!$device.isDesktop"
         style="position: fixed; top: 14px; left: 50%; transform: translateX(-50%); font-size: 21px; font-weight: 500"
+        class="unselectable"
+        @click="openPlanetPrompt"
       >
         <span
           v-if="
@@ -60,7 +61,6 @@
           flat
           class="mr-6"
           style="max-width: 25%; height: 34px"
-          :background-color="$vuetify.theme.dark ? '' : '#DEE1E6'"
           solo
           label="Search"
           @keydown.enter="doSearch"
@@ -179,6 +179,11 @@ export default {
       const query = {}
       if (this.searchText) query.q = this.searchText
       this.$router.push({ path: '/search', query })
+    },
+    openPlanetPrompt() {
+      const planet = window.prompt('Go to Planet')
+      if (!planet) return
+      this.$router.push(`/p/${planet}`)
     }
   }
 }

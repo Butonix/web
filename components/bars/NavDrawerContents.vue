@@ -118,7 +118,6 @@
       hide-details
       class="mx-2 mb-2"
       style="height: 34px"
-      :background-color="$vuetify.theme.dark ? '' : '#DEE1E6'"
     />-->
 
     <v-list class="py-0">
@@ -140,12 +139,7 @@
 
         <v-list-item-content>
           <v-list-item-title>
-            {{ planet.fullName }}
-            <span
-              class="ml-1 text--secondary"
-              style="font-size: 0.93rem; font-weight: 500"
-              >p/{{ planet.name }}</span
-            >
+            {{ planet.name }}
           </v-list-item-title>
           <v-list-item-subtitle style="font-weight: 500">
             {{ planet.postCount }} posts today

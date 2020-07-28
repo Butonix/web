@@ -33,6 +33,14 @@ body {
   outline: none !important;
 }
 
+.v-btn--depressed.theme--light {
+  background-color: #DEE1E6 !important;
+}
+
+.v-text-field--solo.theme--light > .v-input__control > .v-input__slot {
+  background-color: #DEE1E6 !important;
+}
+
 .v-btn--active::before {
   opacity: 0 !important;
 }

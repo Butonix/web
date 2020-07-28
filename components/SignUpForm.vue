@@ -6,7 +6,6 @@
       solo
       flat
       dense
-      :background-color="$vuetify.theme.dark ? '#202124' : '#DEE1E6'"
       :style="$device.isDesktop ? 'max-width: 35%' : ''"
       label="Username"
     />
@@ -17,7 +16,6 @@
       solo
       flat
       dense
-      :background-color="$vuetify.theme.dark ? '#202124' : '#DEE1E6'"
       :style="$device.isDesktop ? 'max-width: 35%' : ''"
       label="Email (Optional)*"
     />
@@ -28,7 +26,6 @@
       solo
       flat
       dense
-      :background-color="$vuetify.theme.dark ? '#202124' : '#DEE1E6'"
       :style="$device.isDesktop ? 'max-width: 35%' : ''"
       label="Password"
       :type="showPassword ? 'text' : 'password'"
@@ -53,7 +50,6 @@
       solo
       flat
       dense
-      :background-color="$vuetify.theme.dark ? '#202124' : '#DEE1E6'"
       :style="$device.isDesktop ? 'max-width: 35%' : ''"
       label="Confirm Password"
       :type="showPassword ? 'text' : 'password'"

@@ -2,7 +2,6 @@ query joinedPlanets {
   joinedPlanets {
     avatarImageUrl
     name
-    fullName
     postCount
   }
 }

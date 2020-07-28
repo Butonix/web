@@ -23,7 +23,6 @@ query hiddenPosts {
       isHidden
       planet {
         name
-        fullName
         description
         userCount
         joined

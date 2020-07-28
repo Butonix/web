@@ -1,5 +1,8 @@
 <template>
-  <div :class="$vuetify.theme.dark ? 'editor-dark' : 'editor-light'">
+  <div
+    :class="$vuetify.theme.dark ? 'editor-dark' : 'editor-light'"
+    @click="editor.focus()"
+  >
     <editor-content
       :class="
         $vuetify.theme.dark ? 'editor-dark__content' : 'editor-light__content'

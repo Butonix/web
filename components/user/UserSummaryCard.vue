@@ -165,7 +165,6 @@
                 label="Bio"
                 solo
                 flat
-                :background-color="$vuetify.theme.dark ? '#202124' : '#DEE1E6'"
                 no-resize
                 rows="3"
                 :counter="160"

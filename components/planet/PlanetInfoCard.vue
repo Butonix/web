@@ -16,11 +16,8 @@
         <v-list-item-title
           style="font-size: 1.43rem; font-weight: 500"
           class="mb-0"
-          >{{ planet.fullName }}
-          <span class="text--secondary ml-2" style="font-size: 0.93rem"
-            >p/{{ planet.name }}</span
-          ></v-list-item-title
-        >
+          >{{ planet.name }}
+        </v-list-item-title>
         <v-list-item-subtitle class="mt-1" style="font-size: 1rem">{{
           planet.description
         }}</v-list-item-subtitle>

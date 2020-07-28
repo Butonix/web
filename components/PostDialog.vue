@@ -159,7 +159,6 @@
                 </v-row>
 
                 <DynamicScroller
-                  v-if="postComments.length > 0"
                   page-mode
                   :items="threadedComments"
                   :min-item-size="54"
@@ -183,11 +182,19 @@
                 </DynamicScroller>
 
                 <v-progress-linear
-                  v-else-if="$apollo.queries.postComments.loading"
+                  v-show="$apollo.queries.postComments.loading"
                   indeterminate
                 />
 
-                <v-row v-else justify="center" class="pt-4" no-gutters>
+                <v-row
+                  v-show="
+                    !$apollo.queries.postComments.loading &&
+                      postComments.length === 0
+                  "
+                  justify="center"
+                  class="pt-4"
+                  no-gutters
+                >
                   No one has commented yet. Will you be the first?
                 </v-row>
 
@@ -261,7 +268,7 @@
               v-model="commentHTML"
               editable
               autofocus
-              :style="$device.isDesktop ? 'max-height: 600px' : ''"
+              :style="$device.isDesktop ? 'min-height: 296px' : ''"
               style="overflow-y: auto"
               class="pa-2"
             />

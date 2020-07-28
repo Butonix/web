@@ -5,11 +5,9 @@
     bottom
     class="bottomappbar"
     :height="$device.isIos ? 80 : 56"
-    :color="$vuetify.theme.dark ? '#35363A' : '#FFFFFF'"
   >
     <v-bottom-navigation
       grow
-      :color="$vuetify.theme.dark ? '#35363A' : '#FFFFFF'"
       :class="$device.isIos ? 'elevation-0' : ''"
       :style="$device.isIos ? 'margin-bottom: 24px' : ''"
     >

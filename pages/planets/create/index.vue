@@ -11,27 +11,15 @@
         autofocus
         solo
         flat
-        label="Comet"
+        label="Name"
         persistent-hint
-        hint="Name shown in address bar (e.g p/Comet). Letters, numbers, and underscores."
+        hint="Name shown in address bar (e.g p/Comet). Letters, numbers, and underscores. This cannot be changed later."
         :counter="21"
       >
         <template v-slot:prepend-inner>
           <span class="text--secondary">p/</span>
         </template>
       </v-text-field>
-
-      <v-text-field
-        v-model="fullName"
-        class="namefield mb-3"
-        autofocus
-        solo
-        flat
-        label="Full name"
-        persistent-hint
-        hint='Full name (e.g. "Comet Discussion"). Spaces are allowed!'
-        :counter="50"
-      />
 
       <v-textarea
         v-model="description"
@@ -85,7 +73,7 @@
         depressed
         rounded
         color="primary"
-        :disabled="!name || !fullName || !description || !selectedGalaxy"
+        :disabled="!name || !description || !selectedGalaxy"
         :loading="createBtnLoading"
         @click="createPlanet"
         >Create</v-btn
@@ -105,7 +93,6 @@ export default {
   data() {
     return {
       name: '',
-      fullName: '',
       description: '',
       galaxies: [],
       selectedGalaxy: null,
@@ -132,7 +119,6 @@ export default {
         mutation: createPlanetGql,
         variables: {
           name: this.name,
-          fullName: this.fullName,
           description: this.description,
           galaxy: this.selectedGalaxy
         }

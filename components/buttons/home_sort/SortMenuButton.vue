@@ -41,7 +41,7 @@
       <v-icon size="20" class="mr-2">{{
         $vuetify.icons.values.mdiCommentMultipleOutline
       }}</v-icon>
-      <span>Comments</span>
+      <span>Most Comments</span>
     </template>
 
     <span v-if="$route.query.types">*</span>

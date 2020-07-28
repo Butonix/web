@@ -165,7 +165,6 @@
       label="Use an image instead"
       class="mt-3 ml-2 fileupload"
       :prepend-icon="$vuetify.icons.values.mdiImage"
-      :background-color="$vuetify.theme.dark ? '#202124' : '#DEE1E6'"
       :style="$device.isDesktop ? 'max-width: 300px' : ''"
       :rules="uploadRules"
     />

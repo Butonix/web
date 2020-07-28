@@ -14,7 +14,10 @@ $material-dark: (
   'background': #202124,
   'surface': #202124,
   'bottom-navigation': #35363A,
+  'navigation-drawer': #202124,
   'cards': #35363A,
+  'toolbar': #202124,
+  'app-bar': #202124,
   'text': (
     'primary': #E8EAED,
     'secondary': #9AA0A6
@@ -23,11 +26,16 @@ $material-dark: (
 
 $material-light: (
   'background': #F8F9FA,
+  'surface': #F8F9FA,
+  'bottom-navigation': #F1F3F4,
+  'navigation-drawer': #F1F3F4,
+  'cards': #F1F3F4,
+  'toolbar': #F1F3F4,
+  'app-bar': #F1F3F4,
   'text': (
     'primary': #202124,
     'secondary': #5F6368
-  ),
-  'cards': #F1F3F4
+  )
 );
 
 $container-max-widths: (

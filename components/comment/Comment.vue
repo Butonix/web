@@ -238,7 +238,7 @@
               v-model="idState.replyHTML"
               editable
               autofocus
-              :style="$device.isDesktop ? 'max-height: 600px' : ''"
+              :style="$device.isDesktop ? 'min-height: 296px' : ''"
               style="overflow-y: auto"
               class="pa-2"
             />
@@ -514,13 +514,6 @@ export default {
       if (!this.$store.state.currentUser) {
         this.$store.dispatch('displaySnackbar', {
           message: 'Must log in to rocket this comment'
-        })
-        return
-      }
-
-      if (this.comment.author.isCurrentUser) {
-        this.$store.dispatch('displaySnackbar', {
-          message: 'Cannot rocket your own comment'
         })
         return
       }

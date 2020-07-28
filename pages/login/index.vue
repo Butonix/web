@@ -3,20 +3,12 @@
     <v-col :cols="$device.isDesktop ? 3 : 12">
       <div class="text-h3 mt-12 mb-6">Welcome back.</div>
       <v-form @submit.prevent="login">
-        <v-text-field
-          v-model="username"
-          solo
-          flat
-          dense
-          :background-color="$vuetify.theme.dark ? '' : '#DEE1E6'"
-          label="Username"
-        />
+        <v-text-field v-model="username" solo flat dense label="Username" />
         <v-text-field
           v-model="password"
           solo
           flat
           dense
-          :background-color="$vuetify.theme.dark ? '' : '#DEE1E6'"
           :type="showPassword ? 'text' : 'password'"
           label="Password"
         >

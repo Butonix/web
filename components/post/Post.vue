@@ -86,7 +86,12 @@
 
         <PostPreview
           v-if="$device.isDesktop"
-          v-show="active && (idState.expand || post.textContent)"
+          v-show="
+            active &&
+              (idState.expand ||
+                post.textContent ||
+                $route.query.view === 'expanded')
+          "
           :key="post.id"
           ref="textcontent"
           :expanded-view="idState.expand || $route.query.view === 'expanded'"

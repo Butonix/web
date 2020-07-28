@@ -85,7 +85,7 @@
               v-model="editTextContent"
               editable
               autofocus
-              :style="$device.isDesktop ? 'max-height: 600px' : ''"
+              :style="$device.isDesktop ? 'min-height: 296px' : ''"
               style="overflow-y: auto"
               class="pa-2"
             />

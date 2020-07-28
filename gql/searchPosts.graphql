@@ -22,7 +22,6 @@ query searchPosts($search: String!, $page: Int, $pageSize: Int, $sort: Sort, $ti
     }
     planet {
       name
-      fullName
       description
       userCount
       joined

@@ -23,7 +23,6 @@ query feed($page: Int, $sort: Sort, $time: Time, $filter: Filter, $types: [Type!
     }
     planet {
       name
-      fullName
       description
       userCount
       avatarImageUrl

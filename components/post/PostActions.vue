@@ -5,7 +5,7 @@
       small
       rounded
       text
-      :to="`/p/${post.id}/${urlName}`"
+      :to="`/p/${post.planet.name}/comments/${post.id}/${urlName}`"
       nuxt
       :title="
         `${post.commentCount} Comment${post.commentCount === 1 ? '' : 's'}`
@@ -21,23 +21,24 @@
     </v-btn>
 
     <v-btn
+      :ripple="false"
       class="px-2 mr-1"
       small
       rounded
       text
       :class="post.isEndorsed ? '' : 'text--secondary'"
-      :color="post.isEndorsed ? 'primary' : ''"
       :title="
         `${post.endorsementCount} Rocket${
           post.endorsementCount === 1 ? '' : 's'
         }`
       "
+      :style="cssVars"
       @click.stop.prevent="toggleEndorsement"
     >
-      <v-icon size="20" class="mr-2">{{
-        $vuetify.icons.values.mdiRocket
-      }}</v-icon>
-      {{ post.endorsementCount }}
+      <AnimatedRocket class="mr-2" :item="post" />
+      <span :style="post.isEndorsed ? 'color: var(--theme-color)' : ''">{{
+        post.endorsementCount
+      }}</span>
     </v-btn>
   </span>
 </template>
@@ -45,9 +46,11 @@
 <script>
 import togglePostEndorsementGql from '~/gql/togglePostEndorsement'
 import { urlName } from '~/util/urlName'
+import AnimatedRocket from '@/components/AnimatedRocket'
 
 export default {
   name: 'PostActions',
+  components: { AnimatedRocket },
   props: {
     post: {
       type: Object,
@@ -55,6 +58,13 @@ export default {
     }
   },
   computed: {
+    cssVars() {
+      return {
+        '--theme-color': this.post.planet.themeColor
+          ? this.post.planet.themeColor
+          : '#EF5350'
+      }
+    },
     newCommentCount() {
       if (!this.post.postView) return -1
       return this.post.commentCount - this.post.postView.lastCommentCount
@@ -69,13 +79,6 @@ export default {
       if (!this.$store.state.currentUser) {
         this.$store.dispatch('displaySnackbar', {
           message: 'Must log in to rocket this post'
-        })
-        return
-      }
-
-      if (this.post.author.isCurrentUser) {
-        this.$store.dispatch('displaySnackbar', {
-          message: 'Cannot rocket your own post'
         })
         return
       }

@@ -22,7 +22,6 @@ query post($postId: ID!) {
       type
       planet {
         name
-        fullName
         description
         userCount
         avatarImageUrl

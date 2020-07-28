@@ -1,7 +1,6 @@
 query popularPlanets {
   popularPlanets {
     name
-    fullName
     description
     userCount
     postCount

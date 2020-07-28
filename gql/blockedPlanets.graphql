@@ -1,7 +1,6 @@
 query blockedPlanets {
   blockedPlanets {
     name
-    fullName
     blocking
     userCount
     description

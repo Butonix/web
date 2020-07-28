@@ -35,6 +35,10 @@ export default {
       document.documentElement.style.backgroundColor = this.$vuetify.theme.dark
         ? '#202124'
         : '#F1F3F4'
+      document.querySelector('body').style.backgroundColor = this.$vuetify.theme
+        .dark
+        ? '#202124'
+        : '#F1F3F4'
     }
   },
   beforeCreate() {
@@ -57,6 +61,10 @@ export default {
   },
   beforeMount() {
     document.documentElement.style.backgroundColor = this.$vuetify.theme.dark
+      ? '#202124'
+      : '#F1F3F4'
+    document.querySelector('body').style.backgroundColor = this.$vuetify.theme
+      .dark
       ? '#202124'
       : '#F1F3F4'
   },

@@ -22,12 +22,7 @@
         </v-list-item-avatar>
         <v-list-item-content>
           <v-list-item-title>
-            {{ planet.fullName }}
-            <span
-              class="ml-1 text--secondary"
-              style="font-size: 0.93rem; font-weight: 500"
-              >p/{{ planet.name }}</span
-            >
+            {{ planet.name }}
           </v-list-item-title>
           <v-list-item-subtitle style="font-weight: 500">
             {{ planet.postCount }} posts today
@@ -37,12 +32,7 @@
     </v-list>
 
     <v-card-actions>
-      <v-btn
-        depressed
-        class="flex-grow-1"
-        :color="$vuetify.theme.dark ? '#202124' : '#DEE1E6'"
-        nuxt
-        to="/planets/explore"
+      <v-btn depressed class="flex-grow-1" nuxt to="/planets/explore"
         >Explore more Planets
         <v-icon size="20" class="ml-2">{{
           $vuetify.icons.values.mdiTelescope
@@ -54,7 +44,6 @@
       <v-btn
         depressed
         class="flex-grow-1"
-        :color="$vuetify.theme.dark ? '#202124' : '#DEE1E6'"
         nuxt
         :to="$store.state.currentUser ? '/planets/create' : '/signup'"
       >

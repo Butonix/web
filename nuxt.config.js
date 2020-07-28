@@ -109,7 +109,8 @@ import {
   mdiArrowLeft,
   mdiEmailOutline,
   mdiArrowExpand,
-  mdiArrowCollapse
+  mdiArrowCollapse,
+  mdiDogSide
 } from '@mdi/js'
 
 export default {
@@ -127,7 +128,8 @@ export default {
         name: 'description',
         content: process.env.npm_package_description || ''
       },
-      { name: 'theme-color', content: '#202124' }
+      { name: 'theme-color', content: '#202124' },
+      { name: 'og:image', hid: 'og:image', content: '/comet_og_image.png' }
     ],
     link: [
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
@@ -420,7 +422,8 @@ export default {
         mdiArrowLeft,
         mdiEmailOutline,
         mdiArrowExpand,
-        mdiArrowCollapse
+        mdiArrowCollapse,
+        mdiDogSide
       }
     },
     theme: {

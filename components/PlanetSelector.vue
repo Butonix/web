@@ -4,34 +4,34 @@
     v-model="planet"
     solo
     flat
-    :items="search && searchPlanets.length > 0 ? searchPlanets : items"
-    item-text="fullName"
+    :items="allPlanets"
+    item-text="name"
     item-value="name"
     label="Choose a planet"
     class="namefield"
-    @keydown="updateSearch"
   >
     <template v-slot:prepend-inner>
       <v-avatar
-        v-if="planet"
         class="mr-2"
         size="24"
         :color="
-          planet.avatarImageUrl && planet.themeColor ? planet.themeColor : ''
+          planet && planet.avatarImageUrl && planet.themeColor
+            ? planet.themeColor
+            : ''
         "
       >
-        <v-img v-if="planet.avatarImageUrl" :src="planet.avatarImageUrl" />
-        <v-icon v-else>{{ $vuetify.icons.values.mdiEarth }}</v-icon>
+        <v-img
+          v-if="planet && planet.avatarImageUrl"
+          :src="planet.avatarImageUrl"
+        />
+        <v-icon v-else class="text--secondary">{{
+          $vuetify.icons.values.mdiEarth
+        }}</v-icon>
       </v-avatar>
-
-      <span v-else class="text--secondary">p/</span>
     </template>
 
     <template v-slot:selection="data">
-      <span class="text--primary">{{ data.item.fullName }}</span>
-      <span class="ml-2 text--secondary" style="font-size: 0.93rem"
-        >p/{{ data.item.name }}</span
-      >
+      <span class="text--primary">{{ data.item.name }}</span>
     </template>
 
     <template v-slot:item="data">
@@ -43,15 +43,14 @@
         >
           <v-img :src="data.item.avatarImageUrl" />
         </v-avatar>
-        <v-icon v-else>{{ $vuetify.icons.values.mdiEarth }}</v-icon>
+        <v-icon v-else class="text--secondary">{{
+          $vuetify.icons.values.mdiEarth
+        }}</v-icon>
       </v-list-item-avatar>
       <v-list-item-content>
-        <v-list-item-title style="font-size: 1rem">{{
-          data.item.fullName
-        }}</v-list-item-title>
-        <v-list-item-subtitle style="font-size: 0.93rem"
-          >p/{{ data.item.name }}</v-list-item-subtitle
-        >
+        <v-list-item-title style="font-size: 1rem">
+          {{ data.item.name }}
+        </v-list-item-title>
       </v-list-item-content>
     </template>
   </v-combobox>
@@ -59,8 +58,6 @@
 
 <script>
 import gql from 'graphql-tag'
-import joinedPlanetsGql from '../gql/joinedPlanets.graphql'
-import searchPlanetsGql from '../gql/searchPlanets.graphql'
 
 export default {
   name: 'PlanetSelector',
@@ -76,21 +73,10 @@ export default {
   },
   data() {
     return {
-      joinedPlanets: [],
-      searchPlanets: [],
+      allPlanets: [],
       search: '',
       planet: this.value,
       prevPlanet: null
-    }
-  },
-  computed: {
-    items() {
-      if (
-        this.prevPlanet &&
-        !this.joinedPlanets.find((p) => p.name === this.prevPlanet.name)
-      ) {
-        return [this.prevPlanet].concat(this.joinedPlanets)
-      } else return this.joinedPlanets
     }
   },
   watch: {
@@ -114,7 +100,6 @@ export default {
               query($planetName: ID!) {
                 planet(planetName: $planetName) {
                   name
-                  fullName
                   avatarImageUrl
                 }
               }
@@ -130,25 +115,15 @@ export default {
     }
   },
   apollo: {
-    joinedPlanets: {
-      query: joinedPlanetsGql
-    },
-    searchPlanets: {
-      query: searchPlanetsGql,
-      variables() {
-        return {
-          search: this.search
+    allPlanets: {
+      query: gql`
+        query {
+          allPlanets {
+            avatarImageUrl
+            name
+          }
         }
-      },
-      skip() {
-        return !this.search
-      },
-      debounce: 300
-    }
-  },
-  methods: {
-    updateSearch() {
-      this.search = this.$refs.combobox.lazySearch
+      `
     }
   }
 }
@@ -159,7 +134,7 @@ export default {
   padding-right: 0 !important;
 }
 
-.namefield >>> .v-label {
-  top: initial !important;
+>>> .v-list-item {
+  cursor: pointer;
 }
 </style>

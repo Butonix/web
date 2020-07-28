@@ -1,7 +1,6 @@
 query planet($planetName: ID!) {
   planet(planetName: $planetName) {
     name
-    fullName
     joined
     blocking
     userCount
