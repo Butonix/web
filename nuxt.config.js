@@ -110,7 +110,8 @@ import {
   mdiEmailOutline,
   mdiArrowExpand,
   mdiArrowCollapse,
-  mdiDogSide
+  mdiDogSide,
+  mdiVideoOutline
 } from '@mdi/js'
 
 export default {
@@ -423,7 +424,8 @@ export default {
         mdiEmailOutline,
         mdiArrowExpand,
         mdiArrowCollapse,
-        mdiDogSide
+        mdiDogSide,
+        mdiVideoOutline
       }
     },
     theme: {

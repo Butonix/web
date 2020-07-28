@@ -17,7 +17,7 @@
         $vuetify.icons.values.mdiEarth
       }}</v-icon>
     </v-avatar>
-    <span class="ml-1 caption"> p/{{ post.planet.name }} </span>
+    <span class="ml-1 caption">p/{{ post.planet.name }}</span>
   </nuxt-link>
 </template>
 

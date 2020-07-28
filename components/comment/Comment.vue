@@ -472,25 +472,22 @@ export default {
             parentCommentId: this.comment.id
           },
           update: (store, { data: { submitComment } }) => {
-            if (this.$route.name === 'post-id-title') {
-              const data = store.readQuery({
-                query: postCommentsGql,
-                variables: {
-                  postId: this.comment.postId
-                  // sort: this.sort.sort.toUpperCase()
-                }
-              })
-              data.postComments.unshift(submitComment)
-              store.writeQuery({
-                query: postCommentsGql,
-                variables: {
-                  postId: this.comment.postId
-                  // sort: this.sort.sort.toUpperCase()
-                },
-                data
-              })
-            }
-
+            const data = store.readQuery({
+              query: postCommentsGql,
+              variables: {
+                postId: this.comment.postId
+                // sort: this.sort.sort.toUpperCase()
+              }
+            })
+            data.postComments.unshift(submitComment)
+            store.writeQuery({
+              query: postCommentsGql,
+              variables: {
+                postId: this.comment.postId
+                // sort: this.sort.sort.toUpperCase()
+              },
+              data
+            })
             this.idState.replyHTML = null
             this.idState.replyDialog = false
             if (!this.comment.childComments) this.comment.childComments = []

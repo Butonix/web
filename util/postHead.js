@@ -37,7 +37,7 @@ export const postHead = (post) => {
         {
           hid: 'og:description',
           property: 'og:description',
-          content: post.textContent
+          content: post.textContent ? post.textContent : ''
         },
         {
           hid: 'og:author',
@@ -77,7 +77,7 @@ export const postHead = (post) => {
         {
           hid: 'twitter:site',
           name: 'twitter:site',
-          content: '@CometCommunica1'
+          content: '@CometWebsite'
         },
         {
           hid: 'twitter:title',
@@ -92,7 +92,7 @@ export const postHead = (post) => {
         {
           hid: 'twitter:description',
           name: 'twitter:description',
-          content: post.textContent
+          content: post.textContent ? post.textContent : ''
         },
         {
           hid: 'twitter:image',

@@ -1,5 +1,5 @@
-query feed($page: Int, $sort: Sort, $time: Time, $filter: Filter, $types: [Type!], $planetName: String, $username: String) {
-  feed(page: $page, sort: $sort, time: $time, filter: $filter, types: $types, planetName: $planetName, username: $username) {
+query feed($page: Int, $sort: Sort, $time: Time, $filter: Filter, $types: [Type!], $planetName: String, $galaxyName: String, $username: String, $search: String) {
+  feed(page: $page, sort: $sort, time: $time, filter: $filter, types: $types, planetName: $planetName, galaxyName: $galaxyName, username: $username, search: $search) {
     commentCount
     createdAt
     editedAt

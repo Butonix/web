@@ -8,15 +8,21 @@
     />
     <v-list-item>
       <v-list-item-avatar>
-        <v-img v-if="planet.avatarImageUrl" :src="planet.avatarImageUrl" />
-        <v-icon v-else>{{ $vuetify.icons.values.mdiEarth }}</v-icon>
+        <nuxt-link
+          style="height: 40px; min-width: 40px; width: 40px"
+          :to="`/p/${planet.name}`"
+        >
+          <v-img v-if="planet.avatarImageUrl" :src="planet.avatarImageUrl" />
+          <v-icon v-else>{{ $vuetify.icons.values.mdiEarth }}</v-icon>
+        </nuxt-link>
       </v-list-item-avatar>
 
       <v-list-item-content>
         <v-list-item-title
           style="font-size: 1.43rem; font-weight: 500"
           class="mb-0"
-          >{{ planet.name }}
+        >
+          <nuxt-link :to="`/p/${planet.name}`">{{ planet.name }}</nuxt-link>
         </v-list-item-title>
         <v-list-item-subtitle class="mt-1" style="font-size: 1rem">{{
           planet.description

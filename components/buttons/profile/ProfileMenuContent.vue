@@ -54,20 +54,6 @@
     <v-list-item
       v-if="$store.state.currentUser"
       nuxt
-      to="/filters"
-      @click="$emit('selected')"
-    >
-      <v-list-item-icon>
-        <v-icon>{{ $vuetify.icons.values.mdiFilterVariant }}</v-icon>
-      </v-list-item-icon>
-      <v-list-item-content>
-        <v-list-item-title>Filters</v-list-item-title>
-      </v-list-item-content>
-    </v-list-item>
-
-    <v-list-item
-      v-if="$store.state.currentUser"
-      nuxt
       to="/settings"
       @click="$emit('selected')"
     >

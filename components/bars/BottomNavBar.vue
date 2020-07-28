@@ -4,12 +4,13 @@
     app
     bottom
     class="bottomappbar"
-    :height="$device.isIos ? 80 : 56"
+    :height="$device.isIos && isPWA ? 80 : 56"
+    :color="$vuetify.theme.dark ? '#35363A' : '#F1F3F4'"
   >
     <v-bottom-navigation
       grow
-      :class="$device.isIos ? 'elevation-0' : ''"
-      :style="$device.isIos ? 'margin-bottom: 24px' : ''"
+      :style="$device.isIos && isPWA ? 'margin-bottom: 24px' : ''"
+      class="elevation-0"
     >
       <v-btn
         aria-label="Home"
@@ -19,22 +20,28 @@
         @click.stop.prevent="clickHomeButton"
       >
         <span
-          :class="$route.name === 'index' ? 'primary--text' : 'text--secondary'"
+          :class="
+            $route.name.startsWith('index')
+              ? 'primary--text'
+              : 'text--secondary'
+          "
           >Posts</span
         >
-        <v-icon :color="$route.name === 'index' ? 'primary' : ''">{{
+        <v-icon :color="$route.name.startsWith('index') ? 'primary' : ''">{{
           $vuetify.icons.values.mdiHome
         }}</v-icon>
       </v-btn>
 
-      <v-btn aria-label="Search" to="/search" nuxt class="navbtn">
+      <v-btn aria-label="Search" class="navbtn" @click="showSearchPrompt">
         <span
           :class="
-            $route.name === 'search' ? 'primary--text' : 'text--secondary'
+            $route.name.startsWith('search')
+              ? 'primary--text'
+              : 'text--secondary'
           "
           >Search</span
         >
-        <v-icon :color="$route.name === 'search' ? 'primary' : ''">{{
+        <v-icon :color="$route.name.startsWith('search') ? 'primary' : ''">{{
           $vuetify.icons.values.mdiMagnify
         }}</v-icon>
       </v-btn>
@@ -54,7 +61,7 @@
         </template>
 
         <v-card>
-          <v-card-text class="px-0 py-2">
+          <v-card-text class="px-0 pt-2" style="padding-bottom: 24px">
             <NavDrawerContents @selected="planetsBottomSheet = false" />
           </v-card-text>
         </v-card>
@@ -93,8 +100,15 @@ export default {
     return {
       notifications: [],
       newPostBottomSheet: false,
-      planetsBottomSheet: false
+      planetsBottomSheet: false,
+      isPWA: false
     }
+  },
+  beforeMount() {
+    this.isPWA =
+      window.matchMedia('(display-mode: standalone)').matches ||
+      window.navigator.standalone ||
+      document.referrer.includes('android-app://')
   },
   apollo: {
     notifications: {
@@ -110,23 +124,9 @@ export default {
     }
   },
   methods: {
-    openNotifications() {
-      if (this.$store.state.currentUser) {
-        this.$router.push('/notifications')
-      } else {
-        this.$store.dispatch('displaySnackbar', {
-          message: 'Must log in to view notifications'
-        })
-      }
-    },
-    openCompose() {
-      if (this.$store.state.currentUser) {
-        this.$router.push('/submit')
-      } else {
-        this.$store.dispatch('displaySnackbar', {
-          message: 'Must log in to submit a post'
-        })
-      }
+    showSearchPrompt() {
+      const search = window.prompt('Search')
+      this.$router.push(`/search?q=${encodeURIComponent(search)}`)
     },
     clickHomeButton() {
       if (this.$route.path === '/') {

@@ -94,7 +94,7 @@ export default {
           this.prevRoute.name &&
           this.prevRoute.name.startsWith('p-')
         ) {
-          const planetName = this.prevRoute.params.name
+          const planetName = this.prevRoute.params.planetname
           const { data } = await this.$apollo.query({
             query: gql`
               query($planetName: ID!) {

@@ -49,7 +49,7 @@
         <span v-else-if="$route.name.startsWith('u-username')">
           {{ $route.params.username }}</span
         >
-        <span v-else-if="$route.name === 'search'">Search</span>
+        <span v-else-if="$route.name.startsWith('search')">Search</span>
       </div>
 
       <v-spacer />
@@ -143,7 +143,6 @@
 import ProfileMenu from '../buttons/profile/ProfileMenu'
 import NewPostButton from '../buttons/new_post/NewPostButton'
 import CometLogo from '../buttons/CometLogo'
-import { capitalizedName } from '~/util/capitalizedName'
 import NotificationsMenu from '@/components/notifications/NotificationsMenu'
 
 export default {
@@ -158,17 +157,9 @@ export default {
     return {
       notifications: [],
       searchText:
-        this.$route.name === 'search' &&
-        this.$route.query &&
-        this.$route.query.q
+        this.$route.name.startsWith('search') && this.$route.query.q
           ? this.$route.query.q
           : ''
-    }
-  },
-  computed: {
-    capitalizedName() {
-      if (this.$route.name !== 'p-name') return ''
-      return capitalizedName(this.$route.params.name)
     }
   },
   methods: {

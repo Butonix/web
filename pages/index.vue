@@ -77,11 +77,11 @@
     </v-col>
     <v-col v-if="$device.isDesktop" cols="3">
       <div class="sticky">
-        <template v-if="$route.name === 'u-username'">
+        <template v-if="$route.name.startsWith('u-username')">
           <UserSummaryCard v-if="user" :user="user" />
         </template>
 
-        <template v-else-if="$route.name === 'p-name'">
+        <template v-else-if="$route.name.startsWith('p-planetname')">
           <div v-if="planet">
             <PlanetInfoCard class="mb-3" :planet="planet" />
             <PlanetRulesCard class="mb-3" :planet="planet" />
@@ -103,8 +103,8 @@
             >
             <v-card-actions>
               <v-spacer />
-              <v-btn depressed text class="mr-2">Log In</v-btn>
-              <v-btn depressed color="primary">Sign Up</v-btn>
+              <v-btn depressed text class="mr-2" nuxt to="/login">Log In</v-btn>
+              <v-btn depressed color="primary" nuxt to="/signup">Sign Up</v-btn>
             </v-card-actions>
           </v-card>
 
@@ -164,7 +164,7 @@ export default {
     }
   },
   beforeRouteLeave(to, from, next) {
-    if (to.name === 'p-name-comments-id-title') {
+    if (to.name === 'p-planetname-comments-id-title') {
       if (!this.dialog) {
         this.displayDialog(to)
       } else if (this.$device.isDesktop) {
@@ -192,13 +192,15 @@ export default {
       return {
         sort,
         time,
-        filter: this.$route.name === 'index' ? 'MYPLANETS' : 'ALL',
+        filter: this.$route.name.startsWith('index') ? 'MYPLANETS' : 'ALL',
         types:
           this.$route.query && this.$route.query.types
             ? this.$route.query.types.split('-').map((t) => t.toUpperCase())
             : [],
+        planetName: this.$route.params.planetname,
+        galaxyName: this.$route.params.galaxyname,
         username: this.$route.params.username,
-        planetName: this.$route.params.name
+        search: this.$route.query.q
       }
     }
   },
@@ -238,11 +240,11 @@ export default {
       query: planetGql,
       variables() {
         return {
-          planetName: this.$route.params.name
+          planetName: this.$route.params.planetname
         }
       },
       skip() {
-        return !this.$route.params.name
+        return !this.$route.params.planetname
       }
     }
   },
