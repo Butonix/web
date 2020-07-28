@@ -1,201 +1,257 @@
 <template>
-  <v-toolbar
-    dense
+  <v-app-bar
+    height="44"
     flat
     :style="{
       'border-width': '1px',
       'border-color': $vuetify.theme.dark
         ? 'rgba(255, 255, 255, 0.12)'
         : 'rgba(0, 0, 0, 0.12)',
-      'border-style': 'solid'
+      'border-style': $device.isDesktop ? 'solid' : 'none',
+      'border-radius': '10px',
+      'background-color': $vuetify.theme.dark ? '#202124' : '#F8F9FA'
     }"
     outlined
-    style="border-radius: 10px; background-color: transparent"
   >
     <v-toolbar-items class="flex-grow-1">
-      <v-btn
-        text
-        nuxt
-        :to="{
-          path: (
-            $route.path
-              .replace('/hot', '')
-              .replace('/top', '')
-              .replace('/new', '')
-              .replace('/hour', '')
-              .replace('/day', '')
-              .replace('/week', '')
-              .replace('/month', '')
-              .replace('/year', '')
-              .replace('/all', '') + '/'
-          ).replace('//', '/')
-        }"
-        :color="
-          !$route.path.includes('/top') && !$route.path.includes('/new')
-            ? 'primary'
-            : ''
-        "
-      >
-        <v-icon class="mr-2">{{ $vuetify.icons.values.mdiFire }}</v-icon>
-        Hot
-      </v-btn>
-      <v-btn
-        text
-        nuxt
-        :to="{
-          path: (
-            $route.path
-              .replace('/hot', '')
-              .replace('/top', '')
-              .replace('/new', '')
-              .replace('/hour', '')
-              .replace('/day', '')
-              .replace('/week', '')
-              .replace('/month', '')
-              .replace('/year', '')
-              .replace('/all', '') + '/new'
-          ).replace('//', '/')
-        }"
-        :color="$route.path.includes('/new') ? 'primary' : ''"
-      >
-        <v-icon class="mr-2">{{
-          $vuetify.icons.values.mdiClockTimeOneOutline
-        }}</v-icon>
-        New
-      </v-btn>
-      <v-btn
-        text
-        nuxt
-        :to="{
-          path: (
-            $route.path
-              .replace('/hot', '')
-              .replace('/top', '')
-              .replace('/new', '')
-              .replace('/hour', '')
-              .replace('/day', '')
-              .replace('/week', '')
-              .replace('/month', '')
-              .replace('/year', '')
-              .replace('/all', '') + '/top/day'
-          ).replace('//', '/')
-        }"
-        :color="$route.path.includes('/top') ? 'primary' : ''"
-      >
-        <v-icon class="mr-2">{{
-          $vuetify.icons.values.mdiFormatListNumbered
-        }}</v-icon>
-        Top
-      </v-btn>
+      <template v-if="$device.isDesktop">
+        <v-btn
+          v-show="!$route.name.includes('u-username')"
+          small
+          text
+          nuxt
+          :to="{
+            path: (
+              $route.path
+                .replace('/hot', '')
+                .replace('/top', '')
+                .replace('/new', '')
+                .replace('/mostcomments', '')
+                .replace('/hour', '')
+                .replace('/day', '')
+                .replace('/week', '')
+                .replace('/month', '')
+                .replace('/year', '')
+                .replace('/all', '') + '/'
+            ).replace('//', '/')
+          }"
+          :color="
+            !$route.path.includes('/top') &&
+            !$route.path.includes('/new') &&
+            !$route.path.includes('/mostcomments')
+              ? 'primary'
+              : ''
+          "
+        >
+          <v-icon size="20">{{ $vuetify.icons.values.mdiFire }}</v-icon>
+          <span class="ml-2">
+            Hot
+          </span>
+        </v-btn>
+        <v-btn
+          small
+          text
+          nuxt
+          :to="{
+            path: (
+              $route.path
+                .replace('/hot', '')
+                .replace('/top', '')
+                .replace('/new', '')
+                .replace('/mostcomments', '')
+                .replace('/hour', '')
+                .replace('/day', '')
+                .replace('/week', '')
+                .replace('/month', '')
+                .replace('/year', '')
+                .replace('/all', '') + '/new'
+            ).replace('//', '/')
+          }"
+          :color="$route.path.includes('/new') ? 'primary' : ''"
+        >
+          <v-icon size="20">{{
+            $vuetify.icons.values.mdiClockTimeOneOutline
+          }}</v-icon>
+          <span class="ml-2">
+            New
+          </span>
+        </v-btn>
+        <v-btn
+          small
+          text
+          nuxt
+          :to="{
+            path: (
+              $route.path
+                .replace('/hot', '')
+                .replace('/top', '')
+                .replace('/new', '')
+                .replace('/mostcomments', '')
+                .replace('/hour', '')
+                .replace('/day', '')
+                .replace('/week', '')
+                .replace('/month', '')
+                .replace('/year', '')
+                .replace('/all', '') + '/top/day'
+            ).replace('//', '/')
+          }"
+          :color="$route.path.includes('/top') ? 'primary' : ''"
+        >
+          <v-icon size="20">{{
+            $vuetify.icons.values.mdiFormatListNumbered
+          }}</v-icon>
+          <span class="ml-2">
+            Top
+          </span>
+        </v-btn>
 
-      <v-menu offset-y transition="slide-y-transition">
-        <template v-slot:activator="{ on }">
-          <v-btn
-            v-show="$route.path.includes('/top')"
-            text
-            class="text--secondary"
-            v-on="on"
-          >
-            {{
-              $route.path.includes('/top/')
-                ? $route.path
-                    .split('/top/')[1]
-                    .charAt(0)
-                    .toUpperCase() + $route.path.split('/top/')[1].substring(1)
-                : 'Day'
-            }}
-          </v-btn>
-        </template>
+        <v-btn
+          small
+          text
+          nuxt
+          :to="{
+            path: (
+              $route.path
+                .replace('/hot', '')
+                .replace('/top', '')
+                .replace('/new', '')
+                .replace('/mostcomments', '')
+                .replace('/hour', '')
+                .replace('/day', '')
+                .replace('/week', '')
+                .replace('/month', '')
+                .replace('/year', '')
+                .replace('/all', '') + '/mostcomments/day'
+            ).replace('//', '/')
+          }"
+          :color="$route.path.includes('/mostcomments') ? 'primary' : ''"
+        >
+          <v-icon size="20">{{
+            $vuetify.icons.values.mdiCommentMultipleOutline
+          }}</v-icon>
+          <span class="ml-2">
+            Most Comments
+          </span>
+        </v-btn>
 
-        <v-list>
-          <v-list-item
-            :color="$route.params.time === 'hour' ? 'primary' : ''"
-            nuxt
-            :to="{
-              params: { time: 'hour' }
-            }"
-          >
-            <v-list-item-content>
-              <v-list-item-title>Hour</v-list-item-title>
-            </v-list-item-content>
-          </v-list-item>
+        <v-menu offset-y transition="slide-y-transition">
+          <template v-slot:activator="{ on }">
+            <v-btn
+              v-show="
+                $route.path.includes('/top') ||
+                  $route.path.includes('/mostcomments')
+              "
+              small
+              text
+              class="text--secondary"
+              v-on="on"
+            >
+              {{
+                $route.path.includes('/top/')
+                  ? $route.path
+                      .split('/top/')[1]
+                      .charAt(0)
+                      .toUpperCase() +
+                    $route.path.split('/top/')[1].substring(1)
+                  : 'Day'
+              }}
+            </v-btn>
+          </template>
 
-          <v-list-item
-            :color="
-              !$route.params.time || $route.params.time === 'day'
-                ? 'primary'
-                : ''
-            "
-            nuxt
-            :to="{
-              params: { time: 'day' }
-            }"
-          >
-            <v-list-item-content>
-              <v-list-item-title
-                :style="
-                  !$route.params.time || $route.params.time === 'day'
-                    ? 'color: var(--v-primary-base) !important;'
-                    : ''
-                "
-                >Day</v-list-item-title
-              >
-            </v-list-item-content>
-          </v-list-item>
+          <v-list>
+            <v-list-item
+              :color="$route.params.time === 'hour' ? 'primary' : ''"
+              nuxt
+              :to="{
+                params: { time: 'hour' }
+              }"
+            >
+              <v-list-item-content>
+                <v-list-item-title>Hour</v-list-item-title>
+              </v-list-item-content>
+            </v-list-item>
 
-          <v-list-item
-            :color="$route.params.time === 'week' ? 'primary' : ''"
-            nuxt
-            :to="{
-              params: { time: 'week' }
-            }"
-          >
-            <v-list-item-content>
-              <v-list-item-title>Week</v-list-item-title>
-            </v-list-item-content>
-          </v-list-item>
+            <v-list-item
+              :color="
+                !$route.params.time || $route.params.time === 'day'
+                  ? 'primary'
+                  : ''
+              "
+              nuxt
+              :to="{
+                params: { time: 'day' }
+              }"
+            >
+              <v-list-item-content>
+                <v-list-item-title
+                  :style="
+                    !$route.params.time || $route.params.time === 'day'
+                      ? 'color: var(--v-primary-base) !important;'
+                      : ''
+                  "
+                  >Day</v-list-item-title
+                >
+              </v-list-item-content>
+            </v-list-item>
 
-          <v-list-item
-            :color="$route.params.time === 'month' ? 'primary' : ''"
-            nuxt
-            :to="{
-              params: { time: 'month' }
-            }"
-          >
-            <v-list-item-content>
-              <v-list-item-title>Month</v-list-item-title>
-            </v-list-item-content>
-          </v-list-item>
+            <v-list-item
+              :color="$route.params.time === 'week' ? 'primary' : ''"
+              nuxt
+              :to="{
+                params: { time: 'week' }
+              }"
+            >
+              <v-list-item-content>
+                <v-list-item-title>Week</v-list-item-title>
+              </v-list-item-content>
+            </v-list-item>
 
-          <v-list-item
-            :color="$route.params.time === 'year' ? 'primary' : ''"
-            nuxt
-            :to="{
-              params: { time: 'year' }
-            }"
-          >
-            <v-list-item-content>
-              <v-list-item-title>Year</v-list-item-title>
-            </v-list-item-content>
-          </v-list-item>
+            <v-list-item
+              :color="$route.params.time === 'month' ? 'primary' : ''"
+              nuxt
+              :to="{
+                params: { time: 'month' }
+              }"
+            >
+              <v-list-item-content>
+                <v-list-item-title>Month</v-list-item-title>
+              </v-list-item-content>
+            </v-list-item>
 
-          <v-list-item
-            :color="$route.params.time === 'all' ? 'primary' : ''"
-            nuxt
-            :to="{
-              params: { time: 'all' }
-            }"
-          >
-            <v-list-item-content>
-              <v-list-item-title>All</v-list-item-title>
-            </v-list-item-content>
-          </v-list-item>
-        </v-list>
-      </v-menu>
+            <v-list-item
+              :color="$route.params.time === 'year' ? 'primary' : ''"
+              nuxt
+              :to="{
+                params: { time: 'year' }
+              }"
+            >
+              <v-list-item-content>
+                <v-list-item-title>Year</v-list-item-title>
+              </v-list-item-content>
+            </v-list-item>
+
+            <v-list-item
+              :color="$route.params.time === 'all' ? 'primary' : ''"
+              nuxt
+              :to="{
+                params: { time: 'all' }
+              }"
+            >
+              <v-list-item-content>
+                <v-list-item-title>All</v-list-item-title>
+              </v-list-item-content>
+            </v-list-item>
+          </v-list>
+        </v-menu>
+      </template>
 
       <v-spacer />
 
+      <TypeMenu v-if="$device.isDesktop" />
+      <SortMenu v-else />
+
       <v-btn
+        small
         text
         nuxt
         :to="
@@ -204,24 +260,29 @@
             : { query: { ...$route.query, view: 'expanded' } }
         "
       >
-        <v-icon class="mr-2">
+        <v-icon size="20">
           {{
             $route.query.view === 'expanded'
               ? $vuetify.icons.values.mdiArrowCollapse
               : $vuetify.icons.values.mdiArrowExpand
           }}
         </v-icon>
-        {{
-          $route.query.view === 'expanded' ? 'Collapse Posts' : 'Expand Posts'
-        }}
+        <span v-if="$device.isDesktop" class="ml-2">
+          {{
+            $route.query.view === 'expanded' ? 'Collapse Posts' : 'Expand Posts'
+          }}
+        </span>
       </v-btn>
     </v-toolbar-items>
-  </v-toolbar>
+  </v-app-bar>
 </template>
 
 <script>
+import TypeMenu from '@/components/buttons/type/TypeMenu'
+import SortMenu from '@/components/buttons/home_sort/SortMenu'
 export default {
-  name: 'SortBar'
+  name: 'SortBar',
+  components: { SortMenu, TypeMenu }
 }
 </script>
 

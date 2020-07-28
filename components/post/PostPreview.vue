@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-if="isExpandable" class="mt-4">
     <div v-if="post.type === 'TEXT' && post.textContent">
       <div
         :class="viewingMore || textContentHeight <= 90 ? '' : 'textcontent'"
@@ -15,7 +15,6 @@
 
     <v-row
       v-else-if="expandedView && post.type === 'IMAGE' && isEmbeddableImage"
-      class="mt-2"
       no-gutters
       justify="start"
     >
@@ -31,16 +30,19 @@
       "
       no-gutters
       justify="start"
-      class="mt-2"
     >
       <client-only>
-        <div v-if="isYoutubeLink" class="youtubecontainer">
+        <div
+          v-if="isYoutubeLink"
+          :class="$device.isDesktop ? '' : 'youtubecontainer'"
+        >
           <iframe
             :src="`https://www.youtube.com/embed/${youtubeId}`"
             frameborder="0"
             allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
             allowfullscreen
-            class="youtube"
+            :class="$device.isDesktop ? '' : 'youtube'"
+            :style="$device.isDesktop ? 'width: 560px; height: 315px' : ''"
           />
         </div>
 
@@ -95,6 +97,15 @@ export default {
     }
   },
   computed: {
+    isExpandable() {
+      return (
+        this.post.textContent ||
+        this.isEmbeddableImage ||
+        this.isYoutubeLink ||
+        this.isSpotifyLink ||
+        this.isInstagramLink
+      )
+    },
     isEmbeddableImage() {
       return this.post.type === 'IMAGE' && this.post.link.startsWith('https://')
     },

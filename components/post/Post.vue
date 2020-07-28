@@ -1,5 +1,5 @@
 <template>
-  <div @click="goToIfMobile">
+  <div v-intersect.once="updateTextContentSize" @click="goToIfMobile">
     <v-list-item class="px-0">
       <PostThumbnail
         v-if="$device.isDesktop"
@@ -20,6 +20,20 @@
         </span>
 
         <v-list-item-title style="white-space: normal">
+          <v-btn
+            v-if="isExpandable"
+            x-small
+            icon
+            class="mr-1 mb-1 text--secondary"
+            @click.stop.prevent="idState.expand = !idState.expand"
+          >
+            <v-icon>{{
+              idState.expand || $route.query.view === 'expanded'
+                ? $vuetify.icons.values.mdiArrowCollapse
+                : $vuetify.icons.values.mdiArrowExpand
+            }}</v-icon>
+          </v-btn>
+
           <nuxt-link
             v-if="$route.name !== 'post-id-title' || post.type === 'TEXT'"
             class="text--primary mr-1"
@@ -72,10 +86,10 @@
 
         <PostPreview
           v-if="$device.isDesktop"
-          v-show="active && expandedView"
+          v-show="active && (idState.expand || post.textContent)"
           :key="post.id"
           ref="textcontent"
-          :expanded-view="expandedView"
+          :expanded-view="idState.expand || $route.query.view === 'expanded'"
           :post="post"
           :viewing-more="idState.viewingMore"
           :text-content-height="idState.textContentHeight"
@@ -84,9 +98,9 @@
 
         <PostBottomBar
           v-if="$device.isDesktop"
+          class="mt-2"
           :post="post"
           :is-post-view="isPostView"
-          class="mt-2"
         />
       </v-list-item-content>
 
@@ -99,10 +113,10 @@
 
     <PostPreview
       v-if="!$device.isDesktop"
-      v-show="active && expandedView"
+      v-show="active && (idState.expand || post.textContent)"
       :key="post.id"
       ref="textcontent"
-      :expanded-view="expandedView"
+      :expanded-view="idState.expand || $route.query.view === 'expanded'"
       :post="post"
       :viewing-more="idState.viewingMore"
       :text-content-height="idState.textContentHeight"
@@ -164,12 +178,39 @@ export default {
     }
   },
   computed: {
-    urlName() {
-      if (!this.post) return ''
-      return urlName(this.post.title)
+    isExpandable() {
+      return (
+        this.isEmbeddableImage ||
+        this.isYoutubeLink ||
+        this.isSpotifyLink ||
+        this.isInstagramLink
+      )
     },
     isEmbeddableImage() {
       return this.post.type === 'IMAGE' && this.post.link.startsWith('https://')
+    },
+    isYoutubeLink() {
+      return (
+        this.post.type === 'LINK' &&
+        (this.post.link.includes('youtube.com/') ||
+          this.post.link.includes('youtu.be/'))
+      )
+    },
+    isSpotifyLink() {
+      return (
+        this.post.type === 'LINK' &&
+        this.post.link.startsWith('https://open.spotify.com/')
+      )
+    },
+    isInstagramLink() {
+      return (
+        this.post.type === 'LINK' &&
+        this.post.link.startsWith('https://www.instagram.com/p/')
+      )
+    },
+    urlName() {
+      if (!this.post) return ''
+      return urlName(this.post.title)
     },
     timeSince() {
       return (
@@ -195,20 +236,31 @@ export default {
   },
   mounted() {
     if (this.isPostView) return
-    if (this.$refs.textcontent) {
+    if (this.$refs.textcontent && this.post.textContent) {
+      console.log('mounted')
       this.idState.textContentHeight = this.$refs.textcontent.$el.clientHeight
+      this.idState.viewingMore = false
     }
   },
   idState() {
     return {
       viewingMore: false,
-      textContentHeight: 0,
+      textContentHeight: 100,
       imagePreview: false,
-      reported: false
+      reported: false,
+      expand: this.expandedView
     }
   },
   methods: {
     doNothing() {},
+    updateTextContentSize() {
+      if (this.isPostView) return
+      if (this.$refs.textcontent && this.post.textContent) {
+        console.log('updateTextContentSize')
+        this.idState.textContentHeight = this.$refs.textcontent.$el.clientHeight
+        this.idState.viewingMore = false
+      }
+    },
     toggleBlock() {
       this.post.author.isBlocking = !this.post.author.isBlocking
       this.$emit('toggleblock')

@@ -2,7 +2,7 @@
   "name": "@comet/web",
   "version": "1.0.0",
   "description": "Create and browse posts and comments on Comet",
-  "author": "Dan Beneventano",
+  "author": "Comet Communications",
   "private": true,
   "engines": {
     "node": "14.x.x"

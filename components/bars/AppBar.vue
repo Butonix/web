@@ -18,12 +18,19 @@
         v-if="!$device.isDesktop"
         style="position: fixed; top: 14px; left: 50%; transform: translateX(-50%); font-size: 21px; font-weight: 500"
       >
-        <span v-if="$route.name === 'index'"
+        <span
+          v-if="
+            $route.path === '/' ||
+              $route.path.startsWith('/hot') ||
+              $route.path.startsWith('/new') ||
+              $route.path.startsWith('/top') ||
+              $route.path.startsWith('/mostcomments')
+          "
           >My Planets<v-icon class="ml-2">{{
             $vuetify.icons.values.mdiEarth
           }}</v-icon></span
         >
-        <span v-else-if="$route.name === 'universe'"
+        <span v-else-if="$route.name.startsWith('universe')"
           >Universe<v-icon class="ml-2">{{
             $vuetify.icons.values.mdiInfinity
           }}</v-icon></span
@@ -38,7 +45,7 @@
             $vuetify.icons.values.mdiLogin
           }}</v-icon></span
         >
-        <span v-else-if="$route.name === 'u-username'">
+        <span v-else-if="$route.name.startsWith('u-username')">
           {{ $route.params.username }}</span
         >
         <span v-else-if="$route.name === 'search'">Search</span>

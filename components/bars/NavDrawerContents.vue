@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div style="font-size: 0.86rem" class="text--secondary px-4 pt-4 pb-2">
+    <div style="font-size: 0.86rem" class="text--secondary px-4 pt-2 pb-2">
       Feeds
     </div>
     <v-list class="py-0">

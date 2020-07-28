@@ -1,12 +1,5 @@
 <template>
-  <v-btn
-    small
-    text
-    rounded
-    class="mr-1 font-weight-regular"
-    aria-label="Post Types"
-    @click.stop.prevent="click"
-  >
+  <v-btn small text aria-label="Post Types" @click.stop.prevent="click">
     <span v-if="typeString === 'Everything'">
       <v-icon size="20" class="mr-1">{{
         $vuetify.icons.values.mdiText

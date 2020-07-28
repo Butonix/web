@@ -2,7 +2,7 @@
   <v-app id="app">
     <AppBar />
 
-    <NavDrawer />
+    <NavDrawer v-if="$device.isDesktop" />
 
     <v-main>
       <v-container class="pt-0">

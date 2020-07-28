@@ -1,28 +1,9 @@
 <template>
   <v-row justify="center">
-    <v-col :class="$device.isDesktop ? '' : 'px-0'">
-      <div class="mb-3">
-        <SortBar v-if="$device.isDesktop" />
+    <v-col :class="$device.isDesktop ? '' : 'pa-0'">
+      <SortBar :class="$device.isDesktop ? 'mb-3 ml-9' : ''" />
 
-        <v-row v-else no-gutters class="px-3">
-          <v-spacer />
-          <SortMenu />
-        </v-row>
-      </div>
-
-      <div
-        :style="{
-          'border-style': $device.isDesktop ? 'solid' : 'none',
-          'border-width': '1px',
-          'border-color': $vuetify.theme.dark
-            ? 'rgba(255, 255, 255, 0.12)'
-            : 'rgba(0, 0, 0, 0.12)',
-          'border-top-left-radius': $device.isDesktop ? '10px' : '0',
-          'border-top-right-radius': $device.isDesktop ? '10px' : '0',
-          'border-bottom-style': 'none',
-          'border-top-style': 'solid'
-        }"
-      >
+      <div>
         <DynamicScroller
           page-mode
           :items="feed"
@@ -37,30 +18,57 @@
               :size-dependencies="[item.title, item.textContent]"
             >
               <div
-                :style="{
-                  'border-bottom-style': 'solid',
-                  'border-bottom-width': '1px',
-                  'border-bottom-color': $vuetify.theme.dark
-                    ? 'rgba(255, 255, 255, 0.12)'
-                    : 'rgba(0, 0, 0, 0.12)'
-                }"
-                class="pa-3"
+                style="display: flex; flex-direction: row; align-items: center"
               >
-                <Post
-                  :post="item"
-                  :index="index"
-                  :active="active"
-                  :expanded-view="$route.query.view === 'expanded'"
-                  @togglehidden="toggleHidden"
-                  @toggleblock="toggleBlock"
-                />
+                <div
+                  v-if="$device.isDesktop"
+                  class="text--secondary pr-2"
+                  style="min-width: 36px; text-align: right"
+                >
+                  {{ index + 1 }}
+                </div>
+                <div
+                  :style="{
+                    'border-style': 'solid',
+                    'border-bottom-style':
+                      index === feed.length - 1 ? 'solid' : 'none',
+                    'border-left-style': $device.isDesktop ? 'solid' : 'none',
+                    'border-right-style': $device.isDesktop ? 'solid' : 'none',
+                    'border-width': '1px',
+                    'border-color': $vuetify.theme.dark
+                      ? 'rgba(255, 255, 255, 0.12)'
+                      : 'rgba(0, 0, 0, 0.12)',
+                    'border-top-left-radius':
+                      $device.isDesktop && index === 0 ? '10px' : '0',
+                    'border-top-right-radius':
+                      $device.isDesktop && index === 0 ? '10px' : '0',
+                    'border-bottom-left-radius':
+                      $device.isDesktop && index === feed.length - 1
+                        ? '10px'
+                        : '0',
+                    'border-bottom-right-radius':
+                      $device.isDesktop && index === feed.length - 1
+                        ? '10px'
+                        : '0'
+                  }"
+                  class="pa-3 flex-grow-1"
+                >
+                  <Post
+                    :post="item"
+                    :index="index"
+                    :active="active"
+                    :expanded-view="$route.query.view === 'expanded'"
+                    @togglehidden="toggleHidden"
+                    @toggleblock="toggleBlock"
+                  />
+                </div>
               </div>
             </DynamicScrollerItem>
           </template>
         </DynamicScroller>
       </div>
 
-      <div class="pt-3">
+      <div class="pt-3" :class="$device.isDesktop ? 'ml-9' : ''">
         <v-progress-linear
           v-show="$apollo.queries.feed.loading"
           indeterminate
@@ -122,11 +130,11 @@ import Post from '../components/post/Post'
 import PopularPlanetsCard from '@/components/PopularPlanetsCard'
 import PostDialog from '@/components/PostDialog'
 import SortBar from '@/components/bars/SortBar'
-import SortMenu from '@/components/buttons/home_sort/SortMenu'
 import UserSummaryCard from '@/components/user/UserSummaryCard'
 import PlanetInfoCard from '@/components/planet/PlanetInfoCard'
 import PlanetRulesCard from '@/components/planet/PlanetRulesCard'
 import PlanetModsCard from '@/components/planet/PlanetModsCard'
+import { postHead } from '@/util/postHead'
 
 export default {
   name: 'Index',
@@ -136,7 +144,6 @@ export default {
     PlanetRulesCard,
     PlanetInfoCard,
     UserSummaryCard,
-    SortMenu,
     SortBar,
     PostDialog,
     PopularPlanetsCard,
@@ -170,12 +177,16 @@ export default {
   },
   computed: {
     vars() {
-      let sort = 'HOT'
+      let sort = this.$route.name.includes('u-username') ? 'NEW' : 'HOT'
       if (this.$route.name.includes('new')) sort = 'NEW'
       else if (this.$route.name.includes('top-time')) sort = 'TOP'
+      else if (this.$route.name.includes('mostcomments-time')) sort = 'COMMENTS'
 
       let time = 'ALL'
-      if (this.$route.name.includes('top-time'))
+      if (
+        this.$route.name.includes('top-time') ||
+        this.$route.name.includes('mostcomments-time')
+      )
         time = this.$route.params.time.toUpperCase()
 
       return {
@@ -289,8 +300,19 @@ export default {
       })
     }
   },
-  head: {
-    title: 'Home'
+  head() {
+    if (!this.dialog) {
+      return {
+        title: this.$route.name.includes('universe') ? 'Universe' : 'My Planets'
+      }
+    }
+    if (this.selectedPost) {
+      return postHead(this.selectedPost)
+    } else {
+      return {
+        title: this.$route.name.includes('universe') ? 'Universe' : 'My Planets'
+      }
+    }
   }
 }
 </script>

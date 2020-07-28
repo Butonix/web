@@ -1,17 +1,17 @@
 <template>
   <v-app-bar
-    :hide-on-scroll="!$device.isIos"
+    hide-on-scroll
     app
     bottom
     class="bottomappbar"
-    :height="$device.isIos ? 90 : 56"
+    :height="$device.isIos ? 80 : 56"
     :color="$vuetify.theme.dark ? '#35363A' : '#FFFFFF'"
   >
     <v-bottom-navigation
       grow
       :color="$vuetify.theme.dark ? '#35363A' : '#FFFFFF'"
       :class="$device.isIos ? 'elevation-0' : ''"
-      :style="$device.isIos ? 'margin-bottom: 34px' : ''"
+      :style="$device.isIos ? 'margin-bottom: 24px' : ''"
     >
       <v-btn
         aria-label="Home"
@@ -48,13 +48,15 @@
       <v-bottom-sheet v-model="planetsBottomSheet" scrollable>
         <template v-slot:activator="{ on }">
           <v-btn aria-label="Planets" class="navbtn" v-on="on">
-            <span>Planets</span>
-            <v-icon>{{ $vuetify.icons.values.mdiEarth }}</v-icon>
+            <span class="text--secondary">Planets</span>
+            <v-icon class="text--secondary">{{
+              $vuetify.icons.values.mdiEarth
+            }}</v-icon>
           </v-btn>
         </template>
 
         <v-card>
-          <v-card-text class="pa-0">
+          <v-card-text class="px-0 py-2">
             <NavDrawerContents @selected="planetsBottomSheet = false" />
           </v-card-text>
         </v-card>

@@ -91,8 +91,9 @@
               :style="
                 $device.isDesktop ? 'padding-top: 36px' : 'padding-top: 44px'
               "
+              justify="center"
             >
-              <v-col :class="$device.isDesktop ? '' : 'px-0'">
+              <div class="postcol">
                 <div
                   v-if="$device.isDesktop"
                   class="mb-3 pa-3"
@@ -191,11 +192,11 @@
                 </v-row>
 
                 <div style="height: 600px" />
-              </v-col>
+              </div>
 
-              <v-col v-if="$device.isDesktop" cols="3">
+              <div v-if="$device.isDesktop" class="infocol">
                 <PlanetInfoCard :planet="post.planet" />
-              </v-col>
+              </div>
             </v-row>
           </v-container>
         </div>
@@ -501,4 +502,26 @@ export default {
 }
 </script>
 
-<style scoped></style>
+<style scoped>
+.postcol {
+  width: 100%;
+  margin-top: 12px;
+}
+
+.infocol {
+  display: none;
+}
+
+@media (min-width: 960px) {
+  .postcol {
+    max-width: 740px;
+    margin: 12px 12px 32px 32px;
+  }
+
+  .infocol {
+    display: block;
+    width: 312px;
+    margin: 12px 32px 32px 0;
+  }
+}
+</style>

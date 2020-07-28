@@ -8,7 +8,13 @@
           </v-list-item-icon>
           <v-list-item-content>
             <v-list-item-title
-              :class="!$route.query.sort ? 'font-weight-bold' : ''"
+              :class="
+                !$route.path.includes('/top') &&
+                !$route.path.includes('/new') &&
+                !$route.path.includes('/mostcomments')
+                  ? 'font-weight-bold'
+                  : ''
+              "
               >Hot</v-list-item-title
             >
           </v-list-item-content>
@@ -20,7 +26,7 @@
           </v-list-item-icon>
           <v-list-item-content>
             <v-list-item-title
-              :class="$route.query.sort === 'top' ? 'font-weight-bold' : ''"
+              :class="$route.path.includes('/top') ? 'font-weight-bold' : ''"
               >Top</v-list-item-title
             >
           </v-list-item-content>
@@ -32,7 +38,7 @@
           </v-list-item-icon>
           <v-list-item-content>
             <v-list-item-title
-              :class="$route.query.sort === 'new' ? 'font-weight-bold' : ''"
+              :class="$route.path.includes('/new') ? 'font-weight-bold' : ''"
               >New</v-list-item-title
             >
           </v-list-item-content>
@@ -47,19 +53,17 @@
           <v-list-item-content>
             <v-list-item-title
               :class="
-                $route.query.sort === 'comments' ? 'font-weight-bold' : ''
+                $route.path.includes('/mostcomments') ? 'font-weight-bold' : ''
               "
               >Comments</v-list-item-title
             >
           </v-list-item-content>
         </v-list-item>
 
-        <template v-if="!$device.isDesktop">
-          <v-divider />
-          <v-list>
-            <TypeMenuContent />
-          </v-list>
-        </template>
+        <v-divider />
+        <v-list>
+          <TypeMenuContent />
+        </v-list>
       </v-list>
     </v-fade-transition>
 
@@ -179,31 +183,61 @@ export default {
   methods: {
     chooseHot() {
       this.$emit('selected')
-      const query = Object.assign({}, this.$route.query)
-      delete query.sort
-      delete query.time
       try {
-        this.$router.push({ path: this.$route.path, query })
+        this.$router.push({
+          path: (
+            this.$route.path
+              .replace('/hot', '')
+              .replace('/top', '')
+              .replace('/new', '')
+              .replace('/mostcomments', '')
+              .replace('/hour', '')
+              .replace('/day', '')
+              .replace('/week', '')
+              .replace('/month', '')
+              .replace('/year', '')
+              .replace('/all', '') + '/'
+          ).replace('//', '/')
+        })
       } catch (e) {}
     },
     chooseTop() {
       this.selectingTime = true
       try {
         this.$router.push({
-          path: this.$route.path,
-          query: { ...this.$route.query, sort: 'top' }
+          path: (
+            this.$route.path
+              .replace('/hot', '')
+              .replace('/top', '')
+              .replace('/new', '')
+              .replace('/mostcomments', '')
+              .replace('/hour', '')
+              .replace('/day', '')
+              .replace('/week', '')
+              .replace('/month', '')
+              .replace('/year', '')
+              .replace('/all', '') + '/top/day'
+          ).replace('//', '/')
         })
       } catch (e) {}
     },
     chooseNew() {
       this.$emit('selected')
-      const query = Object.assign({}, this.$route.query)
-      query.sort = 'new'
-      delete query.time
       try {
         this.$router.push({
-          path: this.$route.path,
-          query
+          path: (
+            this.$route.path
+              .replace('/hot', '')
+              .replace('/top', '')
+              .replace('/new', '')
+              .replace('/mostcomments', '')
+              .replace('/hour', '')
+              .replace('/day', '')
+              .replace('/week', '')
+              .replace('/month', '')
+              .replace('/year', '')
+              .replace('/all', '') + '/new'
+          ).replace('//', '/')
         })
       } catch (e) {}
     },
@@ -211,68 +245,62 @@ export default {
       this.selectingTime = true
       try {
         this.$router.push({
-          path: this.$route.path,
-          query: { ...this.$route.query, sort: 'comments' }
+          path: (
+            this.$route.path
+              .replace('/hot', '')
+              .replace('/top', '')
+              .replace('/new', '')
+              .replace('/mostcomments', '')
+              .replace('/hour', '')
+              .replace('/day', '')
+              .replace('/week', '')
+              .replace('/month', '')
+              .replace('/year', '')
+              .replace('/all', '') + '/mostcomments/day'
+          ).replace('//', '/')
         })
       } catch (e) {}
     },
     chooseTimeAll() {
       this.$emit('selected')
       this.cancelSelectingTime()
-      const query = Object.assign({}, this.$route.query)
-      delete query.time
       try {
-        this.$router.push({ path: this.$route.path, query })
+        this.$router.push({ params: { time: 'all' } })
       } catch (e) {}
     },
     chooseTimeHour() {
       this.$emit('selected')
       this.cancelSelectingTime()
       try {
-        this.$router.push({
-          path: this.$route.path,
-          query: { ...this.$route.query, time: 'hour' }
-        })
+        this.$router.push({ params: { time: 'hour' } })
       } catch (e) {}
     },
     chooseTimeDay() {
       this.$emit('selected')
       this.cancelSelectingTime()
       try {
-        this.$router.push({
-          path: this.$route.path,
-          query: { ...this.$route.query, time: 'day' }
-        })
+        this.$router.push({ params: { time: 'day' } })
       } catch (e) {}
     },
     chooseTimeWeek() {
       this.$emit('selected')
       this.cancelSelectingTime()
       try {
-        this.$router.push({
-          path: this.$route.path,
-          query: { ...this.$route.query, time: 'week' }
-        })
+        this.$router.push({ params: { time: 'week' } })
       } catch (e) {}
     },
     chooseTimeMonth() {
       this.$emit('selected')
       this.cancelSelectingTime()
       try {
-        this.$router.push({
-          path: this.$route.path,
-          query: { ...this.$route.query, time: 'month' }
-        })
+        this.$router.push({ params: { time: 'month' } })
       } catch (e) {}
     },
     chooseTimeYear() {
       this.$emit('selected')
       this.cancelSelectingTime()
       try {
-        this.$router.push({
-          path: this.$route.path,
-          query: { ...this.$route.query, time: 'year' }
-        })
+        this.$router.push({ params: { time: 'year' } })
       } catch (e) {}
     },
     cancelSelectingTime() {

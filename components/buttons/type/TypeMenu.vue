@@ -1,5 +1,6 @@
 <template>
   <v-menu
+    v-if="$device.isDesktop"
     offset-y
     transition="slide-y-transition"
     :close-on-content-click="false"
@@ -12,6 +13,16 @@
       <TypeMenuContent />
     </v-list>
   </v-menu>
+
+  <v-bottom-sheet v-else>
+    <template v-slot:activator="{ on }">
+      <TypeMenuBtn v-on="on" />
+    </template>
+
+    <v-list>
+      <TypeMenuContent />
+    </v-list>
+  </v-bottom-sheet>
 </template>
 
 <script>

@@ -4,7 +4,6 @@
     icon
     class="text--secondary"
     aria-label="Post Options"
-    :ripple="false"
     @click.stop.prevent="click"
   >
     <v-icon size="20">{{ $vuetify.icons.values.mdiDotsVertical }}</v-icon>

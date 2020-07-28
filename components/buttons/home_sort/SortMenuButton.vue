@@ -1,53 +1,50 @@
 <template>
-  <v-btn
-    aria-label="Sort Posts"
-    size="20"
-    small
-    outlined
-    rounded
-    class="font-weight-regular"
-    style="border-width: 1px"
-    :style="
-      $vuetify.theme.dark
-        ? 'border-color: rgba(255, 255, 255, 0.12);'
-        : 'border-color: rgba(0, 0, 0, 0.12);'
-    "
-    @click="click"
-  >
-    <v-icon
-      v-if="$route.query.sort === 'hot' || !$route.query.sort"
-      size="20"
-      class="mr-2"
-      >{{ $vuetify.icons.values.mdiFire }}</v-icon
+  <v-btn aria-label="Sort Posts" text small @click="click">
+    <template
+      v-if="
+        !$route.path.includes('/top') &&
+          !$route.path.includes('/new') &&
+          !$route.path.includes('/mostcomments')
+      "
     >
-    <v-icon v-else-if="$route.query.sort === 'top'" size="20" class="mr-2">{{
-      $vuetify.icons.values.mdiFormatListNumbered
-    }}</v-icon>
-    <v-icon v-else-if="$route.query.sort === 'new'" size="20" class="mr-2">{{
-      $vuetify.icons.values.mdiClockTimeOneOutline
-    }}</v-icon>
-    <v-icon
-      v-else-if="$route.query.sort === 'comments'"
-      size="20"
-      class="mr-2"
-      >{{ $vuetify.icons.values.mdiCommentMultipleOutline }}</v-icon
-    >
+      <v-icon size="20" class="mr-2">{{
+        $vuetify.icons.values.mdiFire
+      }}</v-icon>
+      <span>Hot</span>
+    </template>
 
-    <span v-if="$route.query.sort === 'hot' || !$route.query.sort">Hot</span>
-    <span v-else-if="$route.query.sort === 'top'"
-      >Top{{
-        $route.query.time
-          ? ` (${$route.query.time
-              .substring(0, 1)
-              .toUpperCase()}${$route.query.time.substring(1).toLowerCase()})`
-          : ' (All)'
-      }}</span
-    >
-    <span v-else-if="$route.query.sort === 'new'">New</span>
-    <span v-else-if="$route.query.sort === 'comments'">Comments</span>
-    <span v-if="!$device.isDesktop && $route.query && $route.query.types"
-      >*</span
-    >
+    <template v-else-if="$route.path.includes('/new')">
+      <v-icon size="20" class="mr-2">{{
+        $vuetify.icons.values.mdiClockTimeOneOutline
+      }}</v-icon>
+      <span>New</span>
+    </template>
+
+    <template v-else-if="$route.path.includes('/top')">
+      <v-icon size="20" class="mr-2">{{
+        $vuetify.icons.values.mdiFormatListNumbered
+      }}</v-icon>
+      <span
+        >Top{{
+          $route.params.time
+            ? ` (${$route.params.time
+                .substring(0, 1)
+                .toUpperCase()}${$route.params.time
+                .substring(1)
+                .toLowerCase()})`
+            : ' (Day)'
+        }}</span
+      >
+    </template>
+
+    <template v-else-if="$route.path.includes('/mostcomments')">
+      <v-icon size="20" class="mr-2">{{
+        $vuetify.icons.values.mdiCommentMultipleOutline
+      }}</v-icon>
+      <span>Comments</span>
+    </template>
+
+    <span v-if="$route.query.types">*</span>
   </v-btn>
 </template>
 

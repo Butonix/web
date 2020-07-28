@@ -6,7 +6,7 @@
     :mini="mini"
     class="disable-scrollbars"
   >
-    <NavDrawerContents />
+    <NavDrawerContents class="mt-2" />
   </v-navigation-drawer>
 </template>
 

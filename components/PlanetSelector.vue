@@ -4,7 +4,7 @@
     v-model="planet"
     solo
     flat
-    :items="searchPlanets.length > 0 ? searchPlanets : items"
+    :items="search && searchPlanets.length > 0 ? searchPlanets : items"
     item-text="fullName"
     item-value="name"
     label="Choose a planet"
@@ -16,7 +16,9 @@
         v-if="planet"
         class="mr-2"
         size="24"
-        :color="planet.themeColor ? planet.themeColor : 'primary'"
+        :color="
+          planet.avatarImageUrl && planet.themeColor ? planet.themeColor : ''
+        "
       >
         <v-img v-if="planet.avatarImageUrl" :src="planet.avatarImageUrl" />
         <v-icon v-else>{{ $vuetify.icons.values.mdiEarth }}</v-icon>

@@ -122,17 +122,12 @@ export default {
     title: 'Home',
     meta: [
       { charset: 'utf-8' },
-      { name: 'viewport', content: 'width=device-width, initial-scale=1' },
       {
         hid: 'description',
         name: 'description',
         content: process.env.npm_package_description || ''
       },
       { name: 'theme-color', content: '#202124' }
-      /* {
-        name: 'apple-mobile-web-app-status-bar-style',
-        content: 'black-translucent'
-      } */
     ],
     link: [
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },

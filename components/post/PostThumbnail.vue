@@ -12,12 +12,13 @@
       target="_blank"
       rel="noopener"
       aria-label="Thumbnail"
+      style="height: 60px; width: 80px"
       @click.stop.prevent="$emit('thumbnailclick')"
     >
       <img
         v-if="post.thumbnailUrl"
         alt="Thumbnail"
-        style="border-radius: 10px; object-fit: cover"
+        style="object-fit: cover"
         :src="post.thumbnailUrl"
       />
       <div

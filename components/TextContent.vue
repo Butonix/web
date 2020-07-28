@@ -1,6 +1,6 @@
 <template functional>
   <div
-    style="font-size: 1rem"
+    style="font-size: 1rem; line-height: 1.5"
     class="text--primary"
     :class="props.dark ? 'editor-dark__content' : 'editor-light__content'"
     v-html="props.textContent"
