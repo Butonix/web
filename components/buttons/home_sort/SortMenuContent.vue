@@ -55,7 +55,7 @@
               :class="
                 $route.path.includes('/mostcomments') ? 'font-weight-bold' : ''
               "
-              >Comments</v-list-item-title
+              >Most Comments</v-list-item-title
             >
           </v-list-item-content>
         </v-list-item>
@@ -69,18 +69,7 @@
 
     <v-fade-transition hide-on-leave>
       <v-list v-show="selectingTime">
-        <v-list-item @click="chooseTimeAll">
-          <v-list-item-action>
-            <v-radio-group v-model="allTime">
-              <v-radio value="yes" readonly />
-            </v-radio-group>
-          </v-list-item-action>
-          <v-list-item-content>
-            <v-list-item-title>All Time</v-list-item-title>
-          </v-list-item-content>
-        </v-list-item>
-
-        <v-list-item @click="chooseTimeHour">
+        <v-list-item @click="chooseTime('hour')">
           <v-list-item-action>
             <v-radio-group v-model="hour">
               <v-radio value="yes" readonly />
@@ -91,7 +80,7 @@
           </v-list-item-content>
         </v-list-item>
 
-        <v-list-item @click="chooseTimeDay">
+        <v-list-item @click="chooseTime('day')">
           <v-list-item-action>
             <v-radio-group v-model="day">
               <v-radio value="yes" readonly />
@@ -102,7 +91,7 @@
           </v-list-item-content>
         </v-list-item>
 
-        <v-list-item @click="chooseTimeWeek">
+        <v-list-item @click="chooseTime('week')">
           <v-list-item-action>
             <v-radio-group v-model="week">
               <v-radio value="yes" readonly />
@@ -113,7 +102,7 @@
           </v-list-item-content>
         </v-list-item>
 
-        <v-list-item @click="chooseTimeMonth">
+        <v-list-item @click="chooseTime('month')">
           <v-list-item-action>
             <v-radio-group v-model="month">
               <v-radio value="yes" readonly />
@@ -124,7 +113,7 @@
           </v-list-item-content>
         </v-list-item>
 
-        <v-list-item @click="chooseTimeYear">
+        <v-list-item @click="chooseTime('year')">
           <v-list-item-action>
             <v-radio-group v-model="year">
               <v-radio value="yes" readonly />
@@ -132,6 +121,17 @@
           </v-list-item-action>
           <v-list-item-content>
             <v-list-item-title>Year</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
+
+        <v-list-item @click="chooseTime('all')">
+          <v-list-item-action>
+            <v-radio-group v-model="allTime">
+              <v-radio value="yes" readonly />
+            </v-radio-group>
+          </v-list-item-action>
+          <v-list-item-content>
+            <v-list-item-title>All Time</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
       </v-list>
@@ -152,7 +152,8 @@ export default {
   },
   data() {
     return {
-      selectingTime: false
+      selectingTime: false,
+      sort: ''
     }
   },
   computed: {
@@ -201,26 +202,6 @@ export default {
         })
       } catch (e) {}
     },
-    chooseTop() {
-      this.selectingTime = true
-      try {
-        this.$router.push({
-          path: (
-            this.$route.path
-              .replace('/hot', '')
-              .replace('/top', '')
-              .replace('/new', '')
-              .replace('/mostcomments', '')
-              .replace('/hour', '')
-              .replace('/day', '')
-              .replace('/week', '')
-              .replace('/month', '')
-              .replace('/year', '')
-              .replace('/all', '') + '/top/day'
-          ).replace('//', '/')
-        })
-      } catch (e) {}
-    },
     chooseNew() {
       this.$emit('selected')
       try {
@@ -241,8 +222,17 @@ export default {
         })
       } catch (e) {}
     },
+    chooseTop() {
+      this.selectingTime = true
+      this.sort = 'top'
+    },
     chooseComments() {
       this.selectingTime = true
+      this.sort = 'mostcomments'
+    },
+    chooseTime(time) {
+      this.$emit('selected')
+      this.cancelSelectingTime()
       try {
         this.$router.push({
           path: (
@@ -256,51 +246,9 @@ export default {
               .replace('/week', '')
               .replace('/month', '')
               .replace('/year', '')
-              .replace('/all', '') + '/mostcomments/day'
+              .replace('/all', '') + `/${this.sort}/${time}`
           ).replace('//', '/')
         })
-      } catch (e) {}
-    },
-    chooseTimeAll() {
-      this.$emit('selected')
-      this.cancelSelectingTime()
-      try {
-        this.$router.push({ params: { time: 'all' } })
-      } catch (e) {}
-    },
-    chooseTimeHour() {
-      this.$emit('selected')
-      this.cancelSelectingTime()
-      try {
-        this.$router.push({ params: { time: 'hour' } })
-      } catch (e) {}
-    },
-    chooseTimeDay() {
-      this.$emit('selected')
-      this.cancelSelectingTime()
-      try {
-        this.$router.push({ params: { time: 'day' } })
-      } catch (e) {}
-    },
-    chooseTimeWeek() {
-      this.$emit('selected')
-      this.cancelSelectingTime()
-      try {
-        this.$router.push({ params: { time: 'week' } })
-      } catch (e) {}
-    },
-    chooseTimeMonth() {
-      this.$emit('selected')
-      this.cancelSelectingTime()
-      try {
-        this.$router.push({ params: { time: 'month' } })
-      } catch (e) {}
-    },
-    chooseTimeYear() {
-      this.$emit('selected')
-      this.cancelSelectingTime()
-      try {
-        this.$router.push({ params: { time: 'year' } })
       } catch (e) {}
     },
     cancelSelectingTime() {

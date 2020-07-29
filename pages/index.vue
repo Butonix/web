@@ -3,75 +3,90 @@
     <v-col :class="$device.isDesktop ? '' : 'pa-0'">
       <SortBar :class="$device.isDesktop ? 'mb-3 ml-9' : ''" />
 
-      <div>
-        <DynamicScroller
-          page-mode
-          :items="feed"
-          :min-item-size="54"
-          :buffer="3000"
-        >
-          <template v-slot="{ item, index, active }">
-            <DynamicScrollerItem
-              :item="item"
-              :active="active"
-              :index="index"
-              :size-dependencies="[item.title, item.textContent]"
+      <DynamicScroller
+        page-mode
+        :items="feed"
+        :min-item-size="54"
+        :buffer="3000"
+      >
+        <template v-slot="{ item, index, active }">
+          <DynamicScrollerItem
+            :item="item"
+            :active="active"
+            :index="index"
+            :size-dependencies="[item.title, item.textContent]"
+          >
+            <div
+              style="display: flex; flex-direction: row; align-items: center"
             >
               <div
-                style="display: flex; flex-direction: row; align-items: center"
+                v-if="$device.isDesktop"
+                class="text--secondary pr-2"
+                style="min-width: 36px; text-align: right"
               >
-                <div
-                  v-if="$device.isDesktop"
-                  class="text--secondary pr-2"
-                  style="min-width: 36px; text-align: right"
-                >
-                  {{ index + 1 }}
-                </div>
-                <div
-                  :style="{
-                    'border-style': 'solid',
-                    'border-bottom-style':
-                      index === feed.length - 1 ? 'solid' : 'none',
-                    'border-left-style': $device.isDesktop ? 'solid' : 'none',
-                    'border-right-style': $device.isDesktop ? 'solid' : 'none',
-                    'border-width': '1px',
-                    'border-color': $vuetify.theme.dark
-                      ? 'rgba(255, 255, 255, 0.12)'
-                      : 'rgba(0, 0, 0, 0.12)',
-                    'border-top-left-radius':
-                      $device.isDesktop && index === 0 ? '10px' : '0',
-                    'border-top-right-radius':
-                      $device.isDesktop && index === 0 ? '10px' : '0',
-                    'border-bottom-left-radius':
-                      $device.isDesktop && index === feed.length - 1
-                        ? '10px'
-                        : '0',
-                    'border-bottom-right-radius':
-                      $device.isDesktop && index === feed.length - 1
-                        ? '10px'
-                        : '0'
-                  }"
-                  class="pa-3 flex-grow-1"
-                >
-                  <Post
-                    :post="item"
-                    :index="index"
-                    :active="active"
-                    @togglehidden="toggleHidden"
-                    @toggleblock="toggleBlock"
-                  />
-                </div>
+                {{ index + 1 }}
               </div>
-            </DynamicScrollerItem>
-          </template>
-        </DynamicScroller>
-      </div>
+              <div
+                :style="{
+                  'border-style': 'solid',
+                  'border-bottom-style':
+                    index === feed.length - 1 ? 'solid' : 'none',
+                  'border-top-style': index === 0 ? 'none' : 'solid',
+                  'border-left-style': $device.isDesktop ? 'solid' : 'none',
+                  'border-right-style': $device.isDesktop ? 'solid' : 'none',
+                  'border-width': '1px',
+                  'border-color': $vuetify.theme.dark
+                    ? 'rgba(255, 255, 255, 0.12)'
+                    : 'rgba(0, 0, 0, 0.12)',
+                  'border-top-left-radius':
+                    $device.isDesktop && index === 0 ? '10px' : '0',
+                  'border-top-right-radius':
+                    $device.isDesktop && index === 0 ? '10px' : '0',
+                  'border-bottom-left-radius':
+                    $device.isDesktop && index === feed.length - 1
+                      ? '10px'
+                      : '0',
+                  'border-bottom-right-radius':
+                    $device.isDesktop && index === feed.length - 1
+                      ? '10px'
+                      : '0'
+                }"
+                class="pa-3 flex-grow-1"
+              >
+                <Post
+                  :post="item"
+                  :index="index"
+                  :active="active"
+                  @togglehidden="toggleHidden"
+                  @toggleblock="toggleBlock"
+                />
+              </div>
+            </div>
+          </DynamicScrollerItem>
+        </template>
+      </DynamicScroller>
 
-      <div class="pt-3" :class="$device.isDesktop ? 'ml-9' : ''">
+      <div class="pt-3" :class="$device.isDesktop ? 'ml-9' : 'px-3'">
         <v-progress-linear
           v-show="$apollo.queries.feed.loading"
           indeterminate
         />
+
+        <div
+          v-show="!$apollo.queries.feed.loading && feed.length === 0"
+          style="display: flex; flex-direction: column; align-items: center; text-align: center"
+          class="text--secondary"
+        >
+          <v-icon class="text--secondary" size="36">{{
+            $vuetify.icons.values.mdiEmoticonFrown
+          }}</v-icon>
+          <span class="mt-2" style="font-size: 1.5rem"
+            >We searched far and wide, but there's nothing here.</span
+          >
+          <nuxt-link to="/" class="mt-2 primary--text"
+            >Return to My Planets</nuxt-link
+          >
+        </div>
       </div>
     </v-col>
     <v-col v-if="$device.isDesktop" cols="3">

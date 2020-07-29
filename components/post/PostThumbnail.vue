@@ -13,7 +13,7 @@
       rel="noopener nofollow noreferrer"
       aria-label="Thumbnail"
       style="height: 60px; width: 80px"
-      @click.stop.prevent="$emit('thumbnailclick')"
+      @click.stop.prevent="openLink"
     >
       <img
         v-if="post.thumbnailUrl"
@@ -40,6 +40,11 @@ export default {
     post: {
       type: Object,
       required: true
+    }
+  },
+  methods: {
+    openLink() {
+      window.open(this.post.link, '_blank')
     }
   }
 }
