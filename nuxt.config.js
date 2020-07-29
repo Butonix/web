@@ -260,9 +260,10 @@ export default {
       description: 'Create and browse posts and comments on Comet',
       theme_color: '#202124',
       favicon: false,
+      viewport:
+        'width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0, viewport-fit=cover',
       mobileAppIOS: true,
-      appleStatusBarStyle: 'black-translucent',
-      nativeUI: true
+      appleStatusBarStyle: 'black-translucent'
     },
     icon: {
       purpose: ['any', 'maskable']

@@ -14,8 +14,11 @@
       <CometLogo v-if="$device.isDesktop" />
 
       <div
-        v-if="!$device.isDesktop"
-        style="position: fixed; top: 14px; left: 50%; transform: translateX(-50%); font-size: 21px; font-weight: 500"
+        :style="
+          $device.isDesktop
+            ? 'padding-left: 32px; font-size: 18px; font-weight: 500'
+            : 'position: fixed; top: 14px; left: 50%; transform: translateX(-50%); font-size: 21px; font-weight: 500'
+        "
         class="unselectable"
         @click="openPlanetPrompt"
       >

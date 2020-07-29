@@ -35,10 +35,14 @@
           </v-btn>
 
           <nuxt-link
-            v-if="$route.name !== 'post-id-title' || post.type === 'TEXT'"
+            v-if="!isPostView || post.type === 'TEXT'"
             class="text--primary mr-1"
             style="font-size: 1.125rem; font-weight: 400"
-            :to="`/p/${post.planet.name}/comments/${post.id}/${urlName}`"
+            :to="
+              isPostView
+                ? ''
+                : `/p/${post.planet.name}/comments/${post.id}/${urlName}`
+            "
           >
             {{ post.title }}
           </nuxt-link>

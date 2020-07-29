@@ -6,6 +6,7 @@
     <v-list class="py-0">
       <v-list-item
         active-class="linkactive"
+        class="text--primary"
         dense
         nuxt
         to="/"
@@ -13,25 +14,11 @@
         @click="$emit('selected')"
       >
         <v-list-item-avatar size="24">
-          <v-icon
-            size="20"
-            :style="
-              $route.path === '/'
-                ? 'color: var(--v-primary-base) !important;'
-                : ''
-            "
-            >{{ $vuetify.icons.values.mdiEarth }}</v-icon
-          >
+          <v-icon size="20">{{ $vuetify.icons.values.mdiEarth }}</v-icon>
         </v-list-item-avatar>
 
         <v-list-item-content>
-          <v-list-item-title
-            :style="
-              $route.path === '/'
-                ? 'color: var(--v-primary-base) !important;'
-                : ''
-            "
-            style="font-size: 1rem"
+          <v-list-item-title style="font-size: 1rem"
             >My Planets</v-list-item-title
           >
         </v-list-item-content>
@@ -39,6 +26,7 @@
 
       <v-list-item
         active-class="linkactive"
+        class="text--primary"
         dense
         nuxt
         to="/universe"
@@ -80,10 +68,10 @@
             v-for="galaxy in galaxies"
             :key="galaxy.name"
             active-class="linkactive"
+            class="text--primary pl-8"
             dense
             nuxt
             :to="`/g/${galaxy.name}`"
-            class="pl-8"
             @click="$emit('selected')"
           >
             <v-list-item-avatar size="24">
@@ -93,9 +81,10 @@
             </v-list-item-avatar>
 
             <v-list-item-content>
-              <v-list-item-title style="font-size: 1rem">{{
-                galaxy.fullName
-              }}</v-list-item-title>
+              <v-list-item-title
+                style="font-size: 1rem; white-space: normal; line-height: 1.5"
+                >{{ galaxy.fullName }}</v-list-item-title
+              >
             </v-list-item-content>
           </v-list-item>
         </v-list>
@@ -147,6 +136,8 @@
         </v-list-item-content>
       </v-list-item>
     </v-list>
+
+    <div v-if="$device.isDesktop" style="height: 300px" />
   </div>
 </template>
 
