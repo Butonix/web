@@ -6,7 +6,7 @@
       nuxt
       @click="$emit('selected')"
     >
-      <v-list-item-avatar>
+      <v-list-item-avatar color="#65C9FF">
         <v-icon v-if="!$store.state.currentUser.profilePicUrl">{{
           $vuetify.icons.values.mdiAccountOutline
         }}</v-icon>

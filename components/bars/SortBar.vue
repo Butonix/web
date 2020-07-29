@@ -262,7 +262,15 @@
         nuxt
         :to="
           $route.query.view === 'expanded'
-            ? { query: { ...$route.query, view: 'collapsed' } }
+            ? {
+                query: {
+                  ...() => {
+                    const query = Object.assign({}, $route.query)
+                    delete query.view
+                    return query
+                  }
+                }
+              }
             : { query: { ...$route.query, view: 'expanded' } }
         "
         :style="

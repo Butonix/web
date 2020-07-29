@@ -1,4 +1,4 @@
-export const avatarStyle = 'Circle'
+export const avatarStyle = 'Transparent'
 export const topTypes = [
   'NoHair',
   'Eyepatch',

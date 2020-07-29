@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-avatar size="150">
+    <v-avatar size="150" color="#65C9FF">
       <v-img
         max-height="150"
         max-width="150"
@@ -271,7 +271,7 @@ export default {
   },
   computed: {
     avataaarUrl() {
-      return `https://api.getcomet.net/avataaar/?avatarStyle=Circle&topType=${this.topType}&accessoriesType=${this.accessoriesType}&hairColor=${this.hairColor}&facialHairType=${this.facialHairType}&facialHairColor=${this.facialHairColor}&clotheType=${this.clotheType}&clotheColor=${this.clotheColor}&eyeType=${this.eyeType}&eyebrowType=${this.eyebrowType}&mouthType=${this.mouthType}&skinColor=${this.skinColor}`
+      return `https://api.getcomet.net/avataaar/?avatarStyle=Transparent&topType=${this.topType}&accessoriesType=${this.accessoriesType}&hairColor=${this.hairColor}&facialHairType=${this.facialHairType}&facialHairColor=${this.facialHairColor}&clotheType=${this.clotheType}&clotheColor=${this.clotheColor}&eyeType=${this.eyeType}&eyebrowType=${this.eyebrowType}&mouthType=${this.mouthType}&skinColor=${this.skinColor}`
     },
     imageValid() {
       if (!this.imageData) return true

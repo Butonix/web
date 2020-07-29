@@ -3,6 +3,7 @@
     clipped-left
     app
     flat
+    class="topappbar"
     :dense="$device.isDesktop"
     :style="
       $vuetify.theme.dark

@@ -31,7 +31,8 @@
                   'border-style': 'solid',
                   'border-bottom-style':
                     index === feed.length - 1 ? 'solid' : 'none',
-                  'border-top-style': index === 0 ? 'none' : 'solid',
+                  'border-top-style':
+                    index === 0 && !$device.isDesktop ? 'none' : 'solid',
                   'border-left-style': $device.isDesktop ? 'solid' : 'none',
                   'border-right-style': $device.isDesktop ? 'solid' : 'none',
                   'border-width': '1px',

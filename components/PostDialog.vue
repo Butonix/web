@@ -167,11 +167,6 @@
                 </template>
               </DynamicScroller>
 
-              <v-progress-linear
-                v-show="$apollo.queries.postComments.loading"
-                indeterminate
-              />
-
               <v-row
                 v-show="
                   !$apollo.queries.postComments.loading &&
@@ -341,15 +336,8 @@ export default {
     post: {
       deep: true,
       handler() {
+        this.postComments = []
         this.$nextTick(() => this.$refs.dialogref.$refs.dialog.scrollTo(0, 0))
-      }
-    },
-    $route: {
-      deep: true,
-      handler() {
-        if (!this.$route.query || !this.$route.query.replying) {
-          this.commentDialog = false
-        }
       }
     },
     async dialogOpen() {
@@ -388,12 +376,6 @@ export default {
       window.addEventListener('popstate', this.handleHistoryChange)
       this.addedEventListener = true
     }
-
-    if (this.$route.query && this.$route.query.replying) {
-      const query = Object.assign({}, this.$route.query)
-      delete query.replying
-      this.$router.push({ path: this.$route.path, query })
-    }
   },
   methods: {
     doNothing() {},
@@ -402,6 +384,12 @@ export default {
       window.history.pushState({}, null, this.$route.path)
     },
     handleHistoryChange(e) {
+      if (this.commentDialog) {
+        window.history.pushState(window.history.state, null, '?replying=true')
+        this.commentDialog = false
+        window.history.back()
+        return
+      }
       if (
         e.target.location.href.includes('/p/') &&
         e.target.location.href.includes('/comments/')
@@ -416,11 +404,9 @@ export default {
         })
         return
       }
-      this.$router.push({
-        path: this.$route.path,
-        query: { ...this.$route.query, replying: 'true' }
-      })
       this.commentDialog = true
+      window.history.pushState(window.history.state, null, '?replying=true')
+      console.log(window.location)
     },
     closeCommentDialog() {
       if (!this.isCommentEmpty) {
@@ -430,9 +416,6 @@ export default {
         if (!confirmed) return
       }
       this.commentDialog = false
-      const query = Object.assign({}, this.$route.query)
-      delete query.replying
-      this.$router.push({ path: this.$route.path, query })
       this.commentHTML = null
     },
     async submitComment() {

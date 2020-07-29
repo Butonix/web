@@ -13,7 +13,7 @@
             :key="mod.id"
             class="px-0"
           >
-            <v-list-item-avatar size="28" class="mr-2">
+            <v-list-item-avatar size="28" class="mr-2" color="#65C9FF">
               <v-img :src="mod.profilePicUrl" />
             </v-list-item-avatar>
             <v-list-item-content>

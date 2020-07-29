@@ -115,7 +115,7 @@ export default {
     return {
       valid: false,
       username: '',
-      email: '',
+      email: null,
       password: '',
       confirmPassword: '',
       showPassword: false,

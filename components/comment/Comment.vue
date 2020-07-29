@@ -6,16 +6,16 @@
     "
     :id="comment.id"
     :style="{
-      border:
-        level === 0
-          ? $vuetify.theme.dark
-            ? '1px solid rgba(255, 255, 255, 0.12)'
-            : '1px solid rgba(0, 0, 0, 0.12)'
-          : '',
-      'border-radius': $device.isDesktop ? '10px' : '0',
-      'border-left-style': $device.isDesktop ? 'solid' : 'none',
-      'border-right-style': $device.isDesktop ? 'solid' : 'none',
-      'border-bottom-style': $device.isDesktop ? 'solid' : 'none'
+      'border-color': $vuetify.theme.dark
+        ? 'rgba(255, 255, 255, 0.12)'
+        : 'rgba(0, 0, 0, 0.12)',
+      'border-width': '1px',
+      'border-radius': $device.isDesktop && level === 0 ? '10px' : '0',
+      'border-left-style': $device.isDesktop && level === 0 ? 'solid' : 'none',
+      'border-right-style': $device.isDesktop && level === 0 ? 'solid' : 'none',
+      'border-bottom-style':
+        $device.isDesktop && level === 0 ? 'solid' : 'none',
+      'border-top-style': $device.isDesktop && level === 0 ? 'solid' : 'none'
     }"
   >
     <div

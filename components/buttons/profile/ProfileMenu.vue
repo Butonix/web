@@ -13,6 +13,7 @@
           v-if="
             $store.state.currentUser && $store.state.currentUser.profilePicUrl
           "
+          color="#65C9FF"
           size="24"
           class="mr-2"
         >
@@ -51,6 +52,7 @@
           v-if="
             $store.state.currentUser && $store.state.currentUser.profilePicUrl
           "
+          color="#65C9FF"
           size="24"
           class="mr-2"
         >
