@@ -10,7 +10,7 @@
     }"
   >
     <v-list-item>
-      <v-list-item-avatar size="64">
+      <v-list-item-avatar size="64" color="#65C9FF">
         <v-img
           v-if="user.profilePicUrl"
           alt="Profile picture"
@@ -91,9 +91,9 @@
           >{{ user.bio }}</v-list-item-subtitle
         >
         <v-list-item-subtitle
-          class="mt-1 mb-0 caption"
+          class="mt-1 mb-0"
           :class="lastOnlineString === 'Online' ? 'green--text' : ''"
-          style="white-space: normal"
+          style="white-space: normal; font-size: 0.86rem"
           >{{ lastOnlineString }}</v-list-item-subtitle
         >
       </v-list-item-content>
@@ -188,7 +188,7 @@
                 @finished="editDialog = false"
                 @cancelled="cancelDialog"
               />
-              <div class="caption text--secondary mt-3">
+              <div class="text--secondary mt-3" style="font-size: 0.86rem">
                 Note: Changes to avatar may take some time to take effect
               </div>
             </div>

@@ -57,7 +57,6 @@
                     :post="item"
                     :index="index"
                     :active="active"
-                    :expanded-view="$route.query.view === 'expanded'"
                     @togglehidden="toggleHidden"
                     @toggleblock="toggleBlock"
                   />

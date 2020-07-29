@@ -10,7 +10,7 @@
     <a
       :href="post.link"
       target="_blank"
-      rel="noopener"
+      rel="noopener nofollow noreferrer"
       aria-label="Thumbnail"
       style="height: 60px; width: 80px"
       @click.stop.prevent="$emit('thumbnailclick')"

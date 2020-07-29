@@ -23,7 +23,7 @@ export default {
         'Sort by submit to see the latest posts by Comet users',
         'The Comet bot continuously posts popular content from the internet',
         'Comet is mobile-friendly and can be installed on your device by pressing "Add to Home screen" or from the <a>Google Play Store</a>',
-        'Join the <a href="https://discord.gg/NPCMGSm" target="_blank" rel="noopener">Comet Discord</a> to chat with fellow Comet users and developers',
+        'Join the <a href="https://discord.gg/NPCMGSm" target="_blank" rel="noopener nofollow noreferrer">Comet Discord</a> to chat with fellow Comet users and developers',
         'Unblock users and unhide posts and topics by clicking your name at the top right of the page and going to "Filters"',
         'Block users by hovering over a username or going to a profile and clicking the block icon',
         'Hide topics by going to the topic page and clicking "Hide Topic"',

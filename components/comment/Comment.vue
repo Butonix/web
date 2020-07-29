@@ -7,11 +7,15 @@
     :id="comment.id"
     :style="{
       border:
-        level === 0 && !$vuetify.theme.dark
-          ? '1px solid rgba(0, 0, 0, 0.12)'
+        level === 0
+          ? $vuetify.theme.dark
+            ? '1px solid rgba(255, 255, 255, 0.12)'
+            : '1px solid rgba(0, 0, 0, 0.12)'
           : '',
-      'border-radius': '10px',
-      'background-color': $vuetify.theme.dark ? '#35363A' : '#FFFFFF'
+      'border-radius': $device.isDesktop ? '10px' : '0',
+      'border-left-style': $device.isDesktop ? 'solid' : 'none',
+      'border-right-style': $device.isDesktop ? 'solid' : 'none',
+      'border-bottom-style': $device.isDesktop ? 'solid' : 'none'
     }"
   >
     <div
@@ -19,12 +23,12 @@
         'padding-left': 10 * level + 'px',
         'background-color': $vuetify.theme.dark
           ? idState.expanded
-            ? '#414245'
-            : '#35363A'
+            ? '#35363A'
+            : '#202124'
           : idState.expanded
-          ? '#F1F3F4'
-          : '#FFFFFF',
-        'border-radius': '9px'
+          ? '#DEE1E6'
+          : '#F8F9FA',
+        'border-radius': $device.isDesktop ? '9px' : '0'
       }"
     >
       <div
@@ -37,13 +41,14 @@
         @click.stop.prevent="idState.expanded = !idState.expanded"
       >
         <v-card-text
-          class="text--primary pt-2 pb-0 px-2"
+          class="text--primary pt-3 pb-0 px-3"
           style="font-size: 1rem"
         >
           <div v-if="showPostTitle" class="mb-1">
             <nuxt-link
               :to="`/p/${comment.post.id}/${postUrlName}`"
-              class="caption font-weight-medium text--secondary"
+              class="font-weight-medium text--secondary"
+              style="font-size: 0.86rem"
               >{{ comment.post.title }}</nuxt-link
             >
           </div>
@@ -54,7 +59,7 @@
           />
         </v-card-text>
 
-        <v-card-actions class="px-2 py-2">
+        <v-card-actions class="px-3 pb-3 pt-2">
           <UsernameMenu
             v-if="comment.author"
             :user-data="comment.author"
@@ -64,14 +69,18 @@
             >[deleted]</span
           >
 
-          <span :title="editedTimeSince" class="text--secondary caption ml-2"
+          <span
+            :title="editedTimeSince"
+            class="text--secondary ml-2"
+            style="font-size: 0.86rem"
             >{{ timeSince }}{{ editedTimeSince ? '*' : '' }}</span
           >
 
           <span
             v-if="!$device.isDesktop"
-            class="caption ml-3"
+            class="ml-3"
             :class="comment.isEndorsed ? 'primary--text' : 'text--secondary'"
+            style="font-size: 0.86rem"
           >
             {{ comment.endorsementCount }}
             <v-icon
@@ -82,7 +91,12 @@
             >
           </span>
 
-          <span v-if="isNew" class="caption ml-3 primary--text">New</span>
+          <span
+            v-if="isNew"
+            class="ml-3 primary--text"
+            style="font-size: 0.86rem"
+            >New</span
+          >
 
           <template v-if="$device.isDesktop">
             <v-spacer />
@@ -117,55 +131,37 @@
       </div>
     </div>
 
-    <div
-      v-if="!$device.isDesktop && idState.expanded"
-      :style="
-        $vuetify.theme.dark
-          ? 'background-color: #35363A'
-          : 'background-color: #FFFFFF'
-      "
-      style="border-bottom-left-radius: 9px; border-bottom-right-radius: 9px; display: flex"
-    >
-      <v-btn
-        text
-        tile
-        class="flex-grow-1"
-        nuxt
-        :to="`/u/${comment.author.username}`"
+    <v-expand-transition>
+      <div
+        v-show="!$device.isDesktop && idState.expanded"
+        style="display: flex"
       >
-        <v-icon v-if="!comment.author.profilePicUrl" class="mr-2">{{
-          $vuetify.icons.values.mdiAccountOutline
-        }}</v-icon>
-        <v-avatar v-else class="mr-2" size="28">
-          <img :src="comment.author.profilePicUrl" alt="Profile Picture" />
-        </v-avatar>
-        {{ comment.author.username }}
-      </v-btn>
+        <v-btn text tile class="flex-grow-1" @click="openReplyDialog">
+          <v-icon class="mr-2">{{ $vuetify.icons.values.mdiReply }}</v-icon>
+          Reply
+        </v-btn>
 
-      <v-btn text tile class="flex-grow-1" @click="openReplyDialog">
-        <v-icon class="mr-2">{{ $vuetify.icons.values.mdiReply }}</v-icon>
-        Reply
-      </v-btn>
-
-      <v-btn
-        text
-        tile
-        class="flex-grow-1"
-        :class="comment.isEndorsed ? 'primary--text' : ''"
-        @click="toggleEndorsement"
-      >
-        <v-icon class="mr-2">{{ $vuetify.icons.values.mdiRocket }}</v-icon>
-        {{ comment.endorsementCount }} Rocket{{
-          comment.endorsementCount === 1 ? '' : 's'
-        }}
-      </v-btn>
-    </div>
+        <v-btn
+          text
+          tile
+          class="flex-grow-1"
+          :class="comment.isEndorsed ? 'primary--text' : ''"
+          @click="toggleEndorsement"
+        >
+          <v-icon class="mr-2">{{ $vuetify.icons.values.mdiRocket }}</v-icon>
+          {{ comment.endorsementCount }} Rocket{{
+            comment.endorsementCount === 1 ? '' : 's'
+          }}
+        </v-btn>
+      </div>
+    </v-expand-transition>
 
     <div v-show="!idState.childrenCollapsed">
       <Comment
         v-for="c in comment.childComments"
         :key="c.id"
         :post-view="postView"
+        :post="post"
         :comment="c"
         :level="level + 1"
       />
@@ -238,7 +234,9 @@
               v-model="idState.replyHTML"
               editable
               autofocus
-              :style="$device.isDesktop ? 'min-height: 296px' : ''"
+              :style="
+                $device.isDesktop ? 'min-height: 296px; max-height: 600px' : ''
+              "
               style="overflow-y: auto"
               class="pa-2"
             />

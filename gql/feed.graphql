@@ -26,6 +26,7 @@ query feed($page: Int, $sort: Sort, $time: Time, $filter: Filter, $types: [Type!
       description
       userCount
       avatarImageUrl
+      createdAt
       galaxy {
         name
         fullName

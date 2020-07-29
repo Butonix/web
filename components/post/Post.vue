@@ -1,16 +1,11 @@
 <template>
   <div v-intersect.once="updateTextContentSize" @click="goToIfMobile">
     <v-list-item class="px-0">
-      <PostThumbnail
-        v-if="$device.isDesktop"
-        :post="post"
-        @thumbnailclick="toggleEmbed"
-      />
+      <PostThumbnail v-if="$device.isDesktop" :post="post" />
 
       <v-list-item-content
         class="pa-0"
-        style="align-content: space-between"
-        :style="$device.isDesktop ? 'min-height: 60px' : ''"
+        style="align-content: space-between; min-height: 60px"
       >
         <span v-if="post.sticky">
           <v-icon color="primary" size="13" class="mr-1">{{
@@ -21,14 +16,14 @@
 
         <v-list-item-title style="white-space: normal">
           <v-btn
-            v-if="isExpandable"
+            v-if="isExpandable && !isPostView"
             x-small
             icon
             class="mr-1 mb-1 text--secondary"
             @click.stop.prevent="idState.expand = !idState.expand"
           >
             <v-icon>{{
-              idState.expand || $route.query.view === 'expanded'
+              idState.expand
                 ? $vuetify.icons.values.mdiArrowCollapse
                 : $vuetify.icons.values.mdiArrowExpand
             }}</v-icon>
@@ -53,7 +48,7 @@
             style="font-size: 1.125rem; font-weight: 400"
             :href="post.link"
             target="_blank"
-            rel="noopener"
+            rel="noopener nofollow noreferrer"
           >
             {{ post.title }}
           </a>
@@ -62,7 +57,8 @@
             <nuxt-link
               v-if="post.type === 'TEXT'"
               :to="`/p/${post.planet.name}/comments/${post.id}/${urlName}`"
-              class="text--secondary caption hoverable"
+              class="text--secondary hoverable"
+              style="font-size: 0.86rem"
             >
               (text post)
             </nuxt-link>
@@ -70,17 +66,21 @@
               v-else
               :href="post.link"
               target="_blank"
-              rel="noopener"
-              class="text--secondary caption hoverable"
+              rel="noopener nofollow noreferrer"
+              class="text--secondary hoverable"
+              style="font-size: 0.86rem"
               >({{ post.domain }})</a
             >
           </template>
 
           <template v-else>
-            <span v-if="post.type === 'TEXT'" class="text--secondary caption"
+            <span
+              v-if="post.type === 'TEXT'"
+              class="text--secondary"
+              style="font-size: 0.86rem"
               >(text post)</span
             >
-            <span v-else class="text--secondary caption"
+            <span v-else class="text--secondary" style="font-size: 0.86rem"
               >({{ post.domain }})</span
             >
           </template>
@@ -89,51 +89,40 @@
         <PostPlanet v-if="!$device.isDesktop" :post="post" class="mt-1" />
 
         <PostPreview
-          v-if="$device.isDesktop"
-          v-show="
-            active &&
-              (idState.expand ||
-                post.textContent ||
-                $route.query.view === 'expanded')
-          "
-          :key="post.id"
+          v-if="isExpandable && $device.isDesktop"
           ref="textcontent"
-          :expanded-view="idState.expand || $route.query.view === 'expanded'"
+          :key="post.id"
+          :expand="idState.expand || isPostView"
+          :is-post-view="isPostView"
           :post="post"
-          :viewing-more="idState.viewingMore"
           :text-content-height="idState.textContentHeight"
-          @togglemore="idState.viewingMore = !idState.viewingMore"
+          @togglemore="idState.expand = !idState.expand"
         />
 
         <PostBottomBar
-          v-if="$device.isDesktop"
+          v-if="$device.isDesktop && !isPostView"
           class="mt-2"
           :post="post"
           :is-post-view="isPostView"
         />
       </v-list-item-content>
 
-      <PostThumbnail
-        v-if="!$device.isDesktop"
-        :post="post"
-        @thumbnailclick="toggleEmbed"
-      />
+      <PostThumbnail v-if="!$device.isDesktop" :post="post" />
     </v-list-item>
 
     <PostPreview
-      v-if="!$device.isDesktop"
-      v-show="active && (idState.expand || post.textContent)"
-      :key="post.id"
+      v-if="isExpandable && !$device.isDesktop"
       ref="textcontent"
-      :expanded-view="idState.expand || $route.query.view === 'expanded'"
+      :key="post.id"
+      :expand="idState.expand || isPostView"
+      :is-post-view="isPostView"
       :post="post"
-      :viewing-more="idState.viewingMore"
       :text-content-height="idState.textContentHeight"
-      @togglemore="idState.viewingMore = !idState.viewingMore"
+      @togglemore="idState.expand = !idState.expand"
     />
 
     <PostBottomBar
-      v-if="!$device.isDesktop"
+      v-if="!$device.isDesktop || isPostView"
       class="mt-2"
       :post="post"
       :is-post-view="isPostView"
@@ -143,9 +132,7 @@
 
 <script>
 import { IdState } from 'vue-virtual-scroller'
-import { formatDistanceToNowStrict } from 'date-fns'
 import PostThumbnail from './PostThumbnail'
-import { timeSince } from '~/util/timeSince'
 import { urlName } from '~/util/urlName'
 import PostBottomBar from '@/components/post/PostBottomBar'
 import PostPlanet from '@/components/post/PostPlanet'
@@ -180,18 +167,16 @@ export default {
     isPostView: {
       type: Boolean,
       default: false
-    },
-    expandedView: {
-      type: Boolean,
-      default: false
     }
   },
   computed: {
     isExpandable() {
       return (
+        this.post.textContent ||
         this.isEmbeddableImage ||
         this.isYoutubeLink ||
         this.isSpotifyLink ||
+        this.isTweetLink ||
         this.isInstagramLink
       )
     },
@@ -211,6 +196,13 @@ export default {
         this.post.link.startsWith('https://open.spotify.com/')
       )
     },
+    isTweetLink() {
+      return (
+        this.post.type === 'LINK' &&
+        this.post.link.includes('twitter.com/') &&
+        this.post.link.includes('/status/')
+      )
+    },
     isInstagramLink() {
       return (
         this.post.type === 'LINK' &&
@@ -220,54 +212,34 @@ export default {
     urlName() {
       if (!this.post) return ''
       return urlName(this.post.title)
-    },
-    timeSince() {
-      return (
-        (this.$device.isDesktop
-          ? formatDistanceToNowStrict(new Date(this.post.createdAt)) + ' ago'
-          : timeSince(new Date(this.post.createdAt))) +
-        (this.post.editedAt ? '*' : '')
-      )
-    },
-    editedTimeSince() {
-      if (!this.post.editedAt) return ''
-      return (
-        'Edited ' +
-        formatDistanceToNowStrict(new Date(this.post.editedAt)) +
-        ' ago'
-      )
     }
   },
   watch: {
     'post.isHidden'() {
       this.$emit('togglehidden')
-    }
-  },
-  mounted() {
-    if (this.isPostView) return
-    if (this.$refs.textcontent && this.post.textContent) {
-      console.log('mounted')
-      this.idState.textContentHeight = this.$refs.textcontent.$el.clientHeight
-      this.idState.viewingMore = false
+    },
+    '$route.query.view'() {
+      if (this.$route.query.view === 'expanded') this.idState.expand = true
+      else this.idState.expand = false
     }
   },
   idState() {
     return {
-      viewingMore: false,
-      textContentHeight: 100,
-      imagePreview: false,
+      textContentHeight: -1,
+      didGetTextContentHeight: false,
       reported: false,
-      expand: this.expandedView
+      expand: this.$route.query.view === 'expanded' || this.isPostView
     }
   },
   methods: {
-    doNothing() {},
     updateTextContentSize() {
-      if (this.isPostView) return
-      if (this.$refs.textcontent && this.post.textContent) {
-        console.log('updateTextContentSize')
+      if (
+        this.$refs.textcontent &&
+        this.post.textContent &&
+        !this.idState.didGetTextContentHeight
+      ) {
         this.idState.textContentHeight = this.$refs.textcontent.$el.clientHeight
-        this.idState.viewingMore = false
+        this.idState.didGetTextContentHeight = true
       }
     },
     toggleBlock() {
@@ -279,17 +251,6 @@ export default {
       this.$router.push(
         `/p/${this.post.planet.name}/comments/${this.post.id}/${this.urlName}`
       )
-    },
-    toggleEmbed() {
-      if (
-        this.post.type === 'IMAGE' &&
-        this.isEmbeddableImage &&
-        !this.isPostView
-      ) {
-        this.idState.imagePreview = !this.idState.imagePreview
-      } else {
-        window.open(this.post.link, '_blank')
-      }
     }
   }
 }

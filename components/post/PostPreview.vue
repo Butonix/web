@@ -1,32 +1,43 @@
 <template>
-  <div v-if="isExpandable" class="mt-4">
-    <div v-if="post.type === 'TEXT' && post.textContent">
-      <div
-        :class="viewingMore || textContentHeight <= 90 ? '' : 'textcontent'"
-        :style="textContentHeight <= 90 ? '' : 'cursor: pointer'"
-        @click.stop.prevent="$emit('togglemore')"
-      >
-        <TextContent
-          :text-content="post.textContent"
-          :dark="$vuetify.theme.dark"
-        />
-      </div>
+  <div v-if="post.textContent" class="mt-4">
+    <div
+      :class="
+        expand || isPostView || textContentHeight <= 90 ? '' : 'textcontent'
+      "
+      :style="
+        expand || isPostView || textContentHeight <= 90 ? '' : 'cursor: pointer'
+      "
+      @click.stop.prevent="toggleTextExpand"
+    >
+      <TextContent
+        :text-content="post.textContent"
+        :dark="$vuetify.theme.dark"
+      />
     </div>
-
+  </div>
+  <div v-else v-show="expand" class="mt-4">
     <v-row
-      v-else-if="expandedView && post.type === 'IMAGE' && isEmbeddableImage"
+      v-if="post.type === 'IMAGE' && isEmbeddableImage"
       no-gutters
       justify="start"
     >
-      <a :href="post.link" rel="noopener" target="_blank">
-        <img alt="Image preview" :src="post.link" style="max-height: 500px" />
+      <a
+        :href="post.link"
+        rel="noopener nofollow noreferrer"
+        target="_blank"
+        @click.stop.prevent="openImageLink"
+      >
+        <img
+          alt="Image preview"
+          :src="post.link"
+          style="max-height: 500px; max-width: 100%"
+        />
       </a>
     </v-row>
 
     <v-row
       v-else-if="
-        expandedView &&
-          (isYoutubeLink || isTweetLink || isSpotifyLink || isInstagramLink)
+        isYoutubeLink || isTweetLink || isSpotifyLink || isInstagramLink
       "
       no-gutters
       justify="start"
@@ -41,13 +52,19 @@
             frameborder="0"
             allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
             allowfullscreen
+            scrolling="no"
             :class="$device.isDesktop ? '' : 'youtube'"
             :style="$device.isDesktop ? 'width: 560px; height: 315px' : ''"
           />
         </div>
 
-        <!--<Tweet v-else-if="isTweetLink" :id="tweetId" />-->
-        <vue-friendly-iframe
+        <Tweet
+          v-else-if="isTweetLink"
+          :id="tweetId"
+          :style="$device.isDesktop ? 'width: 560px' : 'width: 100%'"
+        />
+
+        <iframe
           v-else-if="isSpotifyLink"
           :src="spotifyUrl"
           width="300"
@@ -55,8 +72,13 @@
           frameborder="0"
           allowtransparency="true"
           allow="encrypted-media"
-          class="spotifyframe"
+          :style="
+            $device.isDesktop
+              ? 'width: 300px; height: 380px'
+              : 'width: 100%; height: 380px'
+          "
         />
+
         <instagram-embed
           v-else-if="isInstagramLink"
           :url="post.link"
@@ -70,42 +92,35 @@
 <script>
 import { getIdFromUrl } from 'vue-youtube'
 import InstagramEmbed from 'vue-instagram-embed'
+import { Tweet } from 'vue-tweet-embed'
 import TextContent from '@/components/TextContent'
 
 export default {
   name: 'PostPreview',
   components: {
     TextContent,
-    InstagramEmbed
+    InstagramEmbed,
+    Tweet
   },
   props: {
     post: {
       type: Object,
       required: true
     },
-    viewingMore: {
+    textContentHeight: {
+      type: Number,
+      required: true
+    },
+    expand: {
       type: Boolean,
       required: true
     },
-    textContentHeight: {
-      type: Number,
-      default: 0
-    },
-    expandedView: {
+    isPostView: {
       type: Boolean,
-      default: false
+      required: true
     }
   },
   computed: {
-    isExpandable() {
-      return (
-        this.post.textContent ||
-        this.isEmbeddableImage ||
-        this.isYoutubeLink ||
-        this.isSpotifyLink ||
-        this.isInstagramLink
-      )
-    },
     isEmbeddableImage() {
       return this.post.type === 'IMAGE' && this.post.link.startsWith('https://')
     },
@@ -147,6 +162,16 @@ export default {
     tweetId() {
       if (!this.isTweetLink) return ''
       else return this.post.link.split('status/')[1].split('?')[0]
+    }
+  },
+  methods: {
+    openImageLink() {
+      window.open(this.post.link, '_blank')
+    },
+    toggleTextExpand() {
+      if (!this.isPostView) {
+        this.$emit('togglemore')
+      }
     }
   }
 }

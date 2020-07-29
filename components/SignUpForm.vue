@@ -7,6 +7,7 @@
       flat
       dense
       :style="$device.isDesktop ? 'max-width: 35%' : ''"
+      class="darktextfield"
       label="Username"
     />
 
@@ -17,6 +18,7 @@
       flat
       dense
       :style="$device.isDesktop ? 'max-width: 35%' : ''"
+      class="darktextfield"
       label="Email (Optional)*"
     />
 
@@ -28,6 +30,7 @@
       dense
       :style="$device.isDesktop ? 'max-width: 35%' : ''"
       label="Password"
+      class="darktextfield"
       :type="showPassword ? 'text' : 'password'"
     >
       <template v-slot:append>
@@ -52,6 +55,7 @@
       dense
       :style="$device.isDesktop ? 'max-width: 35%' : ''"
       label="Confirm Password"
+      class="darktextfield"
       :type="showPassword ? 'text' : 'password'"
     >
       <template v-slot:append>
@@ -69,11 +73,11 @@
       </template>
     </v-text-field>
 
-    <div class="caption text--secondary pb-1">
+    <div class="text--secondary pb-1" style="font-size: 0.86rem">
       *Emails are only used for account recovery and are not shared with any
       third parties.
     </div>
-    <div class="caption text--secondary pb-3">
+    <div class="text--secondary pb-3" style="font-size: 0.86rem">
       By clicking Continue, you agree to our
       <nuxt-link to="/terms" target="_blank" class="primary--text"
         >Terms of Service</nuxt-link

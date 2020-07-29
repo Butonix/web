@@ -1,10 +1,14 @@
 <template>
   <v-card flat :outlined="!$vuetify.theme.dark">
     <v-img
-      v-if="planet.cardImageUrl"
       alt="Planet cover image"
       :src="planet.cardImageUrl"
-      height="250"
+      height="150"
+      :style="
+        `background-color: ${
+          planet.themeColor ? planet.themeColor : 'var(--v-primary-base)'
+        }`
+      "
     />
     <v-list-item>
       <v-list-item-avatar>
@@ -57,11 +61,16 @@
         }}</v-icon>
         {{ planet.galaxy.fullName }}
       </v-chip>
+
+      <v-spacer />
+
+      <span class="text--secondary">{{ createdDate }}</span>
     </v-card-actions>
   </v-card>
 </template>
 
 <script>
+import { format } from 'date-fns'
 import joinPlanetGql from '@/gql/joinPlanet'
 import joinedPlanetsGql from '@/gql/joinedPlanets'
 import leavePlanetGql from '@/gql/leavePlanet'
@@ -72,6 +81,11 @@ export default {
     planet: {
       type: Object,
       required: true
+    }
+  },
+  computed: {
+    createdDate() {
+      return 'Created ' + format(new Date(this.planet.createdAt), 'MMM d, yyyy')
     }
   },
   methods: {

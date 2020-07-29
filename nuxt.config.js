@@ -111,7 +111,8 @@ import {
   mdiArrowExpand,
   mdiArrowCollapse,
   mdiDogSide,
-  mdiVideoOutline
+  mdiVideoOutline,
+  mdiMicrophoneVariant
 } from '@mdi/js'
 
 export default {
@@ -426,7 +427,8 @@ export default {
         mdiArrowExpand,
         mdiArrowCollapse,
         mdiDogSide,
-        mdiVideoOutline
+        mdiVideoOutline,
+        mdiMicrophoneVariant
       }
     },
     theme: {

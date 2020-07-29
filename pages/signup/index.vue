@@ -34,12 +34,7 @@
             Recent and recommended planets here
           </div>
 
-          <v-btn
-            rounded
-            depressed
-            color="primary"
-            class="mt-2"
-            @click="$router.push(`/u/${$store.state.currentUser.username}`)"
+          <v-btn rounded depressed color="primary" class="mt-2" nuxt to="/"
             >Finish</v-btn
           >
         </v-stepper-content>

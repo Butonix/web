@@ -7,20 +7,22 @@
     "
     class="text--secondary"
   >
-    <v-avatar size="20">
+    <v-avatar size="20" color="#65C9FF">
       <img alt="Profile picture" :src="userData.profilePicUrl" />
     </v-avatar>
-    <span class="ml-1 caption">
+    <span
+      class="ml-1"
+      style="font-size: 0.86rem"
+      :class="op && userData.username !== 'Comet' ? 'font-weight-bold' : ''"
+    >
       {{ userData.username }}
     </span>
-    <v-chip
+    <v-icon
       v-if="op && userData.username !== 'Comet'"
-      dark
-      x-small
-      label
-      color="indigo"
-      class="ml-1 px-1"
-      >OP</v-chip
+      size="16"
+      style="padding-bottom: 3px"
+      color="primary"
+      >{{ $vuetify.icons.values.mdiMicrophoneVariant }}</v-icon
     >
     <v-chip
       v-if="userData.tag"

@@ -1,6 +1,6 @@
 <template>
   <v-row justify="center">
-    <v-col :cols="$device.isDesktop ? 6 : 12">
+    <v-col :cols="$device.isDesktop ? 9 : 12">
       <v-row no-gutters>
         <v-tabs v-model="tab" grow background-color="transparent">
           <v-tab

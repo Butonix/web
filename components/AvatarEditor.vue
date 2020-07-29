@@ -163,7 +163,7 @@
       flat
       dense
       label="Use an image instead"
-      class="mt-3 ml-2 fileupload"
+      class="mt-3 ml-2 fileupload darktextfield"
       :prepend-icon="$vuetify.icons.values.mdiImage"
       :style="$device.isDesktop ? 'max-width: 300px' : ''"
       :rules="uploadRules"

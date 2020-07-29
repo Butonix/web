@@ -1,10 +1,16 @@
 <template>
-  <div class="caption mt-2 mx-2 text--secondary">
-    <a href="https://discord.gg/NPCMGSm" target="_blank" rel="noopener"
+  <div class="mt-2 mx-2 text--secondary" style="font-size: 0.86rem">
+    <a
+      href="https://discord.gg/NPCMGSm"
+      target="_blank"
+      rel="noopener nofollow noreferrer"
       >Discord</a
     >
     <span class="mx-1">&middot;</span>
-    <a href="https://github.com/comet-app" target="_blank" rel="noopener"
+    <a
+      href="https://github.com/comet-app"
+      target="_blank"
+      rel="noopener nofollow noreferrer"
       >GitHub</a
     >
     <span class="mx-1">&middot;</span>

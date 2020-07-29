@@ -5,8 +5,8 @@
 
     <span
       :title="editedTimeSince"
-      class="text--secondary caption"
-      style="margin-left: 6px"
+      class="text--secondary"
+      style="margin-left: 6px; font-size: 0.86rem"
       >{{ timeSince }}</span
     >
 

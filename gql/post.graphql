@@ -24,6 +24,7 @@ query post($postId: ID!) {
         name
         description
         userCount
+        createdAt
         avatarImageUrl
         galaxy {
           name

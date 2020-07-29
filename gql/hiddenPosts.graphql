@@ -25,6 +25,7 @@ query hiddenPosts {
         name
         description
         userCount
+        createdAt
         joined
         blocking
         avatarImageUrl

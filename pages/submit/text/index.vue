@@ -52,7 +52,7 @@
               <v-icon class="mr-2">{{
                 $vuetify.icons.values.mdiCloseCircleOutline
               }}</v-icon>
-              Discard
+              Close
             </v-btn>
             <v-btn
               text
@@ -73,7 +73,9 @@
               v-model="textContent"
               editable
               autofocus
-              :style="$device.isDesktop ? 'min-height: 296px' : ''"
+              :style="
+                $device.isDesktop ? 'min-height: 296px; max-height: 600px' : ''
+              "
               style="overflow-y: auto"
               class="pa-2"
             />
@@ -156,17 +158,10 @@ export default {
       this.dialog = true
     },
     closeDialog() {
-      if (!this.isEditorEmpty) {
-        const confirmed = window.confirm(
-          'Are you sure you want to discard this post?'
-        )
-        if (!confirmed) return
-      }
       this.dialog = false
       const query = Object.assign({}, this.$route.query)
       delete query.editing
       this.$router.push({ path: this.$route.path, query })
-      this.textContent = null
     },
     hideDialog() {
       this.dialog = false

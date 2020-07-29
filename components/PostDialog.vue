@@ -86,126 +86,111 @@
             </v-btn>
           </v-app-bar>
 
-          <v-container>
-            <v-row
-              :style="
-                $device.isDesktop ? 'padding-top: 36px' : 'padding-top: 44px'
-              "
-              justify="center"
-            >
-              <div class="postcol">
-                <div
-                  v-if="$device.isDesktop"
-                  class="mb-3 pa-3"
-                  :style="{
-                    'border-radius': '10px',
-                    'border-style': 'solid',
-                    'border-width': '1px',
-                    'border-color': $vuetify.theme.dark
-                      ? 'rgba(255, 255, 255, 0.12)'
-                      : 'rgba(0, 0, 0, 0.12)'
-                  }"
-                >
-                  <Post is-post-view expanded-view :post="post" />
-                </div>
-
-                <div
-                  v-else
-                  class="mb-3 px-3 pb-3"
-                  :style="{
-                    'border-bottom-style': 'solid',
-                    'border-bottom-width': '1px',
-                    'border-bottom-color': $vuetify.theme.dark
-                      ? 'rgba(255, 255, 255, 0.12)'
-                      : 'rgba(0, 0, 0, 0.12)'
-                  }"
-                >
-                  <Post is-post-view expanded-view :post="post" />
-                </div>
-
-                <v-row no-gutters>
-                  <v-btn
-                    v-if="$store.state.currentUser"
-                    rounded
-                    depressed
-                    color="primary"
-                    class="mb-3 white--text"
-                    @click="openCommentDialog"
-                  >
-                    <v-icon class="mr-2">{{
-                      $vuetify.icons.values.mdiPencil
-                    }}</v-icon>
-                    <span class="mr-2">New Comment</span>
-                  </v-btn>
-
-                  <v-btn
-                    v-if="!$store.state.currentUser"
-                    rounded
-                    depressed
-                    color="primary"
-                    class="mb-3 white--text"
-                    to="/login"
-                    nuxt
-                  >
-                    <v-icon class="mr-2">{{
-                      $vuetify.icons.values.mdiPencil
-                    }}</v-icon>
-                    Log in to comment
-                  </v-btn>
-
-                  <v-spacer />
-
-                  <CommentSortMenu />
-                </v-row>
-
-                <DynamicScroller
-                  page-mode
-                  :items="threadedComments"
-                  :min-item-size="54"
-                >
-                  <template v-slot="{ item, index, active }">
-                    <DynamicScrollerItem
-                      :item="item"
-                      :active="active"
-                      :index="index"
-                      :size-dependencies="[item.textContent]"
-                    >
-                      <div class="pb-3">
-                        <Comment
-                          :post="post"
-                          :post-view="postView"
-                          :comment="item"
-                        />
-                      </div>
-                    </DynamicScrollerItem>
-                  </template>
-                </DynamicScroller>
-
-                <v-progress-linear
-                  v-show="$apollo.queries.postComments.loading"
-                  indeterminate
-                />
-
-                <v-row
-                  v-show="
-                    !$apollo.queries.postComments.loading &&
-                      postComments.length === 0
-                  "
-                  justify="center"
-                  class="pt-4"
-                  no-gutters
-                >
-                  No one has commented yet. Will you be the first?
-                </v-row>
-
-                <div style="height: 600px" />
+          <div
+            :class="$device.isDesktop ? 'infocontainer' : ''"
+            :style="
+              $device.isDesktop ? 'padding-top: 48px' : 'padding-top: 68px'
+            "
+          >
+            <div :class="$device.isDesktop ? 'postcol' : ''">
+              <div
+                class="mb-3"
+                :class="$device.isDesktop ? 'pa-3' : 'px-3 pb-3'"
+                :style="{
+                  'border-radius': $device.isDesktop ? '10px' : '0',
+                  'border-style': $device.isDesktop ? 'solid' : 'none',
+                  'border-bottom-style': 'solid',
+                  'border-width': '1px',
+                  'border-color': $vuetify.theme.dark
+                    ? 'rgba(255, 255, 255, 0.12)'
+                    : 'rgba(0, 0, 0, 0.12)'
+                }"
+              >
+                <Post is-post-view :post="post" />
               </div>
 
-              <div v-if="$device.isDesktop" class="infocol">
-                <PlanetInfoCard :planet="post.planet" />
-              </div>
-            </v-row>
-          </v-container>
+              <v-row no-gutters>
+                <v-btn
+                  v-if="$store.state.currentUser"
+                  rounded
+                  depressed
+                  color="primary"
+                  class="mb-3 white--text"
+                  @click="openCommentDialog"
+                >
+                  <v-icon class="mr-2">{{
+                    $vuetify.icons.values.mdiPencil
+                  }}</v-icon>
+                  <span class="mr-2">New Comment</span>
+                </v-btn>
+
+                <v-btn
+                  v-if="!$store.state.currentUser"
+                  rounded
+                  depressed
+                  color="primary"
+                  class="mb-3 white--text"
+                  to="/login"
+                  nuxt
+                >
+                  <v-icon class="mr-2">{{
+                    $vuetify.icons.values.mdiPencil
+                  }}</v-icon>
+                  Log in to comment
+                </v-btn>
+
+                <v-spacer />
+
+                <CommentSortMenu />
+              </v-row>
+
+              <DynamicScroller
+                page-mode
+                :items="threadedComments"
+                :min-item-size="54"
+              >
+                <template v-slot="{ item, index, active }">
+                  <DynamicScrollerItem
+                    :item="item"
+                    :active="active"
+                    :index="index"
+                    :size-dependencies="[item.textContent]"
+                  >
+                    <div :class="$device.isDesktop ? 'pb-3' : ''">
+                      <Comment
+                        :post="post"
+                        :post-view="postView"
+                        :comment="item"
+                      />
+                    </div>
+                  </DynamicScrollerItem>
+                </template>
+              </DynamicScroller>
+
+              <v-progress-linear
+                v-show="$apollo.queries.postComments.loading"
+                indeterminate
+              />
+
+              <v-row
+                v-show="
+                  !$apollo.queries.postComments.loading &&
+                    postComments.length === 0
+                "
+                justify="center"
+                class="pt-4"
+                no-gutters
+              >
+                No one has commented yet. Will you be the first?
+              </v-row>
+
+              <div style="height: 600px" />
+            </div>
+
+            <div v-if="$device.isDesktop" class="infocol">
+              <PlanetInfoCard :planet="post.planet" />
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -268,7 +253,9 @@
               v-model="commentHTML"
               editable
               autofocus
-              :style="$device.isDesktop ? 'min-height: 296px' : ''"
+              :style="
+                $device.isDesktop ? 'min-height: 296px; max-height: 600px' : ''
+              "
               style="overflow-y: auto"
               class="pa-2"
             />
@@ -510,9 +497,23 @@ export default {
 </script>
 
 <style scoped>
+.infocontainer {
+  box-sizing: border-box;
+  display: flex;
+  justify-content: center;
+  margin: 0 auto;
+  max-width: 1280px;
+  padding-bottom: 32px;
+  position: relative;
+  width: calc(100% - 160px);
+}
+
 .postcol {
   width: 100%;
-  margin-top: 12px;
+  margin: 12px 12px 32px 32px;
+  flex: 1;
+  min-width: 0;
+  word-break: break-word;
 }
 
 .infocol {
@@ -522,12 +523,12 @@ export default {
 @media (min-width: 960px) {
   .postcol {
     max-width: 740px;
-    margin: 12px 12px 32px 32px;
   }
 
   .infocol {
     display: block;
     width: 312px;
+    min-width: 312px;
     margin: 12px 32px 32px 0;
   }
 }
