@@ -196,6 +196,23 @@
         </v-menu>
       </template>
 
+      <v-bottom-sheet v-if="!$device.isDesktop && planet">
+        <template v-slot:activator="{ on }">
+          <v-btn v-if="!$device.isDesktop" small text v-on="on">
+            Planet Info
+            <v-icon class="ml-2" size="20">{{
+              $vuetify.icons.values.mdiInformationOutline
+            }}</v-icon>
+          </v-btn>
+        </template>
+
+        <PlanetInfoCard
+          show-edit-btn
+          style="padding-bottom: 24px"
+          :planet="planet"
+        />
+      </v-bottom-sheet>
+
       <v-spacer />
 
       <TypeMenu v-if="$device.isDesktop" />
@@ -233,7 +250,9 @@
         </v-icon>
         <span v-if="$device.isDesktop" class="ml-2">
           {{
-            $route.query.view === 'expanded' ? 'Collapse Posts' : 'Expand Posts'
+            $route.query.view === 'expanded'
+              ? 'Collapse Posts'
+              : 'Expand Posts (Experimental)'
           }}
         </span>
       </v-btn>
@@ -244,9 +263,16 @@
 <script>
 import TypeMenu from '@/components/buttons/type/TypeMenu'
 import SortMenu from '@/components/buttons/home_sort/SortMenu'
+import PlanetInfoCard from '@/components/planet/PlanetInfoCard'
 export default {
   name: 'SortBar',
-  components: { SortMenu, TypeMenu }
+  components: { PlanetInfoCard, SortMenu, TypeMenu },
+  props: {
+    planet: {
+      type: Object,
+      default: null
+    }
+  }
 }
 </script>
 

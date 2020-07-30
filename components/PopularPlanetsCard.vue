@@ -32,7 +32,12 @@
     </v-list>
 
     <v-card-actions>
-      <v-btn depressed class="flex-grow-1" nuxt to="/planets/explore"
+      <v-btn
+        depressed
+        class="flex-grow-1"
+        nuxt
+        to="/planets/explore"
+        :style="$vuetify.theme.dark ? '' : 'background-color: #DEE1E6'"
         >Explore more Planets
         <v-icon size="20" class="ml-2">{{
           $vuetify.icons.values.mdiTelescope
@@ -45,7 +50,8 @@
         depressed
         class="flex-grow-1"
         nuxt
-        :to="$store.state.currentUser ? '/planets/create' : '/signup'"
+        to="/planets/create"
+        :style="$vuetify.theme.dark ? '' : 'background-color: #DEE1E6'"
       >
         Create a Planet
         <v-icon size="20" class="ml-2">{{

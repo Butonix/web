@@ -2,36 +2,36 @@
   <nuxt-link
     :to="
       $device.isDesktop
-        ? `/u/${userData.username}`
+        ? `/u/${user.username}`
         : { path: this.$route.path, query: this.$route.query }
     "
     class="text--secondary"
   >
     <v-avatar size="20">
-      <img alt="Profile picture" :src="userData.profilePicUrl" />
+      <img alt="Profile picture" :src="user.profilePicUrl" />
     </v-avatar>
     <span
       class="ml-1"
       style="font-size: 0.86rem"
-      :class="op && userData.username !== 'Comet' ? 'font-weight-bold' : ''"
+      :class="op && user.username !== 'Comet' ? 'font-weight-bold' : ''"
     >
-      {{ userData.username }}
+      {{ user.username }}
     </span>
     <v-icon
-      v-if="op && userData.username !== 'Comet'"
+      v-if="op && user.username !== 'Comet'"
       size="16"
       style="padding-bottom: 3px"
       color="primary"
       >{{ $vuetify.icons.values.mdiMicrophoneVariant }}</v-icon
     >
     <v-chip
-      v-if="userData.tag"
+      v-if="user.tag"
       dark
       x-small
       label
-      :color="userData.tagColor"
+      :color="user.tagColor"
       class="ml-1 px-2"
-      >{{ userData.tag }}</v-chip
+      >{{ user.tag }}</v-chip
     >
   </nuxt-link>
 </template>
@@ -40,7 +40,7 @@
 export default {
   name: 'Username',
   props: {
-    userData: {
+    user: {
       type: Object,
       required: true
     },

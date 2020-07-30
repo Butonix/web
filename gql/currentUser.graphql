@@ -6,5 +6,8 @@ query currentUser {
     tagColor
     profilePicUrl
     admin
+    moderatedPlanets {
+      name
+    }
   }
 }

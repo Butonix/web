@@ -9,17 +9,26 @@
       'border-width': '1px'
     }"
   >
-    <v-list-item>
-      <v-list-item-avatar size="64">
+    <v-list-item class="py-4">
+      <v-list-item-avatar class="my-0" tile size="64" style="align-self: start">
+        <div
+          style="height: 16px; width: 16px; border-radius: 50%; position: absolute; bottom: 0; right: 0; z-index: 2"
+          :style="
+            lastOnlineString === 'Online'
+              ? 'background-color: #66BB6A'
+              : 'background-color: #9E9E9E'
+          "
+        />
         <v-img
           v-if="user.profilePicUrl"
+          style="border-radius: 50%"
           alt="Profile picture"
           :src="user.profilePicUrl"
         />
         <v-icon v-else>{{ $vuetify.icons.values.mdiAccountOutline }}</v-icon>
       </v-list-item-avatar>
 
-      <v-list-item-content>
+      <v-list-item-content class="py-0">
         <v-list-item-title style="font-size: 1.43rem" class="my-0">
           <v-row no-gutters>
             <nuxt-link :to="`/u/${user.username}`" class="text--primary">{{
@@ -90,119 +99,119 @@
           style="white-space: normal; font-size: 1rem"
           >{{ user.bio }}</v-list-item-subtitle
         >
-        <v-list-item-subtitle
-          class="mt-1 mb-0"
-          :class="lastOnlineString === 'Online' ? 'green--text' : ''"
-          style="white-space: normal; font-size: 0.86rem"
-          >{{ lastOnlineString }}</v-list-item-subtitle
-        >
+
+        <v-row align="center" justify="start" no-gutters class="pt-2">
+          <v-chip
+            small
+            outlined
+            :title="
+              `${user.endorsementCount} Rocket${
+                user.endorsementCount === 1 ? '' : 's'
+              }`
+            "
+          >
+            <v-icon small left>{{ $vuetify.icons.values.mdiRocket }}</v-icon>
+            {{ user.endorsementCount }}
+          </v-chip>
+
+          <v-chip
+            small
+            outlined
+            class="ml-2"
+            :title="
+              `${user.commentCount} Comment${
+                user.commentCount === 1 ? '' : 's'
+              }`
+            "
+          >
+            <v-icon small left>{{
+              $vuetify.icons.values.mdiCommentOutline
+            }}</v-icon>
+            {{ user.commentCount }}
+          </v-chip>
+
+          <v-chip
+            small
+            outlined
+            class="ml-2"
+            :title="`${user.postCount} Post${user.postCount === 1 ? '' : 's'}`"
+          >
+            <v-icon small left>{{ $vuetify.icons.values.mdiPost }}</v-icon>
+            {{ user.postCount }}
+          </v-chip>
+
+          <template v-if="user.isCurrentUser && allowEdit">
+            <v-spacer />
+
+            <v-dialog
+              v-model="editDialog"
+              width="35%"
+              :fullscreen="!$device.isDesktop"
+              :transition="
+                $device.isDesktop
+                  ? 'dialog-transition'
+                  : 'dialog-bottom-transition'
+              "
+            >
+              <template v-slot:activator="{ on }">
+                <v-btn text small rounded class="text--secondary" v-on="on">
+                  <v-icon size="20" class="mr-2">{{
+                    $vuetify.icons.values.mdiPencil
+                  }}</v-icon>
+                  Edit Profile
+                </v-btn>
+              </template>
+
+              <v-card>
+                <div class="pa-4">
+                  <div class="overline text--secondary">CHANGE BIO</div>
+                  <v-textarea
+                    v-model="editBio"
+                    label="Bio"
+                    solo
+                    flat
+                    no-resize
+                    rows="3"
+                    :counter="160"
+                  />
+                  <v-btn
+                    depressed
+                    rounded
+                    color="primary"
+                    class="mb-4"
+                    :disabled="editBio.length > 160"
+                    @click="changeBio"
+                    >Change Bio</v-btn
+                  >
+
+                  <v-divider />
+
+                  <div class="overline text--secondary">CHANGE AVATAR</div>
+                  <AvatarEditor
+                    :dialog-open="editDialog"
+                    button-text="Change Avatar"
+                    @finished="editDialog = false"
+                    @cancelled="cancelDialog"
+                  />
+                  <div class="text--secondary mt-3" style="font-size: 0.86rem">
+                    Note: Changes to avatar may take some time to take effect
+                  </div>
+                </div>
+
+                <v-card-actions>
+                  <v-spacer />
+                  <v-btn text rounded @click="cancelDialog"
+                    >Discard Changes</v-btn
+                  >
+                </v-card-actions>
+              </v-card>
+            </v-dialog>
+          </template>
+        </v-row>
       </v-list-item-content>
     </v-list-item>
 
-    <v-row align="center" justify="start" no-gutters class="px-4 pb-2">
-      <v-chip
-        small
-        outlined
-        :title="
-          `${user.endorsementCount} Rocket${
-            user.endorsementCount === 1 ? '' : 's'
-          }`
-        "
-      >
-        <v-icon small left>{{ $vuetify.icons.values.mdiRocket }}</v-icon>
-        {{ user.endorsementCount }}
-      </v-chip>
-
-      <v-chip
-        small
-        outlined
-        class="ml-2"
-        :title="
-          `${user.commentCount} Comment${user.commentCount === 1 ? '' : 's'}`
-        "
-      >
-        <v-icon small left>{{
-          $vuetify.icons.values.mdiCommentOutline
-        }}</v-icon>
-        {{ user.commentCount }}
-      </v-chip>
-
-      <v-chip
-        small
-        outlined
-        class="ml-2"
-        :title="`${user.postCount} Post${user.postCount === 1 ? '' : 's'}`"
-      >
-        <v-icon small left>{{ $vuetify.icons.values.mdiPost }}</v-icon>
-        {{ user.postCount }}
-      </v-chip>
-
-      <template v-if="user.isCurrentUser && allowEdit">
-        <v-spacer />
-
-        <v-dialog
-          v-model="editDialog"
-          width="35%"
-          :fullscreen="!$device.isDesktop"
-          :transition="
-            $device.isDesktop ? 'dialog-transition' : 'dialog-bottom-transition'
-          "
-        >
-          <template v-slot:activator="{ on }">
-            <v-btn text small rounded class="text--secondary" v-on="on">
-              <v-icon size="20" class="mr-2">{{
-                $vuetify.icons.values.mdiPencil
-              }}</v-icon>
-              Edit Profile
-            </v-btn>
-          </template>
-
-          <v-card>
-            <div class="pa-4">
-              <div class="overline text--secondary">CHANGE BIO</div>
-              <v-textarea
-                v-model="editBio"
-                label="Bio"
-                solo
-                flat
-                no-resize
-                rows="3"
-                :counter="160"
-              />
-              <v-btn
-                depressed
-                rounded
-                color="primary"
-                class="mb-4"
-                :disabled="editBio.length > 160"
-                @click="changeBio"
-                >Change Bio</v-btn
-              >
-
-              <v-divider />
-
-              <div class="overline text--secondary">CHANGE AVATAR</div>
-              <AvatarEditor
-                :dialog-open="editDialog"
-                button-text="Change Avatar"
-                @finished="editDialog = false"
-                @cancelled="cancelDialog"
-              />
-              <div class="text--secondary mt-3" style="font-size: 0.86rem">
-                Note: Changes to avatar may take some time to take effect
-              </div>
-            </div>
-
-            <v-card-actions>
-              <v-spacer />
-              <v-btn text rounded @click="cancelDialog">Discard Changes</v-btn>
-            </v-card-actions>
-          </v-card>
-        </v-dialog>
-      </template>
-    </v-row>
-
-    <div v-if="showViewProfileBtn">
+    <div v-if="showViewProfileBtn && $route.params.username !== user.username">
       <v-list-item nuxt :to="`/u/${user.username}`">
         <v-list-item-icon
           ><v-icon>{{

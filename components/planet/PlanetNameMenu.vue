@@ -8,16 +8,11 @@
   >
     <template v-slot:activator="{ on }">
       <span v-on="on">
-        <Username :user="userData" :op="op" />
+        <PlanetName :planet="planetData" />
       </span>
     </template>
 
-    <UserSummaryCard
-      v-if="user"
-      is-hover
-      :user="user"
-      @toggleblock="$emit('toggleblock')"
-    />
+    <PlanetInfoCard v-if="planet" is-hover :planet="planet" />
     <v-card v-else width="400">
       <div class="pa-4">
         <v-row align="center" justify="center">
@@ -30,16 +25,15 @@
   <v-bottom-sheet v-else v-model="menu">
     <template v-slot:activator="{ on }">
       <span v-on="on">
-        <Username :user="userData" :op="op" />
+        <PlanetName :planet="planetData" />
       </span>
     </template>
 
-    <UserSummaryCard
-      v-if="user"
-      show-view-profile-btn
-      :user="user"
+    <PlanetInfoCard
+      v-if="planet"
       style="padding-bottom: 24px"
-      @toggleblock="$emit('toggleblock')"
+      show-view-planet-btn
+      :planet="planet"
     />
     <v-card v-else>
       <div class="pa-4">
@@ -52,35 +46,31 @@
 </template>
 
 <script>
-import userGql from '../../gql/user.graphql'
-import UserSummaryCard from './UserSummaryCard'
-import Username from './Username'
+import planetGql from '@/gql/planet.graphql'
+import PlanetInfoCard from '@/components/planet/PlanetInfoCard'
+import PlanetName from '@/components/planet/PlanetName'
 
 export default {
-  name: 'UsernameMenu',
-  components: { Username, UserSummaryCard },
+  name: 'PlanetNameMenu',
+  components: { PlanetName, PlanetInfoCard },
   props: {
-    userData: {
+    planetData: {
       type: Object,
       required: true
-    },
-    op: {
-      type: Boolean,
-      default: false
     }
   },
   data() {
     return {
-      user: null,
+      planet: null,
       menu: false
     }
   },
   apollo: {
-    user: {
-      query: userGql,
+    planet: {
+      query: planetGql,
       variables() {
         return {
-          username: this.userData.username
+          planetName: this.planetData.name
         }
       },
       skip() {

@@ -1,6 +1,5 @@
 <template>
   <v-app-bar
-    hide-on-scroll
     app
     bottom
     class="bottomappbar"
@@ -19,17 +18,8 @@
         nuxt
         @click.stop.prevent="clickHomeButton"
       >
-        <span
-          :class="
-            $route.name.startsWith('index')
-              ? 'primary--text'
-              : 'text--secondary'
-          "
-          >Posts</span
-        >
-        <v-icon :color="$route.name.startsWith('index') ? 'primary' : ''">{{
-          $vuetify.icons.values.mdiHome
-        }}</v-icon>
+        <span class="primary--text">Posts</span>
+        <v-icon color="primary">{{ $vuetify.icons.values.mdiHome }}</v-icon>
       </v-btn>
 
       <v-btn aria-label="Search" class="navbtn" @click="showSearchPrompt">
@@ -126,6 +116,7 @@ export default {
   methods: {
     showSearchPrompt() {
       const search = window.prompt('Search')
+      if (!search) return
       this.$router.push(`/search?q=${encodeURIComponent(search)}`)
     },
     clickHomeButton() {

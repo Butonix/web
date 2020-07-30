@@ -10,7 +10,9 @@
       >{{ timeSince }}</span
     >
 
-    <PostPlanet v-if="$device.isDesktop" class="ml-2" :post="post" />
+    <div v-if="$device.isDesktop" class="ml-2">
+      <PlanetNameMenu :planet-data="post.planet" />
+    </div>
 
     <v-spacer />
 
@@ -26,10 +28,16 @@ import PostOptions from '@/components/post/PostOptions'
 import PostActions from '@/components/post/PostActions'
 import UsernameMenu from '@/components/user/UsernameMenu'
 import { timeSince } from '@/util/timeSince'
-import PostPlanet from '@/components/post/PostPlanet'
+import PlanetNameMenu from '@/components/planet/PlanetNameMenu'
+
 export default {
   name: 'PostBottomBar',
-  components: { PostPlanet, UsernameMenu, PostActions, PostOptions },
+  components: {
+    PlanetNameMenu,
+    UsernameMenu,
+    PostActions,
+    PostOptions
+  },
   props: {
     post: {
       type: Object,

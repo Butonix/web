@@ -1,6 +1,15 @@
 <template>
-  <v-card flat :outlined="!$vuetify.theme.dark">
+  <v-card
+    flat
+    :outlined="!$vuetify.theme.dark && !isHover"
+    :width="isHover ? 400 : undefined"
+    :style="{
+      'background-color': $vuetify.theme.dark ? '' : '#F1F3F4',
+      'border-width': '1px'
+    }"
+  >
     <v-img
+      v-if="planet.cardImageUrl"
       alt="Planet cover image"
       :src="planet.cardImageUrl"
       height="150"
@@ -66,6 +75,41 @@
 
       <span class="text--secondary">{{ createdDate }}</span>
     </v-card-actions>
+
+    <v-card-actions
+      v-if="
+        showEditBtn &&
+          $store.state.currentUser &&
+          $route.params.planetname &&
+          $store.state.currentUser.moderatedPlanets
+            .map((p) => p.name)
+            .includes($route.params.planetname)
+      "
+      class="pt-0"
+    >
+      <v-btn
+        depressed
+        class="flex-grow-1"
+        :style="$vuetify.theme.dark ? '' : 'background-color: #DEE1E6'"
+        >Edit Planet
+        <v-icon class="ml-2">{{
+          $vuetify.icons.values.mdiPencil
+        }}</v-icon></v-btn
+      >
+    </v-card-actions>
+
+    <div v-if="showViewPlanetBtn && $route.params.planetname !== planet.name">
+      <v-list-item nuxt :to="`/p/${planet.name}`">
+        <v-list-item-icon
+          ><v-icon>{{
+            $vuetify.icons.values.mdiOpenInNew
+          }}</v-icon></v-list-item-icon
+        >
+        <v-list-item-content>
+          <v-list-item-title>View planet</v-list-item-title>
+        </v-list-item-content>
+      </v-list-item>
+    </div>
   </v-card>
 </template>
 
@@ -81,6 +125,18 @@ export default {
     planet: {
       type: Object,
       required: true
+    },
+    isHover: {
+      type: Boolean,
+      default: false
+    },
+    showViewPlanetBtn: {
+      type: Boolean,
+      default: false
+    },
+    showEditBtn: {
+      type: Boolean,
+      default: false
     }
   },
   computed: {

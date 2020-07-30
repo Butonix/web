@@ -20,7 +20,7 @@
             ? 'padding-left: 32px; font-size: 18px; font-weight: 500'
             : 'position: fixed; top: 14px; left: 50%; transform: translateX(-50%); font-size: 21px; font-weight: 500'
         "
-        class="unselectable"
+        :class="$device.isDesktop ? '' : 'unselectable'"
         @click="openPlanetPrompt"
       >
         <span v-if="$route.name === 'sort-time'"
@@ -39,8 +39,12 @@
           {{ $route.params.username }}</span
         >
 
-        <span v-else-if="$route.name === 'g-sort-time'">
+        <span v-else-if="$route.name === 'g-galaxyname-sort-time'">
           {{ $route.params.galaxyname }}</span
+        >
+
+        <span v-else-if="$route.name === 'p-planetname-sort-time'">
+          {{ $route.params.planetname }}</span
         >
 
         <span v-else-if="$route.name === 'search-sort-time'">Search</span>
@@ -99,15 +103,20 @@
             : '/signup'
         "
       >
-        <v-img
+        <v-avatar
           v-if="
             $store.state.currentUser && $store.state.currentUser.profilePicUrl
           "
-          contain
-          width="32"
-          height="32"
-          :src="$store.state.currentUser.profilePicUrl"
-        />
+          size="32"
+        >
+          <v-img
+            contain
+            width="32"
+            height="32"
+            :src="$store.state.currentUser.profilePicUrl"
+          />
+        </v-avatar>
+
         <v-icon v-else>{{ $vuetify.icons.values.mdiAccountOutline }}</v-icon>
       </v-btn>
 
@@ -178,6 +187,7 @@ export default {
       this.$router.push({ path: '/search', query })
     },
     openPlanetPrompt() {
+      if (this.$device.isDesktop) return
       const planet = window.prompt('Go to Planet')
       if (!planet) return
       this.$router.push(`/p/${planet}`)

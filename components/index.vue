@@ -1,7 +1,7 @@
 <template>
   <v-row justify="center">
     <v-col :class="$device.isDesktop ? '' : 'pa-0'">
-      <SortBar :class="$device.isDesktop ? 'mb-3 ml-9' : ''" />
+      <SortBar :planet="planet" :class="$device.isDesktop ? 'mb-3 ml-9' : ''" />
 
       <DynamicScroller
         page-mode
@@ -96,10 +96,40 @@
           <UserSummaryCard v-if="user" :user="user" />
         </template>
 
+        <template v-else-if="$route.name.startsWith('g-galaxyname')">
+          <v-card flat :outlined="!$vuetify.theme.dark">
+            <v-card-title>Galaxy: {{ $route.params.galaxyname }}</v-card-title>
+            <v-card-subtitle style="font-size: 1rem"
+              >22 Planets in this Galaxy</v-card-subtitle
+            >
+            <v-card-actions>
+              <v-btn
+                depressed
+                class="flex-grow-1"
+                :style="$vuetify.theme.dark ? '' : 'background-color: #DEE1E6'"
+                >View all 22 planets in this galaxy</v-btn
+              >
+            </v-card-actions>
+            <v-card-actions class="pt-0">
+              <v-btn
+                depressed
+                class="flex-grow-1"
+                nuxt
+                to="/planets/create"
+                :style="$vuetify.theme.dark ? '' : 'background-color: #DEE1E6'"
+              >
+                Create a Planet
+                <v-icon size="20" class="ml-2">{{
+                  $vuetify.icons.values.mdiEarthPlus
+                }}</v-icon>
+              </v-btn>
+            </v-card-actions>
+          </v-card>
+        </template>
+
         <template v-else-if="$route.name.startsWith('p-planetname')">
           <div v-if="planet">
-            <PlanetInfoCard class="mb-3" :planet="planet" />
-            <PlanetRulesCard class="mb-3" :planet="planet" />
+            <PlanetInfoCard class="mb-3" :planet="planet" show-edit-btn />
             <PlanetModsCard :planet="planet" />
           </div>
         </template>
@@ -112,14 +142,21 @@
             class="mb-3"
           >
             <v-card-title>Customize your Planets</v-card-title>
-            <v-card-subtitle
+            <v-card-subtitle style="font-size: 1rem"
               >Sign up on Comet to join Planets and create your personalized
               feed.</v-card-subtitle
             >
             <v-card-actions>
               <v-spacer />
               <v-btn depressed text class="mr-2" nuxt to="/login">Log In</v-btn>
-              <v-btn depressed color="primary" nuxt to="/signup">Sign Up</v-btn>
+              <v-btn
+                depressed
+                color="primary"
+                class="white--text"
+                nuxt
+                to="/signup"
+                >Sign Up</v-btn
+              >
             </v-card-actions>
           </v-card>
 
@@ -147,7 +184,6 @@ import PostDialog from '@/components/PostDialog'
 import SortBar from '@/components/bars/SortBar'
 import UserSummaryCard from '@/components/user/UserSummaryCard'
 import PlanetInfoCard from '@/components/planet/PlanetInfoCard'
-import PlanetRulesCard from '@/components/planet/PlanetRulesCard'
 import PlanetModsCard from '@/components/planet/PlanetModsCard'
 import { postHead } from '@/util/postHead'
 
@@ -156,7 +192,6 @@ export default {
   scrollToTop: false,
   components: {
     PlanetModsCard,
-    PlanetRulesCard,
     PlanetInfoCard,
     UserSummaryCard,
     SortBar,

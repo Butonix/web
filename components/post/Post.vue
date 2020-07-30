@@ -86,7 +86,9 @@
           </template>
         </v-list-item-title>
 
-        <PostPlanet v-if="!$device.isDesktop" :post="post" class="mt-1" />
+        <div v-if="!$device.isDesktop" class="mt-1">
+          <PlanetNameMenu :planet-data="post.planet" />
+        </div>
 
         <PostPreview
           v-if="isExpandable && $device.isDesktop"
@@ -135,14 +137,14 @@ import { IdState } from 'vue-virtual-scroller'
 import PostThumbnail from './PostThumbnail'
 import { urlName } from '~/util/urlName'
 import PostBottomBar from '@/components/post/PostBottomBar'
-import PostPlanet from '@/components/post/PostPlanet'
 import PostPreview from '@/components/post/PostPreview'
+import PlanetNameMenu from '@/components/planet/PlanetNameMenu'
 
 export default {
   name: 'Post',
   components: {
+    PlanetNameMenu,
     PostPreview,
-    PostPlanet,
     PostBottomBar,
     PostThumbnail
   },

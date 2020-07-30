@@ -113,7 +113,9 @@ import {
   mdiArrowCollapse,
   mdiDogSide,
   mdiVideoOutline,
-  mdiMicrophoneVariant
+  mdiMicrophoneVariant,
+  mdiInformation,
+  mdiInformationOutline
 } from '@mdi/js'
 
 export default {
@@ -429,7 +431,9 @@ export default {
         mdiArrowCollapse,
         mdiDogSide,
         mdiVideoOutline,
-        mdiMicrophoneVariant
+        mdiMicrophoneVariant,
+        mdiInformation,
+        mdiInformationOutline
       }
     },
     theme: {
@@ -470,32 +474,32 @@ export default {
         {
           name: 'universe-sort-time',
           path: '/universe/:sort?/:time?',
-          component: resolve(__dirname, 'util/index.vue')
+          component: resolve(__dirname, 'components/index.vue')
         },
         {
           name: 'p-planetname-sort-time',
           path: '/p/:planetname/:sort?/:time?',
-          component: resolve(__dirname, 'util/index.vue')
+          component: resolve(__dirname, 'components/index.vue')
         },
         {
           name: 'g-galaxyname-sort-time',
           path: '/g/:galaxyname/:sort?/:time?',
-          component: resolve(__dirname, 'util/index.vue')
+          component: resolve(__dirname, 'components/index.vue')
         },
         {
           name: 'u-username-sort-time',
           path: '/u/:username/:sort?/:time?',
-          component: resolve(__dirname, 'util/index.vue')
+          component: resolve(__dirname, 'components/index.vue')
         },
         {
           name: 'search-sort-time',
           path: '/search/:sort?/:time?',
-          component: resolve(__dirname, 'util/index.vue')
+          component: resolve(__dirname, 'components/index.vue')
         },
         {
           name: 'sort-time',
           path: '/:sort?/:time?',
-          component: resolve(__dirname, 'util/index.vue')
+          component: resolve(__dirname, 'components/index.vue')
         }
       )
       sortRoutes(routes)

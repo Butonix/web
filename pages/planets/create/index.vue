@@ -45,18 +45,18 @@
         item-text="fullName"
         item-value="name"
       >
-        <template v-slot:selection="data">
-          <v-chip
-            v-bind="data.attrs"
-            :input-value="data.selected"
-            label
-            @click="data.select"
-          >
-            <v-icon class="mr-2">{{
-              $vuetify.icons.values[data.item.icon]
+        <template v-slot:prepend-inner>
+          <v-avatar class="mr-2" size="24">
+            <v-icon class="text--secondary">{{
+              selectedGalaxy
+                ? $vuetify.icons.values[selectedGalaxy.icon]
+                : $vuetify.icons.values.mdiChevronDown
             }}</v-icon>
-            {{ data.item.fullName }}
-          </v-chip>
+          </v-avatar>
+        </template>
+
+        <template v-slot:selection="data">
+          <span class="text--primary">{{ data.item.fullName }}</span>
         </template>
 
         <template v-slot:item="data">
@@ -73,11 +73,24 @@
         depressed
         rounded
         color="primary"
-        :disabled="!name || !description || !selectedGalaxy"
+        :disabled="
+          !name ||
+            !description ||
+            !selectedGalaxy ||
+            $store.state.currentUser.moderatedPlanets.length >= 10
+        "
         :loading="createBtnLoading"
         @click="createPlanet"
         >Create</v-btn
       >
+
+      <div
+        v-if="$store.state.currentUser.moderatedPlanets.length >= 10"
+        class="error--text"
+      >
+        Disabled: Cannot moderate more than 10 planets
+      </div>
+
       <div class="text--secondary mt-2" style="font-size: .86rem">
         Further customization will be available on your Planet's page.
       </div>
@@ -90,6 +103,7 @@ import gql from 'graphql-tag'
 import createPlanetGql from '../../../gql/createPlanet.graphql'
 
 export default {
+  middleware: 'authenticated',
   data() {
     return {
       name: '',
