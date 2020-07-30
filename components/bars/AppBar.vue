@@ -23,37 +23,39 @@
         class="unselectable"
         @click="openPlanetPrompt"
       >
-        <span
-          v-if="
-            $route.path === '/' ||
-              $route.path.startsWith('/hot') ||
-              $route.path.startsWith('/new') ||
-              $route.path.startsWith('/top') ||
-              $route.path.startsWith('/mostcomments')
-          "
+        <span v-if="$route.name === 'sort-time'"
           >My Planets<v-icon class="ml-2">{{
             $vuetify.icons.values.mdiEarth
           }}</v-icon></span
         >
-        <span v-else-if="$route.name.startsWith('universe')"
+
+        <span v-else-if="$route.name === 'universe-sort-time'"
           >Universe<v-icon class="ml-2">{{
             $vuetify.icons.values.mdiInfinity
           }}</v-icon></span
         >
+
+        <span v-else-if="$route.name === 'u-username-sort-time'">
+          {{ $route.params.username }}</span
+        >
+
+        <span v-else-if="$route.name === 'g-sort-time'">
+          {{ $route.params.galaxyname }}</span
+        >
+
+        <span v-else-if="$route.name === 'search-sort-time'">Search</span>
+
         <span v-else-if="$route.name === 'signup'"
           >Sign Up<v-icon class="ml-2">{{
             $vuetify.icons.values.mdiClipboardAccount
           }}</v-icon></span
         >
+
         <span v-else-if="$route.name === 'login'"
           >Log In<v-icon class="ml-2">{{
             $vuetify.icons.values.mdiLogin
           }}</v-icon></span
         >
-        <span v-else-if="$route.name.startsWith('u-username')">
-          {{ $route.params.username }}</span
-        >
-        <span v-else-if="$route.name.startsWith('search')">Search</span>
       </div>
 
       <v-spacer />

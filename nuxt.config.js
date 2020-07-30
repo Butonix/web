@@ -1,4 +1,5 @@
 import redirectSSL from 'redirect-ssl'
+import { sortRoutes } from '@nuxt/utils'
 import {
   mdiImage,
   mdiImageOutline,
@@ -460,6 +461,44 @@ export default {
   build: {
     extend(config, ctx) {
       config.externals = [{ newrelic: 'newrelic' }]
+    }
+  },
+
+  router: {
+    extendRoutes(routes, resolve) {
+      routes.push(
+        {
+          name: 'universe-sort-time',
+          path: '/universe/:sort?/:time?',
+          component: resolve(__dirname, 'util/index.vue')
+        },
+        {
+          name: 'p-planetname-sort-time',
+          path: '/p/:planetname/:sort?/:time?',
+          component: resolve(__dirname, 'util/index.vue')
+        },
+        {
+          name: 'g-galaxyname-sort-time',
+          path: '/g/:galaxyname/:sort?/:time?',
+          component: resolve(__dirname, 'util/index.vue')
+        },
+        {
+          name: 'u-username-sort-time',
+          path: '/u/:username/:sort?/:time?',
+          component: resolve(__dirname, 'util/index.vue')
+        },
+        {
+          name: 'search-sort-time',
+          path: '/search/:sort?/:time?',
+          component: resolve(__dirname, 'util/index.vue')
+        },
+        {
+          name: 'sort-time',
+          path: '/:sort?/:time?',
+          component: resolve(__dirname, 'util/index.vue')
+        }
+      )
+      sortRoutes(routes)
     }
   }
 }

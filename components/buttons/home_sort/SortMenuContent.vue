@@ -9,9 +9,7 @@
           <v-list-item-content>
             <v-list-item-title
               :class="
-                !$route.path.includes('/top') &&
-                !$route.path.includes('/new') &&
-                !$route.path.includes('/mostcomments')
+                !$route.params.sort || $route.params.sort === 'hot'
                   ? 'font-weight-bold'
                   : ''
               "
@@ -26,7 +24,7 @@
           </v-list-item-icon>
           <v-list-item-content>
             <v-list-item-title
-              :class="$route.path.includes('/top') ? 'font-weight-bold' : ''"
+              :class="$route.params.sort === 'top' ? 'font-weight-bold' : ''"
               >Top</v-list-item-title
             >
           </v-list-item-content>
@@ -38,7 +36,7 @@
           </v-list-item-icon>
           <v-list-item-content>
             <v-list-item-title
-              :class="$route.path.includes('/new') ? 'font-weight-bold' : ''"
+              :class="$route.params.sort === 'new' ? 'font-weight-bold' : ''"
               >New</v-list-item-title
             >
           </v-list-item-content>
@@ -53,7 +51,7 @@
           <v-list-item-content>
             <v-list-item-title
               :class="
-                $route.path.includes('/mostcomments') ? 'font-weight-bold' : ''
+                $route.params.sort === 'mostcomments' ? 'font-weight-bold' : ''
               "
               >Most Comments</v-list-item-title
             >
@@ -186,19 +184,7 @@ export default {
       this.$emit('selected')
       try {
         this.$router.push({
-          path: (
-            this.$route.path
-              .replace('/hot', '')
-              .replace('/top', '')
-              .replace('/new', '')
-              .replace('/mostcomments', '')
-              .replace('/hour', '')
-              .replace('/day', '')
-              .replace('/week', '')
-              .replace('/month', '')
-              .replace('/year', '')
-              .replace('/all', '') + '/'
-          ).replace('//', '/')
+          params: { ...this.$route.params, sort: 'hot' }
         })
       } catch (e) {}
     },
@@ -206,19 +192,7 @@ export default {
       this.$emit('selected')
       try {
         this.$router.push({
-          path: (
-            this.$route.path
-              .replace('/hot', '')
-              .replace('/top', '')
-              .replace('/new', '')
-              .replace('/mostcomments', '')
-              .replace('/hour', '')
-              .replace('/day', '')
-              .replace('/week', '')
-              .replace('/month', '')
-              .replace('/year', '')
-              .replace('/all', '') + '/new'
-          ).replace('//', '/')
+          params: { ...this.$route.params, sort: 'new' }
         })
       } catch (e) {}
     },
@@ -235,19 +209,7 @@ export default {
       this.cancelSelectingTime()
       try {
         this.$router.push({
-          path: (
-            this.$route.path
-              .replace('/hot', '')
-              .replace('/top', '')
-              .replace('/new', '')
-              .replace('/mostcomments', '')
-              .replace('/hour', '')
-              .replace('/day', '')
-              .replace('/week', '')
-              .replace('/month', '')
-              .replace('/year', '')
-              .replace('/all', '') + `/${this.sort}/${time}`
-          ).replace('//', '/')
+          params: { ...this.$route.params, sort: 'hot', time }
         })
       } catch (e) {}
     },
