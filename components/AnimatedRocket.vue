@@ -149,10 +149,10 @@ input {
     //filter: none;
     .v-icon {
       color: var(--theme-color);
-      will-change: width, height;
+      will-change: transform;
       animation: heart 0.625s cubic-bezier(0.17, 0.89, 0.32, 1);
     }
-    will-change: font-size;
+    will-change: transform;
     animation: heart 0.625s cubic-bezier(0.17, 0.89, 0.32, 1);
 
     &:before,
@@ -212,9 +212,7 @@ label {
 @keyframes heart {
   0%,
   17.5% {
-    font-size: 0;
-    width: 0;
-    height: 0;
+    transform: scale3d(0, 0, 0);
   }
 }
 
