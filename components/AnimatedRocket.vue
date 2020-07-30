@@ -135,7 +135,7 @@ $particle-r: 0.5 * $particle-d;
 }
 
 @mixin bubble($ext) {
-  transform: scale(1);
+  transform: scale3d(1, 1, 1);
   border-color: var(--theme-color);
   border-width: $ext;
   z-index: 500;
@@ -146,14 +146,13 @@ input {
   left: -100vw;
 
   &:checked + label {
-    //filter: none;
     .v-icon {
       color: var(--theme-color);
       will-change: transform;
       animation: heart 0.625s cubic-bezier(0.17, 0.89, 0.32, 1);
     }
     will-change: transform;
-    animation: heart 0.625s cubic-bezier(0.17, 0.89, 0.32, 1);
+    animation: bubble 0.625s cubic-bezier(0.17, 0.89, 0.32, 1);
 
     &:before,
     &:after {
@@ -174,8 +173,6 @@ input {
 }
 
 label {
-  //filter: grayscale(1);
-
   align-self: center;
   position: relative;
   font-size: 1.5rem;
@@ -198,7 +195,7 @@ label {
     border: solid $bubble-r var(--v-primary-base);
     width: $bubble-d;
     height: $bubble-d;
-    transform: scale(0);
+    transform: scale3d(0, 0, 0);
   }
 
   &:after {
