@@ -14,8 +14,6 @@
       <v-btn
         aria-label="Home"
         class="navbtn"
-        :to="{ path: '/' }"
-        nuxt
         @click.stop.prevent="clickHomeButton"
       >
         <span class="primary--text">Posts</span>
@@ -23,15 +21,8 @@
       </v-btn>
 
       <v-btn aria-label="Search" class="navbtn" @click="showSearchPrompt">
-        <span
-          :class="
-            $route.name.startsWith('search')
-              ? 'primary--text'
-              : 'text--secondary'
-          "
-          >Search</span
-        >
-        <v-icon :color="$route.name.startsWith('search') ? 'primary' : ''">{{
+        <span class="text--secondary">Search</span>
+        <v-icon class="text--secondary">{{
           $vuetify.icons.values.mdiMagnify
         }}</v-icon>
       </v-btn>
@@ -120,7 +111,7 @@ export default {
       this.$router.push(`/search?q=${encodeURIComponent(search)}`)
     },
     clickHomeButton() {
-      if (this.$route.path === '/') {
+      if (this.$route.name === 'sort-time') {
         window.scrollTo(0, 0)
       } else {
         this.$router.push({ path: '/' })

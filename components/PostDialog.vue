@@ -104,19 +104,33 @@
                 <Post is-post-view :post="post" />
               </div>
 
-              <v-row no-gutters>
+              <v-row
+                no-gutters
+                :class="$device.isDesktop ? '' : 'px-3'"
+                class="pb-3"
+                :style="{
+                  'border-bottom-width': '1px',
+                  'border-bottom-style': $device.isDesktop ? 'none' : 'solid',
+                  'border-bottom-color': $vuetify.theme.dark
+                    ? 'rgba(255, 255, 255, 0.12)'
+                    : 'rgba(0, 0, 0, 0.12)'
+                }"
+              >
                 <v-btn
                   v-if="$store.state.currentUser"
                   rounded
                   depressed
                   color="primary"
-                  class="mb-3 white--text"
+                  class="white--text"
+                  :class="$device.isDesktop ? '' : 'flex-grow-1 mr-3'"
+                  style="justify-content: start"
+                  height="34"
                   @click="openCommentDialog"
                 >
                   <v-icon class="mr-2">{{
                     $vuetify.icons.values.mdiPencil
                   }}</v-icon>
-                  <span class="mr-2">New Comment</span>
+                  <span class="mr-2">Write a comment...</span>
                 </v-btn>
 
                 <v-btn
@@ -124,7 +138,7 @@
                   rounded
                   depressed
                   color="primary"
-                  class="mb-3 white--text"
+                  class="white--text"
                   to="/login"
                   nuxt
                 >
@@ -134,7 +148,7 @@
                   Log in to comment
                 </v-btn>
 
-                <v-spacer />
+                <v-spacer v-if="$device.isDesktop" />
 
                 <CommentSortMenu />
               </v-row>
@@ -441,8 +455,8 @@ export default {
             })
           }
         })
+        this.commentDialog = false
         this.commentHTML = null
-        this.writingComment = false
 
         await this.$apollo.mutate({
           mutation: recordPostViewGql,
@@ -488,7 +502,7 @@ export default {
 
 .postcol {
   width: 100%;
-  margin: 12px 12px 32px 32px;
+  margin: 12px 24px 32px 32px;
   flex: 1;
   min-width: 0;
   word-break: break-word;

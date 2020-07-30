@@ -5,14 +5,16 @@
     :width="isHover ? 400 : undefined"
     :style="{
       'background-color': $vuetify.theme.dark ? '' : '#F1F3F4',
-      'border-width': '1px'
+      'border-width': '1px',
+      'border-bottom-right-radius': showViewPlanetBtn ? '0' : '10px',
+      'border-bottom-left-radius': showViewPlanetBtn ? '0' : '10px'
     }"
+    :tile="tile"
   >
     <v-img
-      v-if="planet.cardImageUrl"
       alt="Planet cover image"
       :src="planet.cardImageUrl"
-      height="150"
+      :height="planet.cardImageUrl ? 150 : 6"
       :style="
         `background-color: ${
           planet.themeColor ? planet.themeColor : 'var(--v-primary-base)'
@@ -85,7 +87,7 @@
             .map((p) => p.name)
             .includes($route.params.planetname)
       "
-      class="pt-0"
+      class="pb-3 pt-1"
     >
       <v-btn
         depressed
@@ -137,6 +139,10 @@ export default {
     showEditBtn: {
       type: Boolean,
       default: false
+    },
+    tile: {
+      type: Boolean,
+      default: false
     }
   },
   computed: {
@@ -159,7 +165,7 @@ export default {
       this.$apollo.mutate({
         mutation: joinPlanetGql,
         variables: {
-          planetName: this.planetName
+          planetName: this.planet.name
         },
         refetchQueries: [{ query: joinedPlanetsGql }]
       })
@@ -170,7 +176,7 @@ export default {
       this.$apollo.mutate({
         mutation: leavePlanetGql,
         variables: {
-          planetName: this.planetName
+          planetName: this.planet.name
         },
         refetchQueries: [{ query: joinedPlanetsGql }]
       })

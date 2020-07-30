@@ -85,7 +85,7 @@
     </client-only>
 
     <v-row no-gutters class="mt-4">
-      <PlanetSelector v-model="planet" :prev-route="prevRoute" />
+      <PlanetSelector v-model="planet" />
       <v-btn
         class="ml-4"
         depressed
@@ -113,7 +113,6 @@ export default {
   },
   data() {
     return {
-      prevRoute: null,
       textContent: null,
       title: '',
       titleRules: [
@@ -197,9 +196,6 @@ export default {
   },
   head: {
     title: 'New Text Post'
-  },
-  beforeRouteEnter(to, from, next) {
-    next((vm) => (vm.prevRoute = from))
   }
 }
 </script>

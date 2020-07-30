@@ -4,17 +4,17 @@
       <v-btn
         style="font-weight: 400"
         aria-label="Account"
-        text
+        :text="$device.isDesktop"
+        :icon="!$device.isDesktop"
         rounded
-        height="34"
+        :height="$device.isDesktop ? 34 : ''"
         v-on="on"
       >
         <v-avatar
           v-if="
             $store.state.currentUser && $store.state.currentUser.profilePicUrl
           "
-          size="24"
-          class="mr-2"
+          size="48"
         >
           <v-img
             alt="Profile picture"
@@ -22,15 +22,15 @@
           />
         </v-avatar>
 
-        <v-icon v-else class="mr-2">{{
-          $vuetify.icons.values.mdiAccountOutline
-        }}</v-icon>
+        <v-icon v-else>{{ $vuetify.icons.values.mdiAccountOutline }}</v-icon>
 
-        {{
-          $store.state.currentUser
-            ? $store.state.currentUser.username
-            : 'Log In'
-        }}
+        <span v-if="$device.isDesktop" class="ml-2">
+          {{
+            $store.state.currentUser
+              ? $store.state.currentUser.username
+              : 'Log In'
+          }}
+        </span>
       </v-btn>
     </template>
 

@@ -6,7 +6,11 @@
           <v-tab
             style="letter-spacing: normal; text-transform: none; font-size: 1rem"
             nuxt
-            to="/submit/text"
+            :to="
+              `/submit/text${
+                $route.query.planet ? `?planet=${$route.query.planet}` : ''
+              }`
+            "
             :class="tab === '/submit/text' ? '' : 'text--primary'"
           >
             <v-icon
@@ -19,7 +23,11 @@
           <v-tab
             style="letter-spacing: normal; text-transform: none; font-size: 1rem"
             nuxt
-            to="/submit/link"
+            :to="
+              `/submit/link${
+                $route.query.planet ? `?planet=${$route.query.planet}` : ''
+              }`
+            "
             :class="tab === '/submit/link' ? '' : 'text--primary'"
             ><v-icon
               class="mr-2"
@@ -31,7 +39,11 @@
           <v-tab
             style="letter-spacing: normal; text-transform: none; font-size: 1rem"
             nuxt
-            to="/submit/image"
+            :to="
+              `/submit/image${
+                $route.query.planet ? `?planet=${$route.query.planet}` : ''
+              }`
+            "
             :class="tab === '/submit/image' ? '' : 'text--primary'"
             ><v-icon
               class="mr-2"
@@ -52,6 +64,7 @@
 
 <script>
 export default {
+  middleware: 'authenticated',
   data() {
     return {
       tab: null

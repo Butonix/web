@@ -115,7 +115,9 @@ import {
   mdiVideoOutline,
   mdiMicrophoneVariant,
   mdiInformation,
-  mdiInformationOutline
+  mdiInformationOutline,
+  mdiHeadLightbulb,
+  mdiHeadLightbulbOutline
 } from '@mdi/js'
 
 export default {
@@ -433,7 +435,9 @@ export default {
         mdiVideoOutline,
         mdiMicrophoneVariant,
         mdiInformation,
-        mdiInformationOutline
+        mdiInformationOutline,
+        mdiHeadLightbulb,
+        mdiHeadLightbulbOutline
       }
     },
     theme: {

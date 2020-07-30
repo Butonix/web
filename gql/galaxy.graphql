@@ -1,0 +1,9 @@
+query galaxy($galaxyName: String!) {
+  galaxy(galaxyName: $galaxyName) {
+    description
+    fullName
+    icon
+    name
+    planetCount
+  }
+}

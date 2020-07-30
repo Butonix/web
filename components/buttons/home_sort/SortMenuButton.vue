@@ -25,15 +25,10 @@
         $vuetify.icons.values.mdiFormatListNumbered
       }}</v-icon>
       <span
-        >Top{{
-          $route.params.time
-            ? ` (${$route.params.time
-                .substring(0, 1)
-                .toUpperCase()}${$route.params.time
-                .substring(1)
-                .toLowerCase()})`
-            : ' (Day)'
-        }}</span
+        >Top ({{
+          $route.params.time.charAt(0).toUpperCase() +
+            $route.params.time.substring(1)
+        }})</span
       >
     </template>
 
@@ -41,7 +36,12 @@
       <v-icon size="20" class="mr-2">{{
         $vuetify.icons.values.mdiCommentMultipleOutline
       }}</v-icon>
-      <span>Most Comments</span>
+      <span
+        >Most Comments ({{
+          $route.params.time.charAt(0).toUpperCase() +
+            $route.params.time.substring(1)
+        }})</span
+      >
     </template>
 
     <span v-if="$route.query.types">*</span>

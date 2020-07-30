@@ -62,10 +62,6 @@ import gql from 'graphql-tag'
 export default {
   name: 'PlanetSelector',
   props: {
-    prevRoute: {
-      type: Object,
-      default: null
-    },
     value: {
       type: Object,
       default: null
@@ -75,43 +71,29 @@ export default {
     return {
       allPlanets: [],
       search: '',
-      planet: this.value,
-      prevPlanet: null
+      planet: this.value
     }
   },
   watch: {
+    allPlanets() {
+      if (this.$route.query.planet) {
+        this.planet = this.allPlanets.find(
+          (p) => p.name === this.$route.query.planet
+        )
+      }
+    },
     planet: {
       deep: true,
       handler() {
         this.$emit('input', this.planet)
       }
-    },
-    prevRoute: {
-      deep: true,
-      async handler() {
-        if (
-          this.prevRoute &&
-          this.prevRoute.name &&
-          this.prevRoute.name.startsWith('p-')
-        ) {
-          const planetName = this.prevRoute.params.planetname
-          const { data } = await this.$apollo.query({
-            query: gql`
-              query($planetName: ID!) {
-                planet(planetName: $planetName) {
-                  name
-                  avatarImageUrl
-                }
-              }
-            `,
-            variables: {
-              planetName
-            }
-          })
-          this.prevPlanet = data.planet
-          this.planet = this.prevPlanet
-        }
-      }
+    }
+  },
+  created() {
+    if (this.$route.query.planet && this.allPlanets.length > 0) {
+      this.planet = this.allPlanets.find(
+        (p) => p.name === this.$route.query.planet
+      )
     }
   },
   apollo: {

@@ -49,7 +49,9 @@
           <v-avatar class="mr-2" size="24">
             <v-icon class="text--secondary">{{
               selectedGalaxy
-                ? $vuetify.icons.values[selectedGalaxy.icon]
+                ? $vuetify.icons.values[
+                    galaxies.find((g) => g.name === selectedGalaxy).icon
+                  ]
                 : $vuetify.icons.values.mdiChevronDown
             }}</v-icon>
           </v-avatar>
@@ -111,6 +113,18 @@ export default {
       galaxies: [],
       selectedGalaxy: null,
       createBtnLoading: false
+    }
+  },
+  watch: {
+    galaxies() {
+      if (this.$route.query.galaxy) {
+        this.selectedGalaxy = this.$route.query.galaxy
+      }
+    }
+  },
+  created() {
+    if (this.$route.query.galaxy && this.galaxies.length > 0) {
+      this.selectedGalaxy = this.$route.query.galaxy
     }
   },
   apollo: {

@@ -25,10 +25,10 @@
         >
 
         <v-stepper-content step="2">
-          <AvatarEditor @finished="step = 3" />
+          <AvatarEditor @finished="$router.push('/')" />
         </v-stepper-content>
 
-        <v-stepper-step step="3">Join planets</v-stepper-step>
+        <!--<v-stepper-step step="3">Join planets</v-stepper-step>
         <v-stepper-content step="3">
           <div>
             Recent and recommended planets here
@@ -37,7 +37,7 @@
           <v-btn rounded depressed color="primary" class="mt-2" nuxt to="/"
             >Finish</v-btn
           >
-        </v-stepper-content>
+        </v-stepper-content>-->
       </v-stepper>
     </v-col>
   </v-row>

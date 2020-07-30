@@ -1,6 +1,10 @@
 <template>
   <v-row justify="center">
     <v-col :class="$device.isDesktop ? '' : 'pa-0'">
+      <template v-if="!$device.isDesktop">
+        <IndexSidebar />
+      </template>
+
       <SortBar :planet="planet" :class="$device.isDesktop ? 'mb-3 ml-9' : ''" />
 
       <DynamicScroller
@@ -92,76 +96,7 @@
     </v-col>
     <v-col v-if="$device.isDesktop" cols="3">
       <div class="sticky">
-        <template v-if="$route.name.startsWith('u-username')">
-          <UserSummaryCard v-if="user" :user="user" />
-        </template>
-
-        <template v-else-if="$route.name.startsWith('g-galaxyname')">
-          <v-card flat :outlined="!$vuetify.theme.dark">
-            <v-card-title>Galaxy: {{ $route.params.galaxyname }}</v-card-title>
-            <v-card-subtitle style="font-size: 1rem"
-              >22 Planets in this Galaxy</v-card-subtitle
-            >
-            <v-card-actions>
-              <v-btn
-                depressed
-                class="flex-grow-1"
-                :style="$vuetify.theme.dark ? '' : 'background-color: #DEE1E6'"
-                >View all 22 planets in this galaxy</v-btn
-              >
-            </v-card-actions>
-            <v-card-actions class="pt-0">
-              <v-btn
-                depressed
-                class="flex-grow-1"
-                nuxt
-                to="/planets/create"
-                :style="$vuetify.theme.dark ? '' : 'background-color: #DEE1E6'"
-              >
-                Create a Planet
-                <v-icon size="20" class="ml-2">{{
-                  $vuetify.icons.values.mdiEarthPlus
-                }}</v-icon>
-              </v-btn>
-            </v-card-actions>
-          </v-card>
-        </template>
-
-        <template v-else-if="$route.name.startsWith('p-planetname')">
-          <div v-if="planet">
-            <PlanetInfoCard class="mb-3" :planet="planet" show-edit-btn />
-            <PlanetModsCard :planet="planet" />
-          </div>
-        </template>
-
-        <template v-else>
-          <v-card
-            v-if="!$store.state.currentUser"
-            flat
-            :outlined="!$vuetify.theme.dark"
-            class="mb-3"
-          >
-            <v-card-title>Customize your Planets</v-card-title>
-            <v-card-subtitle style="font-size: 1rem"
-              >Sign up on Comet to join Planets and create your personalized
-              feed.</v-card-subtitle
-            >
-            <v-card-actions>
-              <v-spacer />
-              <v-btn depressed text class="mr-2" nuxt to="/login">Log In</v-btn>
-              <v-btn
-                depressed
-                color="primary"
-                class="white--text"
-                nuxt
-                to="/signup"
-                >Sign Up</v-btn
-              >
-            </v-card-actions>
-          </v-card>
-
-          <PopularPlanetsCard />
-        </template>
+        <IndexSidebar />
 
         <InfoLinks class="mt-2" />
       </div>
@@ -176,27 +111,19 @@ import 'vue-virtual-scroller/dist/vue-virtual-scroller.css'
 import { DynamicScroller, DynamicScrollerItem } from 'vue-virtual-scroller'
 import InfoLinks from '@/components/InfoLinks'
 import feedGql from '@/gql/feed.graphql'
-import userGql from '@/gql/user.graphql'
-import planetGql from '@/gql/planet.graphql'
 import Post from '@/components/post/Post'
-import PopularPlanetsCard from '@/components/PopularPlanetsCard'
 import PostDialog from '@/components/PostDialog'
 import SortBar from '@/components/bars/SortBar'
-import UserSummaryCard from '@/components/user/UserSummaryCard'
-import PlanetInfoCard from '@/components/planet/PlanetInfoCard'
-import PlanetModsCard from '@/components/planet/PlanetModsCard'
 import { postHead } from '@/util/postHead'
+import IndexSidebar from '@/components/IndexSidebar'
 
 export default {
   name: 'Index',
   scrollToTop: false,
   components: {
-    PlanetModsCard,
-    PlanetInfoCard,
-    UserSummaryCard,
+    IndexSidebar,
     SortBar,
     PostDialog,
-    PopularPlanetsCard,
     Post,
     InfoLinks,
     DynamicScroller,
@@ -210,7 +137,8 @@ export default {
       dialog: false,
       selectedPost: null,
       user: null,
-      planet: null
+      planet: null,
+      galaxy: null
     }
   },
   beforeRouteLeave(to, from, next) {
@@ -274,28 +202,6 @@ export default {
         }
       },
       fetchPolicy: 'network-only'
-    },
-    user: {
-      query: userGql,
-      variables() {
-        return {
-          username: this.$route.params.username
-        }
-      },
-      skip() {
-        return !this.$route.params.username
-      }
-    },
-    planet: {
-      query: planetGql,
-      variables() {
-        return {
-          planetName: this.$route.params.planetname
-        }
-      },
-      skip() {
-        return !this.$route.params.planetname
-      }
     }
   },
   methods: {

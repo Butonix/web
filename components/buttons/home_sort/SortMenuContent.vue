@@ -156,22 +156,22 @@ export default {
   },
   computed: {
     allTime() {
-      return !this.$route.query.time ? 'yes' : null
+      return this.$route.params.time === 'all' ? 'yes' : null
     },
     hour() {
-      return this.$route.query.time === 'hour' ? 'yes' : null
+      return this.$route.params.time === 'hour' ? 'yes' : null
     },
     day() {
-      return this.$route.query.time === 'day' ? 'yes' : null
+      return this.$route.params.time === 'day' ? 'yes' : null
     },
     week() {
-      return this.$route.query.time === 'week' ? 'yes' : null
+      return this.$route.params.time === 'week' ? 'yes' : null
     },
     month() {
-      return this.$route.query.time === 'month' ? 'yes' : null
+      return this.$route.params.time === 'month' ? 'yes' : null
     },
     year() {
-      return this.$route.query.time === 'year' ? 'yes' : null
+      return this.$route.params.time === 'year' ? 'yes' : null
     }
   },
   watch: {
@@ -209,7 +209,7 @@ export default {
       this.cancelSelectingTime()
       try {
         this.$router.push({
-          params: { ...this.$route.params, sort: 'hot', time }
+          params: { ...this.$route.params, sort: this.sort, time }
         })
       } catch (e) {}
     },

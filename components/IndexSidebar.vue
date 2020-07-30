@@ -1,0 +1,120 @@
+<template>
+  <div v-if="$route.name.startsWith('u-username')">
+    <UserSummaryCard
+      v-if="user"
+      :user="user"
+      :tile="!$device.isDesktop"
+      allow-edit
+    />
+  </div>
+
+  <div v-else-if="$route.name.startsWith('g-galaxyname')">
+    <GalaxyInfoCard v-if="galaxy" :galaxy="galaxy" :tile="!$device.isDesktop" />
+  </div>
+
+  <div v-else-if="$route.name.startsWith('p-planetname')">
+    <div v-if="planet">
+      <PlanetInfoCard
+        :planet="planet"
+        show-edit-btn
+        :tile="!$device.isDesktop"
+      />
+      <PlanetModsCard
+        v-if="$device.isDesktop"
+        class="mt-3"
+        :planet="planet"
+        :tile="!$device.isDesktop"
+      />
+    </div>
+  </div>
+
+  <div v-else-if="$device.isDesktop">
+    <v-card
+      v-if="!$store.state.currentUser"
+      flat
+      :outlined="!$vuetify.theme.dark"
+      class="mb-3"
+    >
+      <v-card-title>Customize your Planets</v-card-title>
+      <v-card-subtitle style="font-size: 1rem"
+        >Sign up on Comet to join Planets and create your personalized
+        feed.</v-card-subtitle
+      >
+      <v-card-actions>
+        <v-spacer />
+        <v-btn depressed text class="mr-2" nuxt to="/login">Log In</v-btn>
+        <v-btn depressed color="primary" class="white--text" nuxt to="/signup"
+          >Sign Up</v-btn
+        >
+      </v-card-actions>
+    </v-card>
+
+    <PopularPlanetsCard />
+  </div>
+</template>
+
+<script>
+import PopularPlanetsCard from '@/components/PopularPlanetsCard'
+import PlanetModsCard from '@/components/planet/PlanetModsCard'
+import PlanetInfoCard from '@/components/planet/PlanetInfoCard'
+import GalaxyInfoCard from '@/components/GalaxyInfoCard'
+import UserSummaryCard from '@/components/user/UserSummaryCard'
+import userGql from '@/gql/user'
+import planetGql from '@/gql/planet'
+import galaxyGql from '@/gql/galaxy'
+
+export default {
+  name: 'IndexSidebar',
+  components: {
+    UserSummaryCard,
+    GalaxyInfoCard,
+    PlanetInfoCard,
+    PlanetModsCard,
+    PopularPlanetsCard
+  },
+  data() {
+    return {
+      user: null,
+      planet: null,
+      galaxy: null
+    }
+  },
+  apollo: {
+    user: {
+      query: userGql,
+      variables() {
+        return {
+          username: this.$route.params.username
+        }
+      },
+      skip() {
+        return !this.$route.params.username
+      }
+    },
+    planet: {
+      query: planetGql,
+      variables() {
+        return {
+          planetName: this.$route.params.planetname
+        }
+      },
+      skip() {
+        return !this.$route.params.planetname
+      }
+    },
+    galaxy: {
+      query: galaxyGql,
+      variables() {
+        return {
+          galaxyName: this.$route.params.galaxyname
+        }
+      },
+      skip() {
+        return !this.$route.params.galaxyname
+      }
+    }
+  }
+}
+</script>
+
+<style scoped></style>

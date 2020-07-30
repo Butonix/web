@@ -17,12 +17,13 @@
         <v-list-item-title style="white-space: normal">
           <v-btn
             v-if="isExpandable && !isPostView"
-            x-small
+            width="16"
+            height="16"
             icon
-            class="mr-1 mb-1 text--secondary"
+            class="mr-1 pb-1 text--secondary"
             @click.stop.prevent="idState.expand = !idState.expand"
           >
-            <v-icon>{{
+            <v-icon size="16">{{
               idState.expand
                 ? $vuetify.icons.values.mdiArrowCollapse
                 : $vuetify.icons.values.mdiArrowExpand

@@ -22,7 +22,7 @@
     <img v-if="image" ref="imagePreview" style="max-width: 100%" class="pb-6" />
 
     <v-row no-gutters class="mt-4">
-      <PlanetSelector v-model="planet" :prev-route="prevRoute" />
+      <PlanetSelector v-model="planet" />
       <v-btn
         class="ml-4"
         color="primary"
@@ -47,7 +47,6 @@ export default {
   components: { PlanetSelector },
   data() {
     return {
-      prevRoute: null,
       title: '',
       titleRules: [
         (v) => v.length <= 300 || 'Title must be 300 characters or less'
@@ -81,9 +80,6 @@ export default {
       reader.onload = (ev) => (this.$refs.imagePreview.src = ev.target.result)
       reader.readAsDataURL(this.image)
     }
-  },
-  beforeRouteEnter(to, from, next) {
-    next((vm) => (vm.prevRoute = from))
   },
   methods: {
     async submitPost() {

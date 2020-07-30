@@ -110,31 +110,11 @@
     />-->
 
     <v-list class="py-0">
-      <v-list-item
+      <PlanetListItem
         v-for="planet in joinedPlanets"
         :key="planet.name"
-        active-class="planetactive"
-        nuxt
-        :to="`/p/${planet.name}`"
-        @click="$emit('selected')"
-      >
-        <v-list-item-avatar
-          size="32"
-          :color="planet.themeColor ? planet.themeColor : 'primary'"
-        >
-          <v-img v-if="planet.avatarImageUrl" :src="planet.avatarImageUrl" />
-          <v-icon v-else>{{ $vuetify.icons.values.mdiEarth }}</v-icon>
-        </v-list-item-avatar>
-
-        <v-list-item-content>
-          <v-list-item-title>
-            {{ planet.name }}
-          </v-list-item-title>
-          <v-list-item-subtitle style="font-weight: 500">
-            {{ planet.postCount }} posts today
-          </v-list-item-subtitle>
-        </v-list-item-content>
-      </v-list-item>
+        :planet="planet"
+      />
     </v-list>
 
     <div v-if="$device.isDesktop" style="height: 300px" />
@@ -144,9 +124,11 @@
 <script>
 import gql from 'graphql-tag'
 import joinedPlanetsGql from '@/gql/joinedPlanets'
+import PlanetListItem from '@/components/PlanetListItem'
 
 export default {
   name: 'NavDrawerContents',
+  components: { PlanetListItem },
   data() {
     return {
       joinedPlanets: [],

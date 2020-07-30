@@ -20,7 +20,7 @@
     />
 
     <v-row no-gutters class="mt-4">
-      <PlanetSelector v-model="planet" :prev-route="prevRoute" />
+      <PlanetSelector v-model="planet" />
       <v-btn
         class="ml-4"
         color="primary"
@@ -45,7 +45,6 @@ export default {
   components: { PlanetSelector },
   data() {
     return {
-      prevRoute: null,
       title: '',
       link: '',
       titleRules: [
@@ -112,9 +111,6 @@ export default {
   },
   head: {
     title: 'New Link Post'
-  },
-  beforeRouteEnter(to, from, next) {
-    next((vm) => (vm.prevRoute = from))
   }
 }
 </script>

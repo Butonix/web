@@ -3,11 +3,13 @@
     :flat="$vuetify.theme.dark"
     :outlined="!$vuetify.theme.dark && !showViewProfileBtn"
     :width="isHover ? 400 : undefined"
-    :tile="showViewProfileBtn"
     :style="{
       'background-color': $vuetify.theme.dark ? '' : '#F1F3F4',
-      'border-width': '1px'
+      'border-width': '1px',
+      'border-bottom-right-radius': showViewProfileBtn ? '0' : '10px',
+      'border-bottom-left-radius': showViewProfileBtn ? '0' : '10px'
     }"
+    :tile="tile"
   >
     <v-list-item class="py-4">
       <v-list-item-avatar class="my-0" tile size="64" style="align-self: start">
@@ -139,77 +141,76 @@
             <v-icon small left>{{ $vuetify.icons.values.mdiPost }}</v-icon>
             {{ user.postCount }}
           </v-chip>
-
-          <template v-if="user.isCurrentUser && allowEdit">
-            <v-spacer />
-
-            <v-dialog
-              v-model="editDialog"
-              width="35%"
-              :fullscreen="!$device.isDesktop"
-              :transition="
-                $device.isDesktop
-                  ? 'dialog-transition'
-                  : 'dialog-bottom-transition'
-              "
-            >
-              <template v-slot:activator="{ on }">
-                <v-btn text small rounded class="text--secondary" v-on="on">
-                  <v-icon size="20" class="mr-2">{{
-                    $vuetify.icons.values.mdiPencil
-                  }}</v-icon>
-                  Edit Profile
-                </v-btn>
-              </template>
-
-              <v-card>
-                <div class="pa-4">
-                  <div class="overline text--secondary">CHANGE BIO</div>
-                  <v-textarea
-                    v-model="editBio"
-                    label="Bio"
-                    solo
-                    flat
-                    no-resize
-                    rows="3"
-                    :counter="160"
-                  />
-                  <v-btn
-                    depressed
-                    rounded
-                    color="primary"
-                    class="mb-4"
-                    :disabled="editBio.length > 160"
-                    @click="changeBio"
-                    >Change Bio</v-btn
-                  >
-
-                  <v-divider />
-
-                  <div class="overline text--secondary">CHANGE AVATAR</div>
-                  <AvatarEditor
-                    :dialog-open="editDialog"
-                    button-text="Change Avatar"
-                    @finished="editDialog = false"
-                    @cancelled="cancelDialog"
-                  />
-                  <div class="text--secondary mt-3" style="font-size: 0.86rem">
-                    Note: Changes to avatar may take some time to take effect
-                  </div>
-                </div>
-
-                <v-card-actions>
-                  <v-spacer />
-                  <v-btn text rounded @click="cancelDialog"
-                    >Discard Changes</v-btn
-                  >
-                </v-card-actions>
-              </v-card>
-            </v-dialog>
-          </template>
         </v-row>
       </v-list-item-content>
     </v-list-item>
+
+    <v-card-actions v-if="user.isCurrentUser && allowEdit" class="pb-3 pt-1">
+      <v-dialog
+        v-model="editDialog"
+        width="35%"
+        :fullscreen="!$device.isDesktop"
+        :transition="
+          $device.isDesktop ? 'dialog-transition' : 'dialog-bottom-transition'
+        "
+      >
+        <template v-slot:activator="{ on }">
+          <v-btn
+            depressed
+            class="flex-grow-1"
+            :style="$vuetify.theme.dark ? '' : 'background-color: #DEE1E6'"
+            v-on="on"
+            >Edit Profile
+            <v-icon class="ml-2">{{
+              $vuetify.icons.values.mdiPencil
+            }}</v-icon></v-btn
+          >
+        </template>
+
+        <v-card :tile="!$device.isDesktop">
+          <div class="pa-4">
+            <div class="overline text--secondary">CHANGE BIO</div>
+            <v-textarea
+              v-model="editBio"
+              label="Bio"
+              solo
+              flat
+              no-resize
+              rows="3"
+              :counter="160"
+              class="darktextfield"
+            />
+            <v-btn
+              depressed
+              rounded
+              color="primary"
+              class="mb-4"
+              :disabled="editBio.length > 160"
+              @click="changeBio"
+              >Change Bio</v-btn
+            >
+
+            <v-divider />
+
+            <div class="overline text--secondary">CHANGE AVATAR</div>
+            <AvatarEditor
+              :dialog-open="editDialog"
+              button-text="Change Avatar"
+              @finished="editDialog = false"
+              @cancelled="cancelDialog"
+            />
+            <div class="text--secondary mt-3" style="font-size: 0.86rem">
+              Note: Changes to avatar may take some time to take effect
+            </div>
+          </div>
+
+          <v-card-actions>
+            <v-spacer />
+            <v-btn text rounded @click="cancelDialog">Discard Changes</v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
+    </v-card-actions>
 
     <div v-if="showViewProfileBtn && $route.params.username !== user.username">
       <v-list-item nuxt :to="`/u/${user.username}`">
@@ -257,6 +258,10 @@ export default {
     allowEdit: {
       type: Boolean,
       default: false
+    },
+    tile: {
+      type: Boolean,
+      default: false
     }
   },
   data() {
@@ -276,6 +281,20 @@ export default {
       } else {
         return 'Last online ' + formatDistanceToNowStrict(lastLogin) + ' ago'
       }
+    }
+  },
+  watch: {
+    editDialog() {
+      if (this.editDialog) {
+        this.$router.push({ query: { ...this.$route.query, editing: 'true' } })
+      } else {
+        const query = Object.assign({}, this.$route.query)
+        delete query.editing
+        this.$router.push({ query })
+      }
+    },
+    '$route.query.editing'(val) {
+      if (!val) this.editDialog = false
     }
   },
   methods: {

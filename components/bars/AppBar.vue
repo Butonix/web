@@ -47,7 +47,9 @@
           {{ $route.params.planetname }}</span
         >
 
-        <span v-else-if="$route.name === 'search-sort-time'">Search</span>
+        <span v-else-if="$route.name === 'search-sort-time'"
+          >"{{ $route.query.q }}"</span
+        >
 
         <span v-else-if="$route.name === 'signup'"
           >Sign Up<v-icon class="ml-2">{{
@@ -91,34 +93,7 @@
         </div>
       </template>
 
-      <ProfileMenu v-if="$device.isDesktop" />
-
-      <v-btn
-        v-else
-        icon
-        nuxt
-        :to="
-          $store.state.currentUser
-            ? `/u/${$store.state.currentUser.username}`
-            : '/signup'
-        "
-      >
-        <v-avatar
-          v-if="
-            $store.state.currentUser && $store.state.currentUser.profilePicUrl
-          "
-          size="32"
-        >
-          <v-img
-            contain
-            width="32"
-            height="32"
-            :src="$store.state.currentUser.profilePicUrl"
-          />
-        </v-avatar>
-
-        <v-icon v-else>{{ $vuetify.icons.values.mdiAccountOutline }}</v-icon>
-      </v-btn>
+      <ProfileMenu />
 
       <template v-if="$device.isDesktop">
         <client-only>
@@ -149,6 +124,8 @@
             />
           </v-menu>
         </client-only>
+
+        <FeedbackDialog />
       </template>
     </v-row>
   </v-app-bar>
@@ -159,10 +136,12 @@ import ProfileMenu from '../buttons/profile/ProfileMenu'
 import NewPostButton from '../buttons/new_post/NewPostButton'
 import CometLogo from '../buttons/CometLogo'
 import NotificationsMenu from '@/components/notifications/NotificationsMenu'
+import FeedbackDialog from '@/components/FeedbackDialog'
 
 export default {
   name: 'AppBar',
   components: {
+    FeedbackDialog,
     NotificationsMenu,
     CometLogo,
     NewPostButton,
