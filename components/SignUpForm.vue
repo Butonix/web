@@ -13,7 +13,7 @@
 
     <v-text-field
       v-model="email"
-      :rules="email.length > 0 ? rules.emailRules : []"
+      :rules="email && email.length > 0 ? rules.emailRules : []"
       solo
       flat
       dense
@@ -129,7 +129,9 @@ export default {
               v.match(/^[a-zA-Z0-9_]+$/).length > 0) ||
             'Username can only have letters, numbers, and underscores.'
         ],
-        emailRules: [(v) => EmailValidator.validate(v) || 'Invalid email'],
+        emailRules: [
+          (v) => (!!v && EmailValidator.validate(v)) || 'Invalid email'
+        ],
         passwordRules: [
           (v) => v.length >= 6 || 'Password must be at least 6 characters'
         ],
