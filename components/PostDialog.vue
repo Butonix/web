@@ -3,11 +3,6 @@
     ref="dialogref"
     v-model="dialogOpen"
     fullscreen
-    :transition="
-      !dialogOpen && !$device.isDesktop
-        ? 'dialog-bottom-transition'
-        : 'dialog-transition'
-    "
     hide-overlay
     :retain-focus="false"
   >

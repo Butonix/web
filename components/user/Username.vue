@@ -7,7 +7,7 @@
     "
     class="text--secondary"
   >
-    <v-avatar size="20" color="#65C9FF">
+    <v-avatar size="20">
       <img alt="Profile picture" :src="userData.profilePicUrl" />
     </v-avatar>
     <span

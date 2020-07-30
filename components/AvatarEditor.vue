@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-avatar size="150" color="#65C9FF">
+    <v-avatar size="150">
       <v-img
         max-height="150"
         max-width="150"

@@ -15,7 +15,7 @@
       />
     </div>
   </div>
-  <div v-else v-show="expand" class="mt-4">
+  <div v-else-if="expand" class="mt-4">
     <v-row
       v-if="post.type === 'IMAGE' && isEmbeddableImage"
       no-gutters

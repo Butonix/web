@@ -10,7 +10,7 @@
     }"
   >
     <v-list-item>
-      <v-list-item-avatar size="64" color="#65C9FF">
+      <v-list-item-avatar size="64">
         <v-img
           v-if="user.profilePicUrl"
           alt="Profile picture"
