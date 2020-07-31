@@ -79,6 +79,32 @@ export default {
       galaxy: null
     }
   },
+  watch: {
+    planet: {
+      deep: true,
+      handler() {
+        this.updateThemeColor()
+      }
+    }
+  },
+  mounted() {
+    this.updateThemeColor()
+  },
+  methods: {
+    updateThemeColor() {
+      if (!this.planet || (this.planet && !this.planet.themeColor)) {
+        this.$nextTick(() => {
+          this.$vuetify.theme.themes.dark.primary = '#EF5350'
+          this.$vuetify.theme.themes.light.primary = '#EF5350'
+        })
+      } else {
+        this.$nextTick(() => {
+          this.$vuetify.theme.themes.dark.primary = this.planet.themeColor
+          this.$vuetify.theme.themes.light.primary = this.planet.themeColor
+        })
+      }
+    }
+  },
   apollo: {
     user: {
       query: userGql,

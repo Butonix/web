@@ -29,6 +29,7 @@ query hiddenPosts {
         joined
         blocking
         avatarImageUrl
+        themeColor
       }
       postView {
         lastCommentCount

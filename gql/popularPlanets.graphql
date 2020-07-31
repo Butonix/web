@@ -1,4 +1,4 @@
-query popularPlanets($galaxyName: String) {
+query popularPlanets($galaxyName: ID) {
   popularPlanets(galaxyName: $galaxyName) {
     name
     description

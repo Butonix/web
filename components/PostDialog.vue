@@ -105,6 +105,7 @@
               </div>
 
               <v-row
+                v-if="!$device.isDesktop"
                 no-gutters
                 :class="$device.isDesktop ? '' : 'px-3'"
                 class="pb-3"
@@ -125,7 +126,7 @@
                   :class="$device.isDesktop ? '' : 'flex-grow-1 mr-3'"
                   style="justify-content: start"
                   height="34"
-                  @click="openCommentDialog"
+                  @click="$refs.editordialog.open()"
                 >
                   <v-icon class="mr-2">{{
                     $vuetify.icons.values.mdiPencil
@@ -139,6 +140,9 @@
                   depressed
                   color="primary"
                   class="white--text"
+                  :class="$device.isDesktop ? '' : 'flex-grow-1 mr-3'"
+                  style="justify-content: start"
+                  height="34"
                   to="/login"
                   nuxt
                 >
@@ -153,10 +157,33 @@
                 <CommentSortMenu />
               </v-row>
 
-              <DynamicScroller
+              <div v-if="$device.isDesktop" class="mb-3">
+                <client-only v-if="$store.state.currentUser">
+                  <div class="text--secondary pb-3" style="font-size: 0.86rem">
+                    Commenting as
+                    <UsernameMenu :user-data="$store.state.currentUser" />
+                  </div>
+                  <Editor v-model="commentHTML" @submitted="submitComment" />
+                </client-only>
+                <v-card v-else flat :outlined="!$vuetify.theme.dark">
+                  <v-card-actions class="px-4">
+                    <span class="text--secondary"
+                      >Sign up or log in to leave a comment</span
+                    >
+                    <v-spacer />
+                    <v-btn text nuxt to="/login">Log in</v-btn>
+                    <v-btn depressed color="primary" nuxt to="/signup"
+                      >Sign up</v-btn
+                    >
+                  </v-card-actions>
+                </v-card>
+              </div>
+
+              <!--<DynamicScroller
                 page-mode
                 :items="threadedComments"
                 :min-item-size="54"
+                :buffer="500"
               >
                 <template v-slot="{ item, index, active }">
                   <DynamicScrollerItem
@@ -170,11 +197,25 @@
                         :post="post"
                         :post-view="postView"
                         :comment="item"
+                        @startreply="handleStartReply"
                       />
                     </div>
                   </DynamicScrollerItem>
                 </template>
-              </DynamicScroller>
+              </DynamicScroller>-->
+
+              <div
+                v-for="comment in threadedComments"
+                :key="comment.id"
+                :class="$device.isDesktop ? 'pb-3' : ''"
+              >
+                <Comment
+                  :post="post"
+                  :post-view="postView"
+                  :comment="comment"
+                  @startreply="handleStartReply"
+                />
+              </div>
 
               <v-row
                 v-show="
@@ -192,107 +233,51 @@
             </div>
 
             <div v-if="$device.isDesktop" class="infocol">
-              <PlanetInfoCard :planet="post.planet" />
+              <div class="sticky">
+                <PlanetInfoCard :planet="post.planet" />
+              </div>
             </div>
           </div>
         </div>
       </div>
     </div>
 
-    <client-only>
-      <v-dialog
-        v-if="$store.state.currentUser"
-        v-model="commentDialog"
-        :retain-focus="false"
-        persistent
-        width="50%"
-        :fullscreen="!$device.isDesktop"
-        :transition="
-          $device.isDesktop ? 'dialog-transition' : 'dialog-bottom-transition'
-        "
-      >
-        <v-card
-          :tile="!$device.isDesktop"
-          :min-height="$device.isDesktop ? '400' : ''"
-        >
-          <div
-            style="display: flex"
-            :style="{
-              'background-color': $vuetify.theme.dark ? '#202124' : '#F1F3F4',
-              'border-bottom-width': '1px',
-              'border-bottom-color': 'rgba(0, 0, 0, 0.12)',
-              'border-bottom-style': $vuetify.theme.dark ? 'none' : 'solid'
-            }"
-          >
-            <v-btn
-              text
-              tile
-              class="flex-grow-1"
-              height="50"
-              @click="closeCommentDialog"
-            >
-              <v-icon class="mr-2">{{
-                $vuetify.icons.values.mdiCloseCircleOutline
-              }}</v-icon>
-              Discard
-            </v-btn>
-            <v-btn
-              text
-              tile
-              class="flex-grow-1"
-              height="50"
-              :disabled="isCommentEmpty"
-              :loading="submitBtnLoading"
-              @click="submitComment"
-            >
-              <v-icon class="mr-2">{{
-                $vuetify.icons.values.mdiCheckCircleOutline
-              }}</v-icon>
-              Done
-            </v-btn>
-          </div>
-
-          <div style="font-size: 1rem">
-            <Editor
-              v-model="commentHTML"
-              editable
-              autofocus
-              :style="
-                $device.isDesktop ? 'min-height: 296px; max-height: 600px' : ''
-              "
-              style="overflow-y: auto"
-              class="pa-2"
-            />
-          </div>
-        </v-card>
-      </v-dialog>
-    </client-only>
+    <EditorDialog
+      ref="editordialog"
+      v-model="commentHTML"
+      :parent-text-content="
+        replyingComment ? replyingComment.textContent : null
+      "
+      @submitted="submitComment"
+    />
   </v-dialog>
 </template>
 
 <script>
-import 'vue-virtual-scroller/dist/vue-virtual-scroller.css'
-import { DynamicScroller, DynamicScrollerItem } from 'vue-virtual-scroller'
+// import 'vue-virtual-scroller/dist/vue-virtual-scroller.css'
+// import { DynamicScroller, DynamicScrollerItem } from 'vue-virtual-scroller'
 import postCommentsGql from '../gql/postComments.graphql'
 import submitCommentGql from '../gql/submitComment.graphql'
 import recordPostViewGql from '../gql/recordPostView.graphql'
 import Comment from '../components/comment/Comment'
 import CommentSortMenu from '../components/comment/sort/CommentSortMenu'
 import { urlName } from '@/util/urlName'
-import { isEditorEmpty } from '@/util/isEditorEmpty'
 import Post from '@/components/post/Post'
 import PlanetInfoCard from '@/components/planet/PlanetInfoCard'
+import UsernameMenu from '@/components/user/UsernameMenu'
 
 export default {
   name: 'PostDialog',
   components: {
+    UsernameMenu,
+    Editor: () => import('@/components/editor/Editor'),
+    EditorDialog: () => import('@/components/editor/EditorDialog'),
     PlanetInfoCard,
     Post,
-    Editor: () => import('@/components/editor/Editor'),
     CommentSortMenu,
-    Comment,
-    DynamicScroller,
-    DynamicScrollerItem
+    Comment
+    // DynamicScroller,
+    // DynamicScrollerItem
   },
   props: {
     post: {
@@ -310,9 +295,9 @@ export default {
       postView: null,
       commentHTML: null,
       submitBtnLoading: false,
-      commentDialog: false,
       dialogOpen: this.value,
-      addedEventListener: false
+      addedEventListener: false,
+      replyingComment: null
     }
   },
   computed: {
@@ -336,20 +321,19 @@ export default {
       }
       fun(thread)
       return thread
-    },
-    isCommentEmpty() {
-      return isEditorEmpty(this.commentHTML)
     }
   },
   watch: {
     post: {
       deep: true,
       handler() {
+        this.updateThemeColor()
         this.postComments = []
         this.$nextTick(() => this.$refs.dialogref.$refs.dialog.scrollTo(0, 0))
       }
     },
     async dialogOpen() {
+      this.updateThemeColor()
       this.$emit('input', this.dialogOpen)
 
       if (!this.dialogOpen && this.addedEventListener) {
@@ -381,6 +365,7 @@ export default {
     }
   },
   async mounted() {
+    this.updateThemeColor()
     if (!this.addedEventListener) {
       window.addEventListener('popstate', this.handleHistoryChange)
       this.addedEventListener = true
@@ -388,17 +373,29 @@ export default {
   },
   methods: {
     doNothing() {},
+    handleStartReply(e) {
+      this.replyingComment = e
+      this.$refs.editordialog.open()
+    },
+    updateThemeColor() {
+      if (!this.post || !this.dialogOpen) {
+        this.$nextTick(() => {
+          this.$vuetify.theme.themes.dark.primary = '#EF5350'
+          this.$vuetify.theme.themes.light.primary = '#EF5350'
+        })
+      } else if (this.post.planet.themeColor) {
+        this.$nextTick(() => {
+          this.$vuetify.theme.themes.dark.primary = this.post.planet.themeColor
+          this.$vuetify.theme.themes.light.primary = this.post.planet.themeColor
+        })
+      }
+    },
     goBack() {
       this.dialogOpen = false
       window.history.pushState({}, null, this.$route.path)
     },
     handleHistoryChange(e) {
-      if (this.commentDialog) {
-        window.history.pushState(window.history.state, null, '?replying=true')
-        this.commentDialog = false
-        window.history.back()
-        return
-      }
+      this.$refs.editordialog.close()
       if (
         e.target.location.href.includes('/p/') &&
         e.target.location.href.includes('/comments/')
@@ -406,35 +403,18 @@ export default {
         return
       this.dialogOpen = false
     },
-    openCommentDialog() {
-      if (!this.$store.state.currentUser) {
-        this.$store.dispatch('displaySnackbar', {
-          message: 'Must log in to reply'
-        })
-        return
-      }
-      this.commentDialog = true
-      window.history.pushState(window.history.state, null, '?replying=true')
-      console.log(window.location)
-    },
-    closeCommentDialog() {
-      if (!this.isCommentEmpty) {
-        const confirmed = window.confirm(
-          'Are you sure you want to discard this comment?'
-        )
-        if (!confirmed) return
-      }
-      this.commentDialog = false
-      this.commentHTML = null
-    },
     async submitComment() {
+      console.log(this.commentHTML)
       this.submitBtnLoading = true
       try {
         await this.$apollo.mutate({
           mutation: submitCommentGql,
           variables: {
             postId: this.postId,
-            textContent: this.commentHTML
+            textContent: this.commentHTML,
+            parentCommentId: this.replyingComment
+              ? this.replyingComment.id
+              : null
           },
           update: (store, { data: { submitComment } }) => {
             const data = store.readQuery({
@@ -453,9 +433,13 @@ export default {
               },
               data
             })
+            if (this.replyingComment) {
+              if (!this.replyingComment.childComments)
+                this.replyingComment.childComments = []
+              this.replyingComment.childComments.unshift(submitComment)
+            }
           }
         })
-        this.commentDialog = false
         this.commentHTML = null
 
         await this.$apollo.mutate({
@@ -481,7 +465,7 @@ export default {
         }
       },
       skip() {
-        return !this.dialogOpen || !this.postId
+        return !this.post || !this.dialogOpen || !this.postId
       }
     }
   }

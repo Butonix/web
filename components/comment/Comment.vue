@@ -22,10 +22,10 @@
       :style="{
         'padding-left': 10 * level + 'px',
         'background-color': $vuetify.theme.dark
-          ? idState.expanded
+          ? idState.expanded && !$device.isDesktop
             ? '#35363A'
             : '#202124'
-          : idState.expanded
+          : idState.expanded && !$device.isDesktop
           ? '#DEE1E6'
           : '#F8F9FA',
         'border-radius': $device.isDesktop ? '9px' : '0'
@@ -80,13 +80,13 @@
             v-if="!$device.isDesktop"
             class="ml-3"
             :class="comment.isEndorsed ? 'primary--text' : 'text--secondary'"
-            style="font-size: 0.86rem"
+            style="font-size: 0.86rem; font-weight: 500"
           >
             {{ comment.endorsementCount }}
             <v-icon
-              size="12"
+              size="16"
               :class="comment.isEndorsed ? 'primary--text' : 'text--secondary'"
-              style="margin-bottom: 2px"
+              style="padding-bottom: 3px"
               >{{ $vuetify.icons.values.mdiRocket }}</v-icon
             >
           </span>
@@ -106,7 +106,7 @@
               text
               rounded
               class="text--secondary"
-              @click="openReplyDialog"
+              @click="idState.replying = !idState.replying"
             >
               <v-icon class="mr-2" size="20">{{
                 $vuetify.icons.values.mdiReply
@@ -119,42 +119,52 @@
               text
               rounded
               :class="comment.isEndorsed ? 'primary--text' : 'text--secondary'"
+              :style="cssVars"
+              :ripple="false"
               @click="toggleEndorsement"
             >
-              <v-icon class="mr-2" size="20">{{
-                $vuetify.icons.values.mdiRocket
-              }}</v-icon>
+              <AnimatedRocket class="mr-2" :item="comment" />
               {{ comment.endorsementCount }}
             </v-btn>
           </template>
         </v-card-actions>
       </div>
+      <client-only v-if="$device.isDesktop">
+        <div v-if="idState.replying" class="pa-3">
+          <Editor
+            v-model="idState.replyHTML"
+            show-cancel-btn
+            :loading="idState.submitBtnLoading"
+            @cancelled="idState.replying = false"
+            @submitted="submitReply"
+          />
+        </div>
+      </client-only>
     </div>
 
-    <v-expand-transition>
-      <div
-        v-show="!$device.isDesktop && idState.expanded"
-        style="display: flex"
-      >
-        <v-btn text tile class="flex-grow-1" @click="openReplyDialog">
-          <v-icon class="mr-2">{{ $vuetify.icons.values.mdiReply }}</v-icon>
-          Reply
-        </v-btn>
+    <div
+      v-show="idState.expanded"
+      v-if="!$device.isDesktop"
+      style="display: flex"
+    >
+      <v-btn text tile class="flex-grow-1" @click="openReplyDialog">
+        <v-icon class="mr-2">{{ $vuetify.icons.values.mdiReply }}</v-icon>
+        Reply
+      </v-btn>
 
-        <v-btn
-          text
-          tile
-          class="flex-grow-1"
-          :class="comment.isEndorsed ? 'primary--text' : ''"
-          @click="toggleEndorsement"
-        >
-          <v-icon class="mr-2">{{ $vuetify.icons.values.mdiRocket }}</v-icon>
-          {{ comment.endorsementCount }} Rocket{{
-            comment.endorsementCount === 1 ? '' : 's'
-          }}
-        </v-btn>
-      </div>
-    </v-expand-transition>
+      <v-btn
+        text
+        tile
+        class="flex-grow-1"
+        :class="comment.isEndorsed ? 'primary&#45;&#45;text' : ''"
+        @click="toggleEndorsement"
+      >
+        <v-icon class="mr-2">{{ $vuetify.icons.values.mdiRocket }}</v-icon>
+        {{ comment.endorsementCount }} Rocket{{
+          comment.endorsementCount === 1 ? '' : 's'
+        }}
+      </v-btn>
+    </div>
 
     <div v-show="!idState.childrenCollapsed">
       <Comment
@@ -164,86 +174,9 @@
         :post="post"
         :comment="c"
         :level="level + 1"
+        @startreply="handleStartReply"
       />
     </div>
-
-    <client-only>
-      <v-dialog
-        v-model="idState.replyDialog"
-        :retain-focus="false"
-        persistent
-        width="50%"
-        :fullscreen="!$device.isDesktop"
-        :transition="
-          $device.isDesktop ? 'dialog-transition' : 'dialog-bottom-transition'
-        "
-      >
-        <v-card
-          :tile="!$device.isDesktop"
-          :min-height="$device.isDesktop ? '400' : ''"
-        >
-          <div
-            style="display: flex"
-            :style="{
-              'background-color': $vuetify.theme.dark ? '#202124' : '#F1F3F4',
-              'border-bottom-width': '1px',
-              'border-bottom-color': 'rgba(0, 0, 0, 0.12)',
-              'border-bottom-style': $vuetify.theme.dark ? 'none' : 'solid'
-            }"
-          >
-            <v-btn
-              text
-              tile
-              class="flex-grow-1"
-              height="50"
-              @click="closeReplyDialog"
-            >
-              <v-icon class="mr-2">{{
-                $vuetify.icons.values.mdiCloseCircleOutline
-              }}</v-icon>
-              Discard
-            </v-btn>
-            <v-btn
-              text
-              tile
-              class="flex-grow-1"
-              height="50"
-              :disabled="isReplyEmpty"
-              :loading="idState.submitBtnLoading"
-              @click="submitReply"
-            >
-              <v-icon class="mr-2">{{
-                $vuetify.icons.values.mdiCheckCircleOutline
-              }}</v-icon>
-              Done
-            </v-btn>
-          </div>
-
-          <div
-            style="font-size: 1rem; max-height: 200px; border-bottom-width: 1px; border-bottom-style: solid"
-            class="pa-2"
-            :style="{
-              'border-bottom-color': $vuetify.theme.dark
-                ? 'rgba(255, 255, 255, 0.12)'
-                : 'rgba(0, 0, 0, 0.12)'
-            }"
-            v-html="comment.textContent"
-          ></div>
-          <div style="font-size: 1rem">
-            <Editor
-              v-model="idState.replyHTML"
-              editable
-              autofocus
-              :style="
-                $device.isDesktop ? 'min-height: 296px; max-height: 600px' : ''
-              "
-              style="overflow-y: auto"
-              class="pa-2"
-            />
-          </div>
-        </v-card>
-      </v-dialog>
-    </client-only>
   </div>
 </template>
 
@@ -261,10 +194,12 @@ import TextContent from '../TextContent'
 import { isEditorEmpty } from '@/util/isEditorEmpty'
 import { timeSince } from '@/util/timeSince'
 import { urlName } from '@/util/urlName'
+import AnimatedRocket from '@/components/AnimatedRocket'
 
 export default {
   name: 'Comment',
   components: {
+    AnimatedRocket,
     TextContent,
     Editor: () => import('@/components/editor/Editor'),
     UsernameMenu
@@ -372,6 +307,13 @@ export default {
           return '#FF9800'
       }
       return '#F44336'
+    },
+    cssVars() {
+      return {
+        '--theme-color': this.post.planet.themeColor
+          ? this.post.planet.themeColor
+          : '#EF5350'
+      }
     }
   },
   watch: {
@@ -402,6 +344,9 @@ export default {
     }
   },
   methods: {
+    handleStartReply(e) {
+      this.$emit('startreply', e)
+    },
     openReplyDialog() {
       if (!this.$store.state.currentUser) {
         this.$store.dispatch('displaySnackbar', {
@@ -409,11 +354,7 @@ export default {
         })
         return
       }
-      this.$router.push({
-        path: this.$route.path,
-        query: { ...this.$route.query, replying: 'true' }
-      })
-      this.idState.replyDialog = true
+      this.$emit('startreply', this.comment)
     },
     closeReplyDialog() {
       if (!this.isReplyEmpty) {
@@ -492,15 +433,18 @@ export default {
             this.comment.childComments.unshift(submitComment)
           }
         })
-        await this.$apollo.mutate({
-          mutation: recordPostViewGql,
-          variables: {
-            postId: this.comment.postId
-          }
-        })
+        this.idState.replying = false
       } catch (e) {
-        this.submitCommentErr = e.message.split('GraphQL error: ')[1]
+        await this.$store.dispatch('displaySnackbar', {
+          message: e.message.split('GraphQL error: ')[1]
+        })
       }
+      this.$apollo.mutate({
+        mutation: recordPostViewGql,
+        variables: {
+          postId: this.comment.postId
+        }
+      })
       this.idState.submitBtnLoading = false
     },
     async toggleEndorsement() {

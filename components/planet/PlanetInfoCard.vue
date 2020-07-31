@@ -58,7 +58,7 @@
       <v-chip
         close
         :close-icon="planet.joined ? '' : $vuetify.icons.values.mdiPlus"
-        color="primary"
+        :color="planet.themeColor ? planet.themeColor : 'primary'"
         @click="toggleJoin"
         @click:close="toggleJoin"
         >{{ planet.joined ? 'Joined' : 'Join' }}</v-chip

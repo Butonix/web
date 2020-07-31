@@ -14,7 +14,7 @@
           v-if="
             $store.state.currentUser && $store.state.currentUser.profilePicUrl
           "
-          size="48"
+          size="36"
         >
           <v-img
             alt="Profile picture"

@@ -22,6 +22,7 @@
       size="16"
       style="padding-bottom: 3px"
       color="primary"
+      title="Original Poster"
       >{{ $vuetify.icons.values.mdiMicrophoneVariant }}</v-icon
     >
     <v-chip

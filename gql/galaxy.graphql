@@ -1,4 +1,4 @@
-query galaxy($galaxyName: String!) {
+query galaxy($galaxyName: ID!) {
   galaxy(galaxyName: $galaxyName) {
     description
     fullName

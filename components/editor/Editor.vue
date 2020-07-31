@@ -1,30 +1,48 @@
 <template>
-  <div
+  <v-sheet
     :class="$vuetify.theme.dark ? 'editor-dark' : 'editor-light'"
-    @click="editor.focus()"
+    :style="$device.isDesktop ? 'position: relative; border-radius: 10px' : ''"
+    @click.stop.prevent="editor.focus()"
   >
     <editor-content
-      :class="
-        $vuetify.theme.dark ? 'editor-dark__content' : 'editor-light__content'
-      "
+      :class="{
+        'editor-dark__content': $vuetify.theme.dark,
+        'editor-light__content': !$vuetify.theme.dark,
+        'pt-3': $device.isDesktop,
+        'px-3': $device.isDesktop
+      }"
       :editor="editor"
-      style="padding-bottom: 96px"
+      style="min-height: 148px; padding-bottom: 64px"
     />
 
     <editor-menu-bar
-      v-if="editable"
       v-slot="{ commands, isActive }"
       :editor="editor"
-      style="position: absolute; width: 100%; bottom: 0; left: 0; right: 0; padding-bottom: 8px; padding-left: 8px; padding-right: 8px"
+      style="position: absolute; bottom: 0; left: 0; right: 0"
       :style="{
-        'background-color': $vuetify.theme.dark ? '#202124' : '#F1F3F4',
+        'background-color': $vuetify.theme.dark ? '#35363A' : '#F1F3F4',
         'border-top-width': '1px',
-        'border-top-color': 'rgba(0, 0, 0, 0.12)',
-        'border-top-style': $vuetify.theme.dark ? 'none' : 'solid'
+        'border-top-color': $vuetify.theme.dark
+          ? 'rgba(255, 255, 255, 0.12)'
+          : 'rgba(0, 0, 0, 0.12)',
+        'border-top-style': 'solid',
+        width: $device.isDesktop ? '' : '100%'
       }"
     >
-      <div class="menubar pt-3">
+      <v-row
+        :class="$device.isDesktop ? 'px-3 py-1' : ''"
+        class="menubar flex-grow-1 mx-0"
+        :style="
+          $device.isDesktop
+            ? 'min-width: 100%; border-bottom-left-radius: 10px; border-bottom-right-radius: 10px'
+            : $device.isIos
+            ? 'padding-bottom: 24px'
+            : ''
+        "
+        align="center"
+      >
         <button
+          title="Bold"
           class="menubar__button"
           :class="{
             'is-active': isActive.bold()
@@ -35,6 +53,7 @@
         </button>
 
         <button
+          title="Italic"
           class="menubar__button"
           :class="{
             'is-active': isActive.italic()
@@ -45,6 +64,7 @@
         </button>
 
         <button
+          title="Strikethrough"
           class="menubar__button"
           :class="{
             'is-active': isActive.strike()
@@ -55,6 +75,7 @@
         </button>
 
         <button
+          title="Underline"
           class="menubar__button"
           :class="{
             'is-active': isActive.underline()
@@ -65,6 +86,7 @@
         </button>
 
         <button
+          title="Code"
           class="menubar__button"
           :class="{
             'is-active': isActive.code()
@@ -75,36 +97,18 @@
         </button>
 
         <button
-          class="menubar__button"
-          :class="{
-            'is-active': isActive.heading({ level: 1 })
-          }"
-          @click="commands.heading({ level: 1 })"
-        >
-          <v-icon>{{ $vuetify.icons.values.mdiFormatHeader1 }}</v-icon>
-        </button>
-
-        <button
+          title="Heading"
           class="menubar__button"
           :class="{
             'is-active': isActive.heading({ level: 2 })
           }"
           @click="commands.heading({ level: 2 })"
         >
-          <v-icon>{{ $vuetify.icons.values.mdiFormatHeader2 }}</v-icon>
+          <v-icon>{{ $vuetify.icons.values.mdiFormatSize }}</v-icon>
         </button>
 
         <button
-          class="menubar__button"
-          :class="{
-            'is-active': isActive.heading({ level: 3 })
-          }"
-          @click="commands.heading({ level: 3 })"
-        >
-          <v-icon>{{ $vuetify.icons.values.mdiFormatHeader3 }}</v-icon>
-        </button>
-
-        <button
+          title="Bulleted List"
           class="menubar__button"
           :class="{
             'is-active': isActive.bullet_list()
@@ -115,6 +119,7 @@
         </button>
 
         <button
+          title="Numbered List"
           class="menubar__button"
           :class="{
             'is-active': isActive.ordered_list()
@@ -125,6 +130,7 @@
         </button>
 
         <button
+          title="Quote"
           class="menubar__button"
           :class="{
             'is-active': isActive.blockquote()
@@ -135,6 +141,7 @@
         </button>
 
         <button
+          title="Code Block"
           class="menubar__button"
           :class="{
             'is-active': isActive.code_block()
@@ -145,6 +152,7 @@
         </button>
 
         <button
+          title="Divider"
           class="menubar__button"
           :class="{
             'is-active': isActive.horizontal_rule()
@@ -155,15 +163,35 @@
         </button>
 
         <button
-          class="menubar__button"
+          title="Link"
+          class="menubar__button mr-auto"
           :class="{ 'is-active': isActive.link() }"
           @click="showLinkPrompt(commands.link)"
         >
           <v-icon>{{ $vuetify.icons.values.mdiLink }}</v-icon>
         </button>
-      </div>
+
+        <template v-if="$device.isDesktop">
+          <v-btn
+            v-if="showCancelBtn"
+            small
+            text
+            @click.stop.prevent="$emit('cancelled')"
+            >Cancel</v-btn
+          >
+          <v-btn
+            small
+            depressed
+            color="primary"
+            class="ml-2"
+            :loading="loading"
+            @click.stop.prevent="$emit('submitted')"
+            >Submit</v-btn
+          >
+        </template>
+      </v-row>
     </editor-menu-bar>
-  </div>
+  </v-sheet>
 </template>
 
 <script>
@@ -198,13 +226,13 @@ export default {
       type: String,
       default: `<p></p>`
     },
-    editable: {
+    showCancelBtn: {
       type: Boolean,
       default: false
     },
-    autofocus: {
+    loading: {
       type: Boolean,
-      default: true
+      default: false
     }
   },
   data() {
@@ -215,9 +243,9 @@ export default {
           this.emitAfterOnUpdate = true
           this.$emit('input', getHTML())
         },
-        editable: this.editable,
+        editable: true,
         content: this.value,
-        autoFocus: this.autofocus,
+        autoFocus: true,
         extensions: [
           new Blockquote(),
           new BulletList(),
@@ -249,16 +277,6 @@ export default {
         return
       }
       this.editor.setContent(val)
-    },
-    editable() {
-      this.editor.setOptions({
-        editable: this.editable
-      })
-    },
-    autofocus() {
-      this.editor.setOptions({
-        autoFocus: this.autofocus
-      })
     }
   },
   beforeDestroy() {

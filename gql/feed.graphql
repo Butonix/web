@@ -1,4 +1,4 @@
-query feed($page: Int, $sort: Sort, $time: Time, $filter: Filter, $types: [Type!], $planetName: String, $galaxyName: String, $username: String, $search: String) {
+query feed($page: Int, $sort: Sort, $time: Time, $filter: Filter, $types: [Type!], $planetName: ID, $galaxyName: ID, $username: String, $search: String) {
   feed(page: $page, sort: $sort, time: $time, filter: $filter, types: $types, planetName: $planetName, galaxyName: $galaxyName, username: $username, search: $search) {
     commentCount
     createdAt
@@ -27,6 +27,7 @@ query feed($page: Int, $sort: Sort, $time: Time, $filter: Filter, $types: [Type!
       userCount
       avatarImageUrl
       createdAt
+      themeColor
       galaxy {
         name
         fullName

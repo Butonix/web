@@ -5,7 +5,7 @@
         <IndexSidebar />
       </template>
 
-      <SortBar :planet="planet" :class="$device.isDesktop ? 'mb-3 ml-9' : ''" />
+      <SortBar :class="$device.isDesktop ? 'mb-3 ml-9' : ''" />
 
       <DynamicScroller
         page-mode
@@ -135,10 +135,7 @@ export default {
       hasMore: true,
       page: 0,
       dialog: false,
-      selectedPost: null,
-      user: null,
-      planet: null,
-      galaxy: null
+      selectedPost: null
     }
   },
   beforeRouteLeave(to, from, next) {
@@ -155,22 +152,14 @@ export default {
   },
   computed: {
     vars() {
-      let sort = this.$route.name.includes('u-username') ? 'NEW' : 'HOT'
-      if (this.$route.name.includes('new')) sort = 'NEW'
-      else if (this.$route.name.includes('top-time')) sort = 'TOP'
-      else if (this.$route.name.includes('mostcomments-time')) sort = 'COMMENTS'
-
-      let time = 'ALL'
-      if (
-        this.$route.name.includes('top-time') ||
-        this.$route.name.includes('mostcomments-time')
-      )
-        time = this.$route.params.time.toUpperCase()
-
       return {
-        sort,
-        time,
-        filter: this.$route.name.startsWith('index') ? 'MYPLANETS' : 'ALL',
+        sort: this.$route.params.sort
+          ? this.$route.params.sort.toUpperCase()
+          : 'HOT',
+        time: this.$route.params.time
+          ? this.$route.params.time.toUpperCase()
+          : 'ALL',
+        filter: this.$route.name.startsWith('sort-time') ? 'MYPLANETS' : 'ALL',
         types:
           this.$route.query && this.$route.query.types
             ? this.$route.query.types.split('-').map((t) => t.toUpperCase())

@@ -234,6 +234,9 @@ export default {
       expand: this.$route.query.view === 'expanded' || this.isPostView
     }
   },
+  mounted() {
+    this.updateTextContentSize()
+  },
   methods: {
     updateTextContentSize() {
       if (

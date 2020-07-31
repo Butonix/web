@@ -151,6 +151,7 @@ export default {
           galaxy: this.selectedGalaxy
         }
       })
+      await this.$store.dispatch('fetchCurrentUser')
       this.createBtnLoading = false
       await this.$router.push(`/p/${this.name}`)
     }

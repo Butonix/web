@@ -249,13 +249,7 @@ import SortMenu from '@/components/buttons/home_sort/SortMenu'
 
 export default {
   name: 'SortBar',
-  components: { SortMenu, TypeMenu },
-  props: {
-    planet: {
-      type: Object,
-      default: null
-    }
-  }
+  components: { SortMenu, TypeMenu }
 }
 </script>
 
