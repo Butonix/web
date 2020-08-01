@@ -108,7 +108,11 @@
                 </div>
 
                 <client-only>
-                  <Editor />
+                  <Editor
+                    v-model="commentHTML"
+                    :loading="submitBtnLoading"
+                    @submitted="submitComment"
+                  />
                 </client-only>
               </div>
 
