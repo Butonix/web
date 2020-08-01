@@ -439,6 +439,8 @@ export default {
       window.history.pushState({}, null, this.$route.path)
     },
     handleHistoryChange(e) {
+      this.$refs.editordialog.close()
+
       if (
         e.target.location.href.includes('/p/') &&
         e.target.location.href.includes('/comments/')

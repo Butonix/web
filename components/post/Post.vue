@@ -107,6 +107,7 @@
           class="mt-2"
           :post="post"
           :is-post-view="isPostView"
+          @toggleblock="toggleBlock"
         />
       </v-list-item-content>
 
@@ -129,6 +130,7 @@
       class="mt-2"
       :post="post"
       :is-post-view="isPostView"
+      @toggleblock="toggleBlock"
     />
   </div>
 </template>

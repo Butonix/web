@@ -5,9 +5,6 @@ export const state = () => ({
   snackbarEnabled: false,
   snackbarMessage: '',
   snackbarSuccess: false,
-  homeQuery: {},
-  topicQuery: {},
-  userQuery: {},
   expandedCommentId: ''
 })
 
@@ -18,15 +15,6 @@ export const mutations = {
   setExpandedCommentId(state, commentId) {
     state.expandedCommentId = commentId
   },
-  setHomeQuery(state, query) {
-    state.homeQuery = query
-  },
-  setTopicQuery(state, query) {
-    state.topicQuery = query
-  },
-  setUserQuery(state, query) {
-    state.userQuery = query
-  },
   setSnackbarEnabled(state, enabled) {
     state.snackbarEnabled = enabled
   },
@@ -35,6 +23,9 @@ export const mutations = {
   },
   setSnackbarSuccess(state, success) {
     state.snackbarSuccess = success
+  },
+  setAppearOffline(state, appearOffline) {
+    state.currentUser.appearOffline = appearOffline
   }
 }
 

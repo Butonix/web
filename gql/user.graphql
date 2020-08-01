@@ -16,5 +16,6 @@ query user($username: String!) {
     tagColor
     profilePicUrl
     bio
+    appearOffline
   }
 }

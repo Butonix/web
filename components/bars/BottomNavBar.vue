@@ -27,9 +27,96 @@
         }}</v-icon>
       </v-btn>
 
-      <v-btn class="navbtn">
-        <v-img contain width="44" src="/logo_mobile.png" />
-      </v-btn>
+      <v-bottom-sheet v-model="middleBtnBottomSheet">
+        <template v-slot:activator="{ on }">
+          <v-btn class="navbtn" v-on="on">
+            <v-img contain width="44" src="/logo_mobile.png" />
+          </v-btn>
+        </template>
+
+        <v-card style="padding-bottom: 24px; padding-top: 12px">
+          <v-row justify="center" class="px-6">
+            <v-col align="center" cols="3">
+              <v-avatar
+                :style="{
+                  'border-width': '1px',
+                  'border-style': 'solid',
+                  'border-color': $vuetify.theme.dark
+                    ? 'rgba(255, 255, 255, 0.12)'
+                    : 'rgba(0, 0, 0, 0.12)'
+                }"
+                :color="$vuetify.theme.dark ? 'primary' : ''"
+                @click="toggleDark"
+              >
+                <v-icon size="24">{{
+                  $vuetify.icons.values.mdiWeatherNight
+                }}</v-icon>
+              </v-avatar>
+              <div class="pt-2">Dark Mode</div>
+            </v-col>
+            <v-col align="center" cols="3">
+              <v-avatar
+                :style="{
+                  'border-width': '1px',
+                  'border-style': 'solid',
+                  'border-color': $vuetify.theme.dark
+                    ? 'rgba(255, 255, 255, 0.12)'
+                    : 'rgba(0, 0, 0, 0.12)'
+                }"
+              >
+                <v-icon size="24">{{
+                  $vuetify.icons.values.mdiStarOutline
+                }}</v-icon>
+              </v-avatar>
+              <div class="pt-2">Saved</div>
+            </v-col>
+            <v-col align="center" cols="3">
+              <nuxt-link
+                :to="
+                  $store.state.currentUser
+                    ? `/u/${$store.state.currentUser.username}`
+                    : '/signup'
+                "
+              >
+                <v-avatar
+                  :style="{
+                    'border-width': '1px',
+                    'border-style': 'solid',
+                    'border-color': $vuetify.theme.dark
+                      ? 'rgba(255, 255, 255, 0.12)'
+                      : 'rgba(0, 0, 0, 0.12)'
+                  }"
+                >
+                  <v-icon size="24">{{
+                    $vuetify.icons.values.mdiAccountOutline
+                  }}</v-icon>
+                </v-avatar>
+              </nuxt-link>
+              <div class="pt-2">Profile</div>
+            </v-col>
+            <v-col align="center" cols="3">
+              <nuxt-link
+                :to="$store.state.currentUser ? '/submit/text' : '/signup'"
+              >
+                <v-avatar
+                  :style="{
+                    'border-width': '1px',
+                    'border-style': 'solid',
+                    'border-color': $vuetify.theme.dark
+                      ? 'rgba(255, 255, 255, 0.12)'
+                      : 'rgba(0, 0, 0, 0.12)'
+                  }"
+                >
+                  <v-icon size="24">{{
+                    $vuetify.icons.values.mdiPencilOutline
+                  }}</v-icon>
+                </v-avatar>
+              </nuxt-link>
+              <div class="pt-2">Submit</div>
+            </v-col>
+          </v-row>
+        </v-card>
+      </v-bottom-sheet>
 
       <v-bottom-sheet v-model="planetsBottomSheet" scrollable>
         <template v-slot:activator="{ on }">
@@ -82,7 +169,15 @@ export default {
       notifications: [],
       newPostBottomSheet: false,
       planetsBottomSheet: false,
-      isPWA: false
+      isPWA: false,
+      middleBtnBottomSheet: false
+    }
+  },
+  watch: {
+    '$route.path'() {
+      this.newPostBottomSheet = false
+      this.planetsBottomSheet = false
+      this.middleBtnBottomSheet = false
     }
   },
   beforeMount() {
@@ -115,6 +210,13 @@ export default {
         window.scrollTo(0, 0)
       } else {
         this.$router.push({ path: '/' })
+      }
+    },
+    toggleDark() {
+      this.$emit('selected')
+      this.$vuetify.theme.dark = !this.$vuetify.theme.dark
+      if (process.client) {
+        localStorage.setItem('dark', this.$vuetify.theme.dark.toString())
       }
     }
   }

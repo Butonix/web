@@ -6,6 +6,7 @@ query currentUser {
     tagColor
     profilePicUrl
     admin
+    appearOffline
     moderatedPlanets {
       name
     }

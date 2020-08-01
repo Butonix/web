@@ -62,6 +62,18 @@
             $vuetify.icons.values.mdiLogin
           }}</v-icon></span
         >
+
+        <span v-else-if="$route.name === 'planets-explore'"
+          >Explore Planets<v-icon class="ml-2">{{
+            $vuetify.icons.values.mdiTelescope
+          }}</v-icon></span
+        >
+
+        <span v-else-if="$route.name.startsWith('submit')"
+          >Submit<v-icon class="ml-2">{{
+            $vuetify.icons.values.mdiPencilOutline
+          }}</v-icon></span
+        >
       </div>
 
       <v-spacer />

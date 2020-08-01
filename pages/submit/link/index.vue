@@ -42,6 +42,7 @@ import submitPostGql from '~/gql/submitPost'
 import PlanetSelector from '@/components/PlanetSelector'
 
 export default {
+  middleware: 'authenticated',
   components: { PlanetSelector },
   data() {
     return {

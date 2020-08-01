@@ -118,7 +118,10 @@ import {
   mdiInformationOutline,
   mdiHeadLightbulb,
   mdiHeadLightbulbOutline,
-  mdiFormatSize
+  mdiFormatSize,
+  mdiStarOutline,
+  mdiPencilOutline,
+  mdiEarthOff
 } from '@mdi/js'
 
 export default {
@@ -439,7 +442,10 @@ export default {
         mdiInformationOutline,
         mdiHeadLightbulb,
         mdiHeadLightbulbOutline,
-        mdiFormatSize
+        mdiFormatSize,
+        mdiStarOutline,
+        mdiPencilOutline,
+        mdiEarthOff
       }
     },
     theme: {

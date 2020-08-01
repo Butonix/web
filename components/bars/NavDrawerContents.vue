@@ -1,7 +1,13 @@
 <template>
   <div>
-    <div style="font-size: 0.86rem" class="text--secondary px-4 pt-2 pb-2">
-      Feeds
+    <div
+      style="font-size: 0.86rem; display: flex"
+      class="text--secondary px-4 pt-2 pb-2"
+    >
+      <span class="mr-auto">Feeds</span>
+      <nuxt-link to="/planets/explore" class="primary--text"
+        >Explore Planets</nuxt-link
+      >
     </div>
     <v-list class="py-0">
       <v-list-item

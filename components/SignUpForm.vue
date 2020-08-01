@@ -11,7 +11,8 @@
       label="Username"
     />
 
-    <v-text-field
+    <!--EMAIL - Disabled for now-->
+    <!--<v-text-field
       v-model="email"
       :rules="email && email.length > 0 ? rules.emailRules : []"
       solo
@@ -20,7 +21,7 @@
       :style="$device.isDesktop ? 'max-width: 35%' : ''"
       class="darktextfield"
       label="Email (Optional)*"
-    />
+    />-->
 
     <v-text-field
       v-model="password"

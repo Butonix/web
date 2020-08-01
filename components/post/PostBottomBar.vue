@@ -1,7 +1,12 @@
 <template>
   <v-row align="center" no-gutters>
     <span v-if="!post.author" class="text--secondary">[deleted]</span>
-    <UsernameMenu v-else :user-data="post.author" :op="isPostView" />
+    <UsernameMenu
+      v-else
+      :user-data="post.author"
+      :op="isPostView"
+      @toggleblock="$emit('toggleblock')"
+    />
 
     <span
       :title="editedTimeSince"

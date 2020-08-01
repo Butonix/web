@@ -73,4 +73,12 @@ export default {
 }
 </script>
 
-<style scoped></style>
+<style scoped>
+>>> .v-slide-group__prev {
+  display: none !important;
+}
+
+>>> .v-slide-group__next {
+  display: none !important;
+}
+</style>

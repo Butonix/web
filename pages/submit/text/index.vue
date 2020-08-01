@@ -107,6 +107,7 @@ import { isEditorEmpty } from '@/util/isEditorEmpty'
 import PlanetSelector from '@/components/PlanetSelector'
 
 export default {
+  middleware: 'authenticated',
   components: {
     PlanetSelector,
     Editor: () => import('@/components/editor/Editor')

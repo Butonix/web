@@ -39,7 +39,7 @@
       show-view-profile-btn
       :user="user"
       style="padding-bottom: 24px"
-      @toggleblock="$emit('toggleblock')"
+      @toggleblock="toggleBlock"
     />
     <v-card v-else>
       <div class="pa-4">
@@ -73,6 +73,12 @@ export default {
     return {
       user: null,
       menu: false
+    }
+  },
+  methods: {
+    toggleBlock() {
+      this.menu = false
+      this.$emit('toggleblock')
     }
   },
   apollo: {
