@@ -1,9 +1,11 @@
-<template functional>
+<template>
   <div
     style="font-size: 1rem; line-height: 1.5"
     class="text--primary"
-    :class="props.dark ? 'editor-dark__content' : 'editor-light__content'"
-    v-html="props.textContent"
+    :class="
+      $vuetify.theme.dark ? 'editor-dark__content' : 'editor-light__content'
+    "
+    v-html="textContent"
   />
 </template>
 

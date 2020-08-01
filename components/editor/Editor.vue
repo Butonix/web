@@ -2,6 +2,7 @@
   <v-sheet
     :class="$vuetify.theme.dark ? 'editor-dark' : 'editor-light'"
     :style="$device.isDesktop ? 'position: relative; border-radius: 10px' : ''"
+    :outlined="!$vuetify.theme.dark"
     @click.stop.prevent="editor.focus()"
   >
     <editor-content
@@ -185,6 +186,7 @@
             color="primary"
             class="ml-2"
             :loading="loading"
+            :disabled="isEmpty"
             @click.stop.prevent="$emit('submitted')"
             >Submit</v-btn
           >
@@ -214,6 +216,7 @@ import {
   History,
   Placeholder
 } from 'tiptap-extensions'
+import { isEditorEmpty } from '@/util/isEditorEmpty'
 
 export default {
   name: 'Editor',
@@ -268,6 +271,11 @@ export default {
           })
         ]
       })
+    }
+  },
+  computed: {
+    isEmpty() {
+      return isEditorEmpty(this.value)
     }
   },
   watch: {

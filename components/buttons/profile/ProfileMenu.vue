@@ -37,7 +37,14 @@
     <ProfileMenuContent @selected="menu = false" />
   </v-bottom-sheet>
 
-  <v-menu v-else v-model="menu" bottom offset-y transition="slide-y-transition">
+  <v-menu
+    v-else
+    v-model="menu"
+    bottom
+    offset-y
+    transition="slide-y-transition"
+    style="z-index: 600"
+  >
     <template v-slot:activator="{ on }">
       <v-btn
         style="font-weight: 400"

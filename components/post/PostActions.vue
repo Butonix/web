@@ -35,7 +35,7 @@
       :style="cssVars"
       @click.stop.prevent="toggleEndorsement"
     >
-      <AnimatedRocket class="mr-2" :item="post" />
+      <AnimatedRocket :key="post.id" class="mr-2" :item="post" />
       <span :style="post.isEndorsed ? 'color: var(--theme-color)' : ''">{{
         post.endorsementCount
       }}</span>

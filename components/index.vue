@@ -173,7 +173,14 @@ export default {
   },
   watch: {
     dialog() {
-      if (!this.dialog) this.hideDialog()
+      if (!this.dialog) {
+        this.hideDialog()
+        if (process.client) {
+          window.document.documentElement.style.overflowY = 'scroll'
+        }
+      } else if (process.client) {
+        window.document.documentElement.style.overflowY = 'hidden'
+      }
     }
   },
   mounted() {

@@ -1,44 +1,30 @@
 <template>
   <div
     v-if="
-      !idState.deleted ||
-        (comment.childComments && comment.childComments.length > 0)
+      !deleted || (comment.childComments && comment.childComments.length > 0)
     "
-    :id="comment.id"
-    :style="{
-      'border-color': $vuetify.theme.dark
-        ? 'rgba(255, 255, 255, 0.12)'
-        : 'rgba(0, 0, 0, 0.12)',
-      'border-width': '1px',
-      'border-radius': $device.isDesktop && level === 0 ? '10px' : '0',
-      'border-left-style': $device.isDesktop && level === 0 ? 'solid' : 'none',
-      'border-right-style': $device.isDesktop && level === 0 ? 'solid' : 'none',
-      'border-bottom-style':
-        $device.isDesktop && level === 0 ? 'solid' : 'none',
-      'border-top-style': $device.isDesktop && level === 0 ? 'solid' : 'none'
-    }"
   >
     <div
       :style="{
-        'padding-left': 10 * level + 'px',
+        'padding-left': 10 * comment.level + 'px',
         'background-color': $vuetify.theme.dark
-          ? idState.expanded && !$device.isDesktop
+          ? expanded && !$device.isDesktop
             ? '#35363A'
             : '#202124'
-          : idState.expanded && !$device.isDesktop
+          : expanded && !$device.isDesktop
           ? '#DEE1E6'
           : '#F8F9FA',
-        'border-radius': $device.isDesktop ? '9px' : '0'
+        'border-radius': $device.isDesktop ? '10px' : '0'
       }"
     >
       <div
         :style="{
           'border-left-color': borderColor,
           'border-left-width': '2px',
-          'border-left-style': level > 0 ? 'solid' : 'none',
+          'border-left-style': comment.level > 0 ? 'solid' : 'none',
           'background-color': 'transparent'
         }"
-        @click.stop.prevent="idState.expanded = !idState.expanded"
+        @click.stop.prevent="expanded = !expanded"
       >
         <v-card-text
           class="text--primary pt-3 pb-0 px-3"
@@ -63,7 +49,7 @@
           <UsernameMenu
             v-if="comment.author"
             :user-data="comment.author"
-            :op="post && post.author.id === comment.author.id"
+            :op="comment.post && comment.post.author.id === comment.author.id"
           />
           <span v-else-if="!comment.author" class="text--secondary"
             >[deleted]</span
@@ -79,16 +65,20 @@
           <span
             v-if="!$device.isDesktop"
             class="ml-3"
-            :class="comment.isEndorsed ? 'primary--text' : 'text--secondary'"
-            style="font-size: 0.86rem; font-weight: 500"
+            :class="isEndorsed ? 'primary--text' : 'text--secondary'"
+            style="font-size: 0.86rem; font-weight: 500; display: inline-flex; align-items: center"
+            :style="cssVars"
           >
-            {{ comment.endorsementCount }}
-            <v-icon
-              size="16"
-              :class="comment.isEndorsed ? 'primary--text' : 'text--secondary'"
-              style="padding-bottom: 3px"
-              >{{ $vuetify.icons.values.mdiRocket }}</v-icon
-            >
+            <span>
+              {{ endorsementCount }}
+            </span>
+            <AnimatedRocket
+              :key="comment.id"
+              :item="{ id: comment.id, isEndorsed }"
+              :size="16"
+              :style="cssVars"
+              class="ml-1"
+            />
           </span>
 
           <span
@@ -106,7 +96,7 @@
               text
               rounded
               class="text--secondary"
-              @click="idState.replying = !idState.replying"
+              @click="replying = !replying"
             >
               <v-icon class="mr-2" size="20">{{
                 $vuetify.icons.values.mdiReply
@@ -115,38 +105,44 @@
             </v-btn>
 
             <v-btn
-              small
-              text
-              rounded
-              :class="comment.isEndorsed ? 'primary--text' : 'text--secondary'"
-              :style="cssVars"
               :ripple="false"
-              @click="toggleEndorsement"
+              class="px-2"
+              small
+              rounded
+              text
+              :class="isEndorsed ? '' : 'text--secondary'"
+              :title="
+                `${endorsementCount} Rocket${endorsementCount === 1 ? '' : 's'}`
+              "
+              :style="cssVars"
+              @click.stop.prevent="toggleEndorsement"
             >
-              <AnimatedRocket class="mr-2" :item="comment" />
-              {{ comment.endorsementCount }}
+              <AnimatedRocket
+                :key="comment.id"
+                class="mr-2"
+                :item="{ id: comment.id, isEndorsed }"
+              />
+              <span :style="isEndorsed ? 'color: var(--theme-color)' : ''">{{
+                endorsementCount
+              }}</span>
             </v-btn>
           </template>
         </v-card-actions>
       </div>
       <client-only v-if="$device.isDesktop">
-        <div v-if="idState.replying" class="pa-3">
+        <div v-if="replying" class="pa-3">
           <Editor
-            v-model="idState.replyHTML"
+            v-model="replyHTML"
             show-cancel-btn
-            :loading="idState.submitBtnLoading"
-            @cancelled="idState.replying = false"
+            :loading="submitBtnLoading"
+            @cancelled="replying = false"
             @submitted="submitReply"
           />
         </div>
       </client-only>
     </div>
 
-    <div
-      v-show="idState.expanded"
-      v-if="!$device.isDesktop"
-      style="display: flex"
-    >
+    <div v-show="expanded" v-if="!$device.isDesktop" style="display: flex">
       <v-btn text tile class="flex-grow-1" @click="openReplyDialog">
         <v-icon class="mr-2">{{ $vuetify.icons.values.mdiReply }}</v-icon>
         Reply
@@ -156,33 +152,18 @@
         text
         tile
         class="flex-grow-1"
-        :class="comment.isEndorsed ? 'primary&#45;&#45;text' : ''"
+        :class="isEndorsed ? 'primary--text' : ''"
         @click="toggleEndorsement"
       >
         <v-icon class="mr-2">{{ $vuetify.icons.values.mdiRocket }}</v-icon>
-        {{ comment.endorsementCount }} Rocket{{
-          comment.endorsementCount === 1 ? '' : 's'
-        }}
+        {{ endorsementCount }} Rocket{{ endorsementCount === 1 ? '' : 's' }}
       </v-btn>
-    </div>
-
-    <div v-show="!idState.childrenCollapsed">
-      <Comment
-        v-for="c in comment.childComments"
-        :key="c.id"
-        :post-view="postView"
-        :post="post"
-        :comment="c"
-        :level="level + 1"
-        @startreply="handleStartReply"
-      />
     </div>
   </div>
 </template>
 
 <script>
 import { formatDistanceToNowStrict } from 'date-fns'
-import { IdState } from 'vue-virtual-scroller'
 import UsernameMenu from '../user/UsernameMenu'
 import toggleCommentEndorsementGql from '../../gql/toggleCommentEndorsement.graphql'
 import submitCommentGql from '../../gql/submitComment.graphql'
@@ -204,12 +185,17 @@ export default {
     Editor: () => import('@/components/editor/Editor'),
     UsernameMenu
   },
-  mixins: [
-    IdState({
-      idProp: (vm) => vm.comment.id
-    })
-  ],
-  idState() {
+  props: {
+    showPostTitle: {
+      type: Boolean,
+      default: false
+    },
+    comment: {
+      type: Object,
+      required: true
+    }
+  },
+  data() {
     return {
       replying: false,
       replyHTML: null,
@@ -220,38 +206,8 @@ export default {
       editHTML: null,
       deleted: false,
       expanded: false,
-      replyDialog: false
-    }
-  },
-  props: {
-    showPostTitle: {
-      type: Boolean,
-      default: false
-    },
-    comment: {
-      type: Object,
-      required: true
-    },
-    postView: {
-      type: Object,
-      default: null
-    },
-    index: {
-      type: Number,
-      default: 0
-    },
-    active: {
-      type: Boolean,
-      default: true
-    },
-    level: {
-      type: Number,
-      default: 0
-    },
-    post: {
-      type: Object,
-      required: false,
-      default: null
+      isEndorsed: this.comment.isEndorsed,
+      endorsementCount: this.comment.endorsementCount
     }
   },
   computed: {
@@ -265,10 +221,10 @@ export default {
       return urlName(this.comment.post.title)
     },
     isEditEmpty() {
-      return isEditorEmpty(this.idState.editHTML)
+      return isEditorEmpty(this.editHTML)
     },
     isReplyEmpty() {
-      return isEditorEmpty(this.idState.replyHTML)
+      return isEditorEmpty(this.replyHTML)
     },
     editedTimeSince() {
       if (!this.comment.editedAt) return ''
@@ -279,9 +235,10 @@ export default {
       )
     },
     isNew() {
-      if (!this.postView) return false
+      if (!this.comment.postView) return false
       return (
-        new Date(this.comment.createdAt) > new Date(this.postView.createdAt)
+        new Date(this.comment.createdAt) >
+        new Date(this.comment.postView.createdAt)
       )
     },
     expandedCommentId: {
@@ -293,7 +250,7 @@ export default {
       }
     },
     borderColor() {
-      const l = (this.level - 1) % 5
+      const l = (this.comment.level - 1) % 5
       switch (l) {
         case 0:
           return '#F44336'
@@ -310,30 +267,22 @@ export default {
     },
     cssVars() {
       return {
-        '--theme-color': this.post.planet.themeColor
-          ? this.post.planet.themeColor
+        '--theme-color': this.comment.post.planet.themeColor
+          ? this.comment.post.planet.themeColor
           : '#EF5350'
       }
     }
   },
   watch: {
-    'idState.editing'(editing) {
-      if (editing) this.idState.editHTML = this.comment.textContent
+    editing(editing) {
+      if (editing) this.editHTML = this.comment.textContent
     },
-    'idState.expanded'(expanded) {
+    expanded(expanded) {
       if (!expanded) return
       this.expandedCommentId = this.comment.id
     },
     expandedCommentId(id) {
-      if (id !== this.comment.id) this.idState.expanded = false
-    },
-    $route: {
-      deep: true,
-      handler() {
-        if (!this.$route.query || !this.$route.query.replying) {
-          this.idState.replyDialog = false
-        }
-      }
+      if (id !== this.comment.id) this.expanded = false
     }
   },
   mounted() {
@@ -344,9 +293,6 @@ export default {
     }
   },
   methods: {
-    handleStartReply(e) {
-      this.$emit('startreply', e)
-    },
     openReplyDialog() {
       if (!this.$store.state.currentUser) {
         this.$store.dispatch('displaySnackbar', {
@@ -354,20 +300,8 @@ export default {
         })
         return
       }
+      this.expanded = false
       this.$emit('startreply', this.comment)
-    },
-    closeReplyDialog() {
-      if (!this.isReplyEmpty) {
-        const confirmed = window.confirm(
-          'Are you sure you want to discard this reply?'
-        )
-        if (!confirmed) return
-      }
-      this.idState.replyDialog = false
-      const query = Object.assign({}, this.$route.query)
-      delete query.replying
-      this.$router.push({ path: this.$route.path, query })
-      this.idState.replyHTML = null
     },
     async deleteComment() {
       const confirmed = window.confirm(
@@ -381,32 +315,32 @@ export default {
         ]
       }
       this.comment.author = null
-      this.idState.deleted = true
+      this.deleted = true
       await this.$apollo.mutate({
         mutation: deleteCommentGql,
         variables: { commentId: this.comment.id }
       })
     },
     async editComment() {
-      this.idState.editBtnLoading = true
+      this.editBtnLoading = true
       await this.$apollo.mutate({
         mutation: editCommentGql,
         variables: {
           commentId: this.comment.id,
-          newTextContent: this.idState.editHTML
+          newTextContent: this.editHTML
         }
       })
-      this.comment.textContent = this.idState.editHTML
-      this.idState.editing = false
-      this.idState.editBtnLoading = false
+      this.comment.textContent = this.editHTML
+      this.editing = false
+      this.editBtnLoading = false
     },
     async submitReply() {
-      this.idState.submitBtnLoading = true
+      this.submitBtnLoading = true
       try {
         await this.$apollo.mutate({
           mutation: submitCommentGql,
           variables: {
-            textContent: this.idState.replyHTML,
+            textContent: this.replyHTML,
             postId: this.comment.postId,
             parentCommentId: this.comment.id
           },
@@ -427,13 +361,12 @@ export default {
               },
               data
             })
-            this.idState.replyHTML = null
-            this.idState.replyDialog = false
+            this.replyHTML = null
             if (!this.comment.childComments) this.comment.childComments = []
             this.comment.childComments.unshift(submitComment)
           }
         })
-        this.idState.replying = false
+        this.replying = false
       } catch (e) {
         await this.$store.dispatch('displaySnackbar', {
           message: e.message.split('GraphQL error: ')[1]
@@ -445,10 +378,10 @@ export default {
           postId: this.comment.postId
         }
       })
-      this.idState.submitBtnLoading = false
+      this.submitBtnLoading = false
     },
     async toggleEndorsement() {
-      this.idState.expanded = false
+      this.expanded = false
 
       if (!this.$store.state.currentUser) {
         this.$store.dispatch('displaySnackbar', {
@@ -457,12 +390,12 @@ export default {
         return
       }
 
-      if (this.comment.isEndorsed) {
-        this.comment.isEndorsed = false
-        this.comment.endorsementCount--
+      if (this.isEndorsed) {
+        this.isEndorsed = false
+        this.endorsementCount--
       } else {
-        this.comment.isEndorsed = true
-        this.comment.endorsementCount++
+        this.isEndorsed = true
+        this.endorsementCount++
       }
       await this.$apollo.mutate({
         mutation: toggleCommentEndorsementGql,

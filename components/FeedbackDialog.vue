@@ -2,7 +2,7 @@
   <v-dialog v-model="dialog" width="50%">
     <template v-slot:activator="{ on }">
       <v-btn class="ml-1 mr-4" icon v-on="on">
-        <v-icon>
+        <v-icon class="text--secondary">
           {{ $vuetify.icons.values.mdiHeadLightbulbOutline }}
         </v-icon>
       </v-btn>

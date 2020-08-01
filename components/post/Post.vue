@@ -235,7 +235,7 @@ export default {
     }
   },
   mounted() {
-    this.updateTextContentSize()
+    this.$nextTick(() => this.updateTextContentSize())
   },
   methods: {
     updateTextContentSize() {

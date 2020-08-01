@@ -1,15 +1,17 @@
 <template>
-  <div style="height: 20px; width: 20px; margin-bottom: 8px">
+  <div :style="`height: ${size}px; width: ${size}px`">
     <input
       :id="`toggle-heart-${item.id}`"
       v-model="item.isEndorsed"
       type="checkbox"
     />
     <label
-      style="max-height: 20px !important; max-width: 20px !important; display: inline-block"
+      :style="
+        `max-height: ${size}px !important; max-width: ${size}px !important; display: inline-flex`
+      "
       :for="`toggle-heart-${item.id}`"
     >
-      <v-icon size="20" :class="item.isEndorsed ? '' : 'text--secondary'">{{
+      <v-icon :size="size" :class="item.isEndorsed ? '' : 'text--secondary'">{{
         $vuetify.icons.values.mdiRocket
       }}</v-icon>
     </label>
@@ -23,6 +25,10 @@ export default {
     item: {
       type: Object,
       required: true
+    },
+    size: {
+      type: Number,
+      default: 20
     }
   }
 }

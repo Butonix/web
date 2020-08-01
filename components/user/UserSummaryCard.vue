@@ -73,7 +73,8 @@
                 <span>{{ user.isBlocking ? 'Unblock' : 'Block' }}</span>
               </v-tooltip>
 
-              <v-tooltip bottom transition="fade-transition">
+              <!--FOLLOW - Disabled for now-->
+              <!--<v-tooltip bottom transition="fade-transition">
                 <template v-slot:activator="{ on }">
                   <v-btn
                     :color="user.isFollowing ? 'primary' : ''"
@@ -91,7 +92,7 @@
                   </v-btn>
                 </template>
                 <span>{{ user.isFollowing ? 'Unfollow' : 'Follow' }}</span>
-              </v-tooltip>
+              </v-tooltip>-->
             </template>
           </v-row>
         </v-list-item-title>

@@ -43,7 +43,7 @@
               class="flex-grow-1"
               height="50"
               :disabled="isTextContentEmpty"
-              :loading="submitBtnLoading"
+              :loading="loading"
               @click.stop.prevent="submit"
             >
               <v-icon class="mr-2">{{
@@ -98,7 +98,7 @@ export default {
       type: String,
       default: null
     },
-    submitBtnLoading: {
+    loading: {
       type: Boolean,
       default: false
     }
@@ -128,10 +128,10 @@ export default {
       this.$emit('closed')
     },
     closeAndGoBack() {
+      this.close()
       window.history.back()
     },
     submit() {
-      this.dialog = false
       this.$emit('submitted')
     },
     open() {
