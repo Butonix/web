@@ -1,8 +1,0 @@
-query blockedPlanets {
-  blockedPlanets {
-    name
-    blocking
-    userCount
-    description
-  }
-}

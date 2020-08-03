@@ -54,7 +54,7 @@
     <v-list-item
       v-if="$store.state.currentUser"
       nuxt
-      to="/settings"
+      to="/settings/account"
       @click="$emit('selected')"
     >
       <v-list-item-icon>

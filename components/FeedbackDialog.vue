@@ -56,6 +56,7 @@ export default {
         }
       })
       this.dialog = false
+      this.feedback = ''
       this.$store.dispatch('displaySnackbar', {
         message: 'Thanks for your feedback!',
         success: true

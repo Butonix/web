@@ -2,7 +2,15 @@
   <div>
     <v-bottom-sheet v-if="!$device.isDesktop" v-model="menuOpen">
       <template v-slot:activator="{ on }">
-        <PostOptionsBtn v-on="on" />
+        <v-btn
+          small
+          icon
+          class="text--secondary"
+          aria-label="Post Options"
+          v-on="on"
+        >
+          <v-icon size="20">{{ $vuetify.icons.values.mdiDotsVertical }}</v-icon>
+        </v-btn>
       </template>
 
       <PostOptionsContent
@@ -17,7 +25,15 @@
 
     <v-menu v-else v-model="menuOpen" transition="slide-y-transition" offset-y>
       <template v-slot:activator="{ on }">
-        <PostOptionsBtn v-on="on" />
+        <v-btn
+          small
+          icon
+          class="text--secondary"
+          aria-label="Post Options"
+          v-on="on"
+        >
+          <v-icon size="20">{{ $vuetify.icons.values.mdiDotsVertical }}</v-icon>
+        </v-btn>
       </template>
 
       <PostOptionsContent
@@ -100,7 +116,6 @@
 
 <script>
 import editPostGql from '../../gql/editPost.graphql'
-import PostOptionsBtn from './PostOptionsBtn'
 import PostOptionsContent from './PostOptionsContent'
 import { isEditorEmpty } from '@/util/isEditorEmpty'
 
@@ -108,8 +123,7 @@ export default {
   name: 'PostOptions',
   components: {
     Editor: () => import('@/components/editor/Editor'),
-    PostOptionsContent,
-    PostOptionsBtn
+    PostOptionsContent
   },
   props: {
     post: {

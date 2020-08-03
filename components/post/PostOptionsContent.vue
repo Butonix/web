@@ -69,9 +69,7 @@
 
     <v-list-item
       v-if="
-        $store.state.currentUser &&
-          post.author &&
-          (post.author.isCurrentUser || $store.state.currentUser.admin)
+        $store.state.currentUser && post.author && post.author.isCurrentUser
       "
       @click="deletePost"
     >
@@ -88,6 +86,82 @@
         >
       </v-list-item-content>
     </v-list-item>
+
+    <template
+      v-if="
+        $store.state.currentUser &&
+          !!$store.state.currentUser.moderatedPlanets.find(
+            (p) => p.name === post.planet.name
+          ) &&
+          !post.author.isCurrentUser
+      "
+    >
+      <v-list-item @click="removePost">
+        <v-list-item-icon>
+          <v-icon>{{ $vuetify.icons.values.mdiShield }}</v-icon>
+        </v-list-item-icon>
+        <v-list-item-content>
+          <v-list-item-title style="font-weight: 500"
+            >Remove Post (Mod)</v-list-item-title
+          >
+        </v-list-item-content>
+      </v-list-item>
+
+      <v-list-item @click="banUserFromPlanet">
+        <v-list-item-icon>
+          <v-icon>{{ $vuetify.icons.values.mdiShield }}</v-icon>
+        </v-list-item-icon>
+        <v-list-item-content>
+          <v-list-item-title style="font-weight: 500"
+            >Ban {{ post.author.username }} from p/{{
+              post.planet.name
+            }}
+            (Mod)</v-list-item-title
+          >
+        </v-list-item-content>
+      </v-list-item>
+    </template>
+
+    <template
+      v-if="
+        $store.state.currentUser &&
+          $store.state.currentUser.admin &&
+          !post.author.isCurrentUser
+      "
+    >
+      <v-list-item @click="removePost">
+        <v-list-item-icon>
+          <v-icon>{{ $vuetify.icons.values.mdiShield }}</v-icon>
+        </v-list-item-icon>
+        <v-list-item-content>
+          <v-list-item-title style="font-weight: 500"
+            >Remove Post (Admin)</v-list-item-title
+          >
+        </v-list-item-content>
+      </v-list-item>
+
+      <v-list-item @click="globalBan">
+        <v-list-item-icon>
+          <v-icon>{{ $vuetify.icons.values.mdiShield }}</v-icon>
+        </v-list-item-icon>
+        <v-list-item-content>
+          <v-list-item-title style="font-weight: 500"
+            >Ban from Comet (Admin)</v-list-item-title
+          >
+        </v-list-item-content>
+      </v-list-item>
+
+      <v-list-item @click="globalBanAndPurge">
+        <v-list-item-icon>
+          <v-icon>{{ $vuetify.icons.values.mdiShield }}</v-icon>
+        </v-list-item-icon>
+        <v-list-item-content>
+          <v-list-item-title style="font-weight: 500"
+            >Ban from Comet & purge posts (Admin)</v-list-item-title
+          >
+        </v-list-item-content>
+      </v-list-item>
+    </template>
   </v-list>
 </template>
 
@@ -96,6 +170,7 @@ import hidePostGql from '../../gql/hidePost.graphql'
 import unhidePostGql from '../../gql/unhidePost.graphql'
 import reportPostGql from '../../gql/reportPost.graphql'
 import deletePostGql from '../../gql/deletePost.graphql'
+import hiddenPostsGql from '@/gql/hiddenPosts.graphql'
 import { urlName } from '~/util/urlName'
 
 export default {
@@ -169,7 +244,11 @@ export default {
         mutation: unhidePostGql,
         variables: {
           postId: this.post.id
-        }
+        },
+        refetchQueries:
+          this.$route.name === 'settings-hiddenposts'
+            ? [{ query: hiddenPostsGql }]
+            : []
       })
     },
     async reportPost() {
@@ -206,6 +285,44 @@ export default {
       this.post.author = null
       if (this.post.type === 'TEXT')
         this.post.textContent = '<post>[deleted]</post>'
+    },
+    async removePost() {
+      const reason = window.prompt('Reason for removal?')
+      if (!reason) return
+      console.log('TODO')
+    },
+    async banUserFromPlanet() {
+      const reason = window.prompt('Reason for ban?')
+      if (!reason) return
+      console.log('TODO')
+    },
+    async globalBan() {
+      const reason = window.prompt('Reason for ban?')
+      if (!reason) return
+      const confirm = window.confirm(
+        'Are you sure you want to ban ' +
+          this.post.author.username +
+          ' from Comet?'
+      )
+      if (!confirm) return
+      console.log('TODO')
+    },
+    async globalBanAndPurge() {
+      const reason = window.prompt('Reason for ban & purge?')
+      if (!reason) return
+      const confirm1 = window.confirm(
+        'Are you sure you want to ban ' +
+          this.post.author.username +
+          ' from Comet and purge all their posts?'
+      )
+      if (!confirm1) return
+      const confirm2 = window.confirm(
+        'About to ban & purge ' +
+          this.post.author.username +
+          '. Please confirm again.'
+      )
+      if (!confirm2) return
+      console.log('TODO')
     }
   }
 }

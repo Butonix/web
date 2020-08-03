@@ -2,7 +2,7 @@ query planet($planetName: ID!) {
   planet(planetName: $planetName) {
     name
     joined
-    blocking
+    muted
     userCount
     description
     defaultSort

@@ -196,8 +196,7 @@ export default {
         return {
           ...this.vars
         }
-      },
-      fetchPolicy: 'network-only'
+      }
     }
   },
   methods: {

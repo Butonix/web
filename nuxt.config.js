@@ -121,7 +121,9 @@ import {
   mdiFormatSize,
   mdiStarOutline,
   mdiPencilOutline,
-  mdiEarthOff
+  mdiEarthOff,
+  mdiShieldOutline,
+  mdiShield
 } from '@mdi/js'
 
 export default {
@@ -445,7 +447,9 @@ export default {
         mdiFormatSize,
         mdiStarOutline,
         mdiPencilOutline,
-        mdiEarthOff
+        mdiEarthOff,
+        mdiShieldOutline,
+        mdiShield
       }
     },
     theme: {

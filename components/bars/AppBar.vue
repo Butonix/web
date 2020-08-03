@@ -88,11 +88,16 @@
           solo
           label="Search"
           @keydown.enter="doSearch"
+          @click:append="doSearch"
         >
           <template v-slot:append>
-            <v-icon size="20" class="text--secondary">{{
-              $vuetify.icons.values.mdiMagnify
-            }}</v-icon>
+            <v-icon
+              size="20"
+              class="text--secondary"
+              style="cursor: pointer"
+              @click="doSearch"
+              >{{ $vuetify.icons.values.mdiMagnify }}</v-icon
+            >
           </template>
         </v-text-field>
 
@@ -173,6 +178,7 @@ export default {
       window.scrollTo(0, 0)
     },
     doSearch() {
+      if (!this.searchText) return
       const query = {}
       if (this.searchText) query.q = this.searchText
       this.$router.push({ path: '/search', query })

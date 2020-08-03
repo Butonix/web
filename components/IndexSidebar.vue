@@ -1,31 +1,21 @@
 <template>
-  <div v-if="$route.name.startsWith('u-username')">
-    <UserSummaryCard
-      v-if="user"
-      :user="user"
+  <div v-if="$route.name.startsWith('u-username') && user">
+    <UserSummaryCard :user="user" :tile="!$device.isDesktop" allow-edit />
+    <ModeratedPlanetsCard :user="user" class="mt-3" />
+  </div>
+
+  <div v-else-if="$route.name.startsWith('g-galaxyname') && galaxy">
+    <GalaxyInfoCard :galaxy="galaxy" :tile="!$device.isDesktop" />
+  </div>
+
+  <div v-else-if="$route.name.startsWith('p-planetname') && planet">
+    <PlanetInfoCard :planet="planet" show-edit-btn :tile="!$device.isDesktop" />
+    <PlanetModsCard
+      v-if="$device.isDesktop"
+      class="mt-3"
+      :planet="planet"
       :tile="!$device.isDesktop"
-      allow-edit
     />
-  </div>
-
-  <div v-else-if="$route.name.startsWith('g-galaxyname')">
-    <GalaxyInfoCard v-if="galaxy" :galaxy="galaxy" :tile="!$device.isDesktop" />
-  </div>
-
-  <div v-else-if="$route.name.startsWith('p-planetname')">
-    <div v-if="planet">
-      <PlanetInfoCard
-        :planet="planet"
-        show-edit-btn
-        :tile="!$device.isDesktop"
-      />
-      <PlanetModsCard
-        v-if="$device.isDesktop"
-        class="mt-3"
-        :planet="planet"
-        :tile="!$device.isDesktop"
-      />
-    </div>
   </div>
 
   <div v-else-if="$device.isDesktop">
@@ -50,6 +40,12 @@
     </v-card>
 
     <PopularPlanetsCard />
+
+    <ModeratedPlanetsCard
+      v-if="$store.state.currentUser"
+      :user="$store.state.currentUser"
+      class="mt-3"
+    />
   </div>
 </template>
 
@@ -62,10 +58,12 @@ import UserSummaryCard from '@/components/user/UserSummaryCard'
 import userGql from '@/gql/user'
 import planetGql from '@/gql/planet'
 import galaxyGql from '@/gql/galaxy'
+import ModeratedPlanetsCard from '@/components/user/ModeratedPlanetsCard'
 
 export default {
   name: 'IndexSidebar',
   components: {
+    ModeratedPlanetsCard,
     UserSummaryCard,
     GalaxyInfoCard,
     PlanetInfoCard,

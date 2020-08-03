@@ -1,12 +1,12 @@
 <template>
   <div v-intersect.once="updateTextContentSize" @click="goToIfMobile">
-    <v-list-item class="px-0">
+    <v-list-item
+      class="px-0"
+      :style="isPostView ? 'min-height: 0' : 'min-height: 60px'"
+    >
       <PostThumbnail v-if="$device.isDesktop" :post="post" />
 
-      <v-list-item-content
-        class="pa-0"
-        style="align-content: space-between; min-height: 60px"
-      >
+      <v-list-item-content class="pa-0" style="align-content: space-between">
         <span v-if="post.sticky">
           <v-icon color="primary" size="13" class="mr-1">{{
             $vuetify.icons.values.mdiStar
@@ -31,28 +31,33 @@
           </v-btn>
 
           <nuxt-link
-            v-if="!isPostView || post.type === 'TEXT'"
+            v-if="!isPostView"
             class="text--primary mr-1"
             style="font-size: 1.125rem; font-weight: 400"
-            :to="
-              isPostView
-                ? ''
-                : `/p/${post.planet.name}/comments/${post.id}/${urlName}`
-            "
+            :to="`/p/${post.planet.name}/comments/${post.id}/${urlName}`"
           >
             {{ post.title }}
           </nuxt-link>
 
           <a
-            v-else
+            v-else-if="post.link"
             class="text--primary mr-1"
             style="font-size: 1.125rem; font-weight: 400"
             :href="post.link"
             target="_blank"
             rel="noopener nofollow noreferrer"
+            @click.stop.prevent="openLink"
           >
             {{ post.title }}
           </a>
+
+          <span
+            v-else
+            class="text--primary mr-1"
+            style="font-size: 1.125rem; font-weight: 400"
+          >
+            {{ post.title }}
+          </span>
 
           <template v-if="$device.isDesktop">
             <nuxt-link
@@ -240,6 +245,10 @@ export default {
     this.$nextTick(() => this.updateTextContentSize())
   },
   methods: {
+    doNothing() {},
+    openLink() {
+      window.open(this.post.link, '_blank')
+    },
     updateTextContentSize() {
       if (
         this.$refs.textcontent &&

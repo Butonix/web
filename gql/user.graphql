@@ -17,5 +17,12 @@ query user($username: String!) {
     profilePicUrl
     bio
     appearOffline
+    moderatedPlanets {
+      name
+      description
+      cardImageUrl
+      avatarImageUrl
+      themeColor
+    }
   }
 }

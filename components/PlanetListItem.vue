@@ -25,7 +25,7 @@
       <v-list-item-title>
         {{ planet.name }}
       </v-list-item-title>
-      <v-list-item-subtitle style="font-weight: 500">
+      <v-list-item-subtitle v-if="!hidePostCount" style="font-weight: 500">
         {{ planet.postCount }} posts today
       </v-list-item-subtitle>
     </v-list-item-content>
@@ -39,6 +39,10 @@ export default {
     planet: {
       type: Object,
       required: true
+    },
+    hidePostCount: {
+      type: Boolean,
+      default: false
     }
   }
 }

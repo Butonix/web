@@ -22,18 +22,18 @@
           <v-icon size="20" class="mr-2">{{
             $vuetify.icons.values.mdiAccountCancelOutline
           }}</v-icon>
-          Blocked Users
+          Blocked Users ({{ blockedUsers.length }})
         </v-tab>
         <v-tab
           nuxt
-          to="/settings/blockedplanets"
+          to="/settings/mutedplanets"
           style="letter-spacing: normal; text-transform: none; font-size: 1rem"
           class="text--secondary"
         >
           <v-icon size="20" class="mr-2">{{
             $vuetify.icons.values.mdiEarthOff
           }}</v-icon>
-          Muted Planets
+          Muted Planets ({{ mutedPlanets.length }})
         </v-tab>
         <v-tab
           nuxt
@@ -44,7 +44,7 @@
           <v-icon size="20" class="mr-2">{{
             $vuetify.icons.values.mdiPost
           }}</v-icon>
-          Hidden Posts
+          Hidden Posts ({{ hiddenPosts.length }})
         </v-tab>
       </v-tabs>
       <nuxt-child />
@@ -53,8 +53,33 @@
 </template>
 
 <script>
+import mutedPlanetsGql from '@/gql/mutedPlanets'
+import blockedUsersGql from '@/gql/blockedUsers'
+import hiddenPostsGql from '@/gql/hiddenPosts'
+
 export default {
-  middleware: 'authenticated'
+  middleware: 'authenticated',
+  data() {
+    return {
+      blockedUsers: [],
+      mutedPlanets: [],
+      hiddenPosts: []
+    }
+  },
+  apollo: {
+    blockedUsers: {
+      query: blockedUsersGql,
+      fetchPolicy: 'cache-and-network'
+    },
+    mutedPlanets: {
+      query: mutedPlanetsGql,
+      fetchPolicy: 'cache-and-network'
+    },
+    hiddenPosts: {
+      query: hiddenPostsGql,
+      fetchPolicy: 'cache-and-network'
+    }
+  }
 }
 </script>
 

@@ -27,7 +27,7 @@ query hiddenPosts {
         userCount
         createdAt
         joined
-        blocking
+        muted
         avatarImageUrl
         themeColor
       }

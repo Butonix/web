@@ -68,7 +68,7 @@
         </div>
 
         <div
-          style="box-sizing: border-box; display: flex; justify-content: center; max-width: 1280px; padding-bottom: 32px; position: relative"
+          style="will-change: transform; box-sizing: border-box; display: flex; justify-content: center; max-width: 1280px; padding-bottom: 32px; position: relative"
           :style="{
             'background-color': $vuetify.theme.dark ? '#202124' : '#F1F3F4',
             margin: $device.isDesktop ? '0 auto' : '',
@@ -359,6 +359,7 @@ export default {
     'post.id'() {
       this.updateThemeColor()
       this.postComments = []
+      this.renderedCommentsCount = 5
       this.$nextTick(() => this.$refs.dialog.scrollTo(0, 0))
     },
     async dialogOpen() {
@@ -403,7 +404,7 @@ export default {
     setInterval(() => {
       if (this.threadedComments.length < this.renderedCommentsCount) return
       this.renderedCommentsCount++
-    }, 100)
+    }, 50)
 
     if (!this.dialogOpen) {
       window.document.documentElement.style.overflowY = 'scroll'

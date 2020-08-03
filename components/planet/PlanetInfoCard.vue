@@ -94,6 +94,7 @@
         depressed
         class="flex-grow-1"
         :style="$vuetify.theme.dark ? '' : 'background-color: #DEE1E6'"
+        @click="editDialog = true"
         >Edit Planet
         <v-icon class="ml-2">{{
           $vuetify.icons.values.mdiPencil
@@ -113,11 +114,209 @@
         </v-list-item-content>
       </v-list-item>
     </div>
+
+    <v-dialog v-model="editDialog" width="35%" persistent>
+      <v-card>
+        <v-card-title>p/{{ planet.name }}</v-card-title>
+        <v-card-text>
+          <div>
+            <v-row
+              v-ripple
+              no-gutters
+              style="cursor: pointer; border-radius: 10px; height: 48px"
+              align="center"
+              class="mb-3 px-3"
+              @click="showColorPicker = !showColorPicker"
+            >
+              <div
+                style="font-size: 1.143rem; font-weight: 500"
+                class="text--primary"
+              >
+                Planet Color
+              </div>
+              <v-avatar size="24" color="primary" class="ml-3" />
+              <v-spacer />
+              <v-icon>{{
+                showColorPicker
+                  ? $vuetify.icons.values.mdiChevronUp
+                  : $vuetify.icons.values.mdiChevronDown
+              }}</v-icon>
+            </v-row>
+            <v-expand-transition>
+              <div v-show="showColorPicker" class="px-3">
+                <v-color-picker
+                  v-model="themeColor"
+                  :class="
+                    $vuetify.theme.dark ? 'darkcolorpicker' : 'lightcolorpicker'
+                  "
+                  :swatches="swatches"
+                  show-swatches
+                />
+              </div>
+            </v-expand-transition>
+          </div>
+
+          <div>
+            <v-row
+              v-ripple
+              no-gutters
+              style="cursor: pointer; border-radius: 10px; height: 48px"
+              align="center"
+              class="mb-3 px-3"
+              @click="showCustomName = !showCustomName"
+            >
+              <div
+                style="font-size: 1.143rem; font-weight: 500"
+                class="text--primary"
+              >
+                Custom Planet Name ({{
+                  planet.customName ? `"${planet.customName}"` : 'none'
+                }})
+              </div>
+              <v-spacer />
+              <v-icon>{{
+                showCustomName
+                  ? $vuetify.icons.values.mdiChevronUp
+                  : $vuetify.icons.values.mdiChevronDown
+              }}</v-icon>
+            </v-row>
+            <v-expand-transition>
+              <div v-show="showCustomName" class="px-3">
+                <v-text-field
+                  solo
+                  flat
+                  class="darktextfield"
+                  label="Custom Planet Name"
+                />
+              </div>
+            </v-expand-transition>
+          </div>
+
+          <div>
+            <v-row
+              v-ripple
+              no-gutters
+              style="cursor: pointer; border-radius: 10px; height: 48px"
+              align="center"
+              class="mb-3 px-3"
+              @click="showDescription = !showDescription"
+            >
+              <div
+                style="font-size: 1.143rem; font-weight: 500"
+                class="text--primary"
+              >
+                Planet Description
+              </div>
+              <v-spacer />
+              <v-icon>{{
+                showDescription
+                  ? $vuetify.icons.values.mdiChevronUp
+                  : $vuetify.icons.values.mdiChevronDown
+              }}</v-icon>
+            </v-row>
+            <v-expand-transition>
+              <div v-show="showDescription" class="px-3">
+                <v-textarea
+                  solo
+                  flat
+                  class="darktextfield"
+                  label="Planet Description"
+                />
+              </div>
+            </v-expand-transition>
+          </div>
+
+          <div>
+            <v-row
+              v-ripple
+              no-gutters
+              style="cursor: pointer; border-radius: 10px; height: 48px"
+              align="center"
+              class="mb-3 px-3"
+              @click="showInviteMods = !showInviteMods"
+            >
+              <div
+                style="font-size: 1.143rem; font-weight: 500"
+                class="text--primary"
+              >
+                Moderators
+              </div>
+              <v-spacer />
+              <v-icon>{{
+                showInviteMods
+                  ? $vuetify.icons.values.mdiChevronUp
+                  : $vuetify.icons.values.mdiChevronDown
+              }}</v-icon>
+            </v-row>
+            <v-expand-transition>
+              <div v-show="showInviteMods" class="px-3">
+                <span
+                  ><v-chip
+                    v-for="mod in planet.moderators"
+                    :key="mod.username"
+                    class="mr-2"
+                    >{{ mod.username }}</v-chip
+                  ></span
+                >
+
+                <v-text-field
+                  :label="
+                    `Invite a user to become a moderator of p/${planet.name}`
+                  "
+                  solo
+                  flat
+                  class="darktextfield mt-3"
+                  :append-icon="$vuetify.icons.values.mdiPlus"
+                />
+              </div>
+            </v-expand-transition>
+          </div>
+
+          <div>
+            <v-row
+              v-ripple
+              no-gutters
+              style="cursor: pointer; border-radius: 10px; height: 48px"
+              align="center"
+              class="px-3"
+              @click="showAllowedPosts = !showAllowedPosts"
+            >
+              <div
+                style="font-size: 1.143rem; font-weight: 500"
+                class="text--primary"
+              >
+                Allowed Post Types
+              </div>
+              <v-spacer />
+              <v-icon>{{
+                showAllowedPosts
+                  ? $vuetify.icons.values.mdiChevronUp
+                  : $vuetify.icons.values.mdiChevronDown
+              }}</v-icon>
+            </v-row>
+            <v-expand-transition>
+              <div v-show="showAllowedPosts" class="px-3">
+                <v-checkbox label="Text Posts" hide-details />
+                <v-checkbox label="Link Posts" hide-details />
+                <v-checkbox label="Image Uploads" hide-details />
+                <v-checkbox label="Moderator Posts Only" hide-details />
+              </div>
+            </v-expand-transition>
+          </div>
+        </v-card-text>
+        <v-card-actions>
+          <v-spacer />
+          <v-btn text @click="cancelEdits">Cancel</v-btn>
+          <v-btn depressed color="primary" @click="confirmEdits">Done</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </v-card>
 </template>
 
 <script>
 import { format } from 'date-fns'
+import colors from 'vuetify/lib/util/colors'
 import joinPlanetGql from '@/gql/joinPlanet'
 import joinedPlanetsGql from '@/gql/joinedPlanets'
 import leavePlanetGql from '@/gql/leavePlanet'
@@ -146,12 +345,51 @@ export default {
       default: false
     }
   },
+  data() {
+    return {
+      editDialog: false,
+      themeColor: this.planet.themeColor ? this.planet.themeColor : '#EF5350',
+      swatches: [[]],
+      showColorPicker: false,
+      showCustomName: false,
+      showDescription: false,
+      showInviteMods: false,
+      showAllowedPosts: false
+    }
+  },
   computed: {
     createdDate() {
       return 'Created ' + format(new Date(this.planet.createdAt), 'MMM d, yyyy')
     }
   },
+  watch: {
+    themeColor() {
+      this.$vuetify.theme.themes.dark.primary = this.themeColor
+      this.$vuetify.theme.themes.light.primary = this.themeColor
+    }
+  },
+  mounted() {
+    const keys = Object.keys(colors)
+    const swatches = []
+    keys.forEach((key) => {
+      swatches.push(colors[key].lighten1)
+    })
+    const swatches2d = [[]]
+    for (let i = 0; i < 5; i++) {
+      swatches2d[i] = []
+      for (let j = 0; j < swatches.length / 5; j++) {
+        swatches2d[i][j] = swatches[j * (swatches.length / 5 + 1) + i]
+      }
+    }
+    this.swatches = swatches2d
+  },
   methods: {
+    cancelEdits() {
+      this.editDialog = false
+    },
+    confirmEdits() {
+      this.editDialog = false
+    },
     toggleJoin() {
       if (this.planet.joined) this.leavePlanet()
       else this.joinPlanet()
@@ -186,4 +424,16 @@ export default {
 }
 </script>
 
-<style scoped></style>
+<style scoped>
+.darkcolorpicker >>> .v-color-picker__input > input {
+  color: #ffffff !important;
+}
+
+.lightcolorpicker >>> .v-color-picker__input > input {
+  color: #000000 !important;
+}
+
+.v-color-picker >>> .v-icon.theme--dark {
+  color: #ffffff !important;
+}
+</style>
