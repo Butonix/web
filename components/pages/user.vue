@@ -104,7 +104,7 @@
                 @click="openBioDialog"
               >
                 {{ user.bio }}
-                <v-icon size="16" class="ml-1">{{
+                <v-icon v-if="user.isCurrentUser" size="16" class="ml-1">{{
                   $vuetify.icons.values.mdiPencil
                 }}</v-icon>
               </div>
@@ -406,11 +406,5 @@ export default {
 
 .bio {
   word-break: break-word;
-}
-
-@media (min-width: 960px) {
-  .bio {
-    max-width: 50%;
-  }
 }
 </style>

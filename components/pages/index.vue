@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-container>
+    <v-container class="pt-0">
       <v-row justify="center">
         <v-col :class="$device.isDesktop ? '' : 'pa-0'">
           <PostsScroller
@@ -12,11 +12,11 @@
             @toggleblock="toggleBlock"
           />
         </v-col>
-        <!--<v-col v-if="$device.isDesktop" cols="3">
+        <v-col v-if="$device.isDesktop" cols="3">
           <div class="sticky">
-
+            <PopularPlanetsCard />
           </div>
-        </v-col>-->
+        </v-col>
       </v-row>
     </v-container>
   </div>
@@ -25,11 +25,13 @@
 <script>
 import postDialogMixin from '@/mixins/postDialogMixin'
 import PostsScroller from '@/components/post/PostsScroller'
+import PopularPlanetsCard from '@/components/PopularPlanetsCard'
 
 export default {
   name: 'Index',
   scrollToTop: false,
   components: {
+    PopularPlanetsCard,
     PostsScroller
   },
   mixins: [postDialogMixin]

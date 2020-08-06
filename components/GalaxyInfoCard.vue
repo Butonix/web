@@ -18,7 +18,10 @@
         depressed
         class="flex-grow-1"
         :style="$vuetify.theme.dark ? '' : 'background-color: #DEE1E6'"
-        >View all {{ galaxy.planetCount }} planets in this galaxy</v-btn
+        >View all {{ galaxy.planetCount }} planet{{
+          galaxy.planetCount === 1 ? '' : 's'
+        }}
+        in this galaxy</v-btn
       >
     </v-card-actions>
     <v-card-actions class="pt-0">

@@ -12,11 +12,11 @@
             @toggleblock="toggleBlock"
           />
         </v-col>
-        <!--<v-col v-if="$device.isDesktop" cols="3">
+        <v-col v-if="$device.isDesktop" cols="3">
           <div class="sticky">
-
+            <GalaxyInfoCard :galaxy="galaxy" />
           </div>
-        </v-col>-->
+        </v-col>
       </v-row>
     </v-container>
   </div>
@@ -25,39 +25,32 @@
 <script>
 import postDialogMixin from '@/mixins/postDialogMixin'
 import PostsScroller from '@/components/post/PostsScroller'
+import GalaxyInfoCard from '@/components/GalaxyInfoCard'
+import galaxyGql from '@/gql/galaxy.graphql'
 
 export default {
   name: 'Galaxy',
   scrollToTop: false,
   components: {
+    GalaxyInfoCard,
     PostsScroller
   },
-  mixins: [postDialogMixin]
-  /* asyncData(context) {
+  mixins: [postDialogMixin],
+  async asyncData(context) {
     const client = context.app.apolloProvider.defaultClient
-    const { data } = client.query({
-      query: planetGql,
-      variables: { planetName: context.params.planetname }
+    const { data } = await client.query({
+      query: galaxyGql,
+      variables: { galaxyName: context.params.galaxyname }
     })
     return {
-      planet: data.planet
+      galaxy: data.galaxy
     }
   },
   data() {
     return {
-      planet: null
+      galaxy: null
     }
-  },
-  apollo: {
-    planet: {
-      query: planetGql,
-      variables() {
-        return {
-          planetName: this.$route.params.planetname
-        }
-      }
-    }
-  } */
+  }
 }
 </script>
 
