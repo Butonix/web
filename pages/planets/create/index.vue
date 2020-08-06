@@ -1,112 +1,120 @@
 <template>
-  <v-container>
-    <v-row justify="center">
-      <v-col :cols="$device.isDesktop ? 6 : 12">
-        <div class="text-h6">Create a Planet</div>
-        <div class="text-subtitle-1 text--secondary mb-3">
-          The Universe is in your hands!
-        </div>
-        <v-text-field
-          v-model="name"
-          class="namefield mb-3"
-          autofocus
-          solo
-          flat
-          label="Name"
-          persistent-hint
-          hint="Name shown in address bar (e.g p/Comet). Letters, numbers, and underscores. This cannot be changed later."
-          :counter="21"
-        >
-          <template v-slot:prepend-inner>
-            <span class="text--secondary">p/</span>
-          </template>
-        </v-text-field>
+  <div>
+    <client-only>
+      <Particles />
+    </client-only>
 
-        <v-textarea
-          v-model="description"
-          class="descriptionfield mb-3"
-          solo
-          no-resize
-          flat
-          label="Description"
-          persistent-hint
-          hint='Explain what your Planet is all about (e.g. "Discussion of the Comet platform")'
-        />
+    <v-container>
+      <v-row justify="center">
+        <v-col :cols="$device.isDesktop ? 6 : 12">
+          <div class="text-h6">Create a Planet</div>
+          <div class="text-subtitle-1 text--secondary mb-3">
+            The Universe is in your hands!
+          </div>
+          <v-text-field
+            v-model="name"
+            class="namefield mb-3"
+            autofocus
+            solo
+            flat
+            label="Name"
+            persistent-hint
+            hint="Name shown in address bar (e.g p/Comet). Letters, numbers, and underscores. This cannot be changed later."
+            :counter="21"
+          >
+            <template v-slot:prepend-inner>
+              <span class="text--secondary">p/</span>
+            </template>
+          </v-text-field>
 
-        <v-select
-          ref="galaxyMenu"
-          v-model="selectedGalaxy"
-          :items="galaxies"
-          solo
-          flat
-          label="Choose Galaxy"
-          persistent-hint
-          hint="Choose your planet's Galaxy"
-          class="mb-3"
-          item-text="fullName"
-          item-value="name"
-        >
-          <template v-slot:prepend-inner>
-            <v-avatar class="mr-2" size="24">
-              <v-icon class="text--secondary">{{
-                selectedGalaxy
-                  ? $vuetify.icons.values[
-                      galaxies.find((g) => g.name === selectedGalaxy).icon
-                    ]
-                  : $vuetify.icons.values.mdiChevronDown
-              }}</v-icon>
-            </v-avatar>
-          </template>
+          <v-textarea
+            v-model="description"
+            class="descriptionfield mb-3"
+            solo
+            no-resize
+            flat
+            label="Description (Required)"
+            persistent-hint
+            hint='Explain what your Planet is all about (e.g. "Discussion of the Comet platform")'
+          />
 
-          <template v-slot:selection="data">
-            <span class="text--primary">{{ data.item.fullName }}</span>
-          </template>
+          <v-select
+            ref="galaxyMenu"
+            v-model="selectedGalaxy"
+            :items="galaxies"
+            solo
+            flat
+            label="Choose Galaxy"
+            persistent-hint
+            hint="Choose your planet's Galaxy"
+            class="mb-3"
+            item-text="fullName"
+            item-value="name"
+          >
+            <template v-slot:prepend-inner>
+              <v-avatar class="mr-2" size="24">
+                <v-icon class="text--secondary">{{
+                  selectedGalaxy
+                    ? $vuetify.icons.values[
+                        galaxies.find((g) => g.name === selectedGalaxy).icon
+                      ]
+                    : $vuetify.icons.values.mdiChevronDown
+                }}</v-icon>
+              </v-avatar>
+            </template>
 
-          <template v-slot:item="data">
-            <v-list-item-icon>
-              <v-icon>{{ $vuetify.icons.values[data.item.icon] }}</v-icon>
-            </v-list-item-icon>
-            <v-list-item-content>
-              <v-list-item-title>{{ data.item.fullName }}</v-list-item-title>
-            </v-list-item-content>
-          </template>
-        </v-select>
+            <template v-slot:selection="data">
+              <span class="text--primary">{{ data.item.fullName }}</span>
+            </template>
 
-        <v-btn
-          depressed
-          rounded
-          color="primary"
-          :disabled="
-            !name ||
-              !description ||
-              !selectedGalaxy ||
-              $store.state.currentUser.moderatedPlanets.length >= 10
-          "
-          :loading="createBtnLoading"
-          @click="createPlanet"
-          >Create</v-btn
-        >
+            <template v-slot:item="data">
+              <v-list-item-icon>
+                <v-icon>{{ $vuetify.icons.values[data.item.icon] }}</v-icon>
+              </v-list-item-icon>
+              <v-list-item-content>
+                <v-list-item-title>{{ data.item.fullName }}</v-list-item-title>
+              </v-list-item-content>
+            </template>
+          </v-select>
 
-        <div
-          v-if="$store.state.currentUser.moderatedPlanets.length >= 10"
-          class="error--text"
-        >
-          Disabled: Cannot moderate more than 10 planets
-        </div>
+          <v-btn
+            depressed
+            rounded
+            color="primary"
+            :disabled="
+              !name ||
+                !description ||
+                !selectedGalaxy ||
+                $store.state.currentUser.moderatedPlanets.length >= 10
+            "
+            :loading="createBtnLoading"
+            @click="createPlanet"
+            >Create</v-btn
+          >
 
-        <div class="text--secondary mt-2" style="font-size: .86rem">
-          Further customization will be available on your Planet's page.
-        </div>
-      </v-col>
-    </v-row>
-  </v-container>
+          <div
+            v-if="$store.state.currentUser.moderatedPlanets.length >= 10"
+            class="error--text"
+          >
+            Disabled: Cannot moderate more than 10 planets
+          </div>
+
+          <div class="text--secondary mt-2" style="font-size: .86rem">
+            Further customization will be available on your Planet's page.
+          </div>
+        </v-col>
+      </v-row>
+    </v-container>
+  </div>
 </template>
 
 <script>
 import gql from 'graphql-tag'
 import createPlanetGql from '../../../gql/createPlanet.graphql'
+import Particles from '@/components/Particles'
 
 export default {
+  components: { Particles },
   middleware: 'authenticated',
   data() {
     return {

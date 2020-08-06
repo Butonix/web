@@ -4,7 +4,7 @@ body {
 }
 
 .topappbar {
-  padding-top: env(safe-area-inset-top) !important;
+  transform: translateY(env(safe-area-inset-top)) !important;
 }
 
 .topappbar > .v-toolbar__content {

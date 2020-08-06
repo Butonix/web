@@ -1,5 +1,9 @@
 <template>
   <div>
+    <client-only>
+      <Particles />
+    </client-only>
+
     <div style="position: relative">
       <div
         :style="
@@ -57,7 +61,8 @@
         </v-col>
         <v-col v-if="$device.isDesktop" cols="3" class="pl-0">
           <div class="sticky">
-            <PlanetInfoCard :planet="planet" />
+            <PlanetInfoCard :planet="planet" show-edit-btn />
+            <PlanetModsCard :planet="planet" class="mt-3" />
           </div>
         </v-col>
       </v-row>
@@ -71,11 +76,15 @@ import PostsScroller from '@/components/post/PostsScroller'
 import PlanetInfoCard from '@/components/planet/PlanetInfoCard'
 import planetGql from '@/gql/planet.graphql'
 import PlanetJoinButton from '@/components/planet/PlanetJoinButton'
+import PlanetModsCard from '@/components/planet/PlanetModsCard'
+import Particles from '@/components/Particles'
 
 export default {
   name: 'Planet',
   scrollToTop: false,
   components: {
+    Particles,
+    PlanetModsCard,
     PlanetJoinButton,
     PlanetInfoCard,
     PostsScroller

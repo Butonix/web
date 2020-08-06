@@ -8,7 +8,6 @@
         ? 'rgba(255, 255, 255, 0.12)'
         : 'rgba(0, 0, 0, 0.12)',
       'border-style': $device.isDesktop ? 'solid' : 'none',
-      'border-bottom-style': 'solid',
       'border-radius': $device.isDesktop ? '10px' : '0',
       'background-color': $vuetify.theme.dark ? '#202124' : '#F8F9FA'
     }"

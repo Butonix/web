@@ -1,5 +1,9 @@
 <template>
   <div>
+    <client-only>
+      <Particles />
+    </client-only>
+
     <div
       style="position: relative; height: 208px; background-size: cover; background-position: center; background-repeat: no-repeat"
       :style="
@@ -231,11 +235,13 @@ import setBioGql from '@/gql/setBio.graphql'
 import UserSummaryCard from '@/components/user/UserSummaryCard'
 import ModeratedPlanetsCard from '@/components/user/ModeratedPlanetsCard'
 import UserCommentsScroller from '@/components/user/UserCommentsScroller'
+import Particles from '@/components/Particles'
 
 export default {
   name: 'User',
   scrollToTop: false,
   components: {
+    Particles,
     UserCommentsScroller,
     AvatarEditor: () => import('@/components/AvatarEditor'),
     ModeratedPlanetsCard,

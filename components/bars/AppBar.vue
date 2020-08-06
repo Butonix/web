@@ -77,7 +77,7 @@
           }}</v-icon></span
         >
 
-        <v-icon>
+        <v-icon v-if="$device.isDesktop">
           {{
             $store.state.nav
               ? $vuetify.icons.values.mdiChevronLeft

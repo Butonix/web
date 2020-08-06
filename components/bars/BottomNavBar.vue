@@ -36,7 +36,7 @@
 
         <v-card style="padding-bottom: 24px; padding-top: 12px">
           <v-row justify="center" class="px-6">
-            <v-col align="center" cols="3">
+            <v-col align="center" cols="4">
               <v-avatar
                 :style="{
                   'border-width': '1px',
@@ -54,7 +54,8 @@
               </v-avatar>
               <div class="pt-2">Dark Mode</div>
             </v-col>
-            <v-col align="center" cols="3">
+            <!--SAVED - Disabled for now-->
+            <!--<v-col align="center" cols="3">
               <v-avatar
                 :style="{
                   'border-width': '1px',
@@ -69,8 +70,8 @@
                 }}</v-icon>
               </v-avatar>
               <div class="pt-2">Saved</div>
-            </v-col>
-            <v-col align="center" cols="3">
+            </v-col>-->
+            <v-col align="center" cols="4">
               <nuxt-link
                 :to="
                   $store.state.currentUser
@@ -94,7 +95,7 @@
               </nuxt-link>
               <div class="pt-2">Profile</div>
             </v-col>
-            <v-col align="center" cols="3">
+            <v-col align="center" cols="4">
               <nuxt-link
                 :to="$store.state.currentUser ? '/submit/text' : '/signup'"
               >

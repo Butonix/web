@@ -12,7 +12,7 @@
             @toggleblock="toggleBlock"
           />
         </v-col>
-        <v-col v-if="$device.isDesktop" cols="3">
+        <v-col v-if="$device.isDesktop" cols="3" class="pl-0">
           <div class="sticky">
             <GalaxyInfoCard :galaxy="galaxy" />
           </div>
