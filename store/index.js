@@ -5,7 +5,8 @@ export const state = () => ({
   snackbarEnabled: false,
   snackbarMessage: '',
   snackbarSuccess: false,
-  expandedCommentId: ''
+  expandedCommentId: '',
+  nav: false
 })
 
 export const mutations = {
@@ -26,6 +27,9 @@ export const mutations = {
   },
   setAppearOffline(state, appearOffline) {
     state.currentUser.appearOffline = appearOffline
+  },
+  setNav(state, nav) {
+    state.nav = nav
   }
 }
 

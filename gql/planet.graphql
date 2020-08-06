@@ -10,11 +10,13 @@ query planet($planetName: ID!) {
     allowImagePosts
     allowLinkPosts
     allowTextPosts
+    modPostsOnly
     cardImageUrl
     avatarImageUrl
     creatorId
     createdAt
     themeColor
+    customName
     galaxy {
       name
       fullName
@@ -26,10 +28,6 @@ query planet($planetName: ID!) {
       endorsementCount
       createdAt
       lastLogin
-      isBlocking
-      isBlocked
-      isFollowing
-      isFollowed
       isCurrentUser
       tag
       tagColor

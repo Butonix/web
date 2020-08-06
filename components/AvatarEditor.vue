@@ -175,7 +175,7 @@
         depressed
         color="primary"
         :loading="loading"
-        :disabled="!imageValid || disabled"
+        :disabled="!imageValid || disabled || (requireChange && !changed)"
         @click="changeProfilePic"
         >{{ buttonText }}</v-btn
       >
@@ -194,6 +194,8 @@
 </template>
 
 <script>
+import NativeSelect from '../components/NativeSelect'
+import setProfilePicGql from '../gql/setProfilePic.graphql'
 import {
   accessoriesTypes,
   clotheTypes,
@@ -207,9 +209,7 @@ import {
   randomFromArr,
   skinColors,
   topTypes
-} from '../util/randomAvataaar'
-import NativeSelect from '../components/NativeSelect'
-import setProfilePicUrlGql from '../gql/setProfilePicUrl.graphql'
+} from '@/util/randomAvataaar'
 
 export default {
   name: 'AvatarEditor',
@@ -228,6 +228,10 @@ export default {
       default: false
     },
     dialogOpen: {
+      type: Boolean,
+      default: false
+    },
+    requireChange: {
       type: Boolean,
       default: false
     }
@@ -266,7 +270,8 @@ export default {
         (v) =>
           (v && (v.type === 'image/jpeg' || v.type === 'image/png')) ||
           'Image must be PNG or JPEG'
-      ]
+      ],
+      changed: false
     }
   },
   computed: {
@@ -293,6 +298,7 @@ export default {
         const fr = new FileReader()
         fr.onload = () => {
           this.previewUrl = fr.result
+          this.changed = true
         }
         fr.readAsDataURL(imageData)
       }
@@ -301,6 +307,7 @@ export default {
       if (this.dialogOpen) this.init()
     },
     avataaarUrl() {
+      this.changed = true
       if (this.avataaarUrl) this.previewUrl = null
     }
   },
@@ -340,6 +347,7 @@ export default {
           this.previewUrl = profilePicUrl
         }
       }
+      this.$nextTick(() => (this.changed = false))
     },
     randomizeAvataaar() {
       this.topType = randomFromArr(topTypes)
@@ -357,44 +365,19 @@ export default {
     },
     async changeProfilePic() {
       this.loading = true
-      let link = this.avataaarUrl
-      if (this.imageData) {
-        try {
-          link = await this.uploadPic()
-        } catch (e) {
-          this.$store.dispatch('displaySnackbar', { message: e.message })
-          this.loading = false
-          return
-        }
-      }
+      const link = this.avataaarUrl
 
       await this.$apollo.mutate({
-        mutation: setProfilePicUrlGql,
+        mutation: setProfilePicGql,
         variables: {
-          profilePicUrl: link
+          profilePicUrl: link,
+          image: this.imageData
         }
       })
 
       await this.$store.dispatch('fetchCurrentUser')
       this.loading = false
       this.$emit('finished')
-    },
-    async uploadPic() {
-      const fd = new FormData()
-      fd.append('image', this.imageData)
-
-      const response = await this.$axios.$post('/uploadprofilepic', fd, {
-        headers: {
-          authorization: `Bearer ${this.$apolloHelpers.getToken()}`
-        }
-      })
-
-      if (response.error || !response.link) {
-        this.loading = false
-        throw new Error('Upload failed')
-      }
-
-      return response.link
     }
   }
 }

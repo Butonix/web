@@ -4,7 +4,6 @@
     :outlined="!$vuetify.theme.dark && !showViewProfileBtn"
     :width="isHover ? 400 : undefined"
     :style="{
-      'background-color': $vuetify.theme.dark ? '' : '#F1F3F4',
       'border-width': '1px',
       'border-bottom-right-radius': showViewProfileBtn ? '0' : '10px',
       'border-bottom-left-radius': showViewProfileBtn ? '0' : '10px'
@@ -146,73 +145,6 @@
       </v-list-item-content>
     </v-list-item>
 
-    <v-card-actions v-if="user.isCurrentUser && allowEdit" class="pb-3 pt-1">
-      <v-dialog
-        v-model="editDialog"
-        width="35%"
-        :fullscreen="!$device.isDesktop"
-        :transition="
-          $device.isDesktop ? 'dialog-transition' : 'dialog-bottom-transition'
-        "
-      >
-        <template v-slot:activator="{ on }">
-          <v-btn
-            depressed
-            class="flex-grow-1"
-            :style="$vuetify.theme.dark ? '' : 'background-color: #DEE1E6'"
-            v-on="on"
-            >Edit Profile
-            <v-icon class="ml-2">{{
-              $vuetify.icons.values.mdiPencil
-            }}</v-icon></v-btn
-          >
-        </template>
-
-        <v-card :tile="!$device.isDesktop">
-          <div class="pa-4">
-            <div class="overline text--secondary">CHANGE BIO</div>
-            <v-textarea
-              v-model="editBio"
-              label="Bio"
-              solo
-              flat
-              no-resize
-              rows="3"
-              :counter="160"
-              class="darktextfield"
-            />
-            <v-btn
-              depressed
-              rounded
-              color="primary"
-              class="mb-4"
-              :disabled="editBio.length > 160"
-              @click="changeBio"
-              >Change Bio</v-btn
-            >
-
-            <v-divider />
-
-            <div class="overline text--secondary">CHANGE AVATAR</div>
-            <AvatarEditor
-              :dialog-open="editDialog"
-              button-text="Change Avatar"
-              @finished="editDialog = false"
-              @cancelled="cancelDialog"
-            />
-            <div class="text--secondary mt-3" style="font-size: 0.86rem">
-              Note: Changes to avatar may take some time to take effect
-            </div>
-          </div>
-
-          <v-card-actions>
-            <v-spacer />
-            <v-btn text rounded @click="cancelDialog">Discard Changes</v-btn>
-          </v-card-actions>
-        </v-card>
-      </v-dialog>
-    </v-card-actions>
-
     <div v-if="showViewProfileBtn && $route.params.username !== user.username">
       <v-list-item nuxt :to="`/u/${user.username}`">
         <v-list-item-icon
@@ -234,11 +166,9 @@ import blockUserGql from '../../gql/blockUser.graphql'
 import unblockUserGql from '../../gql/unblockUser.graphql'
 import followUserGql from '../../gql/followUser.graphql'
 import unfollowUserGql from '../../gql/unfollowUser.graphql'
-import setBioGql from '../../gql/setBio.graphql'
 
 export default {
   name: 'UserSummaryCard',
-  components: { AvatarEditor: () => import('@/components/AvatarEditor') },
   props: {
     user: {
       type: Object,
@@ -256,19 +186,9 @@ export default {
       type: Boolean,
       default: false
     },
-    allowEdit: {
-      type: Boolean,
-      default: false
-    },
     tile: {
       type: Boolean,
       default: false
-    }
-  },
-  data() {
-    return {
-      editDialog: false,
-      editBio: this.user.bio ? this.user.bio : ''
     }
   },
   computed: {
@@ -284,35 +204,7 @@ export default {
       }
     }
   },
-  watch: {
-    editDialog() {
-      if (this.editDialog) {
-        this.$router.push({ query: { ...this.$route.query, editing: 'true' } })
-      } else {
-        const query = Object.assign({}, this.$route.query)
-        delete query.editing
-        this.$router.push({ query })
-      }
-    },
-    '$route.query.editing'(val) {
-      if (!val) this.editDialog = false
-    }
-  },
   methods: {
-    changeBio() {
-      this.editDialog = false
-      this.$apollo.mutate({
-        mutation: setBioGql,
-        variables: {
-          bio: this.editBio
-        }
-      })
-      this.user.bio = this.editBio
-    },
-    cancelDialog() {
-      this.editDialog = false
-      this.editBio = this.user.bio
-    },
     toggleBlock() {
       this.$emit('toggleblock')
       if (this.user.isBlocking) this.unblockUser()

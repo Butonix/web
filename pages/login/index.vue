@@ -1,55 +1,57 @@
 <template>
-  <v-row justify="center">
-    <v-col :cols="$device.isDesktop ? 3 : 12">
-      <div class="text-h3 mt-12 mb-6">Welcome back.</div>
-      <v-form @submit.prevent="login">
-        <v-text-field v-model="username" solo flat dense label="Username" />
-        <v-text-field
-          v-model="password"
-          solo
-          flat
-          dense
-          :type="showPassword ? 'text' : 'password'"
-          label="Password"
-        >
-          <template v-slot:append>
-            <div
-              style="cursor: pointer"
-              tabindex="-1"
-              @click="showPassword = !showPassword"
+  <v-container>
+    <v-row justify="center">
+      <v-col :cols="$device.isDesktop ? 3 : 12">
+        <div class="text-h3 mt-12 mb-6">Welcome back.</div>
+        <v-form @submit.prevent="login">
+          <v-text-field v-model="username" solo flat dense label="Username" />
+          <v-text-field
+            v-model="password"
+            solo
+            flat
+            dense
+            :type="showPassword ? 'text' : 'password'"
+            label="Password"
+          >
+            <template v-slot:append>
+              <div
+                style="cursor: pointer"
+                tabindex="-1"
+                @click="showPassword = !showPassword"
+              >
+                <v-icon class="text--secondary">{{
+                  showPassword
+                    ? $vuetify.icons.values.mdiEye
+                    : $vuetify.icons.values.mdiEyeOff
+                }}</v-icon>
+              </div>
+            </template>
+          </v-text-field>
+          <v-row no-gutters>
+            <v-spacer />
+            <v-btn
+              depressed
+              rounded
+              text
+              class="text--secondary mr-2"
+              nuxt
+              to="/signup"
+              >Don't have an account?</v-btn
             >
-              <v-icon class="text--secondary">{{
-                showPassword
-                  ? $vuetify.icons.values.mdiEye
-                  : $vuetify.icons.values.mdiEyeOff
-              }}</v-icon>
-            </div>
-          </template>
-        </v-text-field>
-        <v-row no-gutters>
-          <v-spacer />
-          <v-btn
-            depressed
-            rounded
-            text
-            class="text--secondary mr-2"
-            nuxt
-            to="/signup"
-            >Don't have an account?</v-btn
-          >
-          <v-btn
-            depressed
-            rounded
-            color="primary"
-            :disabled="!username || !password"
-            :loading="loading"
-            type="submit"
-            >Log In</v-btn
-          >
-        </v-row>
-      </v-form>
-    </v-col>
-  </v-row>
+            <v-btn
+              depressed
+              rounded
+              color="primary"
+              :disabled="!username || !password"
+              :loading="loading"
+              type="submit"
+              >Log In</v-btn
+            >
+          </v-row>
+        </v-form>
+      </v-col>
+    </v-row>
+  </v-container>
 </template>
 
 <script>

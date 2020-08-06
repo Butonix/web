@@ -1,8 +1,10 @@
 <template>
   <v-card flat :outlined="!$vuetify.theme.dark">
-    <v-card-title class="pb-0">
-      Planets moderated by {{ user.username }}
-      <v-icon class="ml-2">{{ $vuetify.icons.values.mdiShield }}</v-icon>
+    <v-card-title class="pb-0" style="word-break: break-word">
+      <span>
+        <v-icon class="mr-2">{{ $vuetify.icons.values.mdiShield }}</v-icon>
+        Planets moderated by {{ user.username }}
+      </span>
     </v-card-title>
     <v-list>
       <PlanetListItem

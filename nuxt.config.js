@@ -490,32 +490,37 @@ export default {
         {
           name: 'universe-sort-time',
           path: '/universe/:sort?/:time?',
-          component: resolve(__dirname, 'components/index.vue')
+          component: resolve(__dirname, 'components/pages/universe.vue')
         },
         {
           name: 'p-planetname-sort-time',
           path: '/p/:planetname/:sort?/:time?',
-          component: resolve(__dirname, 'components/index.vue')
+          component: resolve(__dirname, 'components/pages/planet.vue')
+        },
+        {
+          name: 'p-planetname-comments-id-title',
+          path: '/p/:planetname/comments/:id/:title?',
+          component: resolve(__dirname, 'components/pages/post.vue')
         },
         {
           name: 'g-galaxyname-sort-time',
           path: '/g/:galaxyname/:sort?/:time?',
-          component: resolve(__dirname, 'components/index.vue')
+          component: resolve(__dirname, 'components/pages/galaxy.vue')
         },
         {
           name: 'u-username-sort-time',
           path: '/u/:username/:sort?/:time?',
-          component: resolve(__dirname, 'components/index.vue')
+          component: resolve(__dirname, 'components/pages/user.vue')
         },
         {
           name: 'search-sort-time',
           path: '/search/:sort?/:time?',
-          component: resolve(__dirname, 'components/index.vue')
+          component: resolve(__dirname, 'components/pages/search.vue')
         },
         {
           name: 'sort-time',
           path: '/:sort?/:time?',
-          component: resolve(__dirname, 'components/index.vue')
+          component: resolve(__dirname, 'components/pages/index.vue')
         }
       )
       sortRoutes(routes)

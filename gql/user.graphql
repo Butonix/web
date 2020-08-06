@@ -9,12 +9,11 @@ query user($username: String!) {
     lastLogin
     isBlocking
     isBlocked
-    isFollowing
-    isFollowed
     isCurrentUser
     tag
     tagColor
     profilePicUrl
+    bannerImageUrl
     bio
     appearOffline
     moderatedPlanets {

@@ -15,12 +15,14 @@
       <CometLogo v-if="$device.isDesktop" />
 
       <div
+        v-ripple
         :style="
           $device.isDesktop
-            ? 'padding-left: 32px; font-size: 18px; font-weight: 500'
+            ? 'margin-left: 32px; padding-left: 8px; padding-right: 8px; padding-top: 4px; padding-bottom: 4px; border-radius: 10px; font-size: 18px; font-weight: 500'
             : 'position: fixed; top: 14px; left: 50%; transform: translateX(-50%); font-size: 21px; font-weight: 500'
         "
-        :class="$device.isDesktop ? '' : 'unselectable'"
+        class="unselectable"
+        style="cursor: pointer"
         @click="openPlanetPrompt"
       >
         <span v-if="$route.name === 'sort-time'"
@@ -74,6 +76,14 @@
             $vuetify.icons.values.mdiPencilOutline
           }}</v-icon></span
         >
+
+        <v-icon>
+          {{
+            $store.state.nav
+              ? $vuetify.icons.values.mdiChevronLeft
+              : $vuetify.icons.values.mdiChevronRight
+          }}
+        </v-icon>
       </div>
 
       <v-spacer />
@@ -184,7 +194,10 @@ export default {
       this.$router.push({ path: '/search', query })
     },
     openPlanetPrompt() {
-      if (this.$device.isDesktop) return
+      if (this.$device.isDesktop) {
+        this.$store.commit('setNav', !this.$store.state.nav)
+        return
+      }
       const planet = window.prompt('Go to Planet')
       if (!planet) return
       this.$router.push(`/p/${planet}`)

@@ -11,6 +11,9 @@ query userComments($username: String!, $page: Int, $pageSize: Int, $sort: Commen
     post {
       id
       title
+      planet {
+        name
+      }
     }
     author {
       id

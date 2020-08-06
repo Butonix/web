@@ -5,9 +5,7 @@
     <NavDrawer v-if="$device.isDesktop" />
 
     <v-main>
-      <v-container class="pt-0">
-        <nuxt />
-      </v-container>
+      <nuxt />
       <Snackbar />
     </v-main>
 

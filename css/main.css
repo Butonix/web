@@ -3,13 +3,8 @@ body {
   padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
 }
 
-html {
-  width:100vw;
-  overflow-x:hidden;
-}
-
 .topappbar {
-  transform: translateY(env(safe-area-inset-top)) !important;
+  padding-top: env(safe-area-inset-top) !important;
 }
 
 .topappbar > .v-toolbar__content {

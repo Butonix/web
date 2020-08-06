@@ -17,7 +17,7 @@
   "dependencies": {
     "@mdi/js": "^5.4.45",
     "@nuxtjs/apollo": "^4.0.1-rc.1",
-    "@nuxtjs/axios": "^5.12.0",
+    "@nuxtjs/axios": "^5.12.1",
     "@nuxtjs/device": "^1.2.7",
     "@nuxtjs/pwa": "git+https://github.com/nuxt-community/pwa-module.git",
     "date-fns": "^2.15.0",
@@ -25,7 +25,7 @@
     "graphql-tag": "^2.10.4",
     "is-url": "^1.2.4",
     "newrelic": "^6.11.0",
-    "nuxt": "^2.14.0",
+    "nuxt": "^2.14.1",
     "redirect-ssl": "^2.0.0",
     "tiptap": "^1.29.1",
     "tiptap-extensions": "^1.31.1",
@@ -37,7 +37,7 @@
     "vue-youtube": "^1.4.0"
   },
   "devDependencies": {
-    "@nuxt/types": "^2.14.0",
+    "@nuxt/types": "^2.14.1",
     "@nuxtjs/eslint-config": "^2.0.0",
     "@nuxtjs/eslint-module": "^1.0.0",
     "@nuxtjs/vuetify": "^1.11.2",

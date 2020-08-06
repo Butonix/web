@@ -1,9 +1,10 @@
 <template>
   <v-navigation-drawer
+    v-model="nav"
     app
     clipped
-    :color="$vuetify.theme.dark ? 'transparent' : '#F1F3F4'"
-    :mini="mini"
+    :color="$vuetify.theme.dark ? '#202124' : '#F8F9FA'"
+    mobile-breakpoint="1281"
     class="disable-scrollbars"
   >
     <NavDrawerContents class="mt-2" />
@@ -16,9 +17,14 @@ import NavDrawerContents from '@/components/bars/NavDrawerContents'
 export default {
   name: 'NavDrawer',
   components: { NavDrawerContents },
-  data() {
-    return {
-      mini: false
+  computed: {
+    nav: {
+      get() {
+        return this.$store.state.nav
+      },
+      set(val) {
+        this.$store.commit('setNav', val)
+      }
     }
   }
 }

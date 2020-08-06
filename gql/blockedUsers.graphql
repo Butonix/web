@@ -9,8 +9,6 @@ query blockedUsers {
     lastLogin
     isBlocking
     isBlocked
-    isFollowing
-    isFollowed
     isCurrentUser
     tag
     tagColor

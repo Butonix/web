@@ -86,38 +86,13 @@ export default {
     async submitPost() {
       this.loading = true
 
-      const fd = new FormData()
-      fd.append('image', this.image)
-
-      const response = await this.$axios.$post('/upload', fd, {
-        headers: {
-          authorization: `Bearer ${this.$apolloHelpers.getToken()}`
-        }
-      })
-
-      if (response.error) {
-        await this.$store.dispatch('displaySnackbar', {
-          message: response.error
-        })
-        this.loading = false
-        return
-      }
-
-      if (!response.link) {
-        await this.$store.dispatch('displaySnackbar', {
-          message: 'Upload failed'
-        })
-        this.loading = false
-        return
-      }
-
       try {
         await this.$apollo.mutate({
           mutation: submitPostGql,
           variables: {
             title: this.title,
             type: 'IMAGE',
-            link: response.link,
+            image: this.image,
             planet: this.planet.name
           },
           update: (store, { data: { submitPost } }) => {

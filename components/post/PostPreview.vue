@@ -1,5 +1,5 @@
 <template>
-  <div v-if="post.textContent" class="mt-4">
+  <div v-if="post.textContent" class="mt-2">
     <div
       :class="
         expand || isPostView || textContentHeight <= 90 ? '' : 'textcontent'

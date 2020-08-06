@@ -312,6 +312,10 @@ export default {
     value: {
       type: Boolean,
       required: true
+    },
+    standalone: {
+      type: Boolean,
+      default: false
     }
   },
   data() {
@@ -437,16 +441,20 @@ export default {
     },
     goBack() {
       this.dialogOpen = false
-      window.history.pushState({}, null, this.$route.path)
+      if (!this.standalone) {
+        window.history.pushState({}, null, this.$route.path)
+      }
     },
     handleHistoryChange(e) {
-      this.$refs.editordialog.close()
-
+      if (this.standalone) return
       if (
         e.target.location.href.includes('/p/') &&
         e.target.location.href.includes('/comments/')
       )
         return
+      if (this.$refs.editordialog) {
+        this.$refs.editordialog.close()
+      }
       this.dialogOpen = false
     },
     async submitComment() {

@@ -3,14 +3,16 @@ mutation submitPost(
   $type: PostType!
   $link: String
   $textContent: String
-  $planet: String!
+  $planet: String!,
+  $image: Upload
 ) {
   submitPost(
     title: $title
     type: $type
     link: $link
     textContent: $textContent
-    planet: $planet
+    planet: $planet,
+    image: $image
   ) {
     id
   }

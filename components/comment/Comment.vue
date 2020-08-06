@@ -6,7 +6,7 @@
   >
     <div
       :style="{
-        'padding-left': 10 * comment.level + 'px',
+        'padding-left': comment.level ? 10 * comment.level + 'px' : '0',
         'background-color': $vuetify.theme.dark
           ? expanded && !$device.isDesktop
             ? '#35363A'
@@ -21,10 +21,14 @@
         :style="{
           'border-left-color': borderColor,
           'border-left-width': '2px',
-          'border-left-style': comment.level > 0 ? 'solid' : 'none',
+          'border-left-style': comment.level
+            ? comment.level > 0
+              ? 'solid'
+              : 'none'
+            : 'none',
           'background-color': 'transparent'
         }"
-        @click.stop.prevent="expanded = !expanded"
+        @click="expanded = !expanded"
       >
         <v-card-text
           class="text--primary pt-3 pb-0 px-3"
@@ -32,7 +36,10 @@
         >
           <div v-if="showPostTitle" class="mb-1">
             <nuxt-link
-              :to="`/p/${comment.post.id}/${postUrlName}`"
+              event=""
+              :to="
+                `/p/${comment.post.planet.name}/comments/${comment.post.id}/${postUrlName}`
+              "
               class="font-weight-medium text--secondary"
               style="font-size: 0.86rem"
               >{{ comment.post.title }}</nuxt-link
@@ -49,7 +56,11 @@
           <UsernameMenu
             v-if="comment.author"
             :user-data="comment.author"
-            :op="comment.post && comment.post.author.id === comment.author.id"
+            :op="
+              comment.post &&
+                comment.post.author &&
+                comment.post.author.id === comment.author.id
+            "
           />
           <span v-else-if="!comment.author" class="text--secondary"
             >[deleted]</span
@@ -92,6 +103,7 @@
             <v-spacer />
 
             <v-btn
+              v-if="!hideReply"
               small
               text
               rounded
@@ -193,6 +205,10 @@ export default {
     comment: {
       type: Object,
       required: true
+    },
+    hideReply: {
+      type: Boolean,
+      default: false
     }
   },
   data() {
@@ -250,6 +266,7 @@ export default {
       }
     },
     borderColor() {
+      if (!this.comment.level) return '#F44336'
       const l = (this.comment.level - 1) % 5
       switch (l) {
         case 0:
@@ -267,9 +284,7 @@ export default {
     },
     cssVars() {
       return {
-        '--theme-color': this.comment.post.planet.themeColor
-          ? this.comment.post.planet.themeColor
-          : '#EF5350'
+        '--theme-color': this.$vuetify.theme.themes.dark.primary
       }
     }
   },

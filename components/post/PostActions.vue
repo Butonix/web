@@ -1,24 +1,29 @@
 <template>
   <span>
-    <v-btn
-      class="px-2 mr-1 text--secondary"
-      small
-      rounded
-      text
+    <nuxt-link
+      class="mr-1"
       :to="`/p/${post.planet.name}/comments/${post.id}/${urlName}`"
-      nuxt
-      :title="
-        `${post.commentCount} Comment${post.commentCount === 1 ? '' : 's'}`
-      "
+      event=""
     >
-      <v-icon size="20" class="mr-2">{{
-        $vuetify.icons.values.mdiCommentOutline
-      }}</v-icon>
-      {{ post.commentCount }}
-      <span v-if="newCommentCount > 0" class="primary--text">
-        &nbsp;(+{{ newCommentCount }})</span
+      <v-btn
+        class="px-2 text--secondary"
+        small
+        rounded
+        text
+        :title="
+          `${post.commentCount} Comment${post.commentCount === 1 ? '' : 's'}`
+        "
+        @click.stop.prevent="openPost"
       >
-    </v-btn>
+        <v-icon size="20" class="mr-2">{{
+          $vuetify.icons.values.mdiCommentOutline
+        }}</v-icon>
+        {{ post.commentCount }}
+        <span v-if="newCommentCount > 0" class="primary--text">
+          &nbsp;(+{{ newCommentCount }})</span
+        >
+      </v-btn>
+    </nuxt-link>
 
     <v-btn
       :ripple="false"
@@ -75,6 +80,13 @@ export default {
     }
   },
   methods: {
+    openPost() {
+      this.$router.push(
+        `/p/${this.post.planet.name}/comments/${this.post.id}/${urlName(
+          this.post.title
+        )}`
+      )
+    },
     async toggleEndorsement() {
       if (!this.$store.state.currentUser) {
         this.$store.dispatch('displaySnackbar', {

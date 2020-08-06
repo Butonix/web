@@ -1,12 +1,16 @@
 <template>
-  <div v-intersect.once="updateTextContentSize" @click="goToIfMobile">
+  <div v-intersect.once="updateTextContentSize">
     <v-list-item
       class="px-0"
       :style="isPostView ? 'min-height: 0' : 'min-height: 60px'"
     >
       <PostThumbnail v-if="$device.isDesktop" :post="post" />
 
-      <v-list-item-content class="pa-0" style="align-content: space-between">
+      <v-list-item-content
+        class="pa-0"
+        style="align-content: space-between; align-self: start"
+        :style="isPostView ? 'min-height: 0' : 'min-height: 60px'"
+      >
         <span v-if="post.sticky">
           <v-icon color="primary" size="13" class="mr-1">{{
             $vuetify.icons.values.mdiStar
@@ -16,7 +20,7 @@
 
         <v-list-item-title style="white-space: normal">
           <v-btn
-            v-if="isExpandable && !isPostView"
+            v-if="showExpandBtn && !isPostView"
             width="16"
             height="16"
             icon
@@ -34,6 +38,7 @@
             v-if="!isPostView"
             class="text--primary mr-1"
             style="font-size: 1.125rem; font-weight: 400"
+            event=""
             :to="`/p/${post.planet.name}/comments/${post.id}/${urlName}`"
           >
             {{ post.title }}
@@ -190,6 +195,16 @@ export default {
         this.isInstagramLink
       )
     },
+    showExpandBtn() {
+      return (
+        (this.post.textContent && this.idState.textContentHeight > 90) ||
+        this.isEmbeddableImage ||
+        this.isYoutubeLink ||
+        this.isSpotifyLink ||
+        this.isTweetLink ||
+        this.isInstagramLink
+      )
+    },
     isEmbeddableImage() {
       return this.post.type === 'IMAGE' && this.post.link.startsWith('https://')
     },
@@ -238,7 +253,7 @@ export default {
       textContentHeight: -1,
       didGetTextContentHeight: false,
       reported: false,
-      expand: this.$route.query.view === 'expanded' || this.isPostView
+      expand: this.$route.query.view === 'expanded'
     }
   },
   mounted() {
@@ -262,12 +277,6 @@ export default {
     toggleBlock() {
       this.post.author.isBlocking = !this.post.author.isBlocking
       this.$emit('toggleblock')
-    },
-    goToIfMobile() {
-      if (this.$device.isDesktop || this.isPostView) return
-      this.$router.push(
-        `/p/${this.post.planet.name}/comments/${this.post.id}/${this.urlName}`
-      )
     }
   }
 }
@@ -276,5 +285,9 @@ export default {
 <style scoped>
 .v-dialog__content >>> .v-dialog {
   box-shadow: none !important;
+}
+
+.v-list-item__content > *:not(:last-child) {
+  margin-bottom: 0;
 }
 </style>
