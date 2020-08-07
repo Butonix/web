@@ -1,46 +1,15 @@
 <template>
-  <div :id="id" class="particles-js"></div>
+  <Particles v-if="render" :id="id" class="particles-js" :options="options" />
 </template>
 
 <script>
 export default {
-  name: 'Particles',
+  name: 'ParticlesContainer',
   data() {
     return {
-      id: 'particles-instance-' + Math.floor(Math.random() * 5000)
-    }
-  },
-  watch: {
-    '$vuetify.theme.themes.dark.primary'(val) {
-      this.destroyParticleJS()
-
-      this.$nextTick(() => {
-        this.initParticleJS()
-      })
-    }
-  },
-  beforeDestroy() {
-    this.destroyParticleJS()
-  },
-  mounted() {
-    this.destroyParticleJS()
-
-    require('particles.js')
-    this.$nextTick(() => {
-      this.initParticleJS()
-    })
-  },
-  methods: {
-    destroyParticleJS() {
-      if (Array.isArray(window.pJSDom) && window.pJSDom.length > 0) {
-        for (let i = 0; i < window.pJSDom.length; i++)
-          window.pJSDom[i].pJS.fn.vendors.destroypJS()
-        window.pJSDom = []
-      }
-    },
-    initParticleJS() {
-      // eslint-disable-next-line no-undef
-      particlesJS(this.id, {
+      id: 'particles-instance-' + Math.floor(Math.random() * 5000),
+      render: true,
+      options: {
         particles: {
           number: {
             value: 160,
@@ -149,6 +118,15 @@ export default {
           }
         },
         retina_detect: true
+      }
+    }
+  },
+  watch: {
+    '$vuetify.theme.themes.dark.primary'(val) {
+      this.render = false
+
+      this.$nextTick(() => {
+        this.render = true
       })
     }
   }

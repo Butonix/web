@@ -8,12 +8,14 @@
       <client-only
         v-if="
           $device.isDesktop &&
-            (['signup', 'login', 'planets-create'].includes($route.name) ||
+            (['signup', 'login', 'planets-create', 'planets-explore'].includes(
+              $route.name
+            ) ||
               $route.name.startsWith('settings') ||
               $route.name.startsWith('submit'))
         "
       >
-        <Particles />
+        <ParticlesContainer />
       </client-only>
       <nuxt />
       <Snackbar />
@@ -36,7 +38,7 @@ export default {
     BottomNavBar,
     AppBar,
     Snackbar,
-    Particles: () => import('@/components/Particles')
+    ParticlesContainer: () => import('@/components/ParticlesContainer')
   },
   watch: {
     '$vuetify.theme.dark'() {
