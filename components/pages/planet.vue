@@ -101,7 +101,11 @@
               show-edit-btn
               @doneediting="refetchPlanet"
             />
-            <PlanetModsCard :planet="planet" class="mt-3" />
+            <PlanetModsCard
+              v-if="planet.moderators.length > 0"
+              :planet="planet"
+              class="mt-3"
+            />
           </div>
         </v-col>
       </v-row>
