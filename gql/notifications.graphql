@@ -19,6 +19,9 @@ query notifications($unreadOnly: Boolean!) {
     post {
       id
       title
+      planet {
+        name
+      }
     }
   }
 }

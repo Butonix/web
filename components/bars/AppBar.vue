@@ -25,6 +25,14 @@
         style="cursor: pointer"
         @click="openPlanetPrompt"
       >
+        <v-icon v-if="$device.isDesktop">
+          {{
+            $store.state.nav
+              ? $vuetify.icons.values.mdiChevronLeft
+              : $vuetify.icons.values.mdiChevronRight
+          }}
+        </v-icon>
+
         <span v-if="$route.name === 'sort-time'"
           >My Planets<v-icon class="ml-2">{{
             $vuetify.icons.values.mdiEarth
@@ -76,14 +84,6 @@
             $vuetify.icons.values.mdiPencilOutline
           }}</v-icon></span
         >
-
-        <v-icon v-if="$device.isDesktop">
-          {{
-            $store.state.nav
-              ? $vuetify.icons.values.mdiChevronLeft
-              : $vuetify.icons.values.mdiChevronRight
-          }}
-        </v-icon>
       </div>
 
       <v-spacer />

@@ -10,12 +10,19 @@
       clearable
     />
 
-    <v-btn depressed color="primary" @click="openDialog">
+    <v-btn
+      v-if="!$device.isDesktop"
+      depressed
+      color="primary"
+      @click="openDialog"
+    >
       <v-icon class="mr-2">{{ $vuetify.icons.values.mdiPencil }}</v-icon>
       Open Editor
     </v-btn>
 
-    <div v-if="!isEditorEmpty" class="pt-6" v-html="textContent" />
+    <client-only v-else>
+      <Editor v-model="textContent" :show-submit-btn="false" />
+    </client-only>
 
     <client-only>
       <v-dialog
@@ -71,11 +78,6 @@
           <div style="font-size: 1rem">
             <Editor
               v-model="textContent"
-              editable
-              autofocus
-              :style="
-                $device.isDesktop ? 'min-height: 296px; max-height: 600px' : ''
-              "
               style="overflow-y: auto"
               class="pa-2"
             />

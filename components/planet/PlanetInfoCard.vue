@@ -12,8 +12,8 @@
   >
     <v-img
       alt="Planet cover image"
-      :src="planet.cardImageUrl"
-      :height="planet.cardImageUrl ? 150 : 6"
+      :src="planet.bannerImageUrl"
+      :height="40"
       :style="
         `background-color: ${
           planet.themeColor ? planet.themeColor : 'var(--v-primary-base)'
@@ -21,9 +21,9 @@
       "
     />
     <v-list-item>
-      <v-list-item-avatar>
+      <v-list-item-avatar size="64" style="align-self: start">
         <nuxt-link
-          style="height: 40px; min-width: 40px; width: 40px"
+          style="height: 64px; min-width: 64px; width: 64px"
           :to="`/p/${planet.name}`"
         >
           <v-img v-if="planet.avatarImageUrl" :src="planet.avatarImageUrl" />
@@ -31,7 +31,7 @@
         </nuxt-link>
       </v-list-item-avatar>
 
-      <v-list-item-content>
+      <v-list-item-content style="align-self: start">
         <v-list-item-title
           style="font-size: 1.43rem; font-weight: 500"
           class="mb-0"
@@ -83,7 +83,17 @@
       "
       class="pb-3 pt-1"
     >
-      <PlanetEditorDialog :planet="planet" />
+      <v-btn
+        depressed
+        class="flex-grow-1"
+        nuxt
+        :to="`/p/${$route.params.planetname}/edit`"
+      >
+        Edit Planet
+        <v-icon size="20" class="ml-2">{{
+          $vuetify.icons.values.mdiPencil
+        }}</v-icon>
+      </v-btn>
     </v-card-actions>
 
     <div v-if="showViewPlanetBtn && $route.params.planetname !== planet.name">
@@ -103,12 +113,13 @@
 
 <script>
 import { format } from 'date-fns'
-import PlanetEditorDialog from '@/components/planet/PlanetEditorDialog'
 import PlanetJoinButton from '@/components/planet/PlanetJoinButton'
 
 export default {
   name: 'PlanetInfoCard',
-  components: { PlanetJoinButton, PlanetEditorDialog },
+  components: {
+    PlanetJoinButton
+  },
   props: {
     planet: {
       type: Object,

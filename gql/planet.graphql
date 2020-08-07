@@ -11,7 +11,7 @@ query planet($planetName: ID!) {
     allowLinkPosts
     allowTextPosts
     modPostsOnly
-    cardImageUrl
+    bannerImageUrl
     avatarImageUrl
     creatorId
     createdAt

@@ -21,7 +21,7 @@
       :editor="editor"
       style="position: absolute; bottom: 0; left: 0; right: 0"
       :style="{
-        'background-color': $vuetify.theme.dark ? '#35363A' : '#F1F3F4',
+        'background-color': $vuetify.theme.dark ? '#35363A' : '#F8F9FA',
         'border-top-width': '1px',
         'border-top-color': $vuetify.theme.dark
           ? 'rgba(255, 255, 255, 0.12)'
@@ -181,6 +181,7 @@
             >Cancel</v-btn
           >
           <v-btn
+            v-if="showSubmitBtn"
             small
             depressed
             color="primary"
@@ -232,6 +233,10 @@ export default {
     showCancelBtn: {
       type: Boolean,
       default: false
+    },
+    showSubmitBtn: {
+      type: Boolean,
+      default: true
     },
     loading: {
       type: Boolean,

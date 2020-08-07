@@ -25,7 +25,8 @@
             {{ planet.name }}
           </v-list-item-title>
           <v-list-item-subtitle style="font-weight: 500">
-            {{ planet.postCount }} posts today
+            {{ planet.postCount }} post{{ planet.postCount === 1 ? '' : 's' }}
+            today
           </v-list-item-subtitle>
         </v-list-item-content>
       </v-list-item>

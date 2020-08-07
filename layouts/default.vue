@@ -5,6 +5,21 @@
     <NavDrawer v-if="$device.isDesktop" />
 
     <v-main>
+      <client-only
+        v-if="
+          $device.isDesktop &&
+            ([
+              'signup',
+              'login',
+              'planets-create',
+              'p-planetname-edit'
+            ].includes($route.name) ||
+              $route.name.startsWith('settings') ||
+              $route.name.startsWith('submit'))
+        "
+      >
+        <Particles />
+      </client-only>
       <nuxt />
       <Snackbar />
     </v-main>
@@ -25,7 +40,8 @@ export default {
     NavDrawer,
     BottomNavBar,
     AppBar,
-    Snackbar
+    Snackbar,
+    Particles: () => import('@/components/Particles')
   },
   watch: {
     '$vuetify.theme.dark'() {

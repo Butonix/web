@@ -1,4 +1,5 @@
 import feedGql from '@/gql/feed'
+import postGql from '@/gql/post'
 
 export default {
   data() {
@@ -73,9 +74,19 @@ export default {
     }
   },
   methods: {
-    displayDialog(route) {
+    async displayDialog(route) {
       window.history.pushState({}, null, route.path)
       this.selectedPost = this.feed.find((p) => p.id === route.params.id)
+      if (!this.selectedPost) {
+        this.selectedPost = (
+          await this.$apollo.query({
+            query: postGql,
+            variables: {
+              postId: route.params.id
+            }
+          })
+        ).data.post
+      }
       this.dialog = true
     },
     hideDialog() {

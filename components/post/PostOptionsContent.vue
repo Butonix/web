@@ -166,6 +166,7 @@
 </template>
 
 <script>
+import gql from 'graphql-tag'
 import hidePostGql from '../../gql/hidePost.graphql'
 import unhidePostGql from '../../gql/unhidePost.graphql'
 import reportPostGql from '../../gql/reportPost.graphql'
@@ -289,12 +290,46 @@ export default {
     async removePost() {
       const reason = window.prompt('Reason for removal?')
       if (!reason) return
-      console.log('TODO')
+      await this.$apollo.mutate({
+        mutation: gql`
+          mutation($planetName: ID!, $postId: ID!, $removedReason: String!) {
+            removePost(
+              planetName: $planetName
+              postId: $postId
+              removedReason: $removedReason
+            )
+          }
+        `,
+        variables: {
+          planetName: this.post.planet.name,
+          postId: this.post.id,
+          removedReason: reason
+        }
+      })
+      this.$store.dispatch('displaySnackbar', {
+        message: 'Post removed, will vanish upon refresh.'
+      })
     },
     async banUserFromPlanet() {
       const reason = window.prompt('Reason for ban?')
       if (!reason) return
-      console.log('TODO')
+      await this.$apollo.mutate({
+        mutation: gql`
+          mutation($planetName: ID!, $bannedUserId: ID!) {
+            banUserFromPlanet(
+              planetName: $planetName
+              bannedUserId: $bannedUserId
+            )
+          }
+        `,
+        variables: {
+          planetName: this.post.planet.name,
+          bannedUserId: this.post.author.id
+        }
+      })
+      this.$store.dispatch('displaySnackbar', {
+        message: `Banned ${this.post.author.username} from p/${this.post.planet.name}!`
+      })
     },
     async globalBan() {
       const reason = window.prompt('Reason for ban?')
@@ -305,7 +340,20 @@ export default {
           ' from Comet?'
       )
       if (!confirm) return
-      console.log('TODO')
+      await this.$apollo.mutate({
+        mutation: gql`
+          mutation($banReason: String!, $bannedId: ID!) {
+            banUser(banReason: $banReason, bannedId: $bannedId)
+          }
+        `,
+        variables: {
+          banReason: reason,
+          bannedId: this.post.author.id
+        }
+      })
+      this.$store.dispatch('displaySnackbar', {
+        message: `Banned ${this.post.author.username} from Comet!`
+      })
     },
     async globalBanAndPurge() {
       const reason = window.prompt('Reason for ban & purge?')
@@ -322,7 +370,20 @@ export default {
           '. Please confirm again.'
       )
       if (!confirm2) return
-      console.log('TODO')
+      await this.$apollo.mutate({
+        mutation: gql`
+          mutation($banReason: String!, $bannedId: ID!) {
+            banAndPurgeUser(banReason: $banReason, bannedId: $bannedId)
+          }
+        `,
+        variables: {
+          banReason: reason,
+          bannedId: this.post.author.id
+        }
+      })
+      this.$store.dispatch('displaySnackbar', {
+        message: `Banned ${this.post.author.username} from Comet and purged their posts!`
+      })
     }
   }
 }

@@ -19,7 +19,7 @@ query user($username: String!) {
     moderatedPlanets {
       name
       description
-      cardImageUrl
+      bannerImageUrl
       avatarImageUrl
       themeColor
     }

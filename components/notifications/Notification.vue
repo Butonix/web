@@ -14,7 +14,9 @@
         </span>
         <nuxt-link
           class="text--secondary"
-          :to="`/p/${notif.post.id}/${urlName}`"
+          :to="
+            `/p/${notif.post.planet.name}/comments/${notif.post.id}/${urlName}`
+          "
           >&nbsp;"<span class="hoverable">{{ notif.post.title }}</span
           >"</nuxt-link
         >

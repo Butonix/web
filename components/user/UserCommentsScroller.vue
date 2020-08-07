@@ -102,7 +102,6 @@ export default {
   },
   methods: {
     selectComment(item) {
-      this.$emit('selectpost', item.post.id)
       this.$router.push(
         `/p/${item.post.planet.name}/comments/${item.post.id}/${urlName(
           item.post.title

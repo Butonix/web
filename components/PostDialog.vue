@@ -427,12 +427,15 @@ export default {
       this.$refs.editordialog.open()
     },
     updateThemeColor() {
-      if (!this.post || !this.dialogOpen) {
+      if (
+        (!this.post || !this.dialogOpen) &&
+        this.$route.name !== 'p-planetname-sort-time'
+      ) {
         this.$nextTick(() => {
           this.$vuetify.theme.themes.dark.primary = '#EF5350'
           this.$vuetify.theme.themes.light.primary = '#EF5350'
         })
-      } else if (this.post.planet.themeColor) {
+      } else if (this.post && this.post.planet.themeColor) {
         this.$nextTick(() => {
           this.$vuetify.theme.themes.dark.primary = this.post.planet.themeColor
           this.$vuetify.theme.themes.light.primary = this.post.planet.themeColor

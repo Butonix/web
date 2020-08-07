@@ -108,7 +108,7 @@
               text
               rounded
               class="text--secondary"
-              @click="replying = !replying"
+              @click="toggleReply"
             >
               <v-icon class="mr-2" size="20">{{
                 $vuetify.icons.values.mdiReply
@@ -308,6 +308,15 @@ export default {
     }
   },
   methods: {
+    toggleReply() {
+      if (!this.$store.state.currentUser) {
+        this.$store.dispatch('displaySnackbar', {
+          message: 'Must log in to reply'
+        })
+        return
+      }
+      this.replying = !this.replying
+    },
     openReplyDialog() {
       if (!this.$store.state.currentUser) {
         this.$store.dispatch('displaySnackbar', {

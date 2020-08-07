@@ -1,9 +1,5 @@
 <template>
   <div>
-    <client-only>
-      <Particles />
-    </client-only>
-
     <div
       style="position: relative; height: 208px; background-size: cover; background-position: center; background-repeat: no-repeat"
       :style="
@@ -153,7 +149,6 @@
                 :items="userComments"
                 :selected-post="selectedPost"
                 :loading="$apollo.queries.userComments.loading"
-                @selectpost="setSelectedPost"
               />
             </v-tab-item>
           </v-tabs-items>
@@ -230,18 +225,15 @@ import postDialogMixin from '@/mixins/postDialogMixin'
 import PostsScroller from '@/components/post/PostsScroller'
 import userGql from '@/gql/user.graphql'
 import userCommentsGql from '@/gql/userComments.graphql'
-import postGql from '@/gql/post.graphql'
 import setBioGql from '@/gql/setBio.graphql'
 import UserSummaryCard from '@/components/user/UserSummaryCard'
 import ModeratedPlanetsCard from '@/components/user/ModeratedPlanetsCard'
 import UserCommentsScroller from '@/components/user/UserCommentsScroller'
-import Particles from '@/components/Particles'
 
 export default {
   name: 'User',
   scrollToTop: false,
   components: {
-    Particles,
     UserCommentsScroller,
     AvatarEditor: () => import('@/components/AvatarEditor'),
     ModeratedPlanetsCard,
@@ -323,25 +315,8 @@ export default {
   },
   methods: {
     openBannerInput() {
+      if (!this.user.isCurrentUser) return
       this.$refs.bannerinput.$refs.input.click()
-    },
-    setSelectedPost(id) {
-      this.selectedPostId = id
-    },
-    async displayDialog(route) {
-      window.history.pushState({}, null, route.path)
-      this.selectedPost = this.feed.find((p) => p.id === route.params.id)
-      if (!this.selectedPost && this.selectedPostId) {
-        this.selectedPost = (
-          await this.$apollo.query({
-            query: postGql,
-            variables: {
-              postId: this.selectedPostId
-            }
-          })
-        ).data.post
-      }
-      this.dialog = true
     },
     openAvatarDialog() {
       if (!this.user.isCurrentUser) return

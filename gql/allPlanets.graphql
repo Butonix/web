@@ -7,7 +7,7 @@ query allPlanets {
     joined
     userCount
     themeColor
-    cardImageUrl
+    bannerImageUrl
     createdAt
     galaxy {
       fullName
