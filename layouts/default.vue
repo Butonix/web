@@ -8,12 +8,7 @@
       <client-only
         v-if="
           $device.isDesktop &&
-            ([
-              'signup',
-              'login',
-              'planets-create',
-              'p-planetname-edit'
-            ].includes($route.name) ||
+            (['signup', 'login', 'planets-create'].includes($route.name) ||
               $route.name.startsWith('settings') ||
               $route.name.startsWith('submit'))
         "

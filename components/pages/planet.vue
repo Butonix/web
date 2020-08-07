@@ -149,10 +149,11 @@ export default {
     isMod() {
       return (
         this.$store.state.currentUser &&
-        !!this.$store.state.currentUser.moderatedPlanets.find(
+        (!!this.$store.state.currentUser.moderatedPlanets.find(
           (p) =>
             p.name.toLowerCase() === this.$route.params.planetname.toLowerCase()
-        )
+        ) ||
+          this.$store.state.currentUser.admin)
       )
     }
   },

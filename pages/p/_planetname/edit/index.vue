@@ -19,7 +19,7 @@
           </div>
           <div>
             <v-color-picker
-              v-model="planet.themeColor"
+              v-model="themeColor"
               :class="
                 $vuetify.theme.dark ? 'darkcolorpicker' : 'lightcolorpicker'
               "
@@ -72,7 +72,10 @@
             depressed
             color="primary"
             :loading="loading"
-            :disabled="!planet.description || planet.customName.length > 50"
+            :disabled="
+              !planet.description ||
+                (planet.customName && planet.customName.length > 50)
+            "
             @click="confirmEdits"
             >Done</v-btn
           >
@@ -92,9 +95,10 @@ export default {
     // If the user is not a mod of this planet
     if (
       !store.state.currentUser ||
-      !store.state.currentUser.moderatedPlanets.find(
+      (!store.state.currentUser.moderatedPlanets.find(
         (p) => p.name.toLowerCase() === params.planetname.toLowerCase()
-      )
+      ) &&
+        !store.state.currentUser.admin)
     ) {
       return redirect(`/p/${params.planetname}`)
     }
@@ -106,17 +110,22 @@ export default {
       variables: { planetName: context.params.planetname }
     })
     return {
-      planet: data.planet
+      planet: data.planet,
+      themeColor: data.planet.themeColor
     }
   },
   data() {
     return {
       planet: null,
       loading: false,
-      swatches: [[]]
+      swatches: [[]],
+      themeColor: '#EF5350'
     }
   },
   watch: {
+    themeColor(val) {
+      this.planet.themeColor = val.hex ? val.hex : val
+    },
     'planet.themeColor'(val) {
       this.$vuetify.theme.themes.dark.primary = val
       this.$vuetify.theme.themes.light.primary = val
@@ -132,7 +141,9 @@ export default {
     for (let i = 0; i < 5; i++) {
       swatches2d[i] = []
       for (let j = 0; j < swatches.length / 5; j++) {
-        swatches2d[i][j] = swatches[j * (swatches.length / 5 + 1) + i]
+        if (swatches[j * (swatches.length / 5 + 1) + i]) {
+          swatches2d[i][j] = swatches[j * (swatches.length / 5 + 1) + i]
+        }
       }
     }
     this.swatches = swatches2d

@@ -11,24 +11,33 @@ export default {
     }
   },
   watch: {
-    '$vuetify.theme.themes.dark.primary'() {
-      if (Array.isArray(window.pJSDom) && window.pJSDom.length > 0) {
-        for (let i = 0; i < window.pJSDom.length; i++)
-          window.pJSDom[i].pJS.fn.vendors.destroypJS()
-        window.pJSDom = []
-      }
+    '$vuetify.theme.themes.dark.primary'(val) {
+      this.destroyParticleJS()
+
       this.$nextTick(() => {
         this.initParticleJS()
       })
     }
   },
+  beforeDestroy() {
+    this.destroyParticleJS()
+  },
   mounted() {
+    this.destroyParticleJS()
+
     require('particles.js')
     this.$nextTick(() => {
       this.initParticleJS()
     })
   },
   methods: {
+    destroyParticleJS() {
+      if (Array.isArray(window.pJSDom) && window.pJSDom.length > 0) {
+        for (let i = 0; i < window.pJSDom.length; i++)
+          window.pJSDom[i].pJS.fn.vendors.destroypJS()
+        window.pJSDom = []
+      }
+    },
     initParticleJS() {
       // eslint-disable-next-line no-undef
       particlesJS(this.id, {

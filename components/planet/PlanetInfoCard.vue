@@ -77,9 +77,10 @@
         showEditBtn &&
           $store.state.currentUser &&
           $route.params.planetname &&
-          $store.state.currentUser.moderatedPlanets
+          ($store.state.currentUser.moderatedPlanets
             .map((p) => p.name)
-            .includes($route.params.planetname)
+            .includes($route.params.planetname) ||
+            $store.state.currentUser.admin)
       "
       class="pb-3 pt-1"
     >
