@@ -6,5 +6,6 @@ query popularPlanets($galaxyName: ID) {
     postCount
     joined
     muted
+    avatarImageUrl
   }
 }

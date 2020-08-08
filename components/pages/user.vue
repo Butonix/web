@@ -5,7 +5,7 @@
       :style="
         user.bannerImageUrl
           ? `background-image: url(${user.bannerImageUrl})`
-          : 'background-image: url(/newbanner.png)'
+          : 'background-image: url(/cometgrid76.png)'
       "
     >
       <div

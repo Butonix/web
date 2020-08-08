@@ -5,31 +5,11 @@
       <v-icon class="ml-2">{{ $vuetify.icons.values.mdiTrendingUp }}</v-icon>
     </v-card-title>
     <v-list>
-      <v-list-item
+      <PlanetListItem
         v-for="planet in popularPlanets"
         :key="planet.name"
-        nuxt
-        :to="`/p/${planet.name}`"
-      >
-        <v-list-item-avatar
-          :color="planet.avatarImageUrl ? 'primary' : ''"
-          size="32"
-        >
-          <v-img v-if="planet.avatarImageUrl" :src="planet.avatarImageUrl" />
-          <v-icon v-else size="32" class="text--secondary">{{
-            $vuetify.icons.values.mdiEarth
-          }}</v-icon>
-        </v-list-item-avatar>
-        <v-list-item-content>
-          <v-list-item-title>
-            {{ planet.name }}
-          </v-list-item-title>
-          <v-list-item-subtitle style="font-weight: 500">
-            {{ planet.postCount }} post{{ planet.postCount === 1 ? '' : 's' }}
-            today
-          </v-list-item-subtitle>
-        </v-list-item-content>
-      </v-list-item>
+        :planet="planet"
+      />
     </v-list>
 
     <v-card-actions>
@@ -65,9 +45,11 @@
 
 <script>
 import popularPlanetsGql from '../gql/popularPlanets.graphql'
+import PlanetListItem from '@/components/PlanetListItem'
 
 export default {
   name: 'PopularPlanetsCard',
+  components: { PlanetListItem },
   data() {
     return {
       popularPlanets: []
