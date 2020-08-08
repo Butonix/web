@@ -9,6 +9,8 @@ query currentUser {
     appearOffline
     moderatedPlanets {
       name
+      avatarImageUrl
+      themeColor
     }
   }
 }
