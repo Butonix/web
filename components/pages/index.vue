@@ -32,6 +32,7 @@
             :user="$store.state.currentUser"
             class="mt-3"
           />
+          <InfoLinks class="mt-3" />
         </div>
       </v-col>
     </v-row>
@@ -44,11 +45,13 @@ import PostsScroller from '@/components/post/PostsScroller'
 import PopularPlanetsCard from '@/components/PopularPlanetsCard'
 import ModeratedPlanetsCard from '@/components/user/ModeratedPlanetsCard'
 import { postHead } from '@/util/postHead'
+import InfoLinks from '@/components/InfoLinks'
 
 export default {
   name: 'Index',
   scrollToTop: false,
   components: {
+    InfoLinks,
     ModeratedPlanetsCard,
     PopularPlanetsCard,
     PostsScroller

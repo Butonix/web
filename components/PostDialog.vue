@@ -247,6 +247,7 @@
                   "
                   :planet="post.planet"
                 />
+                <InfoLinks class="mt-3" />
               </div>
             </div>
           </div>
@@ -276,6 +277,7 @@ import Post from '@/components/post/Post'
 import PlanetInfoCard from '@/components/planet/PlanetInfoCard'
 import UsernameMenu from '@/components/user/UsernameMenu'
 import CommentSortMenu from '@/components/comment/sort/CommentSortMenu'
+import InfoLinks from '@/components/InfoLinks'
 
 function flat(r, a) {
   const b = {}
@@ -297,6 +299,7 @@ function flat(r, a) {
 export default {
   name: 'PostDialog',
   components: {
+    InfoLinks,
     CommentSortMenu,
     PlanetInfoCard,
     UsernameMenu,

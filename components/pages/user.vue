@@ -161,6 +161,7 @@
               class="mt-3"
               :user="user"
             />
+            <InfoLinks class="mt-3" />
           </div>
         </v-col>
       </v-row>
@@ -231,11 +232,13 @@ import ModeratedPlanetsCard from '@/components/user/ModeratedPlanetsCard'
 import UserCommentsScroller from '@/components/user/UserCommentsScroller'
 import { userHead } from '@/util/userHead'
 import { postHead } from '@/util/postHead'
+import InfoLinks from '@/components/InfoLinks'
 
 export default {
   name: 'User',
   scrollToTop: false,
   components: {
+    InfoLinks,
     UserCommentsScroller,
     AvatarEditor: () => import('@/components/AvatarEditor'),
     ModeratedPlanetsCard,

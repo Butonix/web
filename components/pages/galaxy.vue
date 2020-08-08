@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-container>
+    <v-container class="pt-0">
       <v-row justify="center">
         <v-col :class="$device.isDesktop ? '' : 'pa-0'">
           <PostsScroller
@@ -15,6 +15,7 @@
         <v-col v-if="$device.isDesktop" cols="3" class="pl-0">
           <div class="sticky">
             <GalaxyInfoCard :galaxy="galaxy" />
+            <InfoLinks class="mt-3" />
           </div>
         </v-col>
       </v-row>
@@ -28,11 +29,13 @@ import PostsScroller from '@/components/post/PostsScroller'
 import GalaxyInfoCard from '@/components/GalaxyInfoCard'
 import galaxyGql from '@/gql/galaxy.graphql'
 import { postHead } from '@/util/postHead'
+import InfoLinks from '@/components/InfoLinks'
 
 export default {
   name: 'Galaxy',
   scrollToTop: false,
   components: {
+    InfoLinks,
     GalaxyInfoCard,
     PostsScroller
   },

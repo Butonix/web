@@ -106,6 +106,7 @@
               :planet="planet"
               class="mt-3"
             />
+            <InfoLinks class="mt-3" />
           </div>
         </v-col>
       </v-row>
@@ -123,11 +124,13 @@ import PlanetJoinButton from '@/components/planet/PlanetJoinButton'
 import PlanetModsCard from '@/components/planet/PlanetModsCard'
 import { planetHead } from '@/util/planetHead'
 import { postHead } from '@/util/postHead'
+import InfoLinks from '@/components/InfoLinks'
 
 export default {
   name: 'Planet',
   scrollToTop: false,
   components: {
+    InfoLinks,
     PlanetModsCard,
     PlanetJoinButton,
     PlanetInfoCard,
