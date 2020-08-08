@@ -30,7 +30,11 @@
 </template>
 
 <script>
-export default {}
+export default {
+  head: {
+    title: 'Privacy Policy'
+  }
+}
 </script>
 
 <style scoped></style>

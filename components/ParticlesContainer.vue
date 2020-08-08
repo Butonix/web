@@ -117,6 +117,7 @@ export default {
             }
           }
         },
+        fpsLimit: 24,
         retina_detect: true
       }
     }

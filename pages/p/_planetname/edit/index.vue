@@ -66,6 +66,23 @@
           </div>
         </div>
 
+        <div
+          v-if="planet.bannerImageUrl"
+          style="cursor: pointer"
+          class="hoverable"
+          @click="removeBanner"
+        >
+          Remove Planet Banner
+        </div>
+        <div
+          v-if="planet.avatarImageUrl"
+          style="cursor: pointer"
+          class="hoverable"
+          @click="removeAvatar"
+        >
+          Remove Planet Avatar
+        </div>
+
         <v-row no-gutters>
           <v-spacer />
           <v-btn
@@ -149,6 +166,26 @@ export default {
     this.swatches = swatches2d
   },
   methods: {
+    async removeAvatar() {
+      this.planet.avatarImageUrl = null
+      this.$apollo.mutate({
+        mutation: gql`
+          mutation($planetName: ID!) {
+            removePlanetAvatar(planetName: $planetName)
+          }
+        `
+      })
+    },
+    async removeBanner() {
+      this.planet.bannerImageUrl = null
+      this.$apollo.mutate({
+        mutation: gql`
+          mutation($planetName: ID!) {
+            removePlanetBanner(planetName: $planetName)
+          }
+        `
+      })
+    },
     async confirmEdits() {
       this.loading = true
 

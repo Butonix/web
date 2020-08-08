@@ -27,6 +27,7 @@ import postDialogMixin from '@/mixins/postDialogMixin'
 import PostsScroller from '@/components/post/PostsScroller'
 import GalaxyInfoCard from '@/components/GalaxyInfoCard'
 import galaxyGql from '@/gql/galaxy.graphql'
+import { postHead } from '@/util/postHead'
 
 export default {
   name: 'Galaxy',
@@ -50,6 +51,11 @@ export default {
     return {
       galaxy: null
     }
+  },
+  head() {
+    if (this.selectedPost && this.dialog) return postHead(this.selectedPost)
+    else if (!this.galaxy) return { title: 'Galaxy' }
+    else return { title: this.galaxy.fullName }
   }
 }
 </script>

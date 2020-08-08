@@ -31,6 +31,9 @@ export default {
     return {
       allPlanets: []
     }
+  },
+  head: {
+    title: 'Explore Planets'
   }
 }
 </script>

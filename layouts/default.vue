@@ -4,19 +4,20 @@
 
     <NavDrawer v-if="$device.isDesktop" />
 
+    <client-only
+      v-if="
+        $device.isDesktop &&
+          (['signup', 'login', 'planets-create', 'planets-explore'].includes(
+            $route.name
+          ) ||
+            $route.name.startsWith('settings') ||
+            $route.name.startsWith('submit'))
+      "
+    >
+      <ParticlesContainer />
+    </client-only>
+
     <v-main>
-      <client-only
-        v-if="
-          $device.isDesktop &&
-            (['signup', 'login', 'planets-create', 'planets-explore'].includes(
-              $route.name
-            ) ||
-              $route.name.startsWith('settings') ||
-              $route.name.startsWith('submit'))
-        "
-      >
-        <ParticlesContainer />
-      </client-only>
       <nuxt />
       <Snackbar />
     </v-main>

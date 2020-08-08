@@ -81,6 +81,9 @@ export default {
       query: hiddenPostsGql,
       fetchPolicy: 'cache-and-network'
     }
+  },
+  head: {
+    title: 'Settings'
   }
 }
 </script>

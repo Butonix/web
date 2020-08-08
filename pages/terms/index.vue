@@ -264,7 +264,11 @@
 </template>
 
 <script>
-export default {}
+export default {
+  head: {
+    title: 'Terms of Service'
+  }
+}
 </script>
 
 <style scoped></style>

@@ -82,6 +82,11 @@ export default {
       },
       fetchPolicy: 'cache-and-network'
     }
+  },
+  head() {
+    return {
+      title: `${this.notifications.length} Notifications`
+    }
   }
 }
 </script>

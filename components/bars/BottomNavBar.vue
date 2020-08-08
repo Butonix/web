@@ -3,12 +3,12 @@
     app
     bottom
     class="bottomappbar"
-    :height="$device.isIos && isPWA ? 80 : 56"
+    :height="$device.isIos ? 80 : 56"
     :color="$vuetify.theme.dark ? '#35363A' : '#F1F3F4'"
   >
     <v-bottom-navigation
       grow
-      :style="$device.isIos && isPWA ? 'margin-bottom: 24px' : ''"
+      :style="$device.isIos ? 'margin-bottom: 24px' : ''"
       class="elevation-0"
     >
       <v-btn
@@ -136,24 +136,31 @@
         </v-card>
       </v-bottom-sheet>
 
-      <v-btn aria-label="Messages" to="/messages" nuxt class="navbtn">
-        <span
-          :class="
-            $route.name === 'messages' ? 'primary--text' : 'text--secondary'
-          "
-          >Messages</span
-        >
-        <v-badge v-if="notifications.length > 0" overlap content="1">
-          <v-icon :color="$route.name === 'messages' ? 'primary' : ''">{{
-            $vuetify.icons.values.mdiEmailOutline
-          }}</v-icon>
-        </v-badge>
-        <v-icon
-          v-else
-          :color="$route.name === 'notifications' ? 'primary' : ''"
-          >{{ $vuetify.icons.values.mdiEmailOutline }}</v-icon
-        >
-      </v-btn>
+      <v-bottom-sheet scrollable>
+        <template v-slot:activator="{ on }">
+          <v-btn aria-label="Notifications" class="navbtn" v-on="on">
+            <span class="text--secondary">Notifications</span>
+            <v-badge
+              v-if="notifications.length > 0"
+              overlap
+              :content="notifications.length"
+            >
+              <v-icon class="text--secondary">{{
+                $vuetify.icons.values.mdiEmailOutline
+              }}</v-icon>
+            </v-badge>
+            <v-icon v-else class="text--secondary">{{
+              $vuetify.icons.values.mdiBellOutline
+            }}</v-icon>
+          </v-btn>
+        </template>
+
+        <v-card>
+          <v-card-text class="pa-0">
+            <NotificationsMenu />
+          </v-card-text>
+        </v-card>
+      </v-bottom-sheet>
     </v-bottom-navigation>
   </v-app-bar>
 </template>
@@ -161,10 +168,11 @@
 <script>
 import notificationsGql from '../../gql/notifications.graphql'
 import NavDrawerContents from '@/components/bars/NavDrawerContents'
+import NotificationsMenu from '@/components/notifications/NotificationsMenu'
 
 export default {
   name: 'BottomNavBar',
-  components: { NavDrawerContents },
+  components: { NotificationsMenu, NavDrawerContents },
   data() {
     return {
       notifications: [],

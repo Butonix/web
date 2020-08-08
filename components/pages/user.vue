@@ -5,7 +5,7 @@
       :style="
         user.bannerImageUrl
           ? `background-image: url(${user.bannerImageUrl})`
-          : 'background-image: url(/cometgrid76.png)'
+          : 'background-image: url(/newbanner.png)'
       "
     >
       <div
@@ -229,6 +229,8 @@ import setBioGql from '@/gql/setBio.graphql'
 import UserSummaryCard from '@/components/user/UserSummaryCard'
 import ModeratedPlanetsCard from '@/components/user/ModeratedPlanetsCard'
 import UserCommentsScroller from '@/components/user/UserCommentsScroller'
+import { userHead } from '@/util/userHead'
+import { postHead } from '@/util/postHead'
 
 export default {
   name: 'User',
@@ -355,6 +357,10 @@ export default {
         }
       })
     }
+  },
+  head() {
+    if (this.selectedPost && this.dialog) return postHead(this.selectedPost)
+    else return userHead(this.user)
   }
 }
 </script>

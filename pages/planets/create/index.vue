@@ -157,6 +157,9 @@ export default {
       this.createBtnLoading = false
       await this.$router.push(`/p/${this.name}`)
     }
+  },
+  head: {
+    title: 'Create a Planet'
   }
 }
 </script>

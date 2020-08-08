@@ -121,6 +121,8 @@ import PlanetInfoCard from '@/components/planet/PlanetInfoCard'
 import planetGql from '@/gql/planet.graphql'
 import PlanetJoinButton from '@/components/planet/PlanetJoinButton'
 import PlanetModsCard from '@/components/planet/PlanetModsCard'
+import { planetHead } from '@/util/planetHead'
+import { postHead } from '@/util/postHead'
 
 export default {
   name: 'Planet',
@@ -237,6 +239,10 @@ export default {
         })
       ).data.planet
     }
+  },
+  head() {
+    if (this.selectedPost && this.dialog) return postHead(this.selectedPost)
+    else return planetHead(this.planet)
   }
 }
 </script>

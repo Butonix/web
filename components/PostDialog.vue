@@ -6,6 +6,7 @@
   >
     <v-app-bar
       v-if="!$device.isDesktop"
+      class="topappbar"
       flat
       style="position: fixed; top: 0; z-index: 700"
       :style="{

@@ -6,6 +6,7 @@
           v-if="$store.state.currentUser"
           style="font-size: 1rem; text-align: center"
           class="pb-3 text--secondary"
+          :class="$device.isDesktop ? '' : 'pt-3'"
         >
           Only showing posts from Planet's you've joined - switch to
           <nuxt-link to="/universe" class="primary--text">Universe</nuxt-link>
@@ -42,6 +43,7 @@ import postDialogMixin from '@/mixins/postDialogMixin'
 import PostsScroller from '@/components/post/PostsScroller'
 import PopularPlanetsCard from '@/components/PopularPlanetsCard'
 import ModeratedPlanetsCard from '@/components/user/ModeratedPlanetsCard'
+import { postHead } from '@/util/postHead'
 
 export default {
   name: 'Index',
@@ -51,32 +53,14 @@ export default {
     PopularPlanetsCard,
     PostsScroller
   },
-  mixins: [postDialogMixin]
-  /* asyncData(context) {
-    const client = context.app.apolloProvider.defaultClient
-    const { data } = client.query({
-      query: planetGql,
-      variables: { planetName: context.params.planetname }
-    })
-    return {
-      planet: data.planet
-    }
-  },
-  data() {
-    return {
-      planet: null
-    }
-  },
-  apollo: {
-    planet: {
-      query: planetGql,
-      variables() {
-        return {
-          planetName: this.$route.params.planetname
-        }
+  mixins: [postDialogMixin],
+  head() {
+    if (this.selectedPost && this.dialog) return postHead(this.selectedPost)
+    else
+      return {
+        title: 'My Planets'
       }
-    }
-  } */
+  }
 }
 </script>
 

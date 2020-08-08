@@ -77,7 +77,11 @@
 </template>
 
 <script>
-export default {}
+export default {
+  head: {
+    title: 'Content Policy'
+  }
+}
 </script>
 
 <style scoped></style>

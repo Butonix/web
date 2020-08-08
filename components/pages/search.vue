@@ -25,6 +25,7 @@
 <script>
 import postDialogMixin from '@/mixins/postDialogMixin'
 import PostsScroller from '@/components/post/PostsScroller'
+import { postHead } from '@/util/postHead'
 
 export default {
   name: 'Search',
@@ -32,32 +33,14 @@ export default {
   components: {
     PostsScroller
   },
-  mixins: [postDialogMixin]
-  /* asyncData(context) {
-    const client = context.app.apolloProvider.defaultClient
-    const { data } = client.query({
-      query: planetGql,
-      variables: { planetName: context.params.planetname }
-    })
-    return {
-      planet: data.planet
-    }
-  },
-  data() {
-    return {
-      planet: null
-    }
-  },
-  apollo: {
-    planet: {
-      query: planetGql,
-      variables() {
-        return {
-          planetName: this.$route.params.planetname
-        }
+  mixins: [postDialogMixin],
+  head() {
+    if (this.selectedPost && this.dialog) return postHead(this.selectedPost)
+    else
+      return {
+        title: `"${this.$route.query.q}"`
       }
-    }
-  } */
+  }
 }
 </script>
 

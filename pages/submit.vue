@@ -59,6 +59,13 @@
         <div class="pt-6">
           <nuxt-child />
         </div>
+
+        <div class="text--secondary">
+          Can't find a Planet to post to?
+          <nuxt-link to="/planets/create" class="primary--text"
+            >Create one</nuxt-link
+          >
+        </div>
       </v-col>
     </v-row>
   </v-container>
@@ -71,6 +78,9 @@ export default {
     return {
       tab: null
     }
+  },
+  head: {
+    title: 'Submit Post'
   }
 }
 </script>
