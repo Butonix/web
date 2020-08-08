@@ -7,5 +7,6 @@ query popularPlanets($galaxyName: ID) {
     joined
     muted
     avatarImageUrl
+    themeColor
   }
 }
