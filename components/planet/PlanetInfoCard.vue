@@ -40,9 +40,11 @@
             planet.customName ? planet.customName : planet.name
           }}</nuxt-link>
         </v-list-item-title>
-        <v-list-item-subtitle class="mt-1" style="font-size: 1rem">{{
-          planet.description
-        }}</v-list-item-subtitle>
+        <v-list-item-subtitle
+          class="mt-1"
+          style="font-size: 1rem; overflow: auto; text-overflow: initial; white-space: initial"
+          >{{ planet.description }}</v-list-item-subtitle
+        >
       </v-list-item-content>
     </v-list-item>
 
