@@ -1,7 +1,8 @@
 query joinedPlanets {
   joinedPlanets {
-    avatarImageUrl
     name
     postCount
+    avatarImageUrl
+    themeColor
   }
 }

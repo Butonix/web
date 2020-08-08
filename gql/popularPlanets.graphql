@@ -1,11 +1,7 @@
 query popularPlanets($galaxyName: ID) {
   popularPlanets(galaxyName: $galaxyName) {
     name
-    description
-    userCount
     postCount
-    joined
-    muted
     avatarImageUrl
     themeColor
   }
