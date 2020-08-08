@@ -173,7 +173,10 @@ export default {
           mutation($planetName: ID!) {
             removePlanetAvatar(planetName: $planetName)
           }
-        `
+        `,
+        variables: {
+          planetName: this.planet.name
+        }
       })
     },
     async removeBanner() {
@@ -183,7 +186,10 @@ export default {
           mutation($planetName: ID!) {
             removePlanetBanner(planetName: $planetName)
           }
-        `
+        `,
+        variables: {
+          planetName: this.planet.name
+        }
       })
     },
     async confirmEdits() {
