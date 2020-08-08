@@ -219,7 +219,7 @@ export default {
       this.$apollo.mutate({
         mutation: blockUserGql,
         variables: {
-          blockedId: this.user.id
+          blockedUsername: this.user.username
         }
       })
     },
