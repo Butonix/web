@@ -207,7 +207,7 @@ export default {
     copyLink() {
       this.$emit('selected')
       this.$copyText(
-        `https://www.getcomet.net/p/${this.post.id}/${this.urlName}`
+        `https://www.getcomet.net/p/${this.post.planet.name}/comments/${this.post.id}/${this.urlName}`
       )
       this.$store.dispatch('displaySnackbar', {
         message: 'Copied link to clipboard',
