@@ -343,6 +343,7 @@ export default {
    */
   apollo: {
     cookieAttributes: {
+      expires: 7,
       secure: process.env.NODE_ENV === 'production'
     },
     // required

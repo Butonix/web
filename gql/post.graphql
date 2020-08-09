@@ -26,6 +26,7 @@ query post($postId: ID!) {
         userCount
         createdAt
         avatarImageUrl
+        bannerImageUrl
         themeColor
         galaxy {
           name
