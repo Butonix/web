@@ -106,7 +106,7 @@
 import submitPostGql from '~/gql/submitPost'
 import { urlName } from '~/util/urlName'
 import { isEditorEmpty } from '@/util/isEditorEmpty'
-import PlanetSelector from '@/components/PlanetSelector'
+import PlanetSelector from '@/components/planet/PlanetSelector'
 
 export default {
   middleware: 'authenticated',

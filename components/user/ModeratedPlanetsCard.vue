@@ -18,7 +18,7 @@
 </template>
 
 <script>
-import PlanetListItem from '@/components/PlanetListItem'
+import PlanetListItem from '@/components/planet/PlanetListItem'
 
 export default {
   name: 'ModeratedPlanetsCard',

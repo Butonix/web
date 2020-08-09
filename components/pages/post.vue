@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import PostDialog from '@/components/PostDialog'
+import PostDialog from '@/components/pages/PostDialog'
 import postGql from '@/gql/post'
 import { postHead } from '@/util/postHead'
 

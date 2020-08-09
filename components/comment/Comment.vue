@@ -1,9 +1,5 @@
 <template>
-  <div
-    v-if="
-      !deleted || (comment.childComments && comment.childComments.length > 0)
-    "
-  >
+  <div>
     <div
       :style="{
         'padding-left': comment.level ? 10 * comment.level + 'px' : '0',
@@ -47,9 +43,21 @@
           </div>
 
           <TextContent
+            v-show="!editing || !$device.isDesktop"
             :dark="$vuetify.theme.dark"
             :text-content="comment.textContent"
           />
+
+          <client-only v-if="editing && $device.isDesktop">
+            <Editor
+              v-model="editHTML"
+              show-submit-btn
+              show-cancel-btn
+              :loading="editBtnLoading"
+              @cancelled="editing = false"
+              @submitted="editComment(comment)"
+            />
+          </client-only>
         </v-card-text>
 
         <v-card-actions class="px-3 pb-3 pt-2">
@@ -102,13 +110,29 @@
           <template v-if="$device.isDesktop">
             <v-spacer />
 
+            <CommentOptions
+              v-if="
+                comment.author &&
+                  $store.state.currentUser &&
+                  (comment.author.isCurrentUser ||
+                    !!$store.state.currentUser.moderatedPlanets.find(
+                      (p) => p.name === comment.post.planet.name
+                    ) ||
+                    $store.state.currentUser.admin)
+              "
+              :comment="comment"
+              @startedit="startEdit(comment)"
+              @deletecomment="deleteComment"
+              @removecomment="removeComment"
+            />
+
             <v-btn
               v-if="!hideReply"
               small
               text
               rounded
               class="text--secondary"
-              @click="toggleReply"
+              @click="startReply(comment)"
             >
               <v-icon class="mr-2" size="20">{{
                 $vuetify.icons.values.mdiReply
@@ -141,21 +165,37 @@
           </template>
         </v-card-actions>
       </div>
-      <client-only v-if="$device.isDesktop">
-        <div v-if="replying" class="pa-3">
+      <client-only v-if="$device.isDesktop && replying">
+        <div class="pa-3">
           <Editor
             v-model="replyHTML"
             show-cancel-btn
-            :loading="submitBtnLoading"
+            :loading="replyBtnLoading"
             @cancelled="replying = false"
-            @submitted="submitReply"
+            @submitted="submitReply(comment)"
           />
         </div>
       </client-only>
     </div>
 
     <div v-show="expanded" v-if="!$device.isDesktop" style="display: flex">
-      <v-btn text tile class="flex-grow-1" @click="openReplyDialog">
+      <CommentOptions
+        v-if="
+          comment.author &&
+            $store.state.currentUser &&
+            (comment.author.isCurrentUser ||
+              !!$store.state.currentUser.moderatedPlanets.find(
+                (p) => p.name === comment.post.planet.name
+              ) ||
+              $store.state.currentUser.admin)
+        "
+        :comment="comment"
+        @startedit="startEdit(comment)"
+        @deletecomment="deleteComment"
+        @removecomment="removeComment"
+      />
+
+      <v-btn text tile class="flex-grow-1" @click="startReply(comment)">
         <v-icon class="mr-2">{{ $vuetify.icons.values.mdiReply }}</v-icon>
         Reply
       </v-btn>
@@ -176,27 +216,28 @@
 
 <script>
 import { formatDistanceToNowStrict } from 'date-fns'
+import gql from 'graphql-tag'
 import UsernameMenu from '../user/UsernameMenu'
 import toggleCommentEndorsementGql from '../../gql/toggleCommentEndorsement.graphql'
-import submitCommentGql from '../../gql/submitComment.graphql'
-import postCommentsGql from '../../gql/postComments.graphql'
-import recordPostViewGql from '../../gql/recordPostView.graphql'
-import editCommentGql from '../../gql/editComment.graphql'
 import deleteCommentGql from '../../gql/deleteComment.graphql'
 import TextContent from '../TextContent'
 import { isEditorEmpty } from '@/util/isEditorEmpty'
 import { timeSince } from '@/util/timeSince'
 import { urlName } from '@/util/urlName'
 import AnimatedRocket from '@/components/AnimatedRocket'
+import commentMixin from '@/mixins/commentMixin'
+import CommentOptions from '@/components/comment/options/CommentOptions'
 
 export default {
   name: 'Comment',
   components: {
+    CommentOptions,
     AnimatedRocket,
     TextContent,
     Editor: () => import('@/components/editor/Editor'),
     UsernameMenu
   },
+  mixins: [commentMixin],
   props: {
     showPostTitle: {
       type: Boolean,
@@ -213,14 +254,9 @@ export default {
   },
   data() {
     return {
-      replying: false,
-      replyHTML: null,
-      submitBtnLoading: false,
-      editBtnLoading: false,
       childrenCollapsed: false,
-      editing: false,
-      editHTML: null,
       deleted: false,
+      removed: false,
       expanded: false,
       isEndorsed: this.comment.isEndorsed,
       endorsementCount: this.comment.endorsementCount
@@ -238,9 +274,6 @@ export default {
     },
     isEditEmpty() {
       return isEditorEmpty(this.editHTML)
-    },
-    isReplyEmpty() {
-      return isEditorEmpty(this.replyHTML)
     },
     editedTimeSince() {
       if (!this.comment.editedAt) return ''
@@ -289,9 +322,6 @@ export default {
     }
   },
   watch: {
-    editing(editing) {
-      if (editing) this.editHTML = this.comment.textContent
-    },
     expanded(expanded) {
       if (!expanded) return
       this.expandedCommentId = this.comment.id
@@ -308,101 +338,43 @@ export default {
     }
   },
   methods: {
-    toggleReply() {
-      if (!this.$store.state.currentUser) {
-        this.$store.dispatch('displaySnackbar', {
-          message: 'Must log in to reply'
-        })
-        return
-      }
-      this.replying = !this.replying
-    },
-    openReplyDialog() {
-      if (!this.$store.state.currentUser) {
-        this.$store.dispatch('displaySnackbar', {
-          message: 'Must log in to reply'
-        })
-        return
-      }
-      this.expanded = false
-      this.$emit('startreply', this.comment)
-    },
     async deleteComment() {
       const confirmed = window.confirm(
         'Are you sure you want to delete this comment?'
       )
       if (!confirmed) return
-      this.comment.textContent = {
-        type: 'doc',
-        content: [
-          { type: 'paragraph', content: [{ text: '[deleted]', type: 'text' }] }
-        ]
-      }
+      this.comment.textContent = '<p>[deleted]</p>'
       this.comment.author = null
       this.deleted = true
       await this.$apollo.mutate({
         mutation: deleteCommentGql,
         variables: { commentId: this.comment.id }
       })
+      this.$forceUpdate()
     },
-    async editComment() {
-      this.editBtnLoading = true
+    async removeComment() {
+      const reason = window.prompt('Reason for removal?')
+      if (!reason) return
+      this.comment.textContent = `<p>[removed: ${reason}]</p>`
+      this.comment.author = null
+      this.removed = true
       await this.$apollo.mutate({
-        mutation: editCommentGql,
-        variables: {
-          commentId: this.comment.id,
-          newTextContent: this.editHTML
-        }
-      })
-      this.comment.textContent = this.editHTML
-      this.editing = false
-      this.editBtnLoading = false
-    },
-    async submitReply() {
-      this.submitBtnLoading = true
-      try {
-        await this.$apollo.mutate({
-          mutation: submitCommentGql,
-          variables: {
-            textContent: this.replyHTML,
-            postId: this.comment.postId,
-            parentCommentId: this.comment.id
-          },
-          update: (store, { data: { submitComment } }) => {
-            const data = store.readQuery({
-              query: postCommentsGql,
-              variables: {
-                postId: this.comment.postId
-                // sort: this.sort.sort.toUpperCase()
-              }
-            })
-            data.postComments.unshift(submitComment)
-            store.writeQuery({
-              query: postCommentsGql,
-              variables: {
-                postId: this.comment.postId
-                // sort: this.sort.sort.toUpperCase()
-              },
-              data
-            })
-            this.replyHTML = null
-            if (!this.comment.childComments) this.comment.childComments = []
-            this.comment.childComments.unshift(submitComment)
+        mutation: gql`
+          mutation($planetName: ID!, $commentId: ID!, $removedReason: String!) {
+            removeComment(
+              planetName: $planetName
+              commentId: $commentId
+              removedReason: $removedReason
+            )
           }
-        })
-        this.replying = false
-      } catch (e) {
-        await this.$store.dispatch('displaySnackbar', {
-          message: e.message.split('GraphQL error: ')[1]
-        })
-      }
-      this.$apollo.mutate({
-        mutation: recordPostViewGql,
+        `,
         variables: {
-          postId: this.comment.postId
+          planetName: this.comment.post.planet.name,
+          commentId: this.comment.id,
+          removedReason: reason
         }
       })
-      this.submitBtnLoading = false
+      this.$forceUpdate()
     },
     async toggleEndorsement() {
       this.expanded = false

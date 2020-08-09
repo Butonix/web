@@ -194,8 +194,8 @@
 </template>
 
 <script>
-import NativeSelect from '../components/NativeSelect'
-import setProfilePicGql from '../gql/setProfilePic.graphql'
+import setProfilePicGql from '../../gql/setProfilePic.graphql'
+import NativeSelect from './NativeSelect'
 import {
   accessoriesTypes,
   clotheTypes,

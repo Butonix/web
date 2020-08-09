@@ -47,7 +47,7 @@
 
 <script>
 import SignUpForm from '../../components/SignUpForm'
-import AvatarEditor from '../../components/AvatarEditor'
+import AvatarEditor from '../../components/avatar_editor/AvatarEditor'
 
 export default {
   components: { AvatarEditor, SignUpForm },

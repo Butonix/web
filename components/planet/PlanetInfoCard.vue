@@ -91,6 +91,7 @@
         class="flex-grow-1"
         nuxt
         :to="`/p/${$route.params.planetname}/edit`"
+        :style="$vuetify.theme.dark ? '' : 'background-color: #DEE1E6'"
       >
         Edit Planet
         <v-icon size="20" class="ml-2">{{

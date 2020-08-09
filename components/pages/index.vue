@@ -42,7 +42,7 @@
 <script>
 import postDialogMixin from '@/mixins/postDialogMixin'
 import PostsScroller from '@/components/post/PostsScroller'
-import PopularPlanetsCard from '@/components/PopularPlanetsCard'
+import PopularPlanetsCard from '@/components/planet/PopularPlanetsCard'
 import ModeratedPlanetsCard from '@/components/user/ModeratedPlanetsCard'
 import { postHead } from '@/util/postHead'
 import InfoLinks from '@/components/InfoLinks'

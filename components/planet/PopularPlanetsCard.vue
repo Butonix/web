@@ -44,8 +44,8 @@
 </template>
 
 <script>
-import popularPlanetsGql from '../gql/popularPlanets.graphql'
-import PlanetListItem from '@/components/PlanetListItem'
+import popularPlanetsGql from '../../gql/popularPlanets.graphql'
+import PlanetListItem from '@/components/planet/PlanetListItem'
 
 export default {
   name: 'PopularPlanetsCard',

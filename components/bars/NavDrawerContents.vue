@@ -130,7 +130,7 @@
 <script>
 import gql from 'graphql-tag'
 import joinedPlanetsGql from '@/gql/joinedPlanets'
-import PlanetListItem from '@/components/PlanetListItem'
+import PlanetListItem from '@/components/planet/PlanetListItem'
 
 export default {
   name: 'NavDrawerContents',

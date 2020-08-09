@@ -25,7 +25,6 @@
         color="primary"
         nuxt
         to="/signup"
-        class="white--text"
         >Sign Up</v-btn
       >
     </v-card-actions>

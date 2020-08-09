@@ -2,10 +2,17 @@
   <v-btn
     rounded
     depressed
-    class="white--text"
     color="primary"
     nuxt
-    :to="$store.state.currentUser ? '/submit/text' : '/signup'"
+    :to="
+      $store.state.currentUser
+        ? `/submit/text${
+            $route.params.planetname
+              ? `?planet=${$route.params.planetname}`
+              : ''
+          }`
+        : '/signup'
+    "
     height="34"
   >
     <v-icon class="mr-2">{{ $vuetify.icons.values.mdiPlusBox }}</v-icon>

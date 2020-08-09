@@ -43,7 +43,7 @@
 
 <script>
 import popularPlanetsGql from '@/gql/popularPlanets.graphql'
-import PlanetListItem from '@/components/PlanetListItem'
+import PlanetListItem from '@/components/planet/PlanetListItem'
 
 export default {
   name: 'GalaxyInfoCard',

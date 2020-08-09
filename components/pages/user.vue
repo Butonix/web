@@ -240,7 +240,7 @@ export default {
   components: {
     InfoLinks,
     UserCommentsScroller,
-    AvatarEditor: () => import('@/components/AvatarEditor'),
+    AvatarEditor: () => import('@/components/avatar_editor/AvatarEditor'),
     ModeratedPlanetsCard,
     UserSummaryCard,
     PostsScroller

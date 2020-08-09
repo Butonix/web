@@ -39,7 +39,7 @@ import isUrl from 'is-url'
 import gql from 'graphql-tag'
 import { urlName } from '~/util/urlName'
 import submitPostGql from '~/gql/submitPost'
-import PlanetSelector from '@/components/PlanetSelector'
+import PlanetSelector from '@/components/planet/PlanetSelector'
 
 export default {
   middleware: 'authenticated',

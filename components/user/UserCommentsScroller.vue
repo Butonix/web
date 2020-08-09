@@ -55,7 +55,7 @@
 <script>
 import 'vue-virtual-scroller/dist/vue-virtual-scroller.css'
 import { DynamicScroller, DynamicScrollerItem } from 'vue-virtual-scroller'
-import PostDialog from '@/components/PostDialog'
+import PostDialog from '@/components/pages/PostDialog'
 import { urlName } from '@/util/urlName'
 import Comment from '@/components/comment/Comment'
 import NoPostsMessage from '@/components/NoPostsMessage'

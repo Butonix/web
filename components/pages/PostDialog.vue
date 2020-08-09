@@ -110,9 +110,13 @@
 
                 <client-only>
                   <Editor
-                    v-model="commentHTML"
-                    :loading="submitBtnLoading"
-                    @submitted="submitComment"
+                    v-model="replyHTML"
+                    :loading="replyBtnLoading"
+                    @submitted="
+                      submitReply(
+                        replyingComment ? replyingComment : { postId: post.id }
+                      )
+                    "
                   />
                 </client-only>
               </div>
@@ -133,12 +137,7 @@
                   >
                   <v-spacer />
                   <v-btn text nuxt to="/login">Log in</v-btn>
-                  <v-btn
-                    depressed
-                    color="primary"
-                    class="white--text"
-                    nuxt
-                    to="/signup"
+                  <v-btn depressed color="primary" nuxt to="/signup"
                     >Sign up</v-btn
                   >
                 </v-card-actions>
@@ -164,11 +163,10 @@
                 rounded
                 depressed
                 color="primary"
-                class="white--text"
                 :class="$device.isDesktop ? '' : 'flex-grow-1 mr-3'"
                 style="justify-content: start"
                 height="34"
-                @click="composeRootComment"
+                @click="handleStartReply(null)"
               >
                 <v-icon class="mr-2">{{
                   $vuetify.icons.values.mdiPencil
@@ -181,7 +179,6 @@
                 rounded
                 depressed
                 color="primary"
-                class="white--text"
                 :class="$device.isDesktop ? '' : 'flex-grow-1 mr-3'"
                 style="justify-content: start"
                 height="34"
@@ -226,6 +223,7 @@
                   'border-top-width': '1px'
                 }"
                 @startreply="handleStartReply"
+                @startedit="handleStartEdit"
               />
             </div>
             <div style="height: 600px" />
@@ -255,29 +253,40 @@
       </div>
     </div>
 
-    <EditorDialog
-      ref="editordialog"
-      v-model="commentHTML"
-      :parent-text-content="
-        replyingComment ? replyingComment.textContent : null
-      "
-      :loading="submitBtnLoading"
-      @submitted="submitComment"
-    />
+    <template v-if="!$device.isDesktop">
+      <EditorDialog
+        ref="replydialog"
+        v-model="replyHTML"
+        :parent-text-content="
+          replyingComment ? replyingComment.textContent : null
+        "
+        :loading="replyBtnLoading"
+        @submitted="
+          submitReply(replyingComment ? replyingComment : { postId: post.id })
+        "
+      />
+
+      <EditorDialog
+        ref="editdialog"
+        v-model="editHTML"
+        :loading="editBtnLoading"
+        @submitted="editComment(editingComment)"
+      />
+    </template>
   </div>
 </template>
 
 <script>
-import postCommentsGql from '../gql/postComments.graphql'
-import submitCommentGql from '../gql/submitComment.graphql'
-import recordPostViewGql from '../gql/recordPostView.graphql'
-import Comment from '../components/comment/Comment'
+import postCommentsGql from '../../gql/postComments.graphql'
+import recordPostViewGql from '../../gql/recordPostView.graphql'
+import Comment from '../comment/Comment'
 import { urlName } from '@/util/urlName'
 import Post from '@/components/post/Post'
 import PlanetInfoCard from '@/components/planet/PlanetInfoCard'
 import UsernameMenu from '@/components/user/UsernameMenu'
 import CommentSortMenu from '@/components/comment/sort/CommentSortMenu'
 import InfoLinks from '@/components/InfoLinks'
+import commentMixin from '@/mixins/commentMixin'
 
 function flat(r, a) {
   const b = {}
@@ -308,6 +317,7 @@ export default {
     Post,
     Comment
   },
+  mixins: [commentMixin],
   props: {
     post: {
       type: Object,
@@ -326,12 +336,11 @@ export default {
     return {
       postComments: [],
       postView: null,
-      commentHTML: null,
-      submitBtnLoading: false,
       dialogOpen: this.value,
       addedEventListener: false,
       replyingComment: null,
-      renderedCommentsCount: 5
+      editingComment: null,
+      renderedCommentsCount: 10
     }
   },
   computed: {
@@ -367,7 +376,7 @@ export default {
     'post.id'() {
       this.updateThemeColor()
       this.postComments = []
-      this.renderedCommentsCount = 5
+      this.renderedCommentsCount = 10
       this.$nextTick(() => this.$refs.dialog.scrollTo(0, 0))
     },
     async dialogOpen() {
@@ -422,13 +431,14 @@ export default {
   },
   methods: {
     doNothing() {},
-    composeRootComment() {
-      this.replyingComment = null
-      this.$refs.editordialog.open()
-    },
     handleStartReply(e) {
       this.replyingComment = e
-      this.$refs.editordialog.open()
+      this.$refs.replydialog.open()
+    },
+    handleStartEdit(e) {
+      this.editingComment = e
+      this.editHTML = e.textContent
+      this.$refs.editdialog.open()
     },
     updateThemeColor() {
       if (
@@ -463,58 +473,6 @@ export default {
         this.$refs.editordialog.close()
       }
       this.dialogOpen = false
-    },
-    async submitComment() {
-      this.submitBtnLoading = true
-      try {
-        await this.$apollo.mutate({
-          mutation: submitCommentGql,
-          variables: {
-            postId: this.postId,
-            textContent: this.commentHTML,
-            parentCommentId: this.replyingComment
-              ? this.replyingComment.id
-              : null
-          },
-          update: (store, { data: { submitComment } }) => {
-            const data = store.readQuery({
-              query: postCommentsGql,
-              variables: {
-                postId: this.postId
-                // sort: this.sort.sort.toUpperCase()
-              }
-            })
-            data.postComments.unshift(submitComment)
-            store.writeQuery({
-              query: postCommentsGql,
-              variables: {
-                postId: this.postId
-                // sort: this.sort.sort.toUpperCase()
-              },
-              data
-            })
-            if (this.replyingComment) {
-              if (!this.replyingComment.childComments)
-                this.replyingComment.childComments = []
-              this.replyingComment.childComments.unshift(submitComment)
-            }
-          }
-        })
-        this.commentHTML = null
-        this.$refs.editordialog.close()
-
-        await this.$apollo.mutate({
-          mutation: recordPostViewGql,
-          variables: {
-            postId: this.postId
-          }
-        })
-      } catch (e) {
-        this.$store.dispatch('displaySnackbar', {
-          message: e.message.split('GraphQL error: ')[1]
-        })
-      }
-      this.submitBtnLoading = false
     }
   },
   apollo: {
