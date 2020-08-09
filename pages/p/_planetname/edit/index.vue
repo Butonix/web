@@ -66,6 +66,16 @@
           </div>
         </div>
 
+        <v-text-field
+          v-model="addModeratorUsername"
+          solo
+          flat
+          label="Add a moderator"
+          :append-icon="$vuetify.icons.values.mdiAccountPlusOutline"
+          @click:append="addModerator"
+          @keydown.enter="addModerator"
+        />
+
         <div
           v-if="planet.bannerImageUrl"
           style="cursor: pointer"
@@ -136,7 +146,8 @@ export default {
       planet: null,
       loading: false,
       swatches: [[]],
-      themeColor: '#EF5350'
+      themeColor: '#EF5350',
+      addModeratorUsername: ''
     }
   },
   watch: {
@@ -166,6 +177,31 @@ export default {
     this.swatches = swatches2d
   },
   methods: {
+    async addModerator() {
+      if (!this.addModeratorUsername) return
+      try {
+        await this.$apollo.mutate({
+          mutation: gql`
+            mutation($planetName: ID!, $username: String!) {
+              addModerator(planetName: $planetName, username: $username)
+            }
+          `,
+          variables: {
+            planetName: this.planet.name,
+            username: this.addModeratorUsername
+          }
+        })
+        this.$store.dispatch('displaySnackbar', {
+          message: `Added ${this.addModeratorUsername} as a moderator`,
+          success: true
+        })
+        this.addModeratorUsername = ''
+      } catch (e) {
+        this.$store.dispatch('displaySnackbar', {
+          message: e.message.split('GraphQL error: ')[1]
+        })
+      }
+    },
     async removeAvatar() {
       this.planet.avatarImageUrl = null
       this.$apollo.mutate({

@@ -74,10 +74,10 @@
       </template>
     </v-text-field>
 
-    <div class="text--secondary pb-1" style="font-size: 0.86rem">
+    <!--<div class="text&#45;&#45;secondary pb-1" style="font-size: 0.86rem">
       *Emails are only used for account recovery and are not shared with any
       third parties.
-    </div>
+    </div>-->
     <div class="text--secondary pb-3" style="font-size: 0.86rem">
       By clicking Continue, you agree to our
       <nuxt-link to="/terms" target="_blank" class="primary--text"

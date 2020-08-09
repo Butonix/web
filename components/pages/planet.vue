@@ -27,7 +27,7 @@
         >
       </div>
       <div
-        style="height: 78px; display: flex; flex-direction: row; align-items: center"
+        style="min-height: 78px; display: flex; flex-direction: row; align-items: center"
         :style="
           $vuetify.theme.dark
             ? 'background-color: #35363A'
@@ -40,12 +40,33 @@
               {{ planet.customName ? planet.customName : planet.name }}
             </span>
             <PlanetJoinButton :planet="planet" class="ml-2" />
+            <v-btn
+              v-if="
+                $store.state.currentUser &&
+                  (!!$store.state.currentUser.moderatedPlanets.find(
+                    (p) => p.name === planet.name
+                  ) ||
+                    $store.state.currentUser.admin)
+              "
+              text
+              class="ml-2 px-2"
+              nuxt
+              :to="`/p/${planet.name}/edit`"
+            >
+              Edit
+              <v-icon size="20" class="ml-2">{{
+                $vuetify.icons.values.mdiPencil
+              }}</v-icon>
+            </v-btn>
           </v-row>
           <div
             style="font-size: 1rem; font-weight: 400"
             class="text--secondary"
           >
             p/{{ planet.name }}
+          </div>
+          <div v-if="!$device.isDesktop && planet.description">
+            {{ planet.description }}
           </div>
         </div>
       </div>

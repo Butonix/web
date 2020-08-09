@@ -239,11 +239,11 @@
             >
               <div style="position: sticky; top: 60px">
                 <PlanetInfoCard
-                  v-if="post"
+                  v-if="planet"
                   :style="
                     $vuetify.theme.dark ? '' : 'background-color: #F8F9FA'
                   "
-                  :planet="post.planet"
+                  :planet="planet"
                 />
                 <InfoLinks class="mt-3" />
               </div>
@@ -278,6 +278,7 @@
 
 <script>
 import postCommentsGql from '../../gql/postComments.graphql'
+import planetGql from '../../gql/planet.graphql'
 import recordPostViewGql from '../../gql/recordPostView.graphql'
 import Comment from '../comment/Comment'
 import { urlName } from '@/util/urlName'
@@ -340,7 +341,8 @@ export default {
       addedEventListener: false,
       replyingComment: null,
       editingComment: null,
-      renderedCommentsCount: 10
+      renderedCommentsCount: 10,
+      planet: null
     }
   },
   computed: {
@@ -376,6 +378,7 @@ export default {
     'post.id'() {
       this.updateThemeColor()
       this.postComments = []
+      this.planet = null
       this.renderedCommentsCount = 10
       this.$nextTick(() => this.$refs.dialog.scrollTo(0, 0))
     },
@@ -487,6 +490,17 @@ export default {
         return !this.post || !this.dialogOpen || !this.postId
       },
       fetchPolicy: 'network-only'
+    },
+    planet: {
+      query: planetGql,
+      variables() {
+        return {
+          planetName: this.post.planet.name
+        }
+      },
+      skip() {
+        return !this.post || !this.dialogOpen || !this.postId
+      }
     }
   }
 }

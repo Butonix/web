@@ -36,7 +36,7 @@
 
         <v-card style="padding-bottom: 24px; padding-top: 12px">
           <v-row justify="center" class="px-6">
-            <v-col align="center" cols="4">
+            <v-col align="center" cols="3">
               <v-avatar
                 :style="{
                   'border-width': '1px',
@@ -71,7 +71,7 @@
               </v-avatar>
               <div class="pt-2">Saved</div>
             </v-col>-->
-            <v-col align="center" cols="4">
+            <v-col align="center" cols="3">
               <nuxt-link
                 :to="
                   $store.state.currentUser
@@ -95,9 +95,37 @@
               </nuxt-link>
               <div class="pt-2">Profile</div>
             </v-col>
-            <v-col align="center" cols="4">
+            <v-col align="center" cols="3">
               <nuxt-link
-                :to="$store.state.currentUser ? '/submit/text' : '/signup'"
+                :to="$store.state.currentUser ? '/planets/create' : '/signup'"
+              >
+                <v-avatar
+                  :style="{
+                    'border-width': '1px',
+                    'border-style': 'solid',
+                    'border-color': $vuetify.theme.dark
+                      ? 'rgba(255, 255, 255, 0.12)'
+                      : 'rgba(0, 0, 0, 0.12)'
+                  }"
+                >
+                  <v-icon size="24">{{
+                    $vuetify.icons.values.mdiEarthPlus
+                  }}</v-icon>
+                </v-avatar>
+              </nuxt-link>
+              <div class="pt-2">Create Planet</div>
+            </v-col>
+            <v-col align="center" cols="3">
+              <nuxt-link
+                :to="
+                  $store.state.currentUser
+                    ? `/submit/text${
+                        $route.params.planetname
+                          ? `?planet=${$route.params.planetname}`
+                          : ''
+                      }`
+                    : '/signup'
+                "
               >
                 <v-avatar
                   :style="{
@@ -146,7 +174,7 @@
               :content="notifications.length"
             >
               <v-icon class="text--secondary">{{
-                $vuetify.icons.values.mdiEmailOutline
+                $vuetify.icons.values.mdiBellOutline
               }}</v-icon>
             </v-badge>
             <v-icon v-else class="text--secondary">{{
@@ -156,8 +184,36 @@
         </template>
 
         <v-card>
-          <v-card-text class="pa-0">
-            <NotificationsMenu />
+          <v-toolbar
+            dense
+            style="position: sticky; top: 0; z-index: 100; border-bottom-width: 1px; border-bottom-style: solid"
+            :style="{
+              'border-bottom-color': $vuetify.theme.dark
+                ? 'rgba(255, 255, 255, 0.12)'
+                : 'rgba(0, 0, 0, 0.12)'
+            }"
+            flat
+            :color="$vuetify.theme.dark ? '#35363A' : '#F1F3F4'"
+          >
+            <v-toolbar-title>{{ notifications.length }} Unread</v-toolbar-title>
+            <v-spacer />
+            <v-toolbar-items>
+              <v-btn text @click="markAllAsRead">Dismiss all</v-btn>
+            </v-toolbar-items>
+          </v-toolbar>
+          <v-card-text v-if="notifications.length > 0" class="px-3 pt-3 pb-6">
+            <Notification
+              v-for="notif in notifications"
+              :key="notif.id"
+              :notif="notif"
+              unread-only
+            />
+          </v-card-text>
+
+          <v-card-text v-else class="px-3 pt-3 pb-6">
+            <div style="text-align: center; font-size: 1.143rem">
+              No new notifications
+            </div>
           </v-card-text>
         </v-card>
       </v-bottom-sheet>
@@ -168,11 +224,12 @@
 <script>
 import notificationsGql from '../../gql/notifications.graphql'
 import NavDrawerContents from '@/components/bars/NavDrawerContents'
-import NotificationsMenu from '@/components/notifications/NotificationsMenu'
+import Notification from '@/components/notifications/Notification'
+import markAllNotificationsReadGql from '@/gql/markAllNotificationsRead'
 
 export default {
   name: 'BottomNavBar',
-  components: { NotificationsMenu, NavDrawerContents },
+  components: { Notification, NavDrawerContents },
   data() {
     return {
       notifications: [],
@@ -209,6 +266,17 @@ export default {
     }
   },
   methods: {
+    async markAllAsRead() {
+      await this.$apollo.mutate({
+        mutation: markAllNotificationsReadGql,
+        refetchQueries: [
+          {
+            query: notificationsGql,
+            variables: { unreadOnly: true }
+          }
+        ]
+      })
+    },
     showSearchPrompt() {
       const search = window.prompt('Search')
       if (!search) return
