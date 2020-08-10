@@ -16,6 +16,7 @@
           persistent-hint
           hint="Name shown in address bar (e.g p/Comet). Letters, numbers, and underscores. This cannot be changed later."
           :counter="21"
+          :rules="name.length > 0 ? planetRules : []"
         >
           <template v-slot:prepend-inner>
             <span class="text--secondary">p/</span>
@@ -80,7 +81,9 @@
             !name ||
               !description ||
               !selectedGalaxy ||
-              $store.state.currentUser.moderatedPlanets.length >= 10
+              $store.state.currentUser.moderatedPlanets.length >= 10 ||
+              !name.match(/^[a-zA-Z0-9_]+$/) ||
+              name.length > 21
           "
           :loading="createBtnLoading"
           @click="createPlanet"
@@ -114,7 +117,15 @@ export default {
       description: '',
       galaxies: [],
       selectedGalaxy: null,
-      createBtnLoading: false
+      createBtnLoading: false,
+      planetRules: [
+        (v) => v.length >= 3 || 'Planet name must be at least 3 characters',
+        (v) => v.length <= 21 || 'Maximum planet name length is 21 characters',
+        (v) =>
+          (v.match(/^[a-zA-Z0-9_]+$/) &&
+            v.match(/^[a-zA-Z0-9_]+$/).length > 0) ||
+          'Planet name can only have letters, numbers, and underscores.'
+      ]
     }
   },
   watch: {
@@ -145,17 +156,23 @@ export default {
   methods: {
     async createPlanet() {
       this.createBtnLoading = true
-      await this.$apollo.mutate({
-        mutation: createPlanetGql,
-        variables: {
-          name: this.name,
-          description: this.description,
-          galaxy: this.selectedGalaxy
-        }
-      })
-      await this.$store.dispatch('fetchCurrentUser')
+      try {
+        await this.$apollo.mutate({
+          mutation: createPlanetGql,
+          variables: {
+            name: this.name,
+            description: this.description,
+            galaxy: this.selectedGalaxy
+          }
+        })
+        await this.$store.dispatch('fetchCurrentUser')
+        await this.$router.push(`/p/${this.name}`)
+      } catch (e) {
+        await this.$store.dispatch('displaySnackbar', {
+          message: e.message.split('GraphQL error: ')[1]
+        })
+      }
       this.createBtnLoading = false
-      await this.$router.push(`/p/${this.name}`)
     }
   },
   head: {
