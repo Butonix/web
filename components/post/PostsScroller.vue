@@ -38,10 +38,17 @@
             class="pa-3"
             :class="$vuetify.theme.dark ? 'post-dark' : 'post-light'"
             style="cursor: pointer"
-            @click="
-              $router.push(
-                `/p/${item.planet.name}/comments/${item.id}/${urlName(item)}`
-              )
+            v-on="
+              !dialog
+                ? {
+                    click: () =>
+                      $router.push(
+                        `/p/${item.planet.name}/comments/${item.id}/${urlName(
+                          item
+                        )}`
+                      )
+                  }
+                : {}
             "
           >
             <Post

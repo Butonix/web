@@ -201,7 +201,7 @@ export default {
       this.$emit('selected')
       navigator.share({
         title: `"${this.post.title}" on Comet`,
-        url: `https://www.getcomet.net/p/${this.post.id}/${this.urlName}`
+        url: `https://www.getcomet.net/p/${this.post.planet.name}/comments/${this.post.id}/${this.urlName}`
       })
     },
     copyLink() {

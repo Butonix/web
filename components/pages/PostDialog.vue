@@ -35,12 +35,12 @@
       <div
         ref="dialog"
         style="height: 100%; overflow-y: auto; position: relative; width: 100%; will-change: transform; contain: layout style size"
-        @click.stop.prevent="goBack"
+        @click="goBack"
       >
         <div
           v-if="$device.isDesktop"
           style="background-color: #030303; color: #E8EAED; position: sticky; box-sizing: border-box; height: 48px; left: 0; margin: 0 auto; max-width: 1280px; right: 0; top: 0; width: calc(100% - 160px); z-index: 70"
-          @click.stop.prevent="doNothing"
+          @click.stop="doNothing"
         >
           <div
             style="padding: 0 32px; align-items: center; box-sizing: border-box; display: flex; height: 100%; margin: auto; max-width: 1128px; width: 100%"
@@ -75,7 +75,7 @@
             margin: $device.isDesktop ? '0 auto' : '',
             width: $device.isDesktop ? 'calc(100% - 160px)' : '100%'
           }"
-          @click.stop.prevent="doNothing"
+          @click.stop="doNothing"
         >
           <div
             style="flex: 1; min-height: 100vh; min-width: 0; padding-bottom: 1px; width: 100%; word-break: break-word"

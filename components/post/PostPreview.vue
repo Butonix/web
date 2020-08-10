@@ -7,7 +7,9 @@
       :style="
         expand || isPostView || textContentHeight <= 90 ? '' : 'cursor: pointer'
       "
-      @click="toggleTextExpand"
+      v-on="
+        !isPostView && textContentHeight > 90 ? { click: toggleTextExpand } : {}
+      "
     >
       <TextContent
         :text-content="post.textContent"
@@ -169,11 +171,9 @@ export default {
       window.open(this.post.link, '_blank')
     },
     toggleTextExpand(e) {
-      if (!this.isPostView && this.textContentHeight > 90) {
-        this.$emit('togglemore')
-        e.stopPropagation()
-        e.preventDefault()
-      }
+      this.$emit('togglemore')
+      e.stopPropagation()
+      e.preventDefault()
     }
   }
 }

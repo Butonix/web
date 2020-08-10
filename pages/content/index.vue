@@ -70,6 +70,20 @@
             interesting, productive dicussion. Non-pornographic nudity (i.e.
             art) is allowed.
           </li>
+          <li>
+            <span class="font-weight-bold">No trolling.</span> Do not post
+            meaningless, annoying, or offensive content that worsens the Comet
+            experience for everyone else. Just don't be a dick.
+          </li>
+          <li>
+            <span class="font-weight-bold">No inappropriate usernames.</span>
+            Includes usernames containing racial slurs or other offensive words.
+          </li>
+          <li>
+            <span class="font-weight-bold"
+              >Your post can be removed at Comet's discretion.</span
+            >
+          </li>
         </ol>
       </v-col>
     </v-row>

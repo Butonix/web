@@ -19,7 +19,7 @@ export const userHead = (user) => {
           property: 'og:image',
           content: user.bannerImageUrl
             ? user.bannerImageUrl
-            : 'https://www.getcomet.net/cometgrid76.png'
+            : 'https://www.getcomet.net/comet_og_image.png'
         },
         {
           hid: 'og:url',
@@ -61,7 +61,7 @@ export const userHead = (user) => {
           name: 'twitter:image',
           content: user.bannerImageUrl
             ? user.bannerImageUrl
-            : 'https://www.getcomet.net/cometgrid76.png'
+            : 'https://www.getcomet.net/comet_og_image.png'
         },
         {
           hid: 'twitter:url',

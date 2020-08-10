@@ -208,7 +208,6 @@ import {
   Bold,
   Code,
   Italic,
-  Link,
   Strike,
   Underline,
   HorizontalRule,
@@ -217,6 +216,7 @@ import {
   History,
   Placeholder
 } from 'tiptap-extensions'
+import CustomLink from '@/components/editor/CustomLink'
 import { isEditorEmpty } from '@/util/isEditorEmpty'
 
 export default {
@@ -260,7 +260,7 @@ export default {
           new CodeBlock(),
           new Heading({ levels: [1, 2, 3] }),
           new OrderedList(),
-          new Link(),
+          new CustomLink(),
           new Bold(),
           new Code(),
           new Italic(),
