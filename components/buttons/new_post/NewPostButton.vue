@@ -15,8 +15,12 @@
     "
     height="34"
   >
-    <v-icon class="mr-2">{{ $vuetify.icons.values.mdiPlusBox }}</v-icon>
-    New Post
+    <v-icon class="mr-2" color="#E8EAED">{{
+      $vuetify.icons.values.mdiPlusBox
+    }}</v-icon>
+    <span style="color: #E8EAED">
+      New Post
+    </span>
   </v-btn>
 </template>
 

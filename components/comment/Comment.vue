@@ -81,6 +81,7 @@
             :class="isEndorsed ? 'primary--text' : 'text--secondary'"
             style="font-size: 0.86rem; font-weight: 500; display: inline-flex; align-items: center"
             :style="cssVars"
+            @click.stop.prevent="toggleEndorsement"
           >
             <span>
               {{ endorsementCount }}

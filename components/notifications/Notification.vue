@@ -1,6 +1,11 @@
 <template>
   <div class="pb-3">
-    <v-card outlined>
+    <v-card
+      outlined
+      nuxt
+      :to="`/p/${notif.post.planet.name}/comments/${notif.post.id}/${urlName}`"
+      @click="$emit('closed')"
+    >
       <div class="px-2 pt-2">
         <span
           v-if="notif.parentCommentId"

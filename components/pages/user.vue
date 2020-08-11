@@ -276,7 +276,8 @@ export default {
         return {
           username: this.$route.params.username
         }
-      }
+      },
+      fetchPolicy: 'network-only'
     }
   },
   computed: {

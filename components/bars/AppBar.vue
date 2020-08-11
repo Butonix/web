@@ -116,7 +116,7 @@
         </div>
 
         <div class="mr-1">
-          <NotificationsMenu />
+          <NotificationsMenu style="z-index: 600" />
         </div>
       </template>
 
@@ -124,7 +124,7 @@
 
       <template v-if="$device.isDesktop">
         <client-only>
-          <v-menu offset-y transition="slide-y-transition">
+          <v-menu offset-y transition="slide-y-transition" style="z-index: 600">
             <template v-slot:activator="{ on }">
               <v-btn
                 class="ml-1"
@@ -151,6 +151,12 @@
             />
           </v-menu>
         </client-only>
+
+        <v-btn class="ml-1" icon title="Toggle Dark Mode" @click="toggleDark">
+          <v-icon :color="$vuetify.theme.dark ? 'primary' : ''">{{
+            $vuetify.icons.values.mdiWeatherNight
+          }}</v-icon>
+        </v-btn>
 
         <FeedbackDialog />
       </template>
@@ -184,6 +190,10 @@ export default {
     }
   },
   methods: {
+    toggleDark() {
+      this.$vuetify.theme.dark = !this.$vuetify.theme.dark
+      localStorage.setItem('dark', this.$vuetify.theme.dark.toString())
+    },
     scrollToTop() {
       window.scrollTo(0, 0)
     },

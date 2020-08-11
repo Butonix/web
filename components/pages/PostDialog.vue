@@ -197,7 +197,6 @@
             </v-row>
 
             <div
-              v-show="renderedComments.length > 0"
               style="box-sizing: border-box"
               :style="{
                 'border-style': $device.isDesktop ? 'solid' : 'none',
@@ -211,7 +210,7 @@
               }"
             >
               <Comment
-                v-for="(comment, index) in renderedComments"
+                v-for="(comment, index) in postComments"
                 :key="comment.id"
                 :post="post"
                 :post-view="postView"
@@ -324,8 +323,7 @@ export default {
       dialogOpen: this.value,
       addedEventListener: false,
       replyingComment: null,
-      editingComment: null,
-      renderedCommentsCount: 10
+      editingComment: null
     }
   },
   computed: {
@@ -335,16 +333,12 @@ export default {
     urlName() {
       if (!this.post) return ''
       return urlName(this.post.title)
-    },
-    renderedComments() {
-      return this.postComments.slice(0, this.renderedCommentsCount)
     }
   },
   watch: {
     'post.id'() {
       this.updateThemeColor()
       this.postComments = []
-      this.renderedCommentsCount = 10
       this.$nextTick(() => this.$refs.dialog.scrollTo(0, 0))
     },
     async dialogOpen() {
@@ -385,11 +379,6 @@ export default {
       window.addEventListener('popstate', this.handleHistoryChange)
       this.addedEventListener = true
     }
-
-    setInterval(() => {
-      if (this.postComments.length < this.renderedCommentsCount) return
-      this.renderedCommentsCount++
-    }, 50)
 
     if (!this.dialogOpen) {
       window.document.documentElement.style.overflowY = 'scroll'

@@ -164,7 +164,7 @@
         </v-card>
       </v-bottom-sheet>
 
-      <v-bottom-sheet scrollable>
+      <v-bottom-sheet v-model="notifsBottomSheet" scrollable>
         <template v-slot:activator="{ on }">
           <v-btn aria-label="Notifications" class="navbtn" v-on="on">
             <span class="text--secondary">Notifications</span>
@@ -207,6 +207,7 @@
               :key="notif.id"
               :notif="notif"
               unread-only
+              @click="notifsBottomSheet = false"
             />
           </v-card-text>
 
@@ -236,7 +237,8 @@ export default {
       newPostBottomSheet: false,
       planetsBottomSheet: false,
       isPWA: false,
-      middleBtnBottomSheet: false
+      middleBtnBottomSheet: false,
+      notifsBottomSheet: false
     }
   },
   watch: {
@@ -244,6 +246,7 @@ export default {
       this.newPostBottomSheet = false
       this.planetsBottomSheet = false
       this.middleBtnBottomSheet = false
+      this.notifsBottomSheet = false
     }
   },
   beforeMount() {

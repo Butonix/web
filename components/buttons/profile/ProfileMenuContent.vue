@@ -65,18 +65,6 @@
       </v-list-item-content>
     </v-list-item>
 
-    <v-list-item @click="toggleDark">
-      <v-list-item-icon>
-        <v-icon>{{ $vuetify.icons.values.mdiWeatherNight }}</v-icon>
-      </v-list-item-icon>
-      <v-list-item-content>
-        <v-list-item-title>Dark mode</v-list-item-title>
-      </v-list-item-content>
-      <v-list-item-action>
-        <v-switch v-model="$vuetify.theme.dark" readonly />
-      </v-list-item-action>
-    </v-list-item>
-
     <v-list-item v-if="$store.state.currentUser" @click="logout">
       <v-list-item-icon>
         <v-icon>{{ $vuetify.icons.values.mdiLogout }}</v-icon>
@@ -94,13 +82,6 @@ import currentUserGql from '../../../gql/currentUser.graphql'
 export default {
   name: 'ProfileMenuContent',
   methods: {
-    toggleDark() {
-      this.$emit('selected')
-      this.$vuetify.theme.dark = !this.$vuetify.theme.dark
-      if (process.client) {
-        localStorage.setItem('dark', this.$vuetify.theme.dark.toString())
-      }
-    },
     async logout() {
       this.$emit('selected')
       this.$store.dispatch('displaySnackbar', { message: 'Logged out' })

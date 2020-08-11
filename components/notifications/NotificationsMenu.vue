@@ -1,10 +1,13 @@
 <template>
   <v-menu
     v-if="$store.state.currentUser"
+    v-model="notifsMenu"
     offset-y
+    bottom
     transition="slide-y-transition"
     :close-on-content-click="false"
     max-height="80%"
+    style="z-index: 600"
   >
     <template v-slot:activator="{ on }">
       <v-btn icon v-on="on">
@@ -19,7 +22,7 @@
       </v-btn>
     </template>
 
-    <v-card width="600">
+    <v-card width="600" style="z-index: 602">
       <v-toolbar
         dense
         style="position: sticky; top: 0; z-index: 100; border-bottom-width: 1px; border-bottom-style: solid"
@@ -46,6 +49,7 @@
           :key="notif.id"
           :unread-only="unreadOnly"
           :notif="notif"
+          @closed="notifsMenu = false"
         />
       </div>
 
@@ -73,7 +77,13 @@ export default {
   data() {
     return {
       notifications: [],
-      unreadOnly: true
+      unreadOnly: true,
+      notifsMenu: false
+    }
+  },
+  watch: {
+    '$route.path'() {
+      this.notifsMenu = false
     }
   },
   methods: {
@@ -110,5 +120,6 @@ export default {
 .v-menu__content {
   overflow: -moz-scrollbars-none !important;
   -ms-overflow-style: none !important;
+  z-index: 602 !important;
 }
 </style>
