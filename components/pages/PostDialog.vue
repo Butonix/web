@@ -197,6 +197,7 @@
             </v-row>
 
             <div
+              v-show="postComments.length > 0"
               style="box-sizing: border-box"
               :style="{
                 'border-style': $device.isDesktop ? 'solid' : 'none',
