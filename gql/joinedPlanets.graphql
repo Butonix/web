@@ -4,5 +4,6 @@ query joinedPlanets {
     postCount
     avatarImageUrl
     themeColor
+    joined
   }
 }

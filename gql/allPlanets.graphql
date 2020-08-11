@@ -11,6 +11,7 @@ query allPlanets {
     createdAt
     galaxy {
       fullName
+      name
       icon
     }
   }

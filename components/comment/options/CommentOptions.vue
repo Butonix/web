@@ -8,6 +8,7 @@
 
     <CommentOptionsContent
       :comment="comment"
+      :post="post"
       @startedit="$emit('startedit')"
       @deletecomment="$emit('deletecomment')"
       @removecomment="$emit('removecomment')"
@@ -23,6 +24,7 @@
 
     <CommentOptionsContent
       :comment="comment"
+      :post="post"
       @startedit="startEdit"
       @deletecomment="deleteComment"
       @removecomment="removeComment"
@@ -37,6 +39,10 @@ export default {
   components: { CommentOptionsContent },
   props: {
     comment: {
+      type: Object,
+      required: true
+    },
+    post: {
       type: Object,
       required: true
     }

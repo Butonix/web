@@ -28,6 +28,7 @@ query post($postId: ID!) {
         avatarImageUrl
         bannerImageUrl
         themeColor
+        joined
         galaxy {
           name
           fullName

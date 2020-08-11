@@ -55,7 +55,11 @@ export default {
                 // sort: this.sort.sort.toUpperCase()
               }
             })
-            data.postComments.unshift(submitComment)
+            submitComment.level = comment.level + 1
+            const index = data.postComments.findIndex(
+              (c) => c.id === comment.id
+            )
+            data.postComments.splice(index + 1, 0, submitComment)
             store.writeQuery({
               query: postCommentsGql,
               variables: {
@@ -65,8 +69,6 @@ export default {
               data
             })
             this.replyHTML = null
-            if (!comment.childComments) comment.childComments = []
-            comment.childComments.unshift(submitComment)
           }
         })
         if (this.$refs.replydialog) {

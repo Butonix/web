@@ -23,7 +23,7 @@
     <template
       v-if="
         !!$store.state.currentUser.moderatedPlanets.find(
-          (p) => p.name === comment.post.planet.name
+          (p) => p.name === post.planet.name
         ) || $store.state.currentUser.admin
       "
     >
@@ -46,6 +46,10 @@ export default {
   name: 'CommentOptionsContent',
   props: {
     comment: {
+      type: Object,
+      required: true
+    },
+    post: {
       type: Object,
       required: true
     }

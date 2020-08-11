@@ -12,6 +12,7 @@
           <nuxt-link to="/universe" class="primary--text">Universe</nuxt-link>
           to see posts from all Planets
         </div>
+
         <PostsScroller
           v-model="dialog"
           :loading="$apollo.queries.feed.loading"

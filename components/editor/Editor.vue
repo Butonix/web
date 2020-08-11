@@ -173,6 +173,7 @@
         </button>
 
         <template v-if="$device.isDesktop">
+          <EmojiPicker @select="addEmoji" />
           <v-btn
             v-if="showCancelBtn"
             small
@@ -222,6 +223,7 @@ import { isEditorEmpty } from '@/util/isEditorEmpty'
 export default {
   name: 'Editor',
   components: {
+    EmojiPicker: () => import('@/components/editor/EmojiPicker'),
     EditorContent,
     EditorMenuBar
   },
@@ -296,6 +298,13 @@ export default {
     this.editor.destroy()
   },
   methods: {
+    addEmoji(emoji) {
+      this.editor.setContent(
+        this.editor.getHTML().substring(0, this.editor.getHTML().length - 4) +
+          emoji.native +
+          '</p>'
+      )
+    },
     showLinkPrompt(command) {
       const linkUrl = prompt('Enter the URL of your link')
       if (linkUrl) {

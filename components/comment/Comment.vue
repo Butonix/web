@@ -33,12 +33,10 @@
           <div v-if="showPostTitle" class="mb-1">
             <nuxt-link
               event=""
-              :to="
-                `/p/${comment.post.planet.name}/comments/${comment.post.id}/${postUrlName}`
-              "
+              :to="`/p/${post.planet.name}/comments/${post.id}/${postUrlName}`"
               class="font-weight-medium text--secondary"
               style="font-size: 0.86rem"
-              >{{ comment.post.title }}</nuxt-link
+              >{{ post.title }}</nuxt-link
             >
           </div>
 
@@ -64,11 +62,7 @@
           <UsernameMenu
             v-if="comment.author"
             :user-data="comment.author"
-            :op="
-              comment.post &&
-                comment.post.author &&
-                comment.post.author.id === comment.author.id
-            "
+            :op="post && post.author && post.author.id === comment.author.id"
           />
           <span v-else-if="!comment.author" class="text--secondary"
             >[deleted]</span
@@ -116,11 +110,12 @@
                   $store.state.currentUser &&
                   (comment.author.isCurrentUser ||
                     !!$store.state.currentUser.moderatedPlanets.find(
-                      (p) => p.name === comment.post.planet.name
+                      (p) => p.name === post.planet.name
                     ) ||
                     $store.state.currentUser.admin)
               "
               :comment="comment"
+              :post="post"
               @startedit="startEdit(comment)"
               @deletecomment="deleteComment"
               @removecomment="removeComment"
@@ -185,11 +180,12 @@
             $store.state.currentUser &&
             (comment.author.isCurrentUser ||
               !!$store.state.currentUser.moderatedPlanets.find(
-                (p) => p.name === comment.post.planet.name
+                (p) => p.name === post.planet.name
               ) ||
               $store.state.currentUser.admin)
         "
         :comment="comment"
+        :post="post"
         @startedit="startEdit(comment)"
         @deletecomment="deleteComment"
         @removecomment="removeComment"
@@ -250,6 +246,14 @@ export default {
     hideReply: {
       type: Boolean,
       default: false
+    },
+    post: {
+      type: Object,
+      default: null
+    },
+    postView: {
+      type: Object,
+      default: null
     }
   },
   data() {
@@ -269,8 +273,8 @@ export default {
         : timeSince(new Date(this.comment.createdAt))
     },
     postUrlName() {
-      if (!this.comment.post) return ''
-      return urlName(this.comment.post.title)
+      if (!this.post) return ''
+      return urlName(this.post.title)
     },
     isEditEmpty() {
       return isEditorEmpty(this.editHTML)
@@ -284,10 +288,9 @@ export default {
       )
     },
     isNew() {
-      if (!this.comment.postView) return false
+      if (!this.postView) return false
       return (
-        new Date(this.comment.createdAt) >
-        new Date(this.comment.postView.createdAt)
+        new Date(this.comment.createdAt) > new Date(this.postView.createdAt)
       )
     },
     expandedCommentId: {
@@ -369,7 +372,7 @@ export default {
           }
         `,
         variables: {
-          planetName: this.comment.post.planet.name,
+          planetName: this.post.planet.name,
           commentId: this.comment.id,
           removedReason: reason
         }

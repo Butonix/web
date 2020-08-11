@@ -1,8 +1,14 @@
 <template>
   <v-container>
     <v-row>
+      <GalaxiesSlider />
       <v-col
         v-for="planet in allPlanets"
+        v-show="
+          $route.query.galaxy
+            ? planet.galaxy.name === $route.query.galaxy
+            : true
+        "
         :key="planet.name"
         :cols="$device.isDesktop ? 4 : 12"
       >
@@ -15,9 +21,10 @@
 <script>
 import allPlanetsGql from '@/gql/allPlanets.graphql'
 import PlanetInfoCard from '@/components/planet/PlanetInfoCard'
+import GalaxiesSlider from '@/components/GalaxiesSlider'
 
 export default {
-  components: { PlanetInfoCard },
+  components: { GalaxiesSlider, PlanetInfoCard },
   async asyncData(context) {
     const client = context.app.apolloProvider.defaultClient
     const { data } = await client.query({

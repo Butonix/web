@@ -29,6 +29,7 @@ query feed($page: Int, $sort: Sort, $time: Time, $filter: Filter, $types: [Type!
       bannerImageUrl
       createdAt
       themeColor
+      joined
       galaxy {
         name
         fullName

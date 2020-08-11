@@ -8,6 +8,7 @@ query postComments($postId: ID!, $sort: Sort) {
     textContent
     postId
     parentCommentId
+    level
     author {
       id
       username

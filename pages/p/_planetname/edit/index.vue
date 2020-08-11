@@ -76,21 +76,16 @@
           @keydown.enter="addModerator"
         />
 
-        <div
-          v-if="planet.bannerImageUrl"
-          style="cursor: pointer"
-          class="hoverable"
-          @click="removeBanner"
-        >
-          Remove Planet Banner
+        <div v-if="planet.bannerImageUrl" class="mb-3">
+          <span style="cursor: pointer" class="hoverable" @click="removeBanner">
+            Remove Planet Banner
+          </span>
         </div>
-        <div
-          v-if="planet.avatarImageUrl"
-          style="cursor: pointer"
-          class="hoverable"
-          @click="removeAvatar"
-        >
-          Remove Planet Avatar
+
+        <div v-if="planet.avatarImageUrl">
+          <span style="cursor: pointer" class="hoverable" @click="removeAvatar">
+            Remove Planet Avatar
+          </span>
         </div>
 
         <v-row no-gutters>
@@ -107,6 +102,8 @@
             >Done</v-btn
           >
         </v-row>
+
+        <div style="height: 300px" />
       </v-col>
     </v-row>
   </v-container>

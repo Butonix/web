@@ -37,7 +37,12 @@
             style="cursor: pointer"
             @click="selectComment(item)"
           >
-            <Comment :comment="item" show-post-title hide-reply />
+            <Comment
+              :post="item.post"
+              :comment="item"
+              show-post-title
+              hide-reply
+            />
           </div>
         </DynamicScrollerItem>
       </template>

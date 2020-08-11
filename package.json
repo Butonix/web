@@ -22,6 +22,7 @@
     "@nuxtjs/pwa": "git+https://github.com/nuxt-community/pwa-module.git",
     "date-fns": "^2.15.0",
     "email-validator": "^2.0.4",
+    "emoji-mart-vue-fast": "^7.0.4",
     "graphql-tag": "^2.10.4",
     "is-url": "^1.2.4",
     "newrelic": "^6.11.0",

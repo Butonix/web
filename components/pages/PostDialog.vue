@@ -213,6 +213,8 @@
               <Comment
                 v-for="(comment, index) in renderedComments"
                 :key="comment.id"
+                :post="post"
+                :post-view="postView"
                 :comment="comment"
                 :style="{
                   'border-top-style':
@@ -226,7 +228,7 @@
                 @startedit="handleStartEdit"
               />
             </div>
-            <div style="height: 600px" />
+            <div style="height: 300px" />
           </div>
 
           <div
@@ -239,11 +241,11 @@
             >
               <div style="position: sticky; top: 60px">
                 <PlanetInfoCard
-                  v-if="planet"
+                  v-if="post"
                   :style="
                     $vuetify.theme.dark ? '' : 'background-color: #F8F9FA'
                   "
-                  :planet="planet"
+                  :planet="post.planet"
                 />
                 <InfoLinks class="mt-3" />
               </div>
@@ -278,7 +280,6 @@
 
 <script>
 import postCommentsGql from '../../gql/postComments.graphql'
-import planetGql from '../../gql/planet.graphql'
 import recordPostViewGql from '../../gql/recordPostView.graphql'
 import Comment from '../comment/Comment'
 import { urlName } from '@/util/urlName'
@@ -288,23 +289,6 @@ import UsernameMenu from '@/components/user/UsernameMenu'
 import CommentSortMenu from '@/components/comment/sort/CommentSortMenu'
 import InfoLinks from '@/components/InfoLinks'
 import commentMixin from '@/mixins/commentMixin'
-
-function flat(r, a) {
-  const b = {}
-  Object.keys(a).forEach(function(k) {
-    if (k !== 'childComments') {
-      b[k] = a[k]
-    }
-  })
-  r.push(b)
-  if (Array.isArray(a.childComments)) {
-    b.childComments = a.childComments.map(function(a) {
-      return a.id
-    })
-    return a.childComments.reduce(flat, r)
-  }
-  return r
-}
 
 export default {
   name: 'PostDialog',
@@ -341,8 +325,7 @@ export default {
       addedEventListener: false,
       replyingComment: null,
       editingComment: null,
-      renderedCommentsCount: 10,
-      planet: null
+      renderedCommentsCount: 10
     }
   },
   computed: {
@@ -353,32 +336,14 @@ export default {
       if (!this.post) return ''
       return urlName(this.post.title)
     },
-    threadedComments() {
-      if (this.postComments.length === 0) return []
-      const thread = this.postComments.filter((c) => c.parentCommentId === null)
-      const fun = (comments, level) => {
-        for (const comment of comments) {
-          comment.childComments = this.postComments.filter(
-            (c) => c.parentCommentId === comment.id
-          )
-          comment.level = level
-          comment.post = this.post
-          comment.postView = this.postView
-          fun(comment.childComments, level + 1)
-        }
-      }
-      fun(thread, 0)
-      return thread.reduce(flat, [])
-    },
     renderedComments() {
-      return this.threadedComments.slice(0, this.renderedCommentsCount)
+      return this.postComments.slice(0, this.renderedCommentsCount)
     }
   },
   watch: {
     'post.id'() {
       this.updateThemeColor()
       this.postComments = []
-      this.planet = null
       this.renderedCommentsCount = 10
       this.$nextTick(() => this.$refs.dialog.scrollTo(0, 0))
     },
@@ -422,7 +387,7 @@ export default {
     }
 
     setInterval(() => {
-      if (this.threadedComments.length < this.renderedCommentsCount) return
+      if (this.postComments.length < this.renderedCommentsCount) return
       this.renderedCommentsCount++
     }, 50)
 
@@ -490,17 +455,6 @@ export default {
         return !this.post || !this.dialogOpen || !this.postId
       },
       fetchPolicy: 'network-only'
-    },
-    planet: {
-      query: planetGql,
-      variables() {
-        return {
-          planetName: this.post.planet.name
-        }
-      },
-      skip() {
-        return !this.post || !this.dialogOpen || !this.postId
-      }
     }
   }
 }
