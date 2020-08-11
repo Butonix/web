@@ -299,11 +299,8 @@ export default {
   },
   methods: {
     addEmoji(emoji) {
-      this.editor.setContent(
-        this.editor.getHTML().substring(0, this.editor.getHTML().length - 4) +
-          emoji.native +
-          '</p>'
-      )
+      const transaction = this.editor.state.tr.insertText(emoji.native)
+      this.editor.view.dispatch(transaction)
     },
     showLinkPrompt(command) {
       const linkUrl = prompt('Enter the URL of your link')
