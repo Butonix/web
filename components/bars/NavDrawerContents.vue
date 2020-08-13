@@ -50,52 +50,18 @@
         </v-list-item-content>
       </v-list-item>
 
-      <v-list-item dense @click="showGalaxies = !showGalaxies">
+      <v-list-item dense to="/galaxies/explore">
         <v-list-item-avatar size="24">
-          <v-icon size="20">{{
-            showGalaxies
-              ? $vuetify.icons.values.mdiChevronUp
-              : $vuetify.icons.values.mdiChevronDown
-          }}</v-icon>
+          <v-icon size="20">{{ $vuetify.icons.values.mdiTelescope }}</v-icon>
         </v-list-item-avatar>
 
         <v-list-item-content>
           <v-list-item-title style="font-size: 1rem"
-            >Galaxies</v-list-item-title
+            >Explore Galaxies</v-list-item-title
           >
         </v-list-item-content>
       </v-list-item>
     </v-list>
-
-    <v-expand-transition>
-      <div v-show="showGalaxies">
-        <v-list class="py-0">
-          <v-list-item
-            v-for="galaxy in galaxies"
-            :key="galaxy.name"
-            active-class="linkactive"
-            class="text--primary pl-8"
-            dense
-            nuxt
-            :to="`/g/${galaxy.name}`"
-            @click="$emit('selected')"
-          >
-            <v-list-item-avatar size="24">
-              <v-icon size="20">{{
-                $vuetify.icons.values[galaxy.icon]
-              }}</v-icon>
-            </v-list-item-avatar>
-
-            <v-list-item-content>
-              <v-list-item-title
-                style="font-size: 1rem; white-space: normal; line-height: 1.5"
-                >{{ galaxy.fullName }}</v-list-item-title
-              >
-            </v-list-item-content>
-          </v-list-item>
-        </v-list>
-      </div>
-    </v-expand-transition>
 
     <div
       v-if="joinedPlanets.length > 0"
@@ -128,7 +94,6 @@
 </template>
 
 <script>
-import gql from 'graphql-tag'
 import joinedPlanetsGql from '@/gql/joinedPlanets'
 import PlanetListItem from '@/components/planet/PlanetListItem'
 
@@ -138,24 +103,12 @@ export default {
   data() {
     return {
       joinedPlanets: [],
-      showGalaxies: false,
       galaxies: []
     }
   },
   apollo: {
     joinedPlanets: {
       query: joinedPlanetsGql
-    },
-    galaxies: {
-      query: gql`
-        query {
-          galaxies {
-            fullName
-            name
-            icon
-          }
-        }
-      `
     }
   }
 }
