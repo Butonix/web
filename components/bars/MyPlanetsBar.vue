@@ -6,12 +6,7 @@
       text
       height="46"
       class="px-3"
-      style="border-right-style: solid; border-right-width: 1px; margin-bottom: 2px"
-      :style="{
-        'border-right-color': $vuetify.theme.dark
-          ? 'rgba(255, 255, 255, 0.12)'
-          : 'rgba(0, 0, 0, 0.12)'
-      }"
+      style="margin-bottom: 2px"
     >
       <v-icon class="mr-2" size="20">{{
         $vuetify.icons.values.mdiEarth
@@ -25,20 +20,18 @@
       depressed
       height="46"
       class="px-3"
-      style="border-right-style: solid; border-right-width: 1px; margin-bottom: 2px"
-      :style="{
-        'border-right-color': $vuetify.theme.dark
-          ? 'rgba(255, 255, 255, 0.12)'
-          : 'rgba(0, 0, 0, 0.12)'
-      }"
+      style="margin-bottom: 2px"
+      nuxt
+      to="/signup"
     >
       <v-icon class="mr-2" size="20">{{
         $vuetify.icons.values.mdiAccountOutline
       }}</v-icon>
-      Sign up to customize My Planets
+      {{ $device.isDesktop ? 'Sign up to customize My Planets' : 'Sign Up' }}
     </v-btn>
 
     <v-btn
+      v-if="$device.isDesktop"
       tile
       text
       height="46"

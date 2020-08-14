@@ -5,12 +5,7 @@
       text
       height="46"
       class="px-3"
-      style="border-right-style: solid; border-right-width: 1px; margin-bottom: 2px"
-      :style="{
-        'border-right-color': $vuetify.theme.dark
-          ? 'rgba(255, 255, 255, 0.12)'
-          : 'rgba(0, 0, 0, 0.12)'
-      }"
+      style="margin-bottom: 2px"
       nuxt
       to="/galaxies/explore"
     >
@@ -24,9 +19,9 @@
       text
       height="46"
       class="px-3"
-      style="font-weight: 400; border-right-style: solid; border-right-width: 1px; margin-bottom: 2px"
+      style="font-weight: 400; border-right-style: solid; border-left-style: solid; border-width: 1px; margin-bottom: 2px"
       :style="{
-        'border-right-color': $vuetify.theme.dark
+        'border-color': $vuetify.theme.dark
           ? 'rgba(255, 255, 255, 0.12)'
           : 'rgba(0, 0, 0, 0.12)'
       }"
