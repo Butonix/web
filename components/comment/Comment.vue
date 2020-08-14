@@ -65,7 +65,9 @@
             :op="post && post.author && post.author.id === comment.author.id"
           />
           <span v-else-if="!comment.author" class="text--secondary"
-            >[deleted]</span
+            >[{{
+              comment.textContent.includes('removed') ? 'removed' : 'deleted'
+            }}]</span
           >
 
           <span

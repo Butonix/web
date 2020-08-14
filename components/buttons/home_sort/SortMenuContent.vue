@@ -62,6 +62,28 @@
         <v-list>
           <TypeMenuContent />
         </v-list>
+
+        <v-divider />
+        <v-list>
+          <v-list-item @click="toggleExpand">
+            <v-list-item-icon>
+              <v-icon>{{
+                $route.query.expanded === 'yes'
+                  ? $vuetify.icons.values.mdiArrowCollapse
+                  : $vuetify.icons.values.mdiArrowExpand
+              }}</v-icon>
+            </v-list-item-icon>
+            <v-list-item-content>
+              <v-list-item-title>
+                {{
+                  $route.query.expanded === 'yes'
+                    ? 'Collapse Posts'
+                    : 'Expand Posts'
+                }}
+              </v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
+        </v-list>
       </v-list>
     </v-fade-transition>
 
@@ -180,6 +202,16 @@ export default {
     }
   },
   methods: {
+    toggleExpand() {
+      this.$emit('selected')
+      if (this.$route.query.expanded === 'yes') {
+        const query = Object.assign({}, this.$route.query)
+        delete query.expanded
+        this.$router.push({ query })
+      } else {
+        this.$router.push({ query: { ...this.$route.query, expanded: 'yes' } })
+      }
+    },
     chooseHot() {
       this.$emit('selected')
       try {

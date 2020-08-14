@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div style="position: relative">
+    <div v-if="$device.isDesktop" style="position: relative">
       <div
         :style="
           planet.bannerImageUrl
@@ -40,33 +40,12 @@
               {{ planet.customName ? planet.customName : planet.name }}
             </span>
             <PlanetJoinButton :planet="planet" class="ml-2" />
-            <v-btn
-              v-if="
-                $store.state.currentUser &&
-                  (!!$store.state.currentUser.moderatedPlanets.find(
-                    (p) => p.name === planet.name
-                  ) ||
-                    $store.state.currentUser.admin)
-              "
-              text
-              class="ml-2 px-2"
-              nuxt
-              :to="`/p/${planet.name}/edit`"
-            >
-              Edit
-              <v-icon size="20" class="ml-2">{{
-                $vuetify.icons.values.mdiPencil
-              }}</v-icon>
-            </v-btn>
           </v-row>
           <div
             style="font-size: 1rem; font-weight: 400"
             class="text--secondary"
           >
             p/{{ planet.name }}
-          </div>
-          <div v-if="!$device.isDesktop && planet.description">
-            {{ planet.description }}
           </div>
         </div>
       </div>
@@ -103,9 +82,110 @@
       </div>
     </div>
 
+    <div v-else style="position: relative">
+      <div
+        :style="
+          `display: flex; height: 64px; background-image: url(${
+            planet && planet.bannerImageUrl ? planet.bannerImageUrl : ''
+          }); background-size: cover; background-position: center; background-repeat: no-repeat; background-color: var(--v-primary-base)`
+        "
+        :class="isMod ? 'editbanner' : ''"
+        @click="openBannerInput"
+      >
+        <v-file-input
+          v-if="isMod"
+          ref="bannerinput"
+          v-model="bannerFile"
+          type="file"
+          style="display: none"
+        />
+        <v-icon
+          size="52"
+          class="editbannericon"
+          dark
+          style="margin: auto auto"
+          >{{ $vuetify.icons.values.mdiPencil }}</v-icon
+        >
+      </div>
+      <div
+        style="padding-top: 48px; padding-bottom: 12px; text-align: center"
+        :style="
+          $vuetify.theme.dark
+            ? 'background-color: #35363A'
+            : 'background-color: #F8F9FA; border-bottom: 1px solid rgba(0, 0, 0, 0.12)'
+        "
+      >
+        <div style="font-size: 1.43rem; font-weight: 500">
+          {{ planet.customName || planet.name }}
+        </div>
+        <div
+          style="font-size: 1rem; font-weight: 400"
+          class="text--secondary mt-1"
+        >
+          p/{{ planet.name }}
+        </div>
+        <div
+          style="font-size: 1rem; font-weight: 400"
+          class="text--secondary mt-3"
+        >
+          {{ planet.description }}
+        </div>
+        <v-row no-gutters align="center" justify="center" class="px-3 mt-3">
+          <MobilePlanetJoinButton :planet="planet" />
+        </v-row>
+
+        <v-card-actions class="pb-0 pt-3" style="justify-content: center">
+          <v-chip outlined nuxt :to="`/g/${planet.galaxy.name}`">
+            <v-avatar left>
+              <v-icon>{{ $vuetify.icons.values[planet.galaxy.icon] }}</v-icon>
+            </v-avatar>
+            {{ planet.galaxy.fullName }}
+          </v-chip>
+          <v-chip outlined class="ml-3">
+            <v-icon left>{{
+              $vuetify.icons.values.mdiAccountMultipleOutline
+            }}</v-icon>
+            {{ planet.userCount }} User{{ planet.userCount === 1 ? '' : 's' }}
+          </v-chip>
+        </v-card-actions>
+      </div>
+      <div
+        style="position: absolute; left: 50%; border: 4px solid white; border-radius: 50%; background-size: cover; margin-left: -36px; top: 28px"
+      >
+        <v-avatar
+          height="72"
+          width="72"
+          color="primary"
+          style="position: relative"
+          :class="isMod ? 'editplanetavatar' : ''"
+          @click="openAvatarInput"
+        >
+          <v-file-input
+            v-if="isMod"
+            ref="avatarinput"
+            v-model="avatarFile"
+            type="file"
+            style="display: none"
+          />
+          <v-icon
+            size="50"
+            style="position: absolute; z-index: 10"
+            class="editplaneticon"
+            dark
+            >{{ $vuetify.icons.values.mdiPencil }}</v-icon
+          >
+          <v-img v-if="planet.avatarImageUrl" :src="planet.avatarImageUrl" />
+          <v-icon v-else color="white">{{
+            $vuetify.icons.values.mdiEarth
+          }}</v-icon>
+        </v-avatar>
+      </div>
+    </div>
+
     <v-container class="pt-0">
       <v-row justify="center">
-        <v-col :class="$device.isDesktop ? '' : 'pa-0'">
+        <v-col :class="$device.isDesktop ? '' : 'px-0'">
+          <PlanetBar :planet="planet" />
           <PostsScroller
             v-model="dialog"
             :loading="$apollo.queries.feed.loading"
@@ -146,11 +226,15 @@ import PlanetModsCard from '@/components/planet/PlanetModsCard'
 import { planetHead } from '@/util/planetHead'
 import { postHead } from '@/util/postHead'
 import InfoLinks from '@/components/InfoLinks'
+import PlanetBar from '@/components/bars/PlanetBar'
+import MobilePlanetJoinButton from '@/components/planet/MobilePlanetJoinButton'
 
 export default {
   name: 'Planet',
   scrollToTop: false,
   components: {
+    MobilePlanetJoinButton,
+    PlanetBar,
     InfoLinks,
     PlanetModsCard,
     PlanetJoinButton,
@@ -234,6 +318,13 @@ export default {
     }
   },
   mounted() {
+    const item = localStorage.getItem('recentPlanets')
+    let recentPlanets = item ? JSON.parse(item) : []
+    recentPlanets = recentPlanets.filter((p) => p !== this.planet.name)
+    recentPlanets.unshift(this.planet.name)
+    recentPlanets = recentPlanets.slice(0, 5)
+    localStorage.setItem('recentPlanets', JSON.stringify(recentPlanets))
+
     this.$nextTick(() => {
       this.$vuetify.theme.themes.dark.primary = this.planet.themeColor
         ? this.planet.themeColor

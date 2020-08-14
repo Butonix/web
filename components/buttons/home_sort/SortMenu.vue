@@ -1,5 +1,5 @@
 <template>
-  <v-bottom-sheet v-model="menu">
+  <v-bottom-sheet v-if="!$device.isDesktop" v-model="menu">
     <template v-slot:activator="{ on }">
       <SortMenuButton v-on="on" />
     </template>
@@ -10,6 +10,21 @@
       </v-card-text>
     </v-card>
   </v-bottom-sheet>
+
+  <v-menu
+    v-else
+    v-model="menu"
+    offset-y
+    bottom
+    transition="slide-y-transition"
+    :close-on-content-click="false"
+  >
+    <template v-slot:activator="{ on }">
+      <SortMenuButton v-on="on" />
+    </template>
+
+    <SortMenuContent :open="menu" @selected="menu = false" />
+  </v-menu>
 </template>
 
 <script>

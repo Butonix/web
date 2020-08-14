@@ -5,7 +5,7 @@
     clipped
     :color="$vuetify.theme.dark ? '#202124' : '#F8F9FA'"
     mobile-breakpoint="1281"
-    class="disable-scrollbars"
+    style="z-index: 100"
   >
     <NavDrawerContents class="mt-2" />
   </v-navigation-drawer>

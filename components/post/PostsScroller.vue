@@ -1,7 +1,5 @@
 <template>
   <div>
-    <SortBar :class="$device.isDesktop ? 'mb-3' : ''" />
-
     <DynamicScroller
       page-mode
       :items="items"
@@ -76,7 +74,6 @@
 import 'vue-virtual-scroller/dist/vue-virtual-scroller.css'
 import { DynamicScroller, DynamicScrollerItem } from 'vue-virtual-scroller'
 import Post from '@/components/post/Post'
-import SortBar from '@/components/bars/SortBar'
 import PostDialog from '@/components/pages/PostDialog'
 import { urlName } from '@/util/urlName'
 import NoPostsMessage from '@/components/NoPostsMessage'
@@ -86,7 +83,6 @@ export default {
   components: {
     NoPostsMessage,
     PostDialog,
-    SortBar,
     Post,
     DynamicScroller,
     DynamicScrollerItem

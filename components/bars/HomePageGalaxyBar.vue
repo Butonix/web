@@ -1,0 +1,146 @@
+<template>
+  <v-app-bar
+    flat
+    dense
+    style="border-bottom-width: 1px; border-bottom-style: solid"
+    :style="{
+      'border-bottom-color': $vuetify.theme.dark
+        ? 'rgba(255, 255, 255, 0.12)'
+        : 'rgba(0, 0, 0, 0.12)'
+    }"
+  >
+    <v-slide-group ref="slider" multiple show-arrows>
+      <v-slide-item>
+        <v-chip
+          :ripple="false"
+          class="mx-2 elevation-0"
+          active-class="active"
+          nuxt
+          :to="{
+            name: 'sort-time',
+            params: { ...$route.params, galaxyname: undefined }
+          }"
+          :color="
+            $route.name === 'sort-time'
+              ? 'primary'
+              : $vuetify.theme.dark
+              ? '#35363A'
+              : '#F8F9FA'
+          "
+          :style="{
+            'border-width': '1px',
+            'border-color': 'rgba(0, 0, 0, 0.12)',
+            'border-style': $vuetify.theme.dark ? 'none' : 'solid'
+          }"
+        >
+          <v-avatar left>
+            <v-icon>{{ $vuetify.icons.values.mdiEarth }}</v-icon>
+          </v-avatar>
+          My Planets
+        </v-chip>
+      </v-slide-item>
+
+      <v-slide-item>
+        <v-chip
+          :ripple="false"
+          class="mx-2 elevation-0"
+          active-class="active"
+          nuxt
+          :to="{
+            name: 'universe-sort-time',
+            params: { ...$route.params, galaxyname: undefined }
+          }"
+          :color="
+            $route.name === 'universe-sort-time'
+              ? 'primary'
+              : $vuetify.theme.dark
+              ? '#35363A'
+              : '#F8F9FA'
+          "
+          :style="{
+            'border-width': '1px',
+            'border-color': 'rgba(0, 0, 0, 0.12)',
+            'border-style': $vuetify.theme.dark ? 'none' : 'solid'
+          }"
+        >
+          <v-avatar left>
+            <v-icon>{{ $vuetify.icons.values.mdiInfinity }}</v-icon>
+          </v-avatar>
+          Universe
+        </v-chip>
+      </v-slide-item>
+
+      <v-slide-item v-for="galaxy in galaxies" :key="galaxy.name">
+        <v-chip
+          :ripple="false"
+          class="mx-2 elevation-0"
+          active-class="active"
+          nuxt
+          :to="{
+            name: 'g-galaxyname-sort-time',
+            params: { ...$route.params, galaxyname: galaxy.name }
+          }"
+          :color="
+            $route.params.galaxyname === galaxy.name
+              ? 'primary'
+              : $vuetify.theme.dark
+              ? '#35363A'
+              : '#F8F9FA'
+          "
+          :style="{
+            'border-width': '1px',
+            'border-color': 'rgba(0, 0, 0, 0.12)',
+            'border-style': $vuetify.theme.dark ? 'none' : 'solid'
+          }"
+        >
+          <v-avatar left>
+            <v-icon>{{ $vuetify.icons.values[galaxy.icon] }}</v-icon>
+          </v-avatar>
+          {{ galaxy.fullName }}
+        </v-chip>
+      </v-slide-item>
+    </v-slide-group>
+  </v-app-bar>
+</template>
+
+<script>
+import gql from 'graphql-tag'
+
+export default {
+  name: 'HomePageGalaxyBar',
+  apollo: {
+    galaxies: {
+      query: gql`
+        query {
+          galaxies {
+            fullName
+            name
+            icon
+            bannerImageUrl
+          }
+        }
+      `
+    }
+  },
+  data() {
+    return {
+      galaxies: []
+    }
+  }
+}
+</script>
+
+<style scoped>
+>>> .v-toolbar__content {
+  padding-left: 0;
+  padding-right: 0;
+}
+
+.active {
+  opacity: 1 !important;
+}
+
+.v-chip--active::before {
+  opacity: 0 !important;
+}
+</style>

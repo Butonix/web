@@ -1,5 +1,13 @@
 <template>
-  <v-btn aria-label="Sort Posts" text small @click="click">
+  <v-btn
+    aria-label="Sort Posts"
+    text
+    tile
+    height="46"
+    class="px-3"
+    style="margin-bottom: 2px"
+    @click="click"
+  >
     <template
       v-if="
         !$route.path.includes('/top') &&

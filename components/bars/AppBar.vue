@@ -4,87 +4,20 @@
     app
     flat
     class="topappbar"
-    :dense="$device.isDesktop"
+    dense
     :style="
       $vuetify.theme.dark
         ? 'border-bottom: 1px solid rgba(255, 255, 255, .12)'
         : 'border-bottom: 1px solid rgba(0, 0, 0, .12)'
     "
   >
+    <v-app-bar-nav-icon
+      v-show="$device.isDesktop"
+      class="text--secondary"
+      @click="$store.commit('setNav', !$store.state.nav)"
+    />
     <v-row class="ma-0" align="center" no-gutters>
-      <CometLogo v-if="$device.isDesktop" />
-
-      <div
-        v-ripple
-        :style="
-          $device.isDesktop
-            ? 'margin-left: 32px; padding-left: 8px; padding-right: 8px; padding-top: 4px; padding-bottom: 4px; border-radius: 10px; font-size: 18px; font-weight: 500'
-            : 'position: fixed; top: 14px; left: 50%; transform: translateX(-50%); font-size: 21px; font-weight: 500'
-        "
-        class="unselectable"
-        style="cursor: pointer"
-        @click="openPlanetPrompt"
-      >
-        <v-icon v-if="$device.isDesktop">
-          {{
-            $store.state.nav
-              ? $vuetify.icons.values.mdiChevronLeft
-              : $vuetify.icons.values.mdiChevronRight
-          }}
-        </v-icon>
-
-        <span v-if="$route.name === 'sort-time'"
-          >My Planets<v-icon class="ml-2">{{
-            $vuetify.icons.values.mdiEarth
-          }}</v-icon></span
-        >
-
-        <span v-else-if="$route.name === 'universe-sort-time'"
-          >Universe<v-icon class="ml-2">{{
-            $vuetify.icons.values.mdiInfinity
-          }}</v-icon></span
-        >
-
-        <span v-else-if="$route.name === 'u-username-sort-time'">
-          {{ $route.params.username }}</span
-        >
-
-        <span v-else-if="$route.name === 'g-galaxyname-sort-time'">
-          {{ $route.params.galaxyname }}</span
-        >
-
-        <span v-else-if="$route.name === 'p-planetname-sort-time'">
-          {{ $route.params.planetname }}</span
-        >
-
-        <span v-else-if="$route.name === 'search-sort-time'"
-          >"{{ $route.query.q }}"</span
-        >
-
-        <span v-else-if="$route.name === 'signup'"
-          >Sign Up<v-icon class="ml-2">{{
-            $vuetify.icons.values.mdiClipboardAccount
-          }}</v-icon></span
-        >
-
-        <span v-else-if="$route.name === 'login'"
-          >Log In<v-icon class="ml-2">{{
-            $vuetify.icons.values.mdiLogin
-          }}</v-icon></span
-        >
-
-        <span v-else-if="$route.name === 'planets-explore'"
-          >Explore Planets<v-icon class="ml-2">{{
-            $vuetify.icons.values.mdiTelescope
-          }}</v-icon></span
-        >
-
-        <span v-else-if="$route.name.startsWith('submit')"
-          >Submit<v-icon class="ml-2">{{
-            $vuetify.icons.values.mdiPencilOutline
-          }}</v-icon></span
-        >
-      </div>
+      <CometLogo />
 
       <v-spacer />
 

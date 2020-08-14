@@ -123,7 +123,8 @@ import {
   mdiPencilOutline,
   mdiEarthOff,
   mdiShieldOutline,
-  mdiShield
+  mdiShield,
+  mdiWeatherHurricane
 } from '@mdi/js'
 
 export default {
@@ -505,7 +506,8 @@ export default {
         mdiPencilOutline,
         mdiEarthOff,
         mdiShieldOutline,
-        mdiShield
+        mdiShield,
+        mdiWeatherHurricane
       }
     },
     theme: {

@@ -1,5 +1,10 @@
 <template>
-  <v-card flat :outlined="!$vuetify.theme.dark" style="border-width: 1px">
+  <v-card
+    flat
+    :outlined="!$vuetify.theme.dark"
+    style="border-width: 1px"
+    :tile="tile"
+  >
     <div
       :style="
         `height: 82px; background-image: url(${galaxy.bannerImageUrl ||
@@ -20,35 +25,41 @@
         $vuetify.icons.values.mdiPencil
       }}</v-icon>
     </div>
-    <v-row no-gutters class="pa-3" align="center" justify="space-between">
-      <div class="text--secondary">
-        <v-icon class="mr-2">{{ $vuetify.icons.values.mdiEarth }}</v-icon>
-        {{ galaxy.planetCount }} Planet{{ galaxy.planetCount === 1 ? '' : 's' }}
-      </div>
-      <div style="text-align: center">
-        <div style="font-size: 1.5rem; font-weight: 500">
-          {{ galaxy.fullName }}
-        </div>
-        <div
-          class="text--secondary"
-          style="font-size: 1rem"
-          :style="isAdmin ? 'cursor: pointer' : ''"
-          @click="descriptionDialog = isAdmin"
-        >
-          {{ galaxy.description ? galaxy.description : 'Description' }}
-        </div>
-      </div>
-      <div>
+
+    <template>
+      <v-card-title
+        style="text-align: center; justify-content: center"
+        class="pt-3"
+        >{{ galaxy.fullName }}</v-card-title
+      >
+      <v-card-subtitle
+        style="font-size: 1rem; text-align: center"
+        class="pb-3"
+        :style="isAdmin ? 'cursor: pointer' : ''"
+        @click="descriptionDialog = isAdmin"
+        >{{ galaxy.description || 'Description' }}</v-card-subtitle
+      >
+      <v-card-actions v-if="!hideButtons" class="pt-0">
         <v-btn
-          depressed
-          color="primary"
+          text
           nuxt
           :to="`/planets/explore?galaxy=${galaxy.name}`"
+          class="text--secondary"
         >
-          <span style="color: #E8EAED">Explore</span>
+          <v-icon class="mr-2 text--secondary">{{
+            $vuetify.icons.values.mdiEarth
+          }}</v-icon>
+          {{ galaxy.planetCount }} Planet{{
+            galaxy.planetCount === 1 ? '' : 's'
+          }}
         </v-btn>
-      </div>
-    </v-row>
+        <v-spacer />
+
+        <v-btn depressed color="primary" nuxt :to="`/g/${galaxy.name}`">
+          <span style="color: #E8EAED">View Posts</span>
+        </v-btn>
+      </v-card-actions>
+    </template>
 
     <v-dialog
       v-if="$store.state.currentUser && $store.state.currentUser.admin"
@@ -62,7 +73,9 @@
         </v-card-text>
         <v-card-actions>
           <v-spacer />
-          <v-btn depressed color="primary" @click="editDescription">Done</v-btn>
+          <v-btn depressed color="primary" @click.stop.prevent="editDescription"
+            >Done</v-btn
+          >
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -78,6 +91,14 @@ export default {
     galaxy: {
       type: Object,
       required: true
+    },
+    hideButtons: {
+      type: Boolean,
+      default: false
+    },
+    tile: {
+      type: Boolean,
+      default: false
     }
   },
   data() {
@@ -144,6 +165,9 @@ export default {
     refetchGalaxies() {
       this.$emit('refetch')
     }
+  },
+  head: {
+    title: 'Explore Galaxies'
   }
 }
 </script>

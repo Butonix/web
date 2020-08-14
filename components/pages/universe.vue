@@ -2,7 +2,9 @@
   <div>
     <v-container class="pt-0">
       <v-row justify="center">
-        <v-col :class="$device.isDesktop ? '' : 'pa-0'">
+        <v-col :class="$device.isDesktop ? '' : 'px-0'">
+          <UniverseBar />
+
           <PostsScroller
             v-model="dialog"
             :loading="$apollo.queries.feed.loading"
@@ -38,11 +40,13 @@ import PopularPlanetsCard from '@/components/planet/PopularPlanetsCard'
 import ModeratedPlanetsCard from '@/components/user/ModeratedPlanetsCard'
 import { postHead } from '@/util/postHead'
 import InfoLinks from '@/components/InfoLinks'
+import UniverseBar from '@/components/bars/UniverseBar'
 
 export default {
   name: 'Universe',
   scrollToTop: false,
   components: {
+    UniverseBar,
     InfoLinks,
     ModeratedPlanetsCard,
     PopularPlanetsCard,

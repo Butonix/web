@@ -285,7 +285,7 @@ export default {
       return format(new Date(this.user.createdAt), 'MMM d, yyyy')
     },
     lastOnlineString() {
-      if (!this.user) return ''
+      if (!this.user || !this.user.lastLogin) return ''
       if (this.user.username === 'Comet') return 'Online'
       const lastLogin = new Date(this.user.lastLogin)
       const now = new Date()

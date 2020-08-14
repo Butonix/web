@@ -1,8 +1,14 @@
 <template>
   <v-card v-if="galaxy" flat :outlined="!$vuetify.theme.dark" :tile="tile">
+    <v-img
+      height="82"
+      :src="galaxy.bannerImageUrl"
+      style="background-color: var(--v-primary-base)"
+    />
+
     <v-card-title class="pb-0">
-      Galaxy: {{ galaxy.fullName }}
-      <v-icon class="ml-2">{{ $vuetify.icons.values[galaxy.icon] }}</v-icon>
+      Popular Planets in {{ galaxy.fullName }}
+      <v-icon class="ml-2">{{ $vuetify.icons.values.mdiTrendingUp }}</v-icon>
     </v-card-title>
 
     <v-list>
@@ -15,13 +21,15 @@
 
     <v-card-actions>
       <v-btn
+        nuxt
+        :to="{ query: { view: 'planets' } }"
         depressed
         class="flex-grow-1"
         :style="$vuetify.theme.dark ? '' : 'background-color: #DEE1E6'"
-        >View all {{ galaxy.planetCount }} planet{{
+        >{{ galaxy.planetCount }} Planet{{
           galaxy.planetCount === 1 ? '' : 's'
         }}
-        in this galaxy</v-btn
+        in this Galaxy</v-btn
       >
     </v-card-actions>
     <v-card-actions class="pt-0">

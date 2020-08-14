@@ -1,30 +1,41 @@
 <template>
-  <v-container>
-    <v-row>
-      <GalaxiesSlider />
-      <v-col
-        v-for="planet in allPlanets"
-        v-show="
-          $route.query.galaxy
-            ? planet.galaxy.name === $route.query.galaxy
-            : true
-        "
-        :key="planet.name"
-        :cols="$device.isDesktop ? 4 : 12"
-      >
-        <PlanetInfoCard :planet="planet" />
-      </v-col>
-    </v-row>
-  </v-container>
+  <div>
+    <PlanetPageGalaxyBar />
+    <v-container>
+      <GalaxyCard
+        v-if="galaxy"
+        v-show="$route.query.galaxy"
+        :galaxy="galaxy"
+        class="mt-3"
+      />
+      <v-row>
+        <v-col
+          v-for="(planet, index) in allPlanets"
+          v-show="
+            $route.query.galaxy
+              ? planet.galaxy.name === $route.query.galaxy
+              : true
+          "
+          :key="planet.name"
+          :class="$device.isDesktop && index % 3 === 1 ? 'px-6' : ''"
+          :cols="$device.isDesktop ? 4 : 12"
+        >
+          <PlanetInfoCard :planet="planet" />
+        </v-col>
+      </v-row>
+    </v-container>
+  </div>
 </template>
 
 <script>
 import allPlanetsGql from '@/gql/allPlanets.graphql'
 import PlanetInfoCard from '@/components/planet/PlanetInfoCard'
-import GalaxiesSlider from '@/components/GalaxiesSlider'
+import galaxyGql from '@/gql/galaxy.graphql'
+import GalaxyCard from '@/components/GalaxyCard'
+import PlanetPageGalaxyBar from '@/components/bars/PlanetPageGalaxyBar'
 
 export default {
-  components: { GalaxiesSlider, PlanetInfoCard },
+  components: { PlanetPageGalaxyBar, GalaxyCard, PlanetInfoCard },
   async asyncData(context) {
     const client = context.app.apolloProvider.defaultClient
     const { data } = await client.query({
@@ -36,7 +47,21 @@ export default {
   },
   data() {
     return {
-      allPlanets: []
+      allPlanets: [],
+      galaxy: null
+    }
+  },
+  apollo: {
+    galaxy: {
+      query: galaxyGql,
+      variables() {
+        return {
+          galaxyName: this.$route.query.galaxy
+        }
+      },
+      skip() {
+        return !this.$route.query.galaxy
+      }
     }
   },
   head: {

@@ -7,9 +7,13 @@
     <client-only
       v-if="
         $device.isDesktop &&
-          (['signup', 'login', 'planets-create', 'planets-explore'].includes(
-            $route.name
-          ) ||
+          ([
+            'signup',
+            'login',
+            'planets-create',
+            'planets-explore',
+            'galaxies-explore'
+          ].includes($route.name) ||
             $route.name.startsWith('settings') ||
             $route.name.startsWith('submit'))
       "
@@ -18,6 +22,13 @@
     </client-only>
 
     <v-main>
+      <HomePageGalaxyBar
+        v-show="
+          $route.name === 'sort-time' ||
+            $route.name === 'universe-sort-time' ||
+            $route.name === 'g-galaxyname-sort-time'
+        "
+      />
       <nuxt />
       <Snackbar />
     </v-main>
@@ -27,14 +38,16 @@
 </template>
 
 <script>
-import Snackbar from '../components/bars/Snackbar'
-import AppBar from '../components/bars/AppBar'
-import BottomNavBar from '../components/bars/BottomNavBar'
+import Snackbar from '@/components/bars/Snackbar'
+import AppBar from '@/components/bars/AppBar'
+import BottomNavBar from '@/components/bars/BottomNavBar'
 import NavDrawer from '@/components/bars/NavDrawer'
+import HomePageGalaxyBar from '@/components/bars/HomePageGalaxyBar'
 
 export default {
   name: 'Default',
   components: {
+    HomePageGalaxyBar,
     NavDrawer,
     BottomNavBar,
     AppBar,

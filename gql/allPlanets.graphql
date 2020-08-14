@@ -1,5 +1,5 @@
-query allPlanets {
-  allPlanets {
+query allPlanets($galaxyName: ID) {
+  allPlanets(galaxyName: $galaxyName) {
     avatarImageUrl
     name
     description

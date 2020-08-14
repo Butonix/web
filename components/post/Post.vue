@@ -243,8 +243,8 @@ export default {
     'post.isHidden'() {
       this.$emit('togglehidden')
     },
-    '$route.query.view'() {
-      if (this.$route.query.view === 'expanded') this.idState.expand = true
+    '$route.query.expanded'() {
+      if (this.$route.query.expanded === 'yes') this.idState.expand = true
       else this.idState.expand = false
     }
   },
@@ -253,7 +253,7 @@ export default {
       textContentHeight: -1,
       didGetTextContentHeight: false,
       reported: false,
-      expand: this.$route.query.view === 'expanded'
+      expand: this.$route.query.expanded === 'yes'
     }
   },
   mounted() {

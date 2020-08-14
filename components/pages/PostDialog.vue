@@ -1,12 +1,12 @@
 <template>
   <div
     v-show="dialogOpen"
-    style="bottom: 0; left: 0; right: 0; position: fixed; height: 100%; width: 100%; z-index: 50; background-color: rgba(28,28,28,.9)"
-    :style="{ top: $device.isDesktop ? '48px' : '56px' }"
+    style="bottom: 0; left: 0; right: 0; position: fixed; top: 48px; height: 100%; width: 100%; z-index: 50; background-color: rgba(28,28,28,.9)"
   >
     <v-app-bar
       v-if="!$device.isDesktop"
       class="topappbar"
+      dense
       flat
       style="position: fixed; top: 0; z-index: 700"
       :style="{
@@ -22,15 +22,14 @@
       </v-app-bar-nav-icon>
 
       <div
-        style="position: fixed; top: 14px; left: 50%; transform: translateX(-50%); font-size: 21px; font-weight: 500"
+        style="position: fixed; top: 8px; left: 50%; transform: translateX(-50%); font-size: 21px; font-weight: 500"
       >
         {{ post ? post.planet.name : '' }}
       </div>
     </v-app-bar>
 
     <div
-      style="bottom: 0; left: 0; right: 0; position: fixed; height: 100%; width: 100%; z-index: 50; backface-visibility: hidden"
-      :style="{ top: $device.isDesktop ? '48px' : '56px' }"
+      style="bottom: 0; left: 0; right: 0; position: fixed; top: 48px; height: 100%; width: 100%; z-index: 50; backface-visibility: hidden"
     >
       <div
         ref="dialog"

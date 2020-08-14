@@ -1,11 +1,6 @@
 <template>
   <div style="cursor: pointer" @click="clickCometLogo">
-    <v-img
-      alt="Comet logo"
-      :src="$device.isDesktop ? '/logo.png' : '/logo_mobile.png'"
-      :width="$device.isDesktop ? 128 : 48"
-      contain
-    />
+    <v-img alt="Comet logo" src="/logo.png" width="108" contain />
   </div>
 </template>
 
