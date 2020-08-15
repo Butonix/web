@@ -5,6 +5,7 @@
     flat
     class="topappbar"
     dense
+    style="z-index: 40"
     :style="
       $vuetify.theme.dark
         ? 'border-bottom: 1px solid rgba(255, 255, 255, .12)'

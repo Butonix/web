@@ -94,7 +94,7 @@
       <v-bottom-sheet v-model="planetsBottomSheet" scrollable>
         <template v-slot:activator="{ on }">
           <v-btn aria-label="Planets" class="navbtn" v-on="on">
-            <span class="text--secondary">My Planets</span>
+            <span class="text--secondary">Planets</span>
             <v-icon class="text--secondary">{{
               $vuetify.icons.values.mdiEarth
             }}</v-icon>

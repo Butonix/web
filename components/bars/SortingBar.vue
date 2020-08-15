@@ -3,6 +3,7 @@
     ref="barcontainer"
     style="position: sticky; top: -1px; z-index: 20"
     class="barcontainer"
+    :class="$device.isDesktop ? 'desktop' : 'mobile'"
   >
     <v-app-bar
       class="mb-3"
@@ -81,12 +82,12 @@ export default {
   padding-right: 0;
 }*/
 
-.barcontainer:not(.isSticky) > .v-app-bar {
+.barcontainer.desktop:not(.isSticky) > .v-app-bar {
   border-radius: 10px;
   transition: border-radius ease 0.25s;
 }
 
-.barcontainer.isSticky > .v-app-bar {
+.barcontainer.desktop.isSticky > .v-app-bar {
   border-radius: 0;
   transition: border-radius ease 0.25s;
 }

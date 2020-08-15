@@ -1,24 +1,27 @@
 <template>
   <v-navigation-drawer
     v-model="nav"
-    v-bar
     app
     clipped
     :color="$vuetify.theme.dark ? '#202124' : '#F8F9FA'"
     mobile-breakpoint="1281"
-    style="z-index: 100; position: fixed !important"
+    style="z-index: 100"
     width="250"
   >
-    <NavDrawerContents class="mt-2" />
+    <simplebar style="height: 100%" data-simplebar-auto-hide="false">
+      <NavDrawerContents class="mt-2" />
+    </simplebar>
   </v-navigation-drawer>
 </template>
 
 <script>
+import 'simplebar/dist/simplebar.min.css'
+import simplebar from 'simplebar-vue'
 import NavDrawerContents from '@/components/bars/NavDrawerContents'
 
 export default {
   name: 'NavDrawer',
-  components: { NavDrawerContents },
+  components: { NavDrawerContents, simplebar },
   computed: {
     nav: {
       get() {
@@ -32,4 +35,8 @@ export default {
 }
 </script>
 
-<style scoped></style>
+<style>
+.simplebar-track.simplebar-vertical .simplebar-scrollbar:before {
+  background-color: var(--v-primary-base);
+}
+</style>
