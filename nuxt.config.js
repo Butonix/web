@@ -291,7 +291,8 @@ export default {
   plugins: [
     '~/plugins/vue-clipboard2.client.js',
     '~/plugins/vue-friendly-iframe.client.js',
-    '~/plugins/particles.vue.client.js'
+    '~/plugins/particles.vue.client.js',
+    '~/plugins/vuebar.js'
   ],
   /*
    ** Nuxt.js dev-modules

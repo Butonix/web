@@ -9,8 +9,8 @@
         : 'rgba(0, 0, 0, 0.12)'
     }"
   >
-    <v-slide-group ref="slider" multiple show-arrows>
-      <v-slide-item>
+    <v-slide-group ref="slider" v-model="model" show-arrows center-active>
+      <v-slide-item v-slot:default="{ active, toggle }">
         <v-chip
           :ripple="false"
           class="mx-2 elevation-0"
@@ -32,6 +32,7 @@
             'border-color': 'rgba(0, 0, 0, 0.12)',
             'border-style': $vuetify.theme.dark ? 'none' : 'solid'
           }"
+          @click="toggle"
         >
           <v-avatar left>
             <v-icon>{{ $vuetify.icons.values.mdiEarth }}</v-icon>
@@ -40,7 +41,7 @@
         </v-chip>
       </v-slide-item>
 
-      <v-slide-item>
+      <v-slide-item v-slot:default="{ active, toggle }">
         <v-chip
           :ripple="false"
           class="mx-2 elevation-0"
@@ -62,6 +63,7 @@
             'border-color': 'rgba(0, 0, 0, 0.12)',
             'border-style': $vuetify.theme.dark ? 'none' : 'solid'
           }"
+          @click="toggle"
         >
           <v-avatar left>
             <v-icon>{{ $vuetify.icons.values.mdiInfinity }}</v-icon>
@@ -70,7 +72,11 @@
         </v-chip>
       </v-slide-item>
 
-      <v-slide-item v-for="galaxy in galaxies" :key="galaxy.name">
+      <v-slide-item
+        v-for="galaxy in galaxies"
+        :key="galaxy.name"
+        v-slot:default="{ active, toggle }"
+      >
         <v-chip
           :ripple="false"
           class="mx-2 elevation-0"
@@ -92,6 +98,7 @@
             'border-color': 'rgba(0, 0, 0, 0.12)',
             'border-style': $vuetify.theme.dark ? 'none' : 'solid'
           }"
+          @click="toggle"
         >
           <v-avatar left>
             <v-icon>{{ $vuetify.icons.values[galaxy.icon] }}</v-icon>
@@ -124,7 +131,8 @@ export default {
   },
   data() {
     return {
-      galaxies: []
+      galaxies: [],
+      model: null
     }
   }
 }

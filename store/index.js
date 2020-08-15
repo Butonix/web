@@ -1,4 +1,5 @@
-import currentUserGql from '../gql/currentUser.graphql'
+import currentUserGql from '@/gql/currentUser.graphql'
+import recentPlanetsGql from '@/gql/recentPlanets.graphql'
 
 export const state = () => ({
   currentUser: null,
@@ -6,7 +7,8 @@ export const state = () => ({
   snackbarMessage: '',
   snackbarSuccess: false,
   expandedCommentId: '',
-  nav: false
+  nav: false,
+  recentPlanets: []
 })
 
 export const mutations = {
@@ -30,6 +32,9 @@ export const mutations = {
   },
   setNav(state, nav) {
     state.nav = nav
+  },
+  setRecentPlanets(state, recentPlanets) {
+    state.recentPlanets = recentPlanets
   }
 }
 
@@ -67,5 +72,15 @@ export const actions = {
     setTimeout(() => {
       commit('setSnackbarEnabled', false)
     }, 2500)
+  },
+  async updateRecentPlanets({ commit }, planetNames) {
+    const client = this.app.apolloProvider.defaultClient
+    const { data } = await client.query({
+      query: recentPlanetsGql,
+      variables: {
+        planetNames
+      }
+    })
+    commit('setRecentPlanets', data.recentPlanets)
   }
 }

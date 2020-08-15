@@ -1,13 +1,13 @@
 <template>
   <SortingBar>
     <v-btn
-      tile
-      text
-      height="46"
+      v-if="$store.state.currentUser"
+      depressed
+      rounded
+      color="primary"
+      height="34"
       class="px-3"
       style="margin-bottom: 2px"
-      nuxt
-      to="/galaxies/explore"
     >
       <v-icon class="mr-2" size="20">{{
         $vuetify.icons.values[galaxy.icon]
@@ -15,11 +15,11 @@
       {{ galaxy.fullName }}</v-btn
     >
     <v-btn
-      tile
-      text
-      height="46"
-      class="px-3"
-      style="font-weight: 400; border-right-style: solid; border-left-style: solid; border-width: 1px; margin-bottom: 2px"
+      outlined
+      rounded
+      height="34"
+      class="px-3 ml-2"
+      style="border-style: solid; border-width: 1px; margin-bottom: 2px"
       :style="{
         'border-color': $vuetify.theme.dark
           ? 'rgba(255, 255, 255, 0.12)'

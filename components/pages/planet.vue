@@ -325,6 +325,8 @@ export default {
     recentPlanets = recentPlanets.slice(0, 5)
     localStorage.setItem('recentPlanets', JSON.stringify(recentPlanets))
 
+    this.$store.dispatch('updateRecentPlanets', recentPlanets)
+
     this.$nextTick(() => {
       this.$vuetify.theme.themes.dark.primary = this.planet.themeColor
         ? this.planet.themeColor

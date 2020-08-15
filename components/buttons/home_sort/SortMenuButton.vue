@@ -1,11 +1,16 @@
 <template>
   <v-btn
     aria-label="Sort Posts"
-    text
-    tile
-    height="46"
+    outlined
+    rounded
+    height="34"
     class="px-3"
-    style="margin-bottom: 2px"
+    style="margin-bottom: 2px; border-width: 1px; border-style: solid"
+    :style="{
+      'border-color': $vuetify.theme.dark
+        ? 'rgba(255, 255, 255, 0.12)'
+        : 'rgba(0, 0, 0, 0.12)'
+    }"
     @click="click"
   >
     <template

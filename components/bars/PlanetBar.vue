@@ -1,44 +1,53 @@
 <template>
   <SortingBar>
-    <v-btn
-      tile
-      text
-      style="margin-bottom: 2px"
-      height="46"
+    <v-chip
+      pill
+      outlined
+      style="border-style: solid; border-width: 1px; margin-bottom: 2px; height: 34px"
+      :style="{
+        'border-color': $vuetify.theme.dark
+          ? 'rgba(255, 255, 255, 0.12)'
+          : 'rgba(0, 0, 0, 0.12)'
+      }"
       class="px-3"
       nuxt
       to="/planets/explore"
     >
-      <v-avatar size="32" color="primary" class="mr-2">
+      <v-avatar color="primary" left>
         <v-img v-if="planet.avatarImageUrl" :src="planet.avatarImageUrl" />
+        <v-icon v-else>{{ $vuetify.icons.values.mdiEarth }}</v-icon>
       </v-avatar>
-      {{ planet.customName || planet.name }}</v-btn
+      {{ planet.customName || planet.name }}</v-chip
     >
 
     <template v-if="$device.isDesktop">
       <v-btn
-        tile
         text
-        height="46"
-        class="px-3"
-        style="font-weight: 400; border-right-style: solid; border-left-style: solid; border-width: 1px; margin-bottom: 2px"
+        rounded
+        height="34"
+        class="px-3 ml-2"
+        style="border-style: solid; border-width: 1px; margin-bottom: 2px"
         :style="{
           'border-color': $vuetify.theme.dark
             ? 'rgba(255, 255, 255, 0.12)'
             : 'rgba(0, 0, 0, 0.12)'
         }"
-        >{{ planet.userCount }} User{{
+      >
+        <v-icon size="20" class="mr-2">{{
+          $vuetify.icons.values.mdiAccountMultiple
+        }}</v-icon>
+        {{ planet.userCount }} User{{
           planet.userCount === 1 ? '' : 's'
         }}</v-btn
       >
       <v-btn
-        tile
+        rounded
         text
-        height="46"
-        class="px-3"
-        style="font-weight: 400; border-right-style: solid; border-right-width: 1px; margin-bottom: 2px"
+        height="34"
+        class="px-3 ml-2"
+        style="border-style: solid; border-width: 1px; margin-bottom: 2px"
         :style="{
-          'border-right-color': $vuetify.theme.dark
+          'border-color': $vuetify.theme.dark
             ? 'rgba(255, 255, 255, 0.12)'
             : 'rgba(0, 0, 0, 0.12)'
         }"
