@@ -3,6 +3,7 @@
     <nuxt-link :to="`/u/${user.username}`" class="text--secondary" event="">
       <v-avatar size="20">
         <img
+          loading="lazy"
           alt="Profile picture"
           :src="user.profilePicUrl"
           style="object-fit: cover"

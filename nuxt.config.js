@@ -518,11 +518,13 @@ export default {
       themes: {
         dark: {
           primary: '#EF5350',
+          secondary: '#ff7043',
           error: '#F44336',
           success: '#43A047'
         },
         light: {
           primary: '#EF5350',
+          secondary: '#ff7043',
           error: '#F44336',
           success: '#43A047'
         }

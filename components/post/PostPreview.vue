@@ -30,6 +30,7 @@
         @click.stop.prevent="openImageLink"
       >
         <img
+          loading="lazy"
           alt="Image preview"
           :src="post.link"
           style="max-height: 500px; max-width: 100%"

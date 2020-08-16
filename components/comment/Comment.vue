@@ -313,7 +313,7 @@ export default {
         case 1:
           return '#3F51B5'
         case 2:
-          return '#009688'
+          return '#EF5350'
         case 3:
           return '#4CAF50'
         case 4:
