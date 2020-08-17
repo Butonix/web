@@ -102,7 +102,7 @@
         </div>
 
         <PostPreview
-          v-if="isExpandable && $device.isDesktop"
+          v-if="$device.isDesktop"
           ref="textcontent"
           :key="post.id"
           :expand="idState.expand || isPostView"
@@ -125,7 +125,7 @@
     </v-list-item>
 
     <PostPreview
-      v-if="isExpandable && !$device.isDesktop"
+      v-if="!$device.isDesktop"
       ref="textcontent"
       :key="post.id"
       :expand="idState.expand || isPostView"

@@ -7,7 +7,7 @@
     <v-main>
       <HomePageGalaxyBar
         v-show="
-          $route.name === 'sort-time' ||
+          $route.name === 'home-sort-time' ||
             $route.name === 'universe-sort-time' ||
             $route.name === 'g-galaxyname-sort-time'
         "

@@ -143,7 +143,7 @@ export default {
       planet: null,
       loading: false,
       swatches: [[]],
-      themeColor: '#EF5350',
+      themeColor: this.$primaryColor,
       addModeratorUsername: ''
     }
   },

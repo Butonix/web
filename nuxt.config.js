@@ -124,7 +124,9 @@ import {
   mdiEarthOff,
   mdiShieldOutline,
   mdiShield,
-  mdiWeatherHurricane
+  mdiWeatherHurricane,
+  mdiArrowRightThinCircleOutline,
+  mdiCloseThick
 } from '@mdi/js'
 
 export default {
@@ -291,7 +293,8 @@ export default {
   plugins: [
     '~/plugins/vue-clipboard2.client.js',
     '~/plugins/vue-friendly-iframe.client.js',
-    '~/plugins/particles.vue.client.js'
+    '~/plugins/color.js',
+    '~/plugins/embedly.client.js'
   ],
   /*
    ** Nuxt.js dev-modules
@@ -507,7 +510,9 @@ export default {
         mdiEarthOff,
         mdiShieldOutline,
         mdiShield,
-        mdiWeatherHurricane
+        mdiWeatherHurricane,
+        mdiArrowRightThinCircleOutline,
+        mdiCloseThick
       }
     },
     theme: {
@@ -517,14 +522,16 @@ export default {
       dark: true,
       themes: {
         dark: {
-          primary: '#EF5350',
-          secondary: '#ff7043',
+          primary: '#5C6BC0',
+          secondary: '#EF5350',
+          accent: '#FF9800',
           error: '#F44336',
           success: '#43A047'
         },
         light: {
-          primary: '#EF5350',
-          secondary: '#ff7043',
+          primary: '#5C6BC0',
+          secondary: '#EF5350',
+          accent: '#FF9800',
           error: '#F44336',
           success: '#43A047'
         }
@@ -578,8 +585,8 @@ export default {
           component: resolve(__dirname, 'components/pages/search.vue')
         },
         {
-          name: 'sort-time',
-          path: '/:sort?/:time?',
+          name: 'home-sort-time',
+          path: '/home/:sort?/:time?',
           component: resolve(__dirname, 'components/pages/index.vue')
         }
       )

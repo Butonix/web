@@ -5,10 +5,17 @@ $heading-font-family: -apple-system,BlinkMacSystemFont,segoe ui,Roboto,Helvetica
 
 $font-size-root: 14px;
 $border-radius-root: 10px;
+$snackbar-content-font-size: 1rem;
 $list-item-dense-title-font-size: .93rem;
 $list-item-action-icon-margin: 16px;
-$snackbar-content-font-size: 1rem;
 $list-item-dense-title-font-weight: 400;
+$list-item-subtitle-font-size: 1rem;
+$list-item-title-font-size: 1rem;
+$list-item-title-subtitle-line-height: 1.3;
+$card-text-font-size: 1rem;
+$card-text-line-height: 1.3;
+$card-title-line-height: 1.3;
+$card-title-font-size: 1.43rem;
 
 $material-dark: (
   'background': #202124,

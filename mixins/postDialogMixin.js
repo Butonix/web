@@ -31,7 +31,9 @@ export default {
         time: this.$route.params.time
           ? this.$route.params.time.toUpperCase()
           : 'ALL',
-        filter: this.$route.name.startsWith('sort-time') ? 'MYPLANETS' : 'ALL',
+        filter: this.$route.name.startsWith('home-sort-time')
+          ? 'MYPLANETS'
+          : 'ALL',
         types:
           this.$route.query && this.$route.query.types
             ? this.$route.query.types.split('-').map((t) => t.toUpperCase())

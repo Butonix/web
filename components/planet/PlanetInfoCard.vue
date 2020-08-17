@@ -42,7 +42,7 @@
         </v-list-item-title>
         <v-list-item-subtitle
           class="mt-1"
-          style="font-size: 1rem; overflow: auto; text-overflow: initial; white-space: initial"
+          style="overflow: auto; text-overflow: initial; white-space: initial"
           >{{ planet.description }}</v-list-item-subtitle
         >
       </v-list-item-content>
@@ -90,12 +90,36 @@
         depressed
         class="flex-grow-1"
         nuxt
-        :to="`/p/${$route.params.planetname}/edit`"
+        :to="`/p/${planet.name}/edit`"
         :style="$vuetify.theme.dark ? '' : 'background-color: #DEE1E6'"
       >
         Edit Planet
         <v-icon size="20" class="ml-2">{{
           $vuetify.icons.values.mdiPencil
+        }}</v-icon>
+      </v-btn>
+    </v-card-actions>
+
+    <v-card-actions class="pb-3 pt-1">
+      <v-btn
+        depressed
+        outlined
+        rounded
+        class="flex-grow-1"
+        nuxt
+        :to="`/p/${planet.name}`"
+        :style="{
+          'background-color': $vuetify.theme.dark
+            ? ''
+            : 'background-color: #DEE1E6',
+          'border-color': $vuetify.theme.dark
+            ? 'rgba(255, 255, 255, 0.12)'
+            : 'rgba(0, 0, 0, 0.12)'
+        }"
+      >
+        Visit
+        <v-icon size="20" class="ml-2">{{
+          $vuetify.icons.values.mdiArrowRightThinCircleOutline
         }}</v-icon>
       </v-btn>
     </v-card-actions>

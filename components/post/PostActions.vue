@@ -67,7 +67,7 @@ export default {
       return {
         '--theme-color': this.post.planet.themeColor
           ? this.post.planet.themeColor
-          : '#EF5350'
+          : this.$primaryColor
       }
     },
     newCommentCount() {

@@ -14,14 +14,15 @@
         <v-chip
           :ripple="false"
           class="mx-2 elevation-0"
+          :class="$route.name === 'home-sort-time' ? 'white--text' : ''"
           active-class="active"
           nuxt
           :to="{
-            name: 'sort-time',
+            name: 'home-sort-time',
             params: { ...$route.params, galaxyname: undefined }
           }"
           :color="
-            $route.name === 'sort-time'
+            $route.name === 'home-sort-time'
               ? 'primary'
               : $vuetify.theme.dark
               ? '#35363A'

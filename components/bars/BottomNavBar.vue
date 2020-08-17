@@ -41,7 +41,7 @@
           <v-row justify="center" class="px-6">
             <v-col align="center" cols="6">
               <nuxt-link
-                :to="$store.state.currentUser ? '/planets/create' : '/signup'"
+                :to="$store.state.currentUser ? '/planets/create' : '/'"
               >
                 <v-avatar
                   :style="{
@@ -230,7 +230,7 @@ export default {
       this.$router.push(`/search?q=${encodeURIComponent(search)}`)
     },
     clickHomeButton() {
-      if (this.$route.name === 'sort-time') {
+      if (this.$route.name === 'home-sort-time') {
         window.scrollTo(0, 0)
       } else {
         this.$router.push({ path: '/' })

@@ -29,9 +29,10 @@
     <v-card-actions class="pt-0">
       <v-btn
         depressed
-        class="flex-grow-1"
+        class="flex-grow-1 white--text"
         nuxt
         to="/planets/create"
+        color="primary"
         :style="$vuetify.theme.dark ? '' : 'background-color: #DEE1E6'"
       >
         Create a Planet

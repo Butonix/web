@@ -330,10 +330,10 @@ export default {
     this.$nextTick(() => {
       this.$vuetify.theme.themes.dark.primary = this.planet.themeColor
         ? this.planet.themeColor
-        : '#EF5350'
+        : this.$primaryColor
       this.$vuetify.theme.themes.light.primary = this.planet.themeColor
         ? this.planet.themeColor
-        : '#EF5350'
+        : this.$primaryColor
     })
   },
   methods: {

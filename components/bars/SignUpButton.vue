@@ -1,10 +1,10 @@
 <template>
   <v-btn
-    color="primary"
+    color="secondary"
     depressed
     rounded
     height="34"
-    class="px-3"
+    class="px-3 white--text"
     style="margin-bottom: 2px"
     nuxt
     to="/signup"
