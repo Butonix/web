@@ -1,7 +1,6 @@
 <template>
   <v-list class="py-0">
     <v-list-item
-      v-if="$store.state.currentUser"
       :to="`/u/${$store.state.currentUser.username}`"
       nuxt
       @click="$emit('selected')"
@@ -23,40 +22,7 @@
       </v-list-item-content>
     </v-list-item>
 
-    <v-list-item
-      v-if="!$store.state.currentUser"
-      nuxt
-      to="/signup"
-      @click="$emit('selected')"
-    >
-      <v-list-item-icon>
-        <v-icon>{{ $vuetify.icons.values.mdiClipboardAccount }}</v-icon>
-      </v-list-item-icon>
-      <v-list-item-content>
-        <v-list-item-title>Sign Up</v-list-item-title>
-      </v-list-item-content>
-    </v-list-item>
-
-    <v-list-item
-      v-if="!$store.state.currentUser"
-      nuxt
-      to="/login"
-      @click="$emit('selected')"
-    >
-      <v-list-item-icon>
-        <v-icon>{{ $vuetify.icons.values.mdiLogin }}</v-icon>
-      </v-list-item-icon>
-      <v-list-item-content>
-        <v-list-item-title>Log in</v-list-item-title>
-      </v-list-item-content>
-    </v-list-item>
-
-    <v-list-item
-      v-if="$store.state.currentUser"
-      nuxt
-      to="/settings/account"
-      @click="$emit('selected')"
-    >
+    <v-list-item nuxt to="/settings/account" @click="$emit('selected')">
       <v-list-item-icon>
         <v-icon>{{ $vuetify.icons.values.mdiCogOutline }}</v-icon>
       </v-list-item-icon>

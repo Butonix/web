@@ -16,7 +16,7 @@
     <v-icon class="mr-2" size="20">{{
       $vuetify.icons.values.mdiTelescope
     }}</v-icon>
-    Explore Planets</v-btn
+    Discover Planets</v-btn
   >
 </template>
 

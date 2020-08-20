@@ -64,7 +64,28 @@
     <div class="pt-3" :class="$device.isDesktop ? '' : 'px-3'">
       <v-progress-linear v-show="loading" indeterminate />
 
-      <NoPostsMessage v-show="!loading && items.length === 0" />
+      <div
+        v-if="
+          $route.name === 'home-sort-time' && !loading && items.length === 0
+        "
+        style="display: flex; flex-direction: column; align-items: center; text-align: center"
+        class="text--secondary"
+      >
+        <v-icon class="text--secondary" size="36">{{
+          $vuetify.icons.values.mdiEmoticonFrown
+        }}</v-icon>
+        <span class="mt-2" style="font-size: 1.5rem"
+          >You have not joined any Planets</span
+        >
+        <nuxt-link to="/planets/explore" class="mt-2 primary--text"
+          >Discover Planets</nuxt-link
+        >
+        <nuxt-link to="/universe" class="mt-2 primary--text"
+          >View Posts from All Planets</nuxt-link
+        >
+      </div>
+
+      <NoPostsMessage v-else-if="!loading && items.length === 0" />
     </div>
     <PostDialog v-model="dialog" :post="selectedPost" />
   </div>

@@ -45,7 +45,7 @@
           </template>
         </v-text-field>
 
-        <div class="mr-4">
+        <div class="mr-1">
           <NewPostButton />
         </div>
 
@@ -54,7 +54,7 @@
         </div>
       </template>
 
-      <ProfileMenu />
+      <ProfileMenu v-if="$store.state.currentUser" />
 
       <template v-if="$device.isDesktop">
         <client-only>

@@ -100,7 +100,7 @@
       </v-btn>
     </v-card-actions>
 
-    <v-card-actions class="pb-3 pt-1">
+    <v-card-actions v-if="showVisitBtn" class="pb-3 pt-1">
       <v-btn
         depressed
         outlined
@@ -158,6 +158,10 @@ export default {
       default: false
     },
     showViewPlanetBtn: {
+      type: Boolean,
+      default: false
+    },
+    showVisitBtn: {
       type: Boolean,
       default: false
     },

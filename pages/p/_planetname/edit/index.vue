@@ -20,6 +20,10 @@
           <div>
             <v-color-picker
               v-model="themeColor"
+              hide-canvas
+              hide-inputs
+              hide-mode-switch
+              disabled
               :class="
                 $vuetify.theme.dark ? 'darkcolorpicker' : 'lightcolorpicker'
               "

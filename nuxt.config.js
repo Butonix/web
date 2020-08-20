@@ -587,7 +587,7 @@ export default {
         {
           name: 'home-sort-time',
           path: '/home/:sort?/:time?',
-          component: resolve(__dirname, 'components/pages/index.vue')
+          component: resolve(__dirname, 'components/pages/home.vue')
         }
       )
       sortRoutes(routes)

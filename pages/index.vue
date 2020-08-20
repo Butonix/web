@@ -1,6 +1,7 @@
 <template>
   <div style="height: 100%; display: flex; flex-direction: row">
     <div
+      v-if="$device.isDesktop"
       id="changeText"
       style="position: absolute; bottom: 0; left: 0; width: 30%; border-top-right-radius: 10px"
       :class="hideText ? 'hide' : ''"
@@ -60,7 +61,10 @@
         >Continue without logging in</v-btn
       >
 
-      <v-col cols="5">
+      <v-col
+        :cols="$device.isDesktop ? 5 : 12"
+        :class="$device.isDesktop ? '' : 'px-6'"
+      >
         <div style="display: flex; flex-direction: column">
           <img
             src="/CometLogoSvg.svg"
@@ -105,6 +109,11 @@
 import spaceImages from 'assets/spaceimages.json'
 
 const i = Math.floor(Math.random() * spaceImages.length)
+// preload next image
+if (process.client) {
+  new Image().src =
+    spaceImages[i + 1 >= spaceImages.length ? 0 : i + 1].imageUrl
+}
 
 export default {
   middleware({ store, redirect }) {
@@ -134,8 +143,15 @@ export default {
         if (this.currentDescription >= this.images.length)
           this.currentDescription = 0
       }, 1500)
-      this.currentImage++
-      if (this.currentImage >= this.images.length) this.currentImage = 0
+      if (this.currentImage + 1 >= this.images.length) {
+        this.currentImage = 0
+      } else {
+        this.currentImage++
+      }
+      // preload next image
+      new Image().src = this.images[
+        this.currentImage + 1 >= this.images.length ? 0 : this.currentImage + 1
+      ].imageUrl
     }, 15000)
   },
   head: {

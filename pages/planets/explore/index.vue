@@ -20,7 +20,7 @@
           :class="$device.isDesktop && index % 3 === 1 ? 'px-6' : ''"
           :cols="$device.isDesktop ? 4 : 12"
         >
-          <PlanetInfoCard :planet="planet" />
+          <PlanetInfoCard :planet="planet" show-visit-btn />
         </v-col>
       </v-row>
     </v-container>
@@ -65,7 +65,7 @@ export default {
     }
   },
   head: {
-    title: 'Explore Planets'
+    title: 'Discover Planets'
   }
 }
 </script>

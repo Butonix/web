@@ -19,7 +19,7 @@
         nuxt
         to="/planets/explore"
         :style="$vuetify.theme.dark ? '' : 'background-color: #DEE1E6'"
-        >Explore more Planets
+        >Discover Planets
         <v-icon size="20" class="ml-2">{{
           $vuetify.icons.values.mdiTelescope
         }}</v-icon></v-btn

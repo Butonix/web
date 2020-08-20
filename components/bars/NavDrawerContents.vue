@@ -1,5 +1,31 @@
 <template>
   <div>
+    <template v-if="!$store.state.currentUser">
+      <div style="display: flex; flex-direction: row" class="px-4 pt-2 pb-3">
+        <v-btn
+          nuxt
+          to="/signup"
+          depressed
+          rounded
+          height="34"
+          color="secondary"
+          class="white--text flex-grow-1"
+          >Sign Up</v-btn
+        >
+      </div>
+      <div style="display: flex; flex-direction: row" class="px-4 pb-2">
+        <v-btn
+          nuxt
+          to="/login"
+          outlined
+          rounded
+          height="34"
+          color="secondary"
+          class="flex-grow-1"
+          >Log In</v-btn
+        >
+      </div>
+    </template>
     <div
       style="font-size: 0.86rem; display: flex"
       class="text--secondary px-4 pt-2 pb-2"
@@ -7,7 +33,7 @@
       <span class="mr-auto">Feeds</span>
     </div>
     <v-list class="py-0">
-      <v-list-item dense to="/">
+      <v-list-item v-if="$store.state.currentUser" dense to="/home">
         <v-list-item-avatar size="24">
           <v-icon size="20">{{ $vuetify.icons.values.mdiEarth }}</v-icon>
         </v-list-item-avatar>

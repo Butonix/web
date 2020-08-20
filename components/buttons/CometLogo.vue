@@ -9,10 +9,10 @@ export default {
   name: 'CometLogo',
   methods: {
     clickCometLogo() {
-      if (this.$route.path === '/') {
+      if (this.$route.path === '/home') {
         window.scrollTo(0, 0)
       } else {
-        this.$router.push({ path: '/' })
+        this.$router.push({ path: '/home' })
       }
     }
   }

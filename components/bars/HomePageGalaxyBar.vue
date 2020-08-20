@@ -10,7 +10,10 @@
     }"
   >
     <v-slide-group ref="slider" v-model="model" show-arrows center-active>
-      <v-slide-item v-slot:default="{ active, toggle }">
+      <v-slide-item
+        v-if="$store.state.currentUser"
+        v-slot:default="{ active, toggle }"
+      >
         <v-chip
           :ripple="false"
           class="mx-2 elevation-0"

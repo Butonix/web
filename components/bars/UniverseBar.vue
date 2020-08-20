@@ -1,7 +1,6 @@
 <template>
   <SortingBar>
     <v-btn
-      v-if="$store.state.currentUser"
       depressed
       color="primary"
       rounded
@@ -12,7 +11,6 @@
       <v-icon class="mr-2">{{ $vuetify.icons.values.mdiInfinity }}</v-icon>
       Universe ({{ allPlanets.length }} Planets)</v-btn
     >
-    <SignUpButton v-else />
 
     <ExplorePlanetsButton v-if="$device.isDesktop" />
   </SortingBar>
@@ -21,12 +19,11 @@
 <script>
 import SortingBar from '@/components/bars/SortingBar'
 import allPlanetsGql from '@/gql/allPlanets'
-import SignUpButton from '@/components/bars/SignUpButton'
 import ExplorePlanetsButton from '@/components/bars/ExplorePlanetsButton'
 
 export default {
   name: 'UniverseBar',
-  components: { ExplorePlanetsButton, SignUpButton, SortingBar },
+  components: { ExplorePlanetsButton, SortingBar },
   data() {
     return {
       allPlanets: []
