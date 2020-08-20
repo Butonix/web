@@ -61,10 +61,7 @@
         >Continue without logging in</v-btn
       >
 
-      <v-col
-        :cols="$device.isDesktop ? 5 : 12"
-        :class="$device.isDesktop ? '' : 'px-6'"
-      >
+      <v-col md="11" sm="12" cols="5" :class="$device.isDesktop ? '' : 'px-6'">
         <div style="display: flex; flex-direction: column">
           <img
             src="/CometLogoSvg.svg"
