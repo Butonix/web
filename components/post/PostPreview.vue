@@ -17,9 +17,10 @@
       />
     </div>
   </div>
-  <div v-else-if="expand" class="mt-4">
+  <div v-else-if="expand">
     <v-row
       v-if="post.type === 'IMAGE' && isEmbeddableImage"
+      class="mt-4"
       no-gutters
       justify="start"
     >
@@ -42,6 +43,7 @@
       v-else-if="
         isYoutubeLink || isTweetLink || isSpotifyLink || isInstagramLink
       "
+      class="mt-4"
       no-gutters
       justify="start"
     >
@@ -93,7 +95,7 @@
     <client-only v-else-if="isPostView">
       <a
         :href="post.link"
-        class="embedly-card"
+        class="embedly-card mt-4"
         :data-card-theme="$vuetify.theme.dark ? 'dark' : 'light'"
         data-card-align="left"
         data-card-controls="0"
