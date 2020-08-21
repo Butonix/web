@@ -5,12 +5,12 @@
     flat
     class="topappbar"
     dense
-    style="z-index: 40"
-    :style="
-      $vuetify.theme.dark
-        ? 'border-bottom: 1px solid rgba(255, 255, 255, .12)'
-        : 'border-bottom: 1px solid rgba(0, 0, 0, .12)'
-    "
+    :style="{
+      'z-index': $device.isDesktop ? '300' : '40',
+      'border-bottom': $vuetify.theme.dark
+        ? '1px solid rgba(255, 255, 255, .12)'
+        : '1px solid rgba(0, 0, 0, .12)'
+    }"
   >
     <v-app-bar-nav-icon
       v-show="$device.isDesktop"

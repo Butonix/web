@@ -592,5 +592,9 @@ export default {
       )
       sortRoutes(routes)
     }
+  },
+
+  env: {
+    EMBEDLY_KEY: process.env.EMBEDLY_KEY
   }
 }

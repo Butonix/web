@@ -1,7 +1,7 @@
 <template>
   <div>
     <div
-      style="position: fixed; top: 0; left: 0; width: 100%; height: 100%"
+      style="position: fixed; top: 48px; left: 0; width: 100%; height: 100%"
       class="background"
       :class="dialogOpen ? '' : 'backgroundhidden'"
     />
@@ -11,10 +11,12 @@
       content-class="dialogcontent"
       hide-overlay
       :origin="mousePosition"
+      persistent
+      no-click-animation
     >
       <div
         id="overlay"
-        style="bottom: 0; left: 0; right: 0; position: fixed; top: 48px; height: 100%; width: 100%; z-index: 50"
+        style="bottom: 0; left: 0; right: 0; position: fixed; height: 100%; width: 100%; z-index: 50"
       >
         <v-app-bar
           v-if="!$device.isDesktop"

@@ -89,6 +89,18 @@
         />
       </client-only>
     </v-row>
+
+    <client-only v-else-if="isPostView">
+      <a
+        :href="post.link"
+        class="embedly-card"
+        :data-card-theme="$vuetify.theme.dark ? 'dark' : 'light'"
+        data-card-align="left"
+        data-card-controls="0"
+        :data-card-key="embedlyKey"
+        >Loading Embed</a
+      >
+    </client-only>
   </div>
 </template>
 
@@ -124,6 +136,9 @@ export default {
     }
   },
   computed: {
+    embedlyKey() {
+      return process.env.EMBEDLY_KEY
+    },
     isEmbeddableImage() {
       return this.post.type === 'IMAGE' && this.post.link.startsWith('https://')
     },
