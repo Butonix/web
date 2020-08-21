@@ -2,7 +2,7 @@
   <v-card class="mt-3" flat :outlined="!$vuetify.theme.dark">
     <v-list-item>
       <v-list-item-content class="pb-1">
-        <v-list-item-title style="font-size: 1.143rem; font-weight: 500"
+        <v-list-item-title style="font-size: 1.143rem; font-weight: 500;"
           >Moderators</v-list-item-title
         >
         <div class="mt-2">
@@ -10,7 +10,7 @@
             v-for="mod in planet.moderators"
             :key="mod.id"
             class="px-0 pb-2"
-            style="min-height: 0"
+            style="min-height: 0;"
           >
             <!--<v-list-item-avatar size="28" class="mr-2">
               <v-img :src="mod.profilePicUrl" />

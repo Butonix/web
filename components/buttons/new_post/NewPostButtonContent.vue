@@ -2,11 +2,9 @@
   <v-list>
     <v-list-item
       nuxt
-      :to="
-        `/submit/text${
-          $route.params.planetname ? `?planet=${$route.params.planetname}` : ''
-        }`
-      "
+      :to="`/submit/text${
+        $route.params.planetname ? `?planet=${$route.params.planetname}` : ''
+      }`"
       @click="$emit('selected')"
     >
       <v-list-item-icon>
@@ -19,11 +17,9 @@
 
     <v-list-item
       nuxt
-      :to="
-        `/submit/link${
-          $route.params.planetname ? `?planet=${$route.params.planetname}` : ''
-        }`
-      "
+      :to="`/submit/link${
+        $route.params.planetname ? `?planet=${$route.params.planetname}` : ''
+      }`"
       @click="$emit('selected')"
     >
       <v-list-item-icon>
@@ -36,11 +32,9 @@
 
     <v-list-item
       nuxt
-      :to="
-        `/submit/image${
-          $route.params.planetname ? `?planet=${$route.params.planetname}` : ''
-        }`
-      "
+      :to="`/submit/image${
+        $route.params.planetname ? `?planet=${$route.params.planetname}` : ''
+      }`"
       @click="$emit('selected')"
     >
       <v-list-item-icon>

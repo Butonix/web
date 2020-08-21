@@ -9,10 +9,10 @@
       $vuetify.theme.dark ? '' : 'background-color: #F1F3F4; border-width: 1px'
     "
   >
-    <v-card-title style="word-break: normal"
+    <v-card-title style="word-break: normal;"
       >Log in to enjoy all of Comet's features!</v-card-title
     >
-    <v-card-subtitle style="font-size: .93rem"
+    <v-card-subtitle style="font-size: 0.93rem;"
       >Create posts and comments, follow topics, fine-tune the content you see,
       and more!</v-card-subtitle
     >
@@ -20,7 +20,7 @@
       <v-spacer />
       <v-btn text rounded nuxt to="/login">Log In</v-btn>
       <v-btn
-        style="border-radius: 4px"
+        style="border-radius: 4px;"
         depressed
         color="primary"
         nuxt

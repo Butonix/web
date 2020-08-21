@@ -6,7 +6,11 @@
           <v-tab
             nuxt
             to="/settings/account"
-            style="letter-spacing: normal; text-transform: none; font-size: 1rem"
+            style="
+              letter-spacing: normal;
+              text-transform: none;
+              font-size: 1rem;
+            "
             class="text--secondary"
           >
             <v-icon size="20" class="mr-2">{{
@@ -17,7 +21,11 @@
           <v-tab
             nuxt
             to="/settings/blockedusers"
-            style="letter-spacing: normal; text-transform: none; font-size: 1rem"
+            style="
+              letter-spacing: normal;
+              text-transform: none;
+              font-size: 1rem;
+            "
             class="text--secondary"
           >
             <v-icon size="20" class="mr-2">{{
@@ -28,7 +36,11 @@
           <v-tab
             nuxt
             to="/settings/mutedplanets"
-            style="letter-spacing: normal; text-transform: none; font-size: 1rem"
+            style="
+              letter-spacing: normal;
+              text-transform: none;
+              font-size: 1rem;
+            "
             class="text--secondary"
           >
             <v-icon size="20" class="mr-2">{{
@@ -39,7 +51,11 @@
           <v-tab
             nuxt
             to="/settings/hiddenposts"
-            style="letter-spacing: normal; text-transform: none; font-size: 1rem"
+            style="
+              letter-spacing: normal;
+              text-transform: none;
+              font-size: 1rem;
+            "
             class="text--secondary"
           >
             <v-icon size="20" class="mr-2">{{

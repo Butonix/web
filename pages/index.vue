@@ -1,9 +1,15 @@
 <template>
-  <div style="height: 100%; display: flex; flex-direction: row">
+  <div style="height: 100%; display: flex; flex-direction: row;">
     <div
       v-if="$device.isDesktop"
       id="changeText"
-      style="position: absolute; bottom: 0; left: 0; width: 30%; border-top-right-radius: 10px"
+      style="
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 30%;
+        border-top-right-radius: 10px;
+      "
       :class="hideText ? 'hide' : ''"
       class="pa-4"
       :style="{
@@ -22,7 +28,7 @@
       <div
         id="description"
         class="text--secondary"
-        style="white-space: pre-line"
+        style="white-space: pre-line;"
       >
         {{ images[currentDescription].description }}
       </div>
@@ -30,11 +36,24 @@
 
     <div
       v-if="$device.isDesktop"
-      style="width: 60%; height: 100vh; background-size: cover; background-position: center; transition: background-image 3s ease-in-out"
+      style="
+        width: 60%;
+        height: 100vh;
+        background-size: cover;
+        background-position: center;
+        transition: background-image 3s ease-in-out;
+      "
       :style="`background-image: url(${images[currentImage].imageUrl})`"
     >
       <div
-        style="position: absolute; width: 25%; height: 100%; bottom: 0; right: 40%; background-color: transparent"
+        style="
+          position: absolute;
+          width: 25%;
+          height: 100%;
+          bottom: 0;
+          right: 40%;
+          background-color: transparent;
+        "
         :style="{
           'background-image': $vuetify.theme.dark
             ? 'linear-gradient(270deg,#202124,rgba(32,33,36,0))'
@@ -48,13 +67,13 @@
       align="center"
       justify="center"
       :style="$device.isDesktop ? 'width: 40%' : 'width: 100%'"
-      style="height: 100vh"
+      style="height: 100vh;"
     >
       <v-btn
         depressed
         rounded
         text
-        style="position: absolute; top: 16px; right: 16px"
+        style="position: absolute; top: 16px; right: 16px;"
         class="text--secondary"
         nuxt
         to="/home"
@@ -68,13 +87,13 @@
         xl="6"
         :class="$device.isDesktop ? '' : 'px-6'"
       >
-        <div style="display: flex; flex-direction: column">
+        <div style="display: flex; flex-direction: column;">
           <img
             src="/CometLogoSvg.svg"
-            style="margin-bottom: 16px; width: 164px"
+            style="margin-bottom: 16px; width: 164px;"
           />
 
-          <div style="font-size: 2rem; font-weight: 500; margin-bottom: 24px">
+          <div style="font-size: 2rem; font-weight: 500; margin-bottom: 24px;">
             See what's in
             <v-menu open-on-hover top offset-y nudge-left="200">
               <template v-slot:activator="{ on }">
@@ -83,10 +102,10 @@
 
               <v-card
                 width="400"
-                style="background-color: rgba(53, 54, 58, 0.9)"
+                style="background-color: rgba(53, 54, 58, 0.9);"
               >
-                <v-card-title style="font-size: 2rem">or·bit</v-card-title>
-                <v-card-subtitle style="font-size: 1rem">
+                <v-card-title style="font-size: 2rem;">or·bit</v-card-title>
+                <v-card-subtitle style="font-size: 1rem;">
                   <span><em>noun.</em></span>
                   <ol>
                     <li>

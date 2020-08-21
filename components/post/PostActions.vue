@@ -10,9 +10,9 @@
         small
         rounded
         text
-        :title="
-          `${post.commentCount} Comment${post.commentCount === 1 ? '' : 's'}`
-        "
+        :title="`${post.commentCount} Comment${
+          post.commentCount === 1 ? '' : 's'
+        }`"
         @click.stop.prevent="openPost"
       >
         <v-icon size="20" class="mr-2">{{
@@ -32,11 +32,9 @@
       rounded
       text
       :class="post.isEndorsed ? '' : 'text--secondary'"
-      :title="
-        `${post.endorsementCount} Rocket${
-          post.endorsementCount === 1 ? '' : 's'
-        }`
-      "
+      :title="`${post.endorsementCount} Rocket${
+        post.endorsementCount === 1 ? '' : 's'
+      }`"
       :style="cssVars"
       @click.stop.prevent="toggleEndorsement"
     >
@@ -49,9 +47,9 @@
 </template>
 
 <script>
+import AnimatedRocket from '@/components/AnimatedRocket'
 import togglePostEndorsementGql from '~/gql/togglePostEndorsement'
 import { urlName } from '~/util/urlName'
-import AnimatedRocket from '@/components/AnimatedRocket'
 
 export default {
   name: 'PostActions',

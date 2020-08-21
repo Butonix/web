@@ -4,7 +4,7 @@
     rounded
     height="34"
     class="px-3 ml-2"
-    style="border-style: solid; border-width: 1px; margin-bottom: 2px"
+    style="border-style: solid; border-width: 1px; margin-bottom: 2px;"
     :style="{
       'border-color': $vuetify.theme.dark
         ? 'rgba(255, 255, 255, 0.12)'

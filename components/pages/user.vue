@@ -1,7 +1,13 @@
 <template>
   <div>
     <div
-      style="position: relative; height: 208px; background-size: cover; background-position: center; background-repeat: no-repeat"
+      style="
+        position: relative;
+        height: 208px;
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+      "
       :style="
         user.bannerImageUrl
           ? `background-image: url(${user.bannerImageUrl})`
@@ -9,29 +15,49 @@
       "
     >
       <div
-        style="position: absolute; width: 100%; height: 100%; bottom: 0; left: 0; background-color: transparent"
+        style="
+          position: absolute;
+          width: 100%;
+          height: 100%;
+          bottom: 0;
+          left: 0;
+          background-color: transparent;
+        "
         :style="{
           'background-image': $vuetify.theme.dark
             ? 'linear-gradient(0deg,#202124,rgba(32,33,36,0.25))'
             : 'linear-gradient(0deg,#F1F3F4,rgba(241,243,244,0.25))'
         }"
       />
-      <div style="position: absolute; bottom: 16px; width: 100%">
+      <div style="position: absolute; bottom: 16px; width: 100%;">
         <v-container>
-          <div style="display: flex; text-align: left">
+          <div style="display: flex; text-align: left;">
             <div
-              style="border-radius: 50%; background-color: #202124; height: 100px; width: 100px"
+              style="
+                border-radius: 50%;
+                background-color: #202124;
+                height: 100px;
+                width: 100px;
+              "
             >
               <v-avatar
                 tile
                 height="100"
                 width="100"
-                style="position: relative"
+                style="position: relative;"
                 :class="user.isCurrentUser ? 'editprofileavatar' : ''"
                 @click="openAvatarDialog"
               >
                 <div
-                  style="height: 25px; width: 25px; border-radius: 50%; position: absolute; bottom: 0; right: 0; z-index: 2"
+                  style="
+                    height: 25px;
+                    width: 25px;
+                    border-radius: 50%;
+                    position: absolute;
+                    bottom: 0;
+                    right: 0;
+                    z-index: 2;
+                  "
                   :style="
                     lastOnlineString === 'Online' && !user.appearOffline
                       ? 'background-color: #66BB6A'
@@ -40,14 +66,14 @@
                 />
                 <v-icon
                   size="50"
-                  style="position: absolute; z-index: 10"
+                  style="position: absolute; z-index: 10;"
                   class="editprofileicon"
                   dark
                   >{{ $vuetify.icons.values.mdiPencil }}</v-icon
                 >
                 <v-img
                   v-if="user.profilePicUrl"
-                  style="border-radius: 50%; background-color: #202124"
+                  style="border-radius: 50%; background-color: #202124;"
                   :src="user.profilePicUrl"
                 />
                 <v-icon v-else>{{
@@ -58,7 +84,7 @@
 
             <div class="pl-6">
               <div
-                style="font-size: 2rem; font-weight: 500; line-height: 2rem"
+                style="font-size: 2rem; font-weight: 500; line-height: 2rem;"
                 class="pb-2"
               >
                 <v-row no-gutters align="center">
@@ -76,16 +102,16 @@
                 </v-row>
               </div>
               <div>
-                <span style="font-weight: 500">{{
+                <span style="font-weight: 500;">{{
                   user.endorsementCount
                 }}</span>
                 Rocket{{ user.endorsementCount === 1 ? '' : 's' }}
                 <span>
-                  <span style="font-weight: 500">&middot;</span>
+                  <span style="font-weight: 500;">&middot;</span>
                   Joined
-                  <span style="font-weight: 500">{{ joinedDate }}</span>
+                  <span style="font-weight: 500;">{{ joinedDate }}</span>
                   <span v-if="user.isCurrentUser" @click="openBannerInput">
-                    <span style="font-weight: 500">&middot;</span>
+                    <span style="font-weight: 500;">&middot;</span>
                     <span class="hoverable"
                       >Upload Banner (rec size: 1920x208)</span
                     >
@@ -94,7 +120,7 @@
                     ref="bannerinput"
                     v-model="bannerFile"
                     type="file"
-                    style="display: none"
+                    style="display: none;"
                   />
                 </span>
               </div>
@@ -118,20 +144,20 @@
       <v-row justify="center">
         <v-col :class="$device.isDesktop ? 'pt-0' : 'pa-0'">
           <v-tabs v-model="tab" background-color="transparent" class="pb-3">
-            <v-tab style="text-transform: none; letter-spacing: normal">
+            <v-tab style="text-transform: none; letter-spacing: normal;">
               <v-icon class="mr-2" size="20">{{
                 $vuetify.icons.values.mdiPost
               }}</v-icon>
               Posts
             </v-tab>
-            <v-tab style="text-transform: none; letter-spacing: normal">
+            <v-tab style="text-transform: none; letter-spacing: normal;">
               <v-icon class="mr-2" size="20">{{
                 $vuetify.icons.values.mdiCommentMultipleOutline
               }}</v-icon>
               Comments
             </v-tab>
           </v-tabs>
-          <v-tabs-items v-model="tab" style="background-color: transparent">
+          <v-tabs-items v-model="tab" style="background-color: transparent;">
             <v-tab-item>
               <PostsScroller
                 v-model="dialog"
@@ -155,7 +181,11 @@
         </v-col>
         <v-col v-if="$device.isDesktop" cols="3" class="pl-0 pt-0">
           <div class="sticky">
-            <UserSummaryCard :user="user" allow-edit style="margin-top: 60px" />
+            <UserSummaryCard
+              :user="user"
+              allow-edit
+              style="margin-top: 60px;"
+            />
             <ModeratedPlanetsCard
               v-if="user.moderatedPlanets.length > 0"
               class="mt-3"

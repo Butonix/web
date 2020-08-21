@@ -1,5 +1,5 @@
 <template>
-  <div class="mt-2 mx-2 text--secondary" style="font-size: 0.86rem">
+  <div class="mt-2 mx-2 text--secondary" style="font-size: 0.86rem;">
     <a
       href="https://discord.gg/NPCMGSm"
       target="_blank"

@@ -3,7 +3,7 @@
     flat
     dense
     :class="$device.isDesktop ? 'pr-5' : ''"
-    style="border-bottom-width: 1px; border-bottom-style: solid; z-index: 30"
+    style="border-bottom-width: 1px; border-bottom-style: solid; z-index: 30;"
     :style="{
       'border-bottom-color': $vuetify.theme.dark
         ? 'rgba(255, 255, 255, 0.12)'

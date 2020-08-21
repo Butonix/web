@@ -1,6 +1,6 @@
 <template>
   <v-card flat :outlined="!$vuetify.theme.dark">
-    <v-card-title class="pb-0" style="word-break: break-word">
+    <v-card-title class="pb-0" style="word-break: break-word;">
       <span>
         <v-icon class="mr-2">{{ $vuetify.icons.values.mdiShield }}</v-icon>
         Planets moderated by {{ user.username }}

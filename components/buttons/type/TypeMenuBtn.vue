@@ -32,10 +32,7 @@ export default {
       if (!this.$route.query.types) return 'Everything'
       let arr = this.$route.query.types.split('-')
       arr = arr.map((s) => s[0].toUpperCase() + s.substring(1))
-      return arr
-        .join(' + ')
-        .replace('Image', 'Images')
-        .replace('Link', 'Links')
+      return arr.join(' + ').replace('Image', 'Images').replace('Link', 'Links')
     }
   },
   methods: {

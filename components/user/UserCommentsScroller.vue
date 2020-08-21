@@ -34,7 +34,7 @@
               'background-color': $vuetify.theme.dark ? '#202124' : '#F8F9FA'
             }"
             :class="$vuetify.theme.dark ? 'post-dark' : 'post-light'"
-            style="cursor: pointer"
+            style="cursor: pointer;"
             @click="selectComment(item)"
           >
             <Comment

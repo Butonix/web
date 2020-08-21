@@ -1,7 +1,7 @@
 <template>
   <v-row>
     <v-col :cols="$device.isDesktop ? 6 : 12">
-      <v-list style="border-radius: 10px">
+      <v-list style="border-radius: 10px;">
         <v-list-item @click="toggleAppearOffline">
           <v-list-item-content>
             <v-list-item-title>Appear Offline</v-list-item-title>
@@ -54,7 +54,7 @@
             >
               <template v-slot:append>
                 <div
-                  style="cursor: pointer"
+                  style="cursor: pointer;"
                   tabindex="-1"
                   @click="showPasswordOld = !showPasswordOld"
                 >
@@ -78,7 +78,7 @@
             >
               <template v-slot:append>
                 <div
-                  style="cursor: pointer"
+                  style="cursor: pointer;"
                   tabindex="-1"
                   @click="showPassword = !showPassword"
                 >
@@ -102,7 +102,7 @@
             >
               <template v-slot:append>
                 <div
-                  style="cursor: pointer"
+                  style="cursor: pointer;"
                   tabindex="-1"
                   @click="showPassword = !showPassword"
                 >

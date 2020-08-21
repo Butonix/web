@@ -10,23 +10,21 @@
         <span
           v-if="notif.parentCommentId"
           class="text--secondary"
-          style="font-size: 1rem"
+          style="font-size: 1rem;"
         >
           Reply to your comment on
         </span>
-        <span v-else class="text--secondary" style="font-size: 1rem">
+        <span v-else class="text--secondary" style="font-size: 1rem;">
           Reply to your post
         </span>
         <nuxt-link
           class="text--secondary"
-          :to="
-            `/p/${notif.post.planet.name}/comments/${notif.post.id}/${urlName}`
-          "
+          :to="`/p/${notif.post.planet.name}/comments/${notif.post.id}/${urlName}`"
           >&nbsp;"<span class="hoverable">{{ notif.post.title }}</span
           >"</nuxt-link
         >
         <div
-          style="font-size: 1rem"
+          style="font-size: 1rem;"
           class="text--primary py-2"
           v-html="notif.comment.textContent"
         />
@@ -43,10 +41,10 @@
 </template>
 
 <script>
-import markNotificationReadGql from '../../gql/markNotificationRead.graphql'
 import UsernameMenu from '@/components/user/UsernameMenu'
 import { urlName } from '@/util/urlName'
 import notificationsGql from '@/gql/notifications'
+import markNotificationReadGql from '../../gql/markNotificationRead.graphql'
 
 export default {
   name: 'Notification',

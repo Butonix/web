@@ -20,7 +20,7 @@
             <ModeratedPlanetsCard
               v-if="
                 $store.state.currentUser &&
-                  $store.state.currentUser.moderatedPlanets.length > 0
+                $store.state.currentUser.moderatedPlanets.length > 0
               "
               :user="$store.state.currentUser"
               class="mt-3"

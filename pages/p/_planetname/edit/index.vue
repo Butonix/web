@@ -5,13 +5,13 @@
         <div class="text-h4 pb-3">Edit p/{{ $route.params.planetname }}</div>
         <div class="pb-6">
           <div
-            style="font-size: 1.143rem; font-weight: 500"
+            style="font-size: 1.143rem; font-weight: 500;"
             class="text--primary"
           >
             Planet Color
           </div>
           <div
-            style="font-size: 0.86rem; font-weight: 500"
+            style="font-size: 0.86rem; font-weight: 500;"
             class="text--secondary pb-3"
           >
             Tip: Make sure your Planet's color looks good on both dark and light
@@ -35,7 +35,7 @@
 
         <div>
           <div
-            style="font-size: 1.143rem; font-weight: 500"
+            style="font-size: 1.143rem; font-weight: 500;"
             class="text--primary pb-3"
           >
             Custom Planet Name ({{
@@ -55,7 +55,7 @@
 
         <div>
           <div
-            style="font-size: 1.143rem; font-weight: 500"
+            style="font-size: 1.143rem; font-weight: 500;"
             class="text--primary pb-3"
           >
             Planet Description
@@ -81,13 +81,21 @@
         />
 
         <div v-if="planet.bannerImageUrl" class="mb-3">
-          <span style="cursor: pointer" class="hoverable" @click="removeBanner">
+          <span
+            style="cursor: pointer;"
+            class="hoverable"
+            @click="removeBanner"
+          >
             Remove Planet Banner
           </span>
         </div>
 
         <div v-if="planet.avatarImageUrl">
-          <span style="cursor: pointer" class="hoverable" @click="removeAvatar">
+          <span
+            style="cursor: pointer;"
+            class="hoverable"
+            @click="removeAvatar"
+          >
             Remove Planet Avatar
           </span>
         </div>
@@ -100,14 +108,14 @@
             :loading="loading"
             :disabled="
               !planet.description ||
-                (planet.customName && planet.customName.length > 50)
+              (planet.customName && planet.customName.length > 50)
             "
             @click="confirmEdits"
             >Done</v-btn
           >
         </v-row>
 
-        <div style="height: 300px" />
+        <div style="height: 300px;" />
       </v-col>
     </v-row>
   </v-container>

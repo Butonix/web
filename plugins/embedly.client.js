@@ -1,10 +1,10 @@
-;(function(w, d) {
+;(function (w, d) {
   const id = 'embedly-platform'
   const n = 'script'
   if (!d.getElementById(id)) {
     w.embedly =
       w.embedly ||
-      function() {
+      function () {
         ;(w.embedly.q = w.embedly.q || []).push(arguments)
       }
     const e = d.createElement(n)
@@ -17,3 +17,9 @@
     s.parentNode.insertBefore(e, s)
   }
 })(window, document)
+
+// eslint-disable-next-line no-undef
+embedly('defaults', {
+  key: process.env.EMBEDLY_KEY,
+  css: '/embedly.css'
+})

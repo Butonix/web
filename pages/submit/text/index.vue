@@ -41,7 +41,7 @@
           :min-height="$device.isDesktop ? '400' : ''"
         >
           <div
-            style="display: flex"
+            style="display: flex;"
             :style="{
               'background-color': $vuetify.theme.dark ? '#202124' : '#F1F3F4',
               'border-bottom-width': '1px',
@@ -75,10 +75,10 @@
             </v-btn>
           </div>
 
-          <div style="font-size: 1rem">
+          <div style="font-size: 1rem;">
             <Editor
               v-model="textContent"
-              style="overflow-y: auto"
+              style="overflow-y: auto;"
               class="pa-2"
             />
           </div>
@@ -103,10 +103,10 @@
 </template>
 
 <script>
-import submitPostGql from '~/gql/submitPost'
-import { urlName } from '~/util/urlName'
 import { isEditorEmpty } from '@/util/isEditorEmpty'
 import PlanetSelector from '@/components/planet/PlanetSelector'
+import submitPostGql from '~/gql/submitPost'
+import { urlName } from '~/util/urlName'
 
 export default {
   middleware: 'authenticated',

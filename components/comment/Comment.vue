@@ -28,14 +28,14 @@
       >
         <v-card-text
           class="text--primary pt-3 pb-0 px-3"
-          style="font-size: 1rem"
+          style="font-size: 1rem;"
         >
           <div v-if="showPostTitle" class="mb-1">
             <nuxt-link
               event=""
               :to="`/p/${post.planet.name}/comments/${post.id}/${postUrlName}`"
               class="font-weight-medium text--secondary"
-              style="font-size: 0.86rem"
+              style="font-size: 0.86rem;"
               >{{ post.title }}</nuxt-link
             >
           </div>
@@ -73,7 +73,7 @@
           <span
             :title="editedTimeSince"
             class="text--secondary ml-2"
-            style="font-size: 0.86rem"
+            style="font-size: 0.86rem;"
             >{{ timeSince }}{{ editedTimeSince ? '*' : '' }}</span
           >
 
@@ -81,7 +81,12 @@
             v-if="!$device.isDesktop"
             class="ml-3"
             :class="isEndorsed ? 'primary--text' : 'text--secondary'"
-            style="font-size: 0.86rem; font-weight: 500; display: inline-flex; align-items: center"
+            style="
+              font-size: 0.86rem;
+              font-weight: 500;
+              display: inline-flex;
+              align-items: center;
+            "
             :style="cssVars"
             @click.stop.prevent="toggleEndorsement"
           >
@@ -100,7 +105,7 @@
           <span
             v-if="isNew"
             class="ml-3 primary--text"
-            style="font-size: 0.86rem"
+            style="font-size: 0.86rem;"
             >New</span
           >
 
@@ -110,12 +115,12 @@
             <CommentOptions
               v-if="
                 comment.author &&
-                  $store.state.currentUser &&
-                  (comment.author.isCurrentUser ||
-                    !!$store.state.currentUser.moderatedPlanets.find(
-                      (p) => p.name === post.planet.name
-                    ) ||
-                    $store.state.currentUser.admin)
+                $store.state.currentUser &&
+                (comment.author.isCurrentUser ||
+                  !!$store.state.currentUser.moderatedPlanets.find(
+                    (p) => p.name === post.planet.name
+                  ) ||
+                  $store.state.currentUser.admin)
               "
               :comment="comment"
               :post="post"
@@ -145,9 +150,9 @@
               rounded
               text
               :class="isEndorsed ? '' : 'text--secondary'"
-              :title="
-                `${endorsementCount} Rocket${endorsementCount === 1 ? '' : 's'}`
-              "
+              :title="`${endorsementCount} Rocket${
+                endorsementCount === 1 ? '' : 's'
+              }`"
               :style="cssVars"
               @click.stop.prevent="toggleEndorsement"
             >
@@ -176,16 +181,16 @@
       </client-only>
     </div>
 
-    <div v-show="expanded" v-if="!$device.isDesktop" style="display: flex">
+    <div v-show="expanded" v-if="!$device.isDesktop" style="display: flex;">
       <CommentOptions
         v-if="
           comment.author &&
-            $store.state.currentUser &&
-            (comment.author.isCurrentUser ||
-              !!$store.state.currentUser.moderatedPlanets.find(
-                (p) => p.name === post.planet.name
-              ) ||
-              $store.state.currentUser.admin)
+          $store.state.currentUser &&
+          (comment.author.isCurrentUser ||
+            !!$store.state.currentUser.moderatedPlanets.find(
+              (p) => p.name === post.planet.name
+            ) ||
+            $store.state.currentUser.admin)
         "
         :comment="comment"
         :post="post"
@@ -216,16 +221,16 @@
 <script>
 import { formatDistanceToNowStrict } from 'date-fns'
 import gql from 'graphql-tag'
-import UsernameMenu from '../user/UsernameMenu'
-import toggleCommentEndorsementGql from '../../gql/toggleCommentEndorsement.graphql'
-import deleteCommentGql from '../../gql/deleteComment.graphql'
-import TextContent from '../TextContent'
 import { isEditorEmpty } from '@/util/isEditorEmpty'
 import { timeSince } from '@/util/timeSince'
 import { urlName } from '@/util/urlName'
 import AnimatedRocket from '@/components/AnimatedRocket'
 import commentMixin from '@/mixins/commentMixin'
 import CommentOptions from '@/components/comment/options/CommentOptions'
+import TextContent from '../TextContent'
+import deleteCommentGql from '../../gql/deleteComment.graphql'
+import toggleCommentEndorsementGql from '../../gql/toggleCommentEndorsement.graphql'
+import UsernameMenu from '../user/UsernameMenu'
 
 export default {
   name: 'Comment',

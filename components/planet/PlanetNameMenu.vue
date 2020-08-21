@@ -31,7 +31,7 @@
 
     <PlanetInfoCard
       v-if="planet"
-      style="padding-bottom: 24px"
+      style="padding-bottom: 24px;"
       show-view-planet-btn
       :planet="planet"
     />

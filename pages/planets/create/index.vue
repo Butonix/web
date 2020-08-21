@@ -79,11 +79,11 @@
           color="primary"
           :disabled="
             !name ||
-              !description ||
-              !selectedGalaxy ||
-              $store.state.currentUser.moderatedPlanets.length >= 10 ||
-              !name.match(/^[a-zA-Z0-9_]+$/) ||
-              name.length > 21
+            !description ||
+            !selectedGalaxy ||
+            $store.state.currentUser.moderatedPlanets.length >= 10 ||
+            !name.match(/^[a-zA-Z0-9_]+$/) ||
+            name.length > 21
           "
           :loading="createBtnLoading"
           @click="createPlanet"
@@ -97,7 +97,7 @@
           Disabled: Cannot moderate more than 10 planets
         </div>
 
-        <div class="text--secondary mt-2" style="font-size: .86rem">
+        <div class="text--secondary mt-2" style="font-size: 0.86rem;">
           Further customization will be available on your Planet's page.
         </div>
       </v-col>

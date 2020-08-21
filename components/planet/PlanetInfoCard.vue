@@ -14,16 +14,14 @@
       alt="Planet cover image"
       :src="planet.bannerImageUrl"
       :height="40"
-      :style="
-        `background-color: ${
-          planet.themeColor ? planet.themeColor : 'var(--v-primary-base)'
-        }`
-      "
+      :style="`background-color: ${
+        planet.themeColor ? planet.themeColor : 'var(--v-primary-base)'
+      }`"
     />
     <v-list-item>
-      <v-list-item-avatar size="64" style="align-self: start">
+      <v-list-item-avatar size="64" style="align-self: start;">
         <nuxt-link
-          style="height: 64px; min-width: 64px; width: 64px"
+          style="height: 64px; min-width: 64px; width: 64px;"
           :to="`/p/${planet.name}`"
         >
           <v-img v-if="planet.avatarImageUrl" :src="planet.avatarImageUrl" />
@@ -31,9 +29,9 @@
         </nuxt-link>
       </v-list-item-avatar>
 
-      <v-list-item-content style="align-self: start">
+      <v-list-item-content style="align-self: start;">
         <v-list-item-title
-          style="font-size: 1.43rem; font-weight: 500"
+          style="font-size: 1.43rem; font-weight: 500;"
           class="mb-0"
         >
           <nuxt-link :to="`/p/${planet.name}`">{{
@@ -42,7 +40,7 @@
         </v-list-item-title>
         <v-list-item-subtitle
           class="mt-1"
-          style="overflow: auto; text-overflow: initial; white-space: initial"
+          style="overflow: auto; text-overflow: initial; white-space: initial;"
           >{{ planet.description }}</v-list-item-subtitle
         >
       </v-list-item-content>
@@ -77,12 +75,12 @@
     <v-card-actions
       v-if="
         showEditBtn &&
-          $store.state.currentUser &&
-          $route.params.planetname &&
-          ($store.state.currentUser.moderatedPlanets
-            .map((p) => p.name)
-            .includes($route.params.planetname) ||
-            $store.state.currentUser.admin)
+        $store.state.currentUser &&
+        $route.params.planetname &&
+        ($store.state.currentUser.moderatedPlanets
+          .map((p) => p.name)
+          .includes($route.params.planetname) ||
+          $store.state.currentUser.admin)
       "
       class="pb-3 pt-1"
     >

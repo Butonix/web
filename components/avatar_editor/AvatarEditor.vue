@@ -65,7 +65,7 @@
             /></v-row>
 
             <div
-              style="max-height: 400px; overflow-y: auto; border-radius: 10px"
+              style="max-height: 400px; overflow-y: auto; border-radius: 10px;"
               :style="{
                 'border-color': $vuetify.theme.dark
                   ? 'rgba(255, 255, 255, 0.12)'
@@ -194,8 +194,6 @@
 </template>
 
 <script>
-import setProfilePicGql from '../../gql/setProfilePic.graphql'
-import NativeSelect from './NativeSelect'
 import {
   accessoriesTypes,
   clotheTypes,
@@ -210,6 +208,8 @@ import {
   skinColors,
   topTypes
 } from '@/util/randomAvataaar'
+import setProfilePicGql from '../../gql/setProfilePic.graphql'
+import NativeSelect from './NativeSelect'
 
 export default {
   name: 'AvatarEditor',

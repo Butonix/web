@@ -6,9 +6,7 @@
       type="checkbox"
     />
     <label
-      :style="
-        `max-height: ${size}px !important; max-width: ${size}px !important; display: inline-flex`
-      "
+      :style="`max-height: ${size}px !important; max-width: ${size}px !important; display: inline-flex`"
       :for="`toggle-heart-${item.id}`"
     >
       <v-icon :size="size" :class="item.isEndorsed ? '' : 'text--secondary'">{{

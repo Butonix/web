@@ -15,7 +15,7 @@
     <Picker
       native
       :data="emojiIndex"
-      style="width: 420px"
+      style="width: 420px;"
       title="Emoji Picker"
       @select="(e) => $emit('select', e)"
     />

@@ -13,13 +13,13 @@
         'px-3': $device.isDesktop
       }"
       :editor="editor"
-      style="min-height: 148px; padding-bottom: 64px"
+      style="min-height: 148px; padding-bottom: 64px;"
     />
 
     <editor-menu-bar
       v-slot="{ commands, isActive }"
       :editor="editor"
-      style="position: absolute; bottom: 0; left: 0; right: 0"
+      style="position: absolute; bottom: 0; left: 0; right: 0;"
       :style="{
         'background-color': $vuetify.theme.dark ? '#35363A' : '#F8F9FA',
         'border-top-width': '1px',

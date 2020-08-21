@@ -37,7 +37,7 @@
           </v-btn>
         </template>
 
-        <v-card style="padding-bottom: 24px; padding-top: 12px">
+        <v-card style="padding-bottom: 24px; padding-top: 12px;">
           <v-row justify="center" class="px-6">
             <v-col align="center" cols="6">
               <nuxt-link
@@ -102,7 +102,7 @@
         </template>
 
         <v-card>
-          <v-card-text class="px-0 pt-2" style="padding-bottom: 24px">
+          <v-card-text class="px-0 pt-2" style="padding-bottom: 24px;">
             <NavDrawerContents @selected="planetsBottomSheet = false" />
           </v-card-text>
         </v-card>
@@ -130,7 +130,13 @@
         <v-card>
           <v-toolbar
             dense
-            style="position: sticky; top: 0; z-index: 100; border-bottom-width: 1px; border-bottom-style: solid"
+            style="
+              position: sticky;
+              top: 0;
+              z-index: 100;
+              border-bottom-width: 1px;
+              border-bottom-style: solid;
+            "
             :style="{
               'border-bottom-color': $vuetify.theme.dark
                 ? 'rgba(255, 255, 255, 0.12)'
@@ -156,7 +162,7 @@
           </v-card-text>
 
           <v-card-text v-else class="px-3 pt-3 pb-6">
-            <div style="text-align: center; font-size: 1.143rem">
+            <div style="text-align: center; font-size: 1.143rem;">
               No new notifications
             </div>
           </v-card-text>
@@ -167,10 +173,10 @@
 </template>
 
 <script>
-import notificationsGql from '../../gql/notifications.graphql'
 import NavDrawerContents from '@/components/bars/NavDrawerContents'
 import Notification from '@/components/notifications/Notification'
 import markAllNotificationsReadGql from '@/gql/markAllNotificationsRead'
+import notificationsGql from '../../gql/notifications.graphql'
 
 export default {
   name: 'BottomNavBar',

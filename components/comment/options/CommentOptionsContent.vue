@@ -32,7 +32,7 @@
           <v-icon>{{ $vuetify.icons.values.mdiShield }}</v-icon>
         </v-list-item-icon>
         <v-list-item-content>
-          <v-list-item-title style="font-weight: 500"
+          <v-list-item-title style="font-weight: 500;"
             >Remove (Mod)</v-list-item-title
           >
         </v-list-item-content>

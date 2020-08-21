@@ -7,7 +7,7 @@
     transition="slide-y-transition"
     :close-on-content-click="false"
     max-height="80%"
-    style="z-index: 600"
+    style="z-index: 600;"
   >
     <template v-slot:activator="{ on }">
       <v-btn icon v-on="on">
@@ -22,10 +22,16 @@
       </v-btn>
     </template>
 
-    <v-card width="600" style="z-index: 602">
+    <v-card width="600" style="z-index: 602;">
       <v-toolbar
         dense
-        style="position: sticky; top: 0; z-index: 100; border-bottom-width: 1px; border-bottom-style: solid"
+        style="
+          position: sticky;
+          top: 0;
+          z-index: 100;
+          border-bottom-width: 1px;
+          border-bottom-style: solid;
+        "
         :style="{
           'border-bottom-color': $vuetify.theme.dark
             ? 'rgba(255, 255, 255, 0.12)'

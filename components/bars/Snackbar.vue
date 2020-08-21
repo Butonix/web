@@ -1,7 +1,7 @@
 <template>
   <v-snackbar
     v-model="snackbarEnabled"
-    style="position: fixed; bottom: 64px"
+    style="position: fixed; bottom: 64px;"
     bottom
     :color="snackbarSuccess ? 'success' : 'error'"
     >{{ snackbarMessage }}</v-snackbar

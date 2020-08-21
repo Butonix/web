@@ -34,7 +34,7 @@
           loading="lazy"
           alt="Image preview"
           :src="post.link"
-          style="max-height: 500px; max-width: 100%"
+          style="max-height: 500px; max-width: 100%;"
         />
       </a>
     </v-row>
@@ -223,12 +223,5 @@ export default {
   width: 100%;
   height: 100%;
   border: 0;
-}
-</style>
-
-<style class="embedly-css">
-.card {
-  font-family: -apple-system, BlinkMacSystemFont, segoe ui, Roboto, Helvetica,
-    Arial, sans-serif, apple color emoji, segoe ui emoji, segoe ui symbol;
 }
 </style>

@@ -1,5 +1,5 @@
 <template>
-  <div style="display: flex; flex-direction: column">
+  <div style="display: flex; flex-direction: column;">
     <v-form @submit.prevent="login">
       <v-text-field v-model="username" outlined label="Username" />
       <v-text-field
@@ -10,7 +10,7 @@
       >
         <template v-slot:append>
           <div
-            style="cursor: pointer"
+            style="cursor: pointer;"
             tabindex="-1"
             @click="showPassword = !showPassword"
           >

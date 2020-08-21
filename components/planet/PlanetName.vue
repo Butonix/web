@@ -12,7 +12,7 @@
           $vuetify.icons.values.mdiEarth
         }}</v-icon>
       </v-avatar>
-      <span class="ml-1" style="font-size: 0.86rem">p/{{ planet.name }}</span>
+      <span class="ml-1" style="font-size: 0.86rem;">p/{{ planet.name }}</span>
     </nuxt-link>
   </span>
 </template>

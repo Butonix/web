@@ -3,10 +3,10 @@
     <v-img
       height="82"
       :src="galaxy.bannerImageUrl"
-      style="background-color: var(--v-primary-base)"
+      style="background-color: var(--v-primary-base);"
     />
 
-    <v-card-title class="pb-0" style="word-break: break-word">
+    <v-card-title class="pb-0" style="word-break: break-word;">
       Popular Planets in {{ galaxy.fullName }}
       <v-icon class="ml-2">{{ $vuetify.icons.values.mdiTrendingUp }}</v-icon>
     </v-card-title>

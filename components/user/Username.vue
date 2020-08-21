@@ -6,12 +6,12 @@
           loading="lazy"
           alt="Profile picture"
           :src="user.profilePicUrl"
-          style="object-fit: cover"
+          style="object-fit: cover;"
         />
       </v-avatar>
       <span
         class="ml-1"
-        style="font-size: 0.86rem"
+        style="font-size: 0.86rem;"
         :class="op && user.username !== 'Comet' ? 'font-weight-bold' : ''"
       >
         {{ user.username }}
@@ -19,7 +19,7 @@
       <v-icon
         v-if="op && user.username !== 'Comet'"
         size="16"
-        style="padding-bottom: 3px"
+        style="padding-bottom: 3px;"
         color="primary"
         title="Original Poster"
         >{{ $vuetify.icons.values.mdiMicrophoneVariant }}</v-icon

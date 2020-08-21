@@ -61,7 +61,7 @@
           :min-height="$device.isDesktop ? '400' : ''"
         >
           <div
-            style="display: flex"
+            style="display: flex;"
             :style="{
               'background-color': $vuetify.theme.dark ? '#202124' : '#F1F3F4',
               'border-bottom-width': '1px',
@@ -96,7 +96,7 @@
             </v-btn>
           </div>
 
-          <div style="font-size: 1rem">
+          <div style="font-size: 1rem;">
             <Editor
               v-model="editTextContent"
               editable
@@ -104,7 +104,7 @@
               :style="
                 $device.isDesktop ? 'min-height: 296px; max-height: 600px' : ''
               "
-              style="overflow-y: auto"
+              style="overflow-y: auto;"
               class="pa-2"
             />
           </div>
@@ -115,9 +115,9 @@
 </template>
 
 <script>
+import { isEditorEmpty } from '@/util/isEditorEmpty'
 import editPostGql from '../../gql/editPost.graphql'
 import PostOptionsContent from './PostOptionsContent'
-import { isEditorEmpty } from '@/util/isEditorEmpty'
 
 export default {
   name: 'PostOptions',

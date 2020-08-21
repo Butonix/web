@@ -1,5 +1,5 @@
 <template>
-  <div style="cursor: pointer" @click="clickCometLogo">
+  <div style="cursor: pointer;" @click="clickCometLogo">
     <v-img alt="Comet logo" src="/CometLogoSvg.svg" width="108" contain />
   </div>
 </template>

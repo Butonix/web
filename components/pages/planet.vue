@@ -1,13 +1,13 @@
 <template>
   <div>
-    <div v-if="$device.isDesktop" style="position: relative">
+    <div v-if="$device.isDesktop" style="position: relative;">
       <div
         :style="
           planet.bannerImageUrl
             ? `height: 208px; background-image: url(${planet.bannerImageUrl}); background-size: cover; background-position: center; background-repeat: no-repeat`
             : 'height: 80px; background-color: var(--v-primary-base)'
         "
-        style="display: flex"
+        style="display: flex;"
         :class="isMod ? 'editbanner' : ''"
         @click="openBannerInput"
       >
@@ -16,33 +16,38 @@
           ref="bannerinput"
           v-model="bannerFile"
           type="file"
-          style="display: none"
+          style="display: none;"
         />
         <v-icon
           size="52"
           class="editbannericon"
           dark
-          style="margin: auto auto"
+          style="margin: auto auto;"
           >{{ $vuetify.icons.values.mdiPencil }}</v-icon
         >
       </div>
       <div
-        style="min-height: 78px; display: flex; flex-direction: row; align-items: center"
+        style="
+          min-height: 78px;
+          display: flex;
+          flex-direction: row;
+          align-items: center;
+        "
         :style="
           $vuetify.theme.dark
             ? 'background-color: #35363A'
             : 'background-color: #F8F9FA; border-bottom: 1px solid rgba(0, 0, 0, 0.12)'
         "
       >
-        <div style="padding-left: 120px; margin-bottom: 2px">
+        <div style="padding-left: 120px; margin-bottom: 2px;">
           <v-row no-gutters align="center" class="text--primary">
-            <span style="font-size: 2rem; font-weight: 500">
+            <span style="font-size: 2rem; font-weight: 500;">
               {{ planet.customName ? planet.customName : planet.name }}
             </span>
             <PlanetJoinButton :planet="planet" class="ml-2" />
           </v-row>
           <div
-            style="font-size: 1rem; font-weight: 400"
+            style="font-size: 1rem; font-weight: 400;"
             class="text--secondary"
           >
             p/{{ planet.name }}
@@ -50,13 +55,20 @@
         </div>
       </div>
       <div
-        style="position: absolute; left: 24px; bottom: 12px; border: 4px solid white; border-radius: 50%; background-size: cover"
+        style="
+          position: absolute;
+          left: 24px;
+          bottom: 12px;
+          border: 4px solid white;
+          border-radius: 50%;
+          background-size: cover;
+        "
       >
         <v-avatar
           height="72"
           width="72"
           color="primary"
-          style="position: relative"
+          style="position: relative;"
           :class="isMod ? 'editplanetavatar' : ''"
           @click="openAvatarInput"
         >
@@ -65,11 +77,11 @@
             ref="avatarinput"
             v-model="avatarFile"
             type="file"
-            style="display: none"
+            style="display: none;"
           />
           <v-icon
             size="50"
-            style="position: absolute; z-index: 10"
+            style="position: absolute; z-index: 10;"
             class="editplaneticon"
             dark
             >{{ $vuetify.icons.values.mdiPencil }}</v-icon
@@ -82,13 +94,11 @@
       </div>
     </div>
 
-    <div v-else style="position: relative">
+    <div v-else style="position: relative;">
       <div
-        :style="
-          `display: flex; height: 64px; background-image: url(${
-            planet && planet.bannerImageUrl ? planet.bannerImageUrl : ''
-          }); background-size: cover; background-position: center; background-repeat: no-repeat; background-color: var(--v-primary-base)`
-        "
+        :style="`display: flex; height: 64px; background-image: url(${
+          planet && planet.bannerImageUrl ? planet.bannerImageUrl : ''
+        }); background-size: cover; background-position: center; background-repeat: no-repeat; background-color: var(--v-primary-base)`"
         :class="isMod ? 'editbanner' : ''"
         @click="openBannerInput"
       >
@@ -97,35 +107,35 @@
           ref="bannerinput"
           v-model="bannerFile"
           type="file"
-          style="display: none"
+          style="display: none;"
         />
         <v-icon
           size="52"
           class="editbannericon"
           dark
-          style="margin: auto auto"
+          style="margin: auto auto;"
           >{{ $vuetify.icons.values.mdiPencil }}</v-icon
         >
       </div>
       <div
-        style="padding-top: 48px; padding-bottom: 12px; text-align: center"
+        style="padding-top: 48px; padding-bottom: 12px; text-align: center;"
         :style="
           $vuetify.theme.dark
             ? 'background-color: #35363A'
             : 'background-color: #F8F9FA; border-bottom: 1px solid rgba(0, 0, 0, 0.12)'
         "
       >
-        <div style="font-size: 1.43rem; font-weight: 500">
+        <div style="font-size: 1.43rem; font-weight: 500;">
           {{ planet.customName || planet.name }}
         </div>
         <div
-          style="font-size: 1rem; font-weight: 400"
+          style="font-size: 1rem; font-weight: 400;"
           class="text--secondary mt-1"
         >
           p/{{ planet.name }}
         </div>
         <div
-          style="font-size: 1rem; font-weight: 400"
+          style="font-size: 1rem; font-weight: 400;"
           class="text--secondary mt-3"
         >
           {{ planet.description }}
@@ -134,7 +144,7 @@
           <MobilePlanetJoinButton :planet="planet" />
         </v-row>
 
-        <v-card-actions class="pb-0 pt-3" style="justify-content: center">
+        <v-card-actions class="pb-0 pt-3" style="justify-content: center;">
           <v-chip outlined nuxt :to="`/g/${planet.galaxy.name}`">
             <v-avatar left>
               <v-icon>{{ $vuetify.icons.values[planet.galaxy.icon] }}</v-icon>
@@ -150,13 +160,21 @@
         </v-card-actions>
       </div>
       <div
-        style="position: absolute; left: 50%; border: 4px solid white; border-radius: 50%; background-size: cover; margin-left: -36px; top: 28px"
+        style="
+          position: absolute;
+          left: 50%;
+          border: 4px solid white;
+          border-radius: 50%;
+          background-size: cover;
+          margin-left: -36px;
+          top: 28px;
+        "
       >
         <v-avatar
           height="72"
           width="72"
           color="primary"
-          style="position: relative"
+          style="position: relative;"
           :class="isMod ? 'editplanetavatar' : ''"
           @click="openAvatarInput"
         >
@@ -165,11 +183,11 @@
             ref="avatarinput"
             v-model="avatarFile"
             type="file"
-            style="display: none"
+            style="display: none;"
           />
           <v-icon
             size="50"
-            style="position: absolute; z-index: 10"
+            style="position: absolute; z-index: 10;"
             class="editplaneticon"
             dark
             >{{ $vuetify.icons.values.mdiPencil }}</v-icon

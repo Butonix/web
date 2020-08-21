@@ -8,7 +8,7 @@
 
       <v-list-item-content
         class="pa-0"
-        style="align-content: space-between; align-self: start"
+        style="align-content: space-between; align-self: start;"
         :style="isPostView ? 'min-height: 0' : 'min-height: 60px'"
       >
         <span v-if="post.sticky">
@@ -18,7 +18,7 @@
           <span class="overline primary--text mb-0">ANNOUNCEMENT</span>
         </span>
 
-        <v-list-item-title style="white-space: normal">
+        <v-list-item-title style="white-space: normal;">
           <v-btn
             v-if="showExpandBtn && !isPostView"
             width="16"
@@ -37,7 +37,7 @@
           <nuxt-link
             v-if="!isPostView"
             class="text--primary mr-1"
-            style="font-size: 1.125rem; font-weight: 400"
+            style="font-size: 1.125rem; font-weight: 400;"
             event=""
             :to="`/p/${post.planet.name}/comments/${post.id}/${urlName}`"
           >
@@ -47,7 +47,7 @@
           <a
             v-else-if="post.link"
             class="text--primary mr-1"
-            style="font-size: 1.125rem; font-weight: 400"
+            style="font-size: 1.125rem; font-weight: 400;"
             :href="post.link"
             target="_blank"
             rel="noopener nofollow noreferrer"
@@ -59,7 +59,7 @@
           <span
             v-else
             class="text--primary mr-1"
-            style="font-size: 1.125rem; font-weight: 400"
+            style="font-size: 1.125rem; font-weight: 400;"
           >
             {{ post.title }}
           </span>
@@ -69,7 +69,7 @@
               v-if="post.type === 'TEXT'"
               :to="`/p/${post.planet.name}/comments/${post.id}/${urlName}`"
               class="text--secondary hoverable"
-              style="font-size: 0.86rem"
+              style="font-size: 0.86rem;"
             >
               (text post)
             </nuxt-link>
@@ -79,7 +79,7 @@
               target="_blank"
               rel="noopener nofollow noreferrer"
               class="text--secondary hoverable"
-              style="font-size: 0.86rem"
+              style="font-size: 0.86rem;"
               >({{ post.domain }})</a
             >
           </template>
@@ -88,10 +88,10 @@
             <span
               v-if="post.type === 'TEXT'"
               class="text--secondary"
-              style="font-size: 0.86rem"
+              style="font-size: 0.86rem;"
               >(text post)</span
             >
-            <span v-else class="text--secondary" style="font-size: 0.86rem"
+            <span v-else class="text--secondary" style="font-size: 0.86rem;"
               >({{ post.domain }})</span
             >
           </template>
@@ -147,11 +147,11 @@
 
 <script>
 import { IdState } from 'vue-virtual-scroller'
-import PostThumbnail from './PostThumbnail'
-import { urlName } from '~/util/urlName'
 import PostBottomBar from '@/components/post/PostBottomBar'
 import PostPreview from '@/components/post/PostPreview'
 import PlanetNameMenu from '@/components/planet/PlanetNameMenu'
+import PostThumbnail from './PostThumbnail'
+import { urlName } from '~/util/urlName'
 
 export default {
   name: 'Post',

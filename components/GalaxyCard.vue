@@ -2,15 +2,14 @@
   <v-card
     flat
     :outlined="!$vuetify.theme.dark"
-    style="border-width: 1px"
+    style="border-width: 1px;"
     :tile="tile"
   >
     <div
-      :style="
-        `height: 82px; background-image: url(${galaxy.bannerImageUrl ||
-          ''}); background-size: cover; background-position: center; background-repeat: no-repeat; background-color: var(--v-primary-base)`
-      "
-      style="display: flex"
+      :style="`height: 82px; background-image: url(${
+        galaxy.bannerImageUrl || ''
+      }); background-size: cover; background-position: center; background-repeat: no-repeat; background-color: var(--v-primary-base)`"
+      style="display: flex;"
       :class="isAdmin ? 'editbanner' : ''"
       @click="openBannerInput"
     >
@@ -19,21 +18,25 @@
         ref="bannerinput"
         v-model="bannerFile"
         type="file"
-        style="display: none"
+        style="display: none;"
       />
-      <v-icon size="52" class="editbannericon" dark style="margin: auto auto">{{
-        $vuetify.icons.values.mdiPencil
-      }}</v-icon>
+      <v-icon
+        size="52"
+        class="editbannericon"
+        dark
+        style="margin: auto auto;"
+        >{{ $vuetify.icons.values.mdiPencil }}</v-icon
+      >
     </div>
 
     <template>
       <v-card-title
-        style="text-align: center; justify-content: center"
+        style="text-align: center; justify-content: center;"
         class="pt-3"
         >{{ galaxy.fullName }}</v-card-title
       >
       <v-card-subtitle
-        style="font-size: 1rem; text-align: center"
+        style="font-size: 1rem; text-align: center;"
         class="pb-3"
         :style="isAdmin ? 'cursor: pointer' : ''"
         @click="descriptionDialog = isAdmin"
@@ -56,7 +59,7 @@
         <v-spacer />
 
         <v-btn depressed color="primary" nuxt :to="`/g/${galaxy.name}`">
-          <span style="color: #E8EAED">View Posts</span>
+          <span style="color: #e8eaed;">View Posts</span>
         </v-btn>
       </v-card-actions>
     </template>

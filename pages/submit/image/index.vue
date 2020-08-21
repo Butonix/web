@@ -19,7 +19,12 @@
       label="Choose an image"
     />
 
-    <img v-if="image" ref="imagePreview" style="max-width: 100%" class="pb-6" />
+    <img
+      v-if="image"
+      ref="imagePreview"
+      style="max-width: 100%;"
+      class="pb-6"
+    />
 
     <v-row no-gutters class="mt-4">
       <PlanetSelector v-model="planet" />
@@ -39,9 +44,9 @@
 </template>
 
 <script>
+import PlanetSelector from '@/components/planet/PlanetSelector'
 import { urlName } from '~/util/urlName'
 import submitPostGql from '~/gql/submitPost'
-import PlanetSelector from '@/components/planet/PlanetSelector'
 
 export default {
   middleware: 'authenticated',

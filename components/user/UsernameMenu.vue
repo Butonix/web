@@ -38,7 +38,7 @@
       v-if="user"
       show-view-profile-btn
       :user="user"
-      style="padding-bottom: 24px"
+      style="padding-bottom: 24px;"
       @toggleblock="toggleBlock"
     />
     <v-card v-else>

@@ -11,9 +11,22 @@
     :tile="tile"
   >
     <v-list-item class="py-4">
-      <v-list-item-avatar class="my-0" tile size="64" style="align-self: start">
+      <v-list-item-avatar
+        class="my-0"
+        tile
+        size="64"
+        style="align-self: start;"
+      >
         <div
-          style="height: 16px; width: 16px; border-radius: 50%; position: absolute; bottom: 0; right: 0; z-index: 2"
+          style="
+            height: 16px;
+            width: 16px;
+            border-radius: 50%;
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            z-index: 2;
+          "
           :style="
             lastOnlineString === 'Online' && !user.appearOffline
               ? 'background-color: #66BB6A'
@@ -22,7 +35,7 @@
         />
         <v-img
           v-if="user.profilePicUrl"
-          style="border-radius: 50%"
+          style="border-radius: 50%;"
           alt="Profile picture"
           :src="user.profilePicUrl"
         />
@@ -30,7 +43,7 @@
       </v-list-item-avatar>
 
       <v-list-item-content class="py-0">
-        <v-list-item-title style="font-size: 1.43rem" class="my-0">
+        <v-list-item-title style="font-size: 1.43rem;" class="my-0">
           <v-row no-gutters>
             <nuxt-link :to="`/u/${user.username}`" class="text--primary">{{
               user.username
@@ -98,7 +111,7 @@
         <v-list-item-subtitle
           v-if="user.bio"
           class="mt-1 mb-0"
-          style="white-space: normal; font-size: 1rem"
+          style="white-space: normal; font-size: 1rem;"
           >{{ user.bio }}</v-list-item-subtitle
         >
 
@@ -106,11 +119,9 @@
           <v-chip
             small
             outlined
-            :title="
-              `${user.endorsementCount} Rocket${
-                user.endorsementCount === 1 ? '' : 's'
-              }`
-            "
+            :title="`${user.endorsementCount} Rocket${
+              user.endorsementCount === 1 ? '' : 's'
+            }`"
           >
             <v-icon small left>{{ $vuetify.icons.values.mdiRocket }}</v-icon>
             {{ user.endorsementCount }}
@@ -120,11 +131,9 @@
             small
             outlined
             class="ml-2"
-            :title="
-              `${user.commentCount} Comment${
-                user.commentCount === 1 ? '' : 's'
-              }`
-            "
+            :title="`${user.commentCount} Comment${
+              user.commentCount === 1 ? '' : 's'
+            }`"
           >
             <v-icon small left>{{
               $vuetify.icons.values.mdiCommentOutline

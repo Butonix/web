@@ -48,7 +48,7 @@
         }}</v-icon>
       </v-list-item-avatar>
       <v-list-item-content>
-        <v-list-item-title style="font-size: 1rem">
+        <v-list-item-title style="font-size: 1rem;">
           {{ data.item.name }}
         </v-list-item-title>
       </v-list-item-content>

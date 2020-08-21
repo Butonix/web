@@ -36,7 +36,7 @@
     >
       <template v-slot:append>
         <div
-          style="cursor: pointer"
+          style="cursor: pointer;"
           tabindex="-1"
           @click="showPassword = !showPassword"
         >
@@ -61,7 +61,7 @@
     >
       <template v-slot:append>
         <div
-          style="cursor: pointer"
+          style="cursor: pointer;"
           tabindex="-1"
           @click="showPassword = !showPassword"
         >
@@ -78,7 +78,7 @@
       *Emails are only used for account recovery and are not shared with any
       third parties.
     </div>-->
-    <div class="text--secondary pb-3" style="font-size: 0.86rem">
+    <div class="text--secondary pb-3" style="font-size: 0.86rem;">
       By clicking Continue, you agree to our
       <nuxt-link to="/terms" target="_blank" class="primary--text"
         >Terms of Service</nuxt-link

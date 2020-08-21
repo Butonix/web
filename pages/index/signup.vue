@@ -1,5 +1,5 @@
 <template>
-  <div style="display: flex; flex-direction: column">
+  <div style="display: flex; flex-direction: column;">
     <v-form ref="form" v-model="valid" @submit.prevent="signUp">
       <v-text-field
         v-model="username"
@@ -22,7 +22,7 @@
       >
         <template v-slot:append>
           <div
-            style="cursor: pointer"
+            style="cursor: pointer;"
             tabindex="-1"
             @click="showPassword = !showPassword"
           >
@@ -43,7 +43,7 @@
       >
         <template v-slot:append>
           <div
-            style="cursor: pointer"
+            style="cursor: pointer;"
             tabindex="-1"
             @click="showPassword = !showPassword"
           >
@@ -70,7 +70,7 @@
           >Sign Up</v-btn
         >
       </v-row>
-      <div class="text--secondary pt-6" style="font-size: 0.86rem">
+      <div class="text--secondary pt-6" style="font-size: 0.86rem;">
         By clicking Sign Up, you agree to our
         <nuxt-link to="/terms" target="_blank" class="primary--text"
           >Terms of Service</nuxt-link

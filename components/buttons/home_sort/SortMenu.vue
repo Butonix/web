@@ -5,7 +5,7 @@
     </template>
 
     <v-card>
-      <v-card-text class="px-0 pt-2" style="padding-bottom: 24px">
+      <v-card-text class="px-0 pt-2" style="padding-bottom: 24px;">
         <SortMenuContent :open="menu" @selected="menu = false" />
       </v-card-text>
     </v-card>

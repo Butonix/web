@@ -5,10 +5,10 @@
     clipped
     :color="$vuetify.theme.dark ? '#202124' : '#F8F9FA'"
     mobile-breakpoint="1281"
-    style="z-index: 30"
+    style="z-index: 30;"
     width="250"
   >
-    <simplebar style="height: 100%" data-simplebar-auto-hide="false">
+    <simplebar style="height: 100%;" data-simplebar-auto-hide="false">
       <NavDrawerContents class="mt-2" />
     </simplebar>
   </v-navigation-drawer>

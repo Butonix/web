@@ -35,7 +35,7 @@
             }"
             class="pa-3"
             :class="$vuetify.theme.dark ? 'post-dark' : 'post-light'"
-            style="cursor: pointer"
+            style="cursor: pointer;"
             v-on="
               !dialog
                 ? {
@@ -68,13 +68,18 @@
         v-if="
           $route.name === 'home-sort-time' && !loading && items.length === 0
         "
-        style="display: flex; flex-direction: column; align-items: center; text-align: center"
+        style="
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          text-align: center;
+        "
         class="text--secondary"
       >
         <v-icon class="text--secondary" size="36">{{
           $vuetify.icons.values.mdiEmoticonFrown
         }}</v-icon>
-        <span class="mt-2" style="font-size: 1.5rem"
+        <span class="mt-2" style="font-size: 1.5rem;"
           >You have not joined any Planets</span
         >
         <nuxt-link to="/planets/explore" class="mt-2 primary--text"

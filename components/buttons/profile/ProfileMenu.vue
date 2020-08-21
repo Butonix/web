@@ -2,7 +2,7 @@
   <v-bottom-sheet v-if="!$device.isDesktop" v-model="menu">
     <template v-slot:activator="{ on }">
       <v-btn
-        style="font-weight: 400"
+        style="font-weight: 400;"
         aria-label="Account"
         :text="$device.isDesktop"
         :icon="!$device.isDesktop"
@@ -43,11 +43,11 @@
     bottom
     offset-y
     transition="slide-y-transition"
-    style="z-index: 600"
+    style="z-index: 600;"
   >
     <template v-slot:activator="{ on }">
       <v-btn
-        style="font-weight: 400"
+        style="font-weight: 400;"
         aria-label="Account"
         text
         rounded

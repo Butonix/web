@@ -5,7 +5,7 @@
     rounded
     height="34"
     class="px-3 white--text"
-    style="margin-bottom: 2px"
+    style="margin-bottom: 2px;"
     nuxt
     to="/signup"
   >

@@ -5,7 +5,7 @@
     rounded
     height="34"
     class="px-3"
-    style="margin-bottom: 2px; border-width: 1px; border-style: solid"
+    style="margin-bottom: 2px; border-width: 1px; border-style: solid;"
     :style="{
       'border-color': $vuetify.theme.dark
         ? 'rgba(255, 255, 255, 0.12)'
@@ -16,8 +16,8 @@
     <template
       v-if="
         !$route.path.includes('/top') &&
-          !$route.path.includes('/new') &&
-          !$route.path.includes('/mostcomments')
+        !$route.path.includes('/new') &&
+        !$route.path.includes('/mostcomments')
       "
     >
       <v-icon size="20" class="mr-2">{{
@@ -40,7 +40,7 @@
       <span
         >Top ({{
           $route.params.time.charAt(0).toUpperCase() +
-            $route.params.time.substring(1)
+          $route.params.time.substring(1)
         }})</span
       >
     </template>
@@ -52,7 +52,7 @@
       <span
         >Most Comments ({{
           $route.params.time.charAt(0).toUpperCase() +
-            $route.params.time.substring(1)
+          $route.params.time.substring(1)
         }})</span
       >
     </template>

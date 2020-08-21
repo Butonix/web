@@ -18,7 +18,7 @@
     <v-icon class="mr-2" color="#E8EAED">{{
       $vuetify.icons.values.mdiPlusBox
     }}</v-icon>
-    <span style="color: #E8EAED">
+    <span style="color: #e8eaed;">
       New Post
     </span>
   </v-btn>

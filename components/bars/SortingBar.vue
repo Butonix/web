@@ -1,13 +1,13 @@
 <template>
   <div
     ref="barcontainer"
-    style="position: sticky; top: -1px; z-index: 20"
+    style="position: sticky; top: -1px; z-index: 20;"
     class="barcontainer"
     :class="$device.isDesktop ? 'desktop' : 'mobile'"
   >
     <v-app-bar
       class="mb-3"
-      style="border-width: 1px; border-style: solid; z-index: 20"
+      style="border-width: 1px; border-style: solid; z-index: 20;"
       flat
       dense
       :style="{

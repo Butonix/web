@@ -17,7 +17,7 @@
           :min-height="$device.isDesktop ? '400' : ''"
         >
           <div
-            style="display: flex"
+            style="display: flex;"
             :style="{
               'background-color': $vuetify.theme.dark ? '#202124' : '#F1F3F4',
               'border-bottom-width': '1px',
@@ -55,7 +55,12 @@
 
           <div
             v-if="parentTextContent"
-            style="font-size: 1rem; max-height: 200px; border-bottom-width: 1px; border-bottom-style: solid"
+            style="
+              font-size: 1rem;
+              max-height: 200px;
+              border-bottom-width: 1px;
+              border-bottom-style: solid;
+            "
             class="pa-2"
             :style="{
               'border-bottom-color': $vuetify.theme.dark
@@ -65,7 +70,7 @@
             v-html="parentTextContent"
           />
 
-          <div style="font-size: 1rem">
+          <div style="font-size: 1rem;">
             <Editor
               v-model="textContent"
               editable
@@ -73,7 +78,7 @@
               :style="
                 $device.isDesktop ? 'min-height: 296px; max-height: 600px' : ''
               "
-              style="overflow-y: auto"
+              style="overflow-y: auto;"
               class="pa-2"
             />
           </div>

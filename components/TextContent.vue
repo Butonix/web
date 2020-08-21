@@ -1,6 +1,6 @@
 <template>
   <div
-    style="font-size: 1rem; line-height: 1.5"
+    style="font-size: 1rem; line-height: 1.5;"
     class="text--primary"
     :class="
       $vuetify.theme.dark ? 'editor-dark__content' : 'editor-light__content'

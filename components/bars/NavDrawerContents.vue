@@ -1,7 +1,7 @@
 <template>
   <div>
     <template v-if="!$store.state.currentUser">
-      <div style="display: flex; flex-direction: row" class="px-4 pt-2 pb-3">
+      <div style="display: flex; flex-direction: row;" class="px-4 pt-2 pb-3">
         <v-btn
           nuxt
           to="/signup"
@@ -13,7 +13,7 @@
           >Sign Up</v-btn
         >
       </div>
-      <div style="display: flex; flex-direction: row" class="px-4 pb-2">
+      <div style="display: flex; flex-direction: row;" class="px-4 pb-2">
         <v-btn
           nuxt
           to="/login"
@@ -27,7 +27,7 @@
       </div>
     </template>
     <div
-      style="font-size: 0.86rem; display: flex"
+      style="font-size: 0.86rem; display: flex;"
       class="text--secondary px-4 pt-2 pb-2"
     >
       <span class="mr-auto">Feeds</span>
@@ -39,7 +39,7 @@
         </v-list-item-avatar>
 
         <v-list-item-content>
-          <v-list-item-title style="font-size: 1rem"
+          <v-list-item-title style="font-size: 1rem;"
             >My Planets</v-list-item-title
           >
         </v-list-item-content>
@@ -51,7 +51,7 @@
         </v-list-item-avatar>
 
         <v-list-item-content>
-          <v-list-item-title style="font-size: 1rem"
+          <v-list-item-title style="font-size: 1rem;"
             >Universe</v-list-item-title
           >
         </v-list-item-content>
@@ -59,7 +59,7 @@
     </v-list>
 
     <div
-      style="font-size: 0.86rem; display: flex"
+      style="font-size: 0.86rem; display: flex;"
       class="text--secondary px-4 pt-2 pb-2"
     >
       <span class="mr-auto">Explore</span>
@@ -71,7 +71,7 @@
         </v-list-item-avatar>
 
         <v-list-item-content>
-          <v-list-item-title style="font-size: 1rem"
+          <v-list-item-title style="font-size: 1rem;"
             >Discover Planets</v-list-item-title
           >
         </v-list-item-content>
@@ -83,7 +83,7 @@
         </v-list-item-avatar>
 
         <v-list-item-content>
-          <v-list-item-title style="font-size: 1rem"
+          <v-list-item-title style="font-size: 1rem;"
             >Explore Galaxies</v-list-item-title
           >
         </v-list-item-content>
@@ -91,7 +91,7 @@
     </v-list>
 
     <div v-if="$store.state.recentPlanets.length > 0">
-      <div style="font-size: 0.86rem" class="text--secondary px-4 pt-4 pb-2">
+      <div style="font-size: 0.86rem;" class="text--secondary px-4 pt-4 pb-2">
         Recent
       </div>
 
@@ -105,7 +105,7 @@
     </div>
 
     <div v-if="joinedPlanets.length > 0">
-      <div style="font-size: 0.86rem" class="text--secondary px-4 pt-4 pb-2">
+      <div style="font-size: 0.86rem;" class="text--secondary px-4 pt-4 pb-2">
         My Planets
       </div>
 
@@ -128,7 +128,7 @@
       </v-list>
     </div>
 
-    <div v-if="$device.isDesktop" style="height: 96px" />
+    <div v-if="$device.isDesktop" style="height: 96px;" />
   </div>
 </template>
 

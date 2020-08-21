@@ -7,7 +7,7 @@
       color="primary"
       height="34"
       class="px-3"
-      style="margin-bottom: 2px"
+      style="margin-bottom: 2px;"
     >
       <v-icon class="mr-2" size="20">{{
         $vuetify.icons.values.mdiEarth

@@ -6,7 +6,7 @@
         outlined
         rounded
         class="font-weight-regular"
-        style="border-width: 1px"
+        style="border-width: 1px;"
         height="34"
         :style="
           $vuetify.theme.dark
@@ -37,7 +37,7 @@
         outlined
         rounded
         class="font-weight-regular"
-        style="border-width: 1px"
+        style="border-width: 1px;"
         :style="
           $vuetify.theme.dark
             ? 'border-color: rgba(255, 255, 255, 0.12);'

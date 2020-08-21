@@ -53,9 +53,9 @@
     <v-list-item
       v-if="
         post.type === 'TEXT' &&
-          $store.state.currentUser &&
-          post.author &&
-          post.author.isCurrentUser
+        $store.state.currentUser &&
+        post.author &&
+        post.author.isCurrentUser
       "
       @click="editPost"
     >
@@ -90,10 +90,10 @@
     <template
       v-if="
         $store.state.currentUser &&
-          !!$store.state.currentUser.moderatedPlanets.find(
-            (p) => p.name === post.planet.name
-          ) &&
-          !post.author.isCurrentUser
+        !!$store.state.currentUser.moderatedPlanets.find(
+          (p) => p.name === post.planet.name
+        ) &&
+        !post.author.isCurrentUser
       "
     >
       <v-list-item @click="removePost">
@@ -101,7 +101,7 @@
           <v-icon>{{ $vuetify.icons.values.mdiShield }}</v-icon>
         </v-list-item-icon>
         <v-list-item-content>
-          <v-list-item-title style="font-weight: 500"
+          <v-list-item-title style="font-weight: 500;"
             >Remove Post (Mod)</v-list-item-title
           >
         </v-list-item-content>
@@ -112,7 +112,7 @@
           <v-icon>{{ $vuetify.icons.values.mdiShield }}</v-icon>
         </v-list-item-icon>
         <v-list-item-content>
-          <v-list-item-title style="font-weight: 500"
+          <v-list-item-title style="font-weight: 500;"
             >Ban {{ post.author.username }} from p/{{
               post.planet.name
             }}
@@ -125,8 +125,8 @@
     <template
       v-if="
         $store.state.currentUser &&
-          $store.state.currentUser.admin &&
-          !post.author.isCurrentUser
+        $store.state.currentUser.admin &&
+        !post.author.isCurrentUser
       "
     >
       <v-list-item @click="removePost">
@@ -134,7 +134,7 @@
           <v-icon>{{ $vuetify.icons.values.mdiShield }}</v-icon>
         </v-list-item-icon>
         <v-list-item-content>
-          <v-list-item-title style="font-weight: 500"
+          <v-list-item-title style="font-weight: 500;"
             >Remove Post (Admin)</v-list-item-title
           >
         </v-list-item-content>
@@ -145,7 +145,7 @@
           <v-icon>{{ $vuetify.icons.values.mdiShield }}</v-icon>
         </v-list-item-icon>
         <v-list-item-content>
-          <v-list-item-title style="font-weight: 500"
+          <v-list-item-title style="font-weight: 500;"
             >Ban from Comet (Admin)</v-list-item-title
           >
         </v-list-item-content>
@@ -156,7 +156,7 @@
           <v-icon>{{ $vuetify.icons.values.mdiShield }}</v-icon>
         </v-list-item-icon>
         <v-list-item-content>
-          <v-list-item-title style="font-weight: 500"
+          <v-list-item-title style="font-weight: 500;"
             >Ban from Comet & purge posts (Admin)</v-list-item-title
           >
         </v-list-item-content>
@@ -167,11 +167,11 @@
 
 <script>
 import gql from 'graphql-tag'
+import hiddenPostsGql from '@/gql/hiddenPosts.graphql'
 import hidePostGql from '../../gql/hidePost.graphql'
 import unhidePostGql from '../../gql/unhidePost.graphql'
 import reportPostGql from '../../gql/reportPost.graphql'
 import deletePostGql from '../../gql/deletePost.graphql'
-import hiddenPostsGql from '@/gql/hiddenPosts.graphql'
 import { urlName } from '~/util/urlName'
 
 export default {

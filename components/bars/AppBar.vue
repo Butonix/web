@@ -28,7 +28,7 @@
           hide-details
           flat
           class="mr-6"
-          style="max-width: 25%; height: 34px"
+          style="max-width: 25%; height: 34px;"
           solo
           label="Search"
           @keydown.enter="doSearch"
@@ -38,7 +38,7 @@
             <v-icon
               size="20"
               class="text--secondary"
-              style="cursor: pointer"
+              style="cursor: pointer;"
               @click="doSearch"
               >{{ $vuetify.icons.values.mdiMagnify }}</v-icon
             >
@@ -50,7 +50,7 @@
         </div>
 
         <div class="mr-1">
-          <NotificationsMenu style="z-index: 600" />
+          <NotificationsMenu style="z-index: 600;" />
         </div>
       </template>
 
@@ -58,7 +58,11 @@
 
       <template v-if="$device.isDesktop">
         <client-only>
-          <v-menu offset-y transition="slide-y-transition" style="z-index: 600">
+          <v-menu
+            offset-y
+            transition="slide-y-transition"
+            style="z-index: 600;"
+          >
             <template v-slot:activator="{ on }">
               <v-btn
                 class="ml-1"
@@ -73,11 +77,9 @@
 
             <iframe
               title="Discord widget"
-              :src="
-                `https://discordapp.com/widget?id=653652395959648314${
-                  $vuetify.theme.dark ? '&theme=dark' : '&theme=light'
-                }`
-              "
+              :src="`https://discordapp.com/widget?id=653652395959648314${
+                $vuetify.theme.dark ? '&theme=dark' : '&theme=light'
+              }`"
               class="frame"
               height="500"
               allowtransparency="true"
@@ -99,11 +101,11 @@
 </template>
 
 <script>
+import NotificationsMenu from '@/components/notifications/NotificationsMenu'
+import FeedbackDialog from '@/components/FeedbackDialog'
 import ProfileMenu from '../buttons/profile/ProfileMenu'
 import NewPostButton from '../buttons/new_post/NewPostButton'
 import CometLogo from '../buttons/CometLogo'
-import NotificationsMenu from '@/components/notifications/NotificationsMenu'
-import FeedbackDialog from '@/components/FeedbackDialog'
 
 export default {
   name: 'AppBar',

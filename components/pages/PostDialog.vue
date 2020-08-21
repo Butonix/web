@@ -1,7 +1,7 @@
 <template>
   <div>
     <div
-      style="position: fixed; top: 48px; left: 0; width: 100%; height: 100%"
+      style="position: fixed; top: 48px; left: 0; width: 100%; height: 100%;"
       class="background"
       :class="dialogOpen ? '' : 'backgroundhidden'"
     />
@@ -16,14 +16,22 @@
     >
       <div
         id="overlay"
-        style="bottom: 0; left: 0; right: 0; position: fixed; height: 100%; width: 100%; z-index: 50"
+        style="
+          bottom: 0;
+          left: 0;
+          right: 0;
+          position: fixed;
+          height: 100%;
+          width: 100%;
+          z-index: 50;
+        "
       >
         <v-app-bar
           v-if="!$device.isDesktop"
           class="topappbar"
           dense
           flat
-          style="position: fixed; top: 0; z-index: 700"
+          style="position: fixed; top: 0; z-index: 700;"
           :style="{
             'border-bottom-width': '1px',
             'border-bottom-style': 'solid',
@@ -37,33 +45,90 @@
           </v-app-bar-nav-icon>
 
           <div
-            style="position: fixed; top: 8px; left: 50%; transform: translateX(-50%); font-size: 21px; font-weight: 500"
+            style="
+              position: fixed;
+              top: 8px;
+              left: 50%;
+              transform: translateX(-50%);
+              font-size: 21px;
+              font-weight: 500;
+            "
           >
             {{ post ? post.planet.name : '' }}
           </div>
         </v-app-bar>
 
         <div
-          style="bottom: 0; left: 0; right: 0; position: fixed; top: 48px; height: 100%; width: 100%; z-index: 50; backface-visibility: hidden"
+          style="
+            bottom: 0;
+            left: 0;
+            right: 0;
+            position: fixed;
+            top: 48px;
+            height: 100%;
+            width: 100%;
+            z-index: 50;
+            backface-visibility: hidden;
+          "
         >
           <div
             ref="dialog"
-            style="height: 100%; overflow-y: auto; position: relative; width: 100%; will-change: transform; contain: layout style size"
+            style="
+              height: 100%;
+              overflow-y: auto;
+              position: relative;
+              width: 100%;
+              will-change: transform;
+              contain: layout style size;
+            "
             @click="goBack"
           >
             <div
               v-if="$device.isDesktop"
-              style="background-color: var(--v-primary-base); color: #E8EAED; position: sticky; box-sizing: border-box; height: 48px; left: 0; margin: 0 auto; max-width: 1280px; right: 0; top: 0; width: calc(100% - 160px); z-index: 70"
+              style="
+                background-color: var(--v-primary-base);
+                color: #e8eaed;
+                position: sticky;
+                box-sizing: border-box;
+                height: 48px;
+                left: 0;
+                margin: 0 auto;
+                max-width: 1280px;
+                right: 0;
+                top: 0;
+                width: calc(100% - 160px);
+                z-index: 70;
+              "
               @click.stop="doNothing"
             >
               <div
-                style="padding-left: 32px; padding-right: 24px; align-items: center; box-sizing: border-box; display: flex; height: 100%; margin: auto; max-width: 1280px; width: 100%"
+                style="
+                  padding-left: 32px;
+                  padding-right: 24px;
+                  align-items: center;
+                  box-sizing: border-box;
+                  display: flex;
+                  height: 100%;
+                  margin: auto;
+                  max-width: 1280px;
+                  width: 100%;
+                "
               >
                 <div
-                  style="align-items: center; display: flex; flex: 1; max-width: calc(100% - 324px); width: 100%"
+                  style="
+                    align-items: center;
+                    display: flex;
+                    flex: 1;
+                    max-width: calc(100% - 324px);
+                    width: 100%;
+                  "
                 >
                   <div
-                    style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap"
+                    style="
+                      overflow: hidden;
+                      text-overflow: ellipsis;
+                      white-space: nowrap;
+                    "
                     class="white--text font-weight-medium"
                   >
                     {{ post ? post.title : '' }}
@@ -71,7 +136,12 @@
                 </div>
 
                 <div
-                  style="display: flex; justify-content: flex-end; margin-left: 12px; width: 312px"
+                  style="
+                    display: flex;
+                    justify-content: flex-end;
+                    margin-left: 12px;
+                    width: 312px;
+                  "
                 >
                   <v-btn
                     icon
@@ -89,7 +159,15 @@
             </div>
 
             <div
-              style="will-change: transform; box-sizing: border-box; display: flex; justify-content: center; max-width: 1280px; padding-bottom: 32px; position: relative"
+              style="
+                will-change: transform;
+                box-sizing: border-box;
+                display: flex;
+                justify-content: center;
+                max-width: 1280px;
+                padding-bottom: 32px;
+                position: relative;
+              "
               :style="{
                 'background-color': $vuetify.theme.dark ? '#202124' : '#F1F3F4',
                 margin: $device.isDesktop ? '0 auto' : '',
@@ -98,7 +176,14 @@
               @click.stop="doNothing"
             >
               <div
-                style="flex: 1; min-height: calc(100vh - 124px); min-width: 0; padding-bottom: 1px; width: 100%; word-break: break-word"
+                style="
+                  flex: 1;
+                  min-height: calc(100vh - 124px);
+                  min-width: 0;
+                  padding-bottom: 1px;
+                  width: 100%;
+                  word-break: break-word;
+                "
                 class="left"
                 :style="{
                   margin: $device.isDesktop ? '12px 12px 32px 32px' : ''
@@ -124,7 +209,7 @@
                 <div v-if="$device.isDesktop" class="pb-3">
                   <div v-if="$store.state.currentUser">
                     <div class="pb-3">
-                      <span class="text--secondary" style="font-size: 0.86rem"
+                      <span class="text--secondary" style="font-size: 0.86rem;"
                         >Commenting as
                         <UsernameMenu :user-data="$store.state.currentUser"
                       /></span>
@@ -190,7 +275,7 @@
                     depressed
                     color="primary"
                     :class="$device.isDesktop ? '' : 'flex-grow-1 mr-3'"
-                    style="justify-content: start"
+                    style="justify-content: start;"
                     height="34"
                     @click="handleStartReply(null)"
                   >
@@ -206,7 +291,7 @@
                     depressed
                     color="primary"
                     :class="$device.isDesktop ? '' : 'flex-grow-1 mr-3'"
-                    style="justify-content: start"
+                    style="justify-content: start;"
                     height="34"
                     to="/login"
                     nuxt
@@ -224,7 +309,7 @@
 
                 <div
                   v-show="postComments.length > 0"
-                  style="box-sizing: border-box"
+                  style="box-sizing: border-box;"
                   :style="{
                     'border-style': $device.isDesktop ? 'solid' : 'none',
                     'border-bottom-style': 'solid',
@@ -256,18 +341,30 @@
                     @startedit="handleStartEdit"
                   />
                 </div>
-                <div style="height: 300px" />
+                <div style="height: 300px;" />
               </div>
 
               <div
                 v-if="$device.isDesktop"
-                style="margin: 12px 32px 32px 0; padding: 0; right: 0; top: 0; width: 312px"
+                style="
+                  margin: 12px 32px 32px 0;
+                  padding: 0;
+                  right: 0;
+                  top: 0;
+                  width: 312px;
+                "
                 class="right"
               >
                 <div
-                  style="display: flex; flex-direction: column; height: 100%; top: 0; width: 312px"
+                  style="
+                    display: flex;
+                    flex-direction: column;
+                    height: 100%;
+                    top: 0;
+                    width: 312px;
+                  "
                 >
-                  <div style="position: sticky; top: 60px">
+                  <div style="position: sticky; top: 60px;">
                     <PlanetInfoCard
                       v-if="post"
                       :style="
@@ -311,9 +408,6 @@
 </template>
 
 <script>
-import postCommentsGql from '../../gql/postComments.graphql'
-import recordPostViewGql from '../../gql/recordPostView.graphql'
-import Comment from '../comment/Comment'
 import { urlName } from '@/util/urlName'
 import Post from '@/components/post/Post'
 import PlanetInfoCard from '@/components/planet/PlanetInfoCard'
@@ -321,6 +415,9 @@ import UsernameMenu from '@/components/user/UsernameMenu'
 import CommentSortMenu from '@/components/comment/sort/CommentSortMenu'
 import InfoLinks from '@/components/InfoLinks'
 import commentMixin from '@/mixins/commentMixin'
+import Comment from '../comment/Comment'
+import recordPostViewGql from '../../gql/recordPostView.graphql'
+import postCommentsGql from '../../gql/postComments.graphql'
 
 export default {
   name: 'PostDialog',

@@ -3,7 +3,13 @@
     <v-app-bar
       flat
       dense
-      style="position: sticky; top: 48px; z-index: 20; border-bottom-width: 1px; border-bottom-style: solid"
+      style="
+        position: sticky;
+        top: 48px;
+        z-index: 20;
+        border-bottom-width: 1px;
+        border-bottom-style: solid;
+      "
       :style="{
         'border-bottom-color': $vuetify.theme.dark
           ? 'rgba(255, 255, 255, 0.12)'

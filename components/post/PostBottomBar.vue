@@ -11,7 +11,7 @@
     <span
       :title="editedTimeSince"
       class="text--secondary"
-      style="margin-left: 6px; font-size: 0.86rem"
+      style="margin-left: 6px; font-size: 0.86rem;"
       >{{ timeSince }}</span
     >
 
