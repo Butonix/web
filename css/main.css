@@ -12,6 +12,11 @@ body {
   overflow-x:hidden;
 }
 
+html {
+  width:100vw;
+  overflow-x:hidden;
+}
+
 /*.page-enter-active,
 .page-leave-active {
   transition-property: opacity;
