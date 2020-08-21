@@ -2,7 +2,7 @@
   <v-app-bar
     flat
     dense
-    class="pr-5"
+    :class="$device.isDesktop ? 'pr-5' : ''"
     style="border-bottom-width: 1px; border-bottom-style: solid; z-index: 30"
     :style="{
       'border-bottom-color': $vuetify.theme.dark

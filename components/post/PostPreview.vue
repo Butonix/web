@@ -225,3 +225,10 @@ export default {
   border: 0;
 }
 </style>
+
+<style class="embedly-css">
+.card {
+  font-family: -apple-system, BlinkMacSystemFont, segoe ui, Roboto, Helvetica,
+    Arial, sans-serif, apple color emoji, segoe ui emoji, segoe ui symbol;
+}
+</style>
