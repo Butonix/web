@@ -22,6 +22,18 @@
       </v-list-item-content>
     </v-list-item>
 
+    <v-list-item @click="toggleDark">
+      <v-list-item-icon>
+        <v-icon>{{ $vuetify.icons.values.mdiWeatherNight }}</v-icon>
+      </v-list-item-icon>
+      <v-list-item-content>
+        <v-list-item-title>Dark Mode</v-list-item-title>
+      </v-list-item-content>
+      <v-list-item-action>
+        <v-switch v-model="$vuetify.theme.dark" readonly />
+      </v-list-item-action>
+    </v-list-item>
+
     <v-list-item nuxt to="/settings/account" @click="$emit('selected')">
       <v-list-item-icon>
         <v-icon>{{ $vuetify.icons.values.mdiCogOutline }}</v-icon>
@@ -48,6 +60,11 @@ import currentUserGql from '../../../gql/currentUser.graphql'
 export default {
   name: 'ProfileMenuContent',
   methods: {
+    toggleDark() {
+      this.$emit('selected')
+      this.$vuetify.theme.dark = !this.$vuetify.theme.dark
+      localStorage.setItem('dark', this.$vuetify.theme.dark.toString())
+    },
     async logout() {
       this.$emit('selected')
       this.$store.dispatch('displaySnackbar', { message: 'Logged out' })
@@ -57,6 +74,7 @@ export default {
       })
       await this.$apolloHelpers.onLogout()
       this.$store.commit('setCurrentUser', null)
+      await this.$router.push('/')
     }
   }
 }

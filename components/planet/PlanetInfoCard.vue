@@ -19,9 +19,9 @@
       }`"
     />
     <v-list-item>
-      <v-list-item-avatar size="64" style="align-self: start;">
+      <v-list-item-avatar size="48" style="align-self: center;">
         <nuxt-link
-          style="height: 64px; min-width: 64px; width: 64px;"
+          style="height: 48px; min-width: 48px; width: 48px;"
           :to="`/p/${planet.name}`"
         >
           <v-img v-if="planet.avatarImageUrl" :src="planet.avatarImageUrl" />
@@ -38,11 +38,7 @@
             planet.customName ? planet.customName : planet.name
           }}</nuxt-link>
         </v-list-item-title>
-        <v-list-item-subtitle
-          class="mt-1"
-          style="overflow: auto; text-overflow: initial; white-space: initial;"
-          >{{ planet.description }}</v-list-item-subtitle
-        >
+        <v-list-item-subtitle>p/{{ planet.name }}</v-list-item-subtitle>
       </v-list-item-content>
     </v-list-item>
 
@@ -122,6 +118,19 @@
       </v-btn>
     </v-card-actions>
 
+    <v-card-text
+      v-if="!showVisitBtn"
+      class="text--primary py-3 description"
+      style="
+        overflow: auto;
+        text-overflow: initial;
+        white-space: pre-line;
+        word-break: break-word;
+      "
+    >
+      {{ planet.description }}
+    </v-card-text>
+
     <div v-if="showViewPlanetBtn && $route.params.planetname !== planet.name">
       <v-list-item nuxt :to="`/p/${planet.name}`">
         <v-list-item-icon
@@ -191,5 +200,9 @@ export default {
 
 .v-color-picker >>> .v-icon.theme--dark {
   color: #ffffff !important;
+}
+
+.description:first-line {
+  line-height: 0;
 }
 </style>

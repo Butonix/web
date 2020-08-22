@@ -11,7 +11,7 @@
               ? `?planet=${$route.params.planetname}`
               : ''
           }`
-        : '/signup'
+        : '/'
     "
     height="34"
   >

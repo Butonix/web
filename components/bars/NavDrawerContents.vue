@@ -90,6 +90,20 @@
       </v-list-item>
     </v-list>
 
+    <div v-if="$store.state.currentUser.moderatedPlanets.length > 0">
+      <div style="font-size: 0.86rem;" class="px-4 pt-4 pb-2 green--text">
+        Moderated
+      </div>
+
+      <v-list class="py-0">
+        <PlanetListItem
+          v-for="planet in $store.state.currentUser.moderatedPlanets"
+          :key="planet.name"
+          :planet="planet"
+        />
+      </v-list>
+    </div>
+
     <div v-if="$store.state.recentPlanets.length > 0">
       <div style="font-size: 0.86rem;" class="text--secondary px-4 pt-4 pb-2">
         Recent

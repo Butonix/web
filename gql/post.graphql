@@ -20,6 +20,7 @@ query post($postId: ID!) {
       thumbnailUrl
       title
       type
+      sticky
       planet {
         name
         description

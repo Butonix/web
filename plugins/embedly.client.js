@@ -20,6 +20,5 @@
 
 // eslint-disable-next-line no-undef
 embedly('defaults', {
-  key: process.env.EMBEDLY_KEY,
-  css: '/embedly.css'
+  key: process.env.EMBEDLY_KEY
 })

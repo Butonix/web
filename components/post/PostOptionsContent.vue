@@ -87,15 +87,18 @@
       </v-list-item-content>
     </v-list-item>
 
-    <template
-      v-if="
-        $store.state.currentUser &&
-        !!$store.state.currentUser.moderatedPlanets.find(
-          (p) => p.name === post.planet.name
-        ) &&
-        !post.author.isCurrentUser
-      "
-    >
+    <v-list-item v-if="isMod || isAdmin" @click="togglePin">
+      <v-list-item-icon>
+        <v-icon>{{ $vuetify.icons.values.mdiPin }}</v-icon>
+      </v-list-item-icon>
+      <v-list-item-content>
+        <v-list-item-title style="font-weight: 500;"
+          >{{ post.sticky ? 'Unpin' : 'Pin' }} Post (Mod)</v-list-item-title
+        >
+      </v-list-item-content>
+    </v-list-item>
+
+    <template v-if="isMod && !post.author.isCurrentUser">
       <v-list-item @click="removePost">
         <v-list-item-icon>
           <v-icon>{{ $vuetify.icons.values.mdiShield }}</v-icon>
@@ -122,13 +125,7 @@
       </v-list-item>
     </template>
 
-    <template
-      v-if="
-        $store.state.currentUser &&
-        $store.state.currentUser.admin &&
-        !post.author.isCurrentUser
-      "
-    >
+    <template v-if="isAdmin && !post.author.isCurrentUser">
       <v-list-item @click="removePost">
         <v-list-item-icon>
           <v-icon>{{ $vuetify.icons.values.mdiShield }}</v-icon>
@@ -194,6 +191,19 @@ export default {
     },
     urlName() {
       return urlName(this.post.title)
+    },
+    isMod() {
+      return (
+        this.$store.state.currentUser &&
+        !!this.$store.state.currentUser.moderatedPlanets.find(
+          (p) => p.name === this.post.planet.name
+        )
+      )
+    },
+    isAdmin() {
+      return (
+        this.$store.state.currentUser && this.$store.state.currentUser.admin
+      )
     }
   },
   methods: {
@@ -250,6 +260,50 @@ export default {
           this.$route.name === 'settings-hiddenposts'
             ? [{ query: hiddenPostsGql }]
             : []
+      })
+    },
+    async togglePin() {
+      if (this.post.sticky) await this.unpinPost()
+      else await this.pinPost()
+    },
+    async pinPost() {
+      this.$store.dispatch('displaySnackbar', {
+        message: `Pinned "${this.post.title.substring(0, 50)}${
+          this.post.title.length > 50 ? '...' : ''
+        }"`
+      })
+      this.$emit('selected')
+      this.post.sticky = true
+      await this.$apollo.mutate({
+        mutation: gql`
+          mutation($postId: ID!, $planetName: ID!) {
+            pinPost(postId: $postId, planetName: $planetName)
+          }
+        `,
+        variables: {
+          postId: this.post.id,
+          planetName: this.post.planet.name
+        }
+      })
+    },
+    async unpinPost() {
+      this.$store.dispatch('displaySnackbar', {
+        message: `Unpinned "${this.post.title.substring(0, 50)}${
+          this.post.title.length > 50 ? '...' : ''
+        }"`
+      })
+      this.$emit('selected')
+      this.post.sticky = false
+      await this.$apollo.mutate({
+        mutation: gql`
+          mutation($postId: ID!, $planetName: ID!) {
+            unpinPost(postId: $postId, planetName: $planetName)
+          }
+        `,
+        variables: {
+          postId: this.post.id,
+          planetName: this.post.planet.name
+        }
       })
     },
     async reportPost() {

@@ -93,6 +93,21 @@
     </v-row>
 
     <client-only v-else-if="isPostView && post.link">
+      <style class="embedly-css">
+        .card {
+          font-family: -apple-system, BlinkMacSystemFont, segoe ui, Roboto,
+            Helvetica, Arial, sans-serif, apple color emoji, segoe ui emoji,
+            segoe ui symbol;
+        }
+
+        .provider {
+          text-transform: none !important;
+        }
+
+        .author {
+          text-transform: none !important;
+        }
+      </style>
       <a
         :href="post.link"
         class="embedly-card mt-4"
@@ -100,8 +115,7 @@
         data-card-align="left"
         data-card-controls="0"
         :data-card-key="embedlyKey"
-        >Loading Embed</a
-      >
+      />
     </client-only>
   </div>
 </template>

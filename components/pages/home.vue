@@ -16,14 +16,6 @@
       <v-col v-if="$device.isDesktop" cols="3" class="pl-0">
         <div class="sticky">
           <PopularPlanetsCard />
-          <ModeratedPlanetsCard
-            v-if="
-              $store.state.currentUser &&
-              $store.state.currentUser.moderatedPlanets.length > 0
-            "
-            :user="$store.state.currentUser"
-            class="mt-3"
-          />
           <InfoLinks class="mt-3" />
         </div>
       </v-col>
@@ -35,7 +27,6 @@
 import postDialogMixin from '@/mixins/postDialogMixin'
 import PostsScroller from '@/components/post/PostsScroller'
 import PopularPlanetsCard from '@/components/planet/PopularPlanetsCard'
-import ModeratedPlanetsCard from '@/components/user/ModeratedPlanetsCard'
 import { postHead } from '@/util/postHead'
 import InfoLinks from '@/components/InfoLinks'
 import MyPlanetsBar from '@/components/bars/MyPlanetsBar'
@@ -52,7 +43,6 @@ export default {
   components: {
     MyPlanetsBar,
     InfoLinks,
-    ModeratedPlanetsCard,
     PopularPlanetsCard,
     PostsScroller
   },

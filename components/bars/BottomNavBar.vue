@@ -245,9 +245,7 @@ export default {
     toggleDark() {
       this.$emit('selected')
       this.$vuetify.theme.dark = !this.$vuetify.theme.dark
-      if (process.client) {
-        localStorage.setItem('dark', this.$vuetify.theme.dark.toString())
-      }
+      localStorage.setItem('dark', this.$vuetify.theme.dark.toString())
     }
   }
 }

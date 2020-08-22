@@ -214,17 +214,17 @@
           />
         </v-col>
         <v-col v-if="$device.isDesktop" cols="3" class="pl-0">
+          <PlanetInfoCard
+            :planet="planet"
+            show-edit-btn
+            @doneediting="refetchPlanet"
+          />
+          <PlanetModsCard
+            v-if="planet.moderators.length > 0"
+            :planet="planet"
+            class="mt-3"
+          />
           <div class="sticky">
-            <PlanetInfoCard
-              :planet="planet"
-              show-edit-btn
-              @doneediting="refetchPlanet"
-            />
-            <PlanetModsCard
-              v-if="planet.moderators.length > 0"
-              :planet="planet"
-              class="mt-3"
-            />
             <InfoLinks class="mt-3" />
           </div>
         </v-col>

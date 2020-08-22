@@ -11,14 +11,14 @@
         style="align-content: space-between; align-self: start;"
         :style="isPostView ? 'min-height: 0' : 'min-height: 60px'"
       >
-        <span v-if="post.sticky">
-          <v-icon color="primary" size="13" class="mr-1">{{
-            $vuetify.icons.values.mdiStar
-          }}</v-icon>
-          <span class="overline primary--text mb-0">ANNOUNCEMENT</span>
-        </span>
-
         <v-list-item-title style="white-space: normal;">
+          <v-icon
+            v-if="post.sticky"
+            class="pb-1 mr-1"
+            size="16"
+            color="primary"
+            >{{ $vuetify.icons.values.mdiPin }}</v-icon
+          >
           <v-btn
             v-if="showExpandBtn && !isPostView"
             width="16"

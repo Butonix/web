@@ -13,6 +13,7 @@ query feed($page: Int, $sort: Sort, $time: Time, $filter: Filter, $types: [Type!
     thumbnailUrl
     domain
     isHidden
+    sticky
     author {
       id
       username

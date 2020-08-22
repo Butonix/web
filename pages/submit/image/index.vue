@@ -17,12 +17,13 @@
       solo
       flat
       label="Choose an image"
+      :rules="uploadRules"
     />
 
     <img
       v-if="image"
       ref="imagePreview"
-      style="max-width: 100%;"
+      style="max-width: 500px;"
       class="pb-6"
     />
 
