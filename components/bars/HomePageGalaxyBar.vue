@@ -12,7 +12,7 @@
   >
     <v-slide-group ref="slider" v-model="model" show-arrows center-active>
       <v-slide-item
-        v-if="$store.state.currentUser"
+        v-show="$store.state.currentUser"
         v-slot:default="{ active, toggle }"
       >
         <v-chip
