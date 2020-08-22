@@ -119,7 +119,7 @@
     </v-card-actions>
 
     <v-card-text
-      v-if="!showVisitBtn"
+      v-if="!hideDescription"
       class="text--primary py-3 description"
       style="
         overflow: auto;
@@ -159,6 +159,10 @@ export default {
     planet: {
       type: Object,
       required: true
+    },
+    hideDescription: {
+      type: Boolean,
+      default: false
     },
     isHover: {
       type: Boolean,

@@ -12,7 +12,7 @@
       </span>
     </template>
 
-    <PlanetInfoCard v-if="planet" is-hover :planet="planet" />
+    <PlanetInfoCard v-if="planet" is-hover :planet="planet" hide-description />
     <v-card v-else width="400">
       <div class="pa-4">
         <v-row align="center" justify="center">
@@ -34,6 +34,7 @@
       style="padding-bottom: 24px;"
       show-view-planet-btn
       :planet="planet"
+      hide-description
     />
     <v-card v-else>
       <div class="pa-4">

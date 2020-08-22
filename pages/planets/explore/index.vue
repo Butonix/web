@@ -20,7 +20,7 @@
           :class="$device.isDesktop && index % 3 === 1 ? 'px-6' : ''"
           :cols="$device.isDesktop ? 4 : 12"
         >
-          <PlanetInfoCard :planet="planet" show-visit-btn />
+          <PlanetInfoCard :planet="planet" show-visit-btn hide-description />
         </v-col>
       </v-row>
     </v-container>
