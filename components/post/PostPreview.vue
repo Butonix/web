@@ -92,7 +92,7 @@
       </client-only>
     </v-row>
 
-    <client-only v-else-if="isPostView">
+    <client-only v-else-if="isPostView && post.link">
       <a
         :href="post.link"
         class="embedly-card mt-4"
