@@ -1,5 +1,5 @@
 <template>
-  <div v-intersect.once="updateTextContentSize">
+  <div>
     <v-list-item
       class="px-0"
       :style="isPostView ? 'min-height: 0' : 'min-height: 60px'"
@@ -110,6 +110,7 @@
           :post="post"
           :text-content-height="idState.textContentHeight"
           @togglemore="idState.expand = !idState.expand"
+          @getheight="setHeight"
         />
 
         <PostBottomBar
@@ -133,6 +134,7 @@
       :post="post"
       :text-content-height="idState.textContentHeight"
       @togglemore="idState.expand = !idState.expand"
+      @getheight="setHeight"
     />
 
     <PostBottomBar
@@ -256,23 +258,27 @@ export default {
       expand: this.$route.query.expanded === 'yes'
     }
   },
-  mounted() {
-    this.$nextTick(() => this.updateTextContentSize())
-  },
   methods: {
     doNothing() {},
     openLink() {
       window.open(this.post.link, '_blank')
     },
     updateTextContentSize() {
-      if (
-        this.$refs.textcontent &&
-        this.post.textContent &&
-        !this.idState.didGetTextContentHeight
-      ) {
-        this.idState.textContentHeight = this.$refs.textcontent.$el.clientHeight
-        this.idState.didGetTextContentHeight = true
-      }
+      this.$nextTick(() => {
+        if (
+          this.$refs.textcontent &&
+          this.post.textContent &&
+          !this.idState.didGetTextContentHeight
+        ) {
+          this.idState.textContentHeight = this.$refs.textcontent.$el.clientHeight
+          this.idState.didGetTextContentHeight = true
+        }
+      })
+    },
+    setHeight(e) {
+      if (this.isPostView) return
+      this.idState.textContentHeight = e
+      this.idState.didGetTextContentHeight = true
     },
     toggleBlock() {
       this.post.author.isBlocking = !this.post.author.isBlocking

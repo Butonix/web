@@ -42,7 +42,6 @@
 
           <TextContent
             v-show="!editing || !$device.isDesktop"
-            :dark="$vuetify.theme.dark"
             :text-content="comment.textContent"
           />
 
