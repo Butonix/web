@@ -12,9 +12,11 @@ body {
   overflow-x:hidden;
 }
 
-html {
-  width:calc(100vw - 17px);
-  overflow-x:hidden;
+@media (min-width: 960px) {
+  html {
+    width:calc(100vw - 17px);
+    overflow-x:hidden;
+  }
 }
 
 /*.page-enter-active,

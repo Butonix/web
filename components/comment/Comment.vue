@@ -81,13 +81,13 @@
             v-if="!$device.isDesktop"
             class="ml-3"
             :class="isEndorsed ? 'primary--text' : 'text--secondary'"
-            style="
-              font-size: 0.86rem;
-              font-weight: 500;
-              display: inline-flex;
-              align-items: center;
-            "
-            :style="cssVars"
+            :style="{
+              ...cssVars,
+              'font-size': '0.86rem',
+              'font-weight': '500',
+              display: 'inline-flex',
+              'align-items': 'center'
+            }"
             @click.stop.prevent="toggleEndorsement"
           >
             <span>

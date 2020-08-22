@@ -16,15 +16,7 @@
     >
       <div
         id="overlay"
-        style="
-          bottom: 0;
-          left: 0;
-          right: 0;
-          position: fixed;
-          height: 100%;
-          width: 100%;
-          z-index: 50;
-        "
+        :style="`bottom: 0; left: 0; right: 0; position: fixed; height: 100%; width: 100%; z-index: 50;`"
       >
         <v-app-bar
           v-if="!$device.isDesktop"

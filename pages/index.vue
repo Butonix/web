@@ -3,20 +3,13 @@
     <div
       v-if="$device.isDesktop"
       id="changeText"
-      style="
-        position: absolute;
-        bottom: 0;
-        left: 0;
-        width: 30%;
-        border-top-right-radius: 10px;
-      "
-      :class="hideText ? 'hide' : ''"
-      class="pa-4"
-      :style="{
-        'background-color': $vuetify.theme.dark
+      :style="`position: absolute; bottom: 0; left: 0; width: 30%; border-top-right-radius: 10px; background-color: ${
+        $vuetify.theme.dark
           ? 'rgba(32, 33, 36, 0.8)'
           : 'rgba(241, 243, 244, 0.8)'
-      }"
+      }`"
+      :class="hideText ? 'hide' : ''"
+      class="pa-4"
     >
       <a
         :href="images[currentDescription].link"
@@ -36,29 +29,14 @@
 
     <div
       v-if="$device.isDesktop"
-      style="
-        width: 60%;
-        height: 100vh;
-        background-size: cover;
-        background-position: center;
-        transition: background-image 3s ease-in-out;
-      "
-      :style="`background-image: url(${images[currentImage].imageUrl})`"
+      :style="`width: 60%; height: 100vh; background-size: cover; background-position: center; transition: background-image 3s ease-in-out; background-image: url(${images[currentImage].imageUrl})`"
     >
       <div
-        style="
-          position: absolute;
-          width: 25%;
-          height: 100%;
-          bottom: 0;
-          right: 40%;
-          background-color: transparent;
-        "
-        :style="{
-          'background-image': $vuetify.theme.dark
+        :style="`position: absolute; width: 25%; height: 100%; bottom: 0; right: 40%; background-color: transparent; background-image: ${
+          $vuetify.theme.dark
             ? 'linear-gradient(270deg,#202124,rgba(32,33,36,0))'
             : 'linear-gradient(270deg,#F1F3F4,rgba(241,243,244,0))'
-        }"
+        }`"
       />
     </div>
 

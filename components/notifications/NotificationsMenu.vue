@@ -25,18 +25,12 @@
     <v-card width="600" style="z-index: 602;">
       <v-toolbar
         dense
-        style="
-          position: sticky;
-          top: 0;
-          z-index: 100;
-          border-bottom-width: 1px;
-          border-bottom-style: solid;
-        "
-        :style="{
-          'border-bottom-color': $vuetify.theme.dark
-            ? 'rgba(255, 255, 255, 0.12)'
-            : 'rgba(0, 0, 0, 0.12)'
-        }"
+        :style="`
+          position: sticky; top: 0; z-index: 100; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: ${
+            $vuetify.theme.dark
+              ? 'rgba(255, 255, 255, 0.12)'
+              : 'rgba(0, 0, 0, 0.12)'
+          }`"
         flat
         :color="$vuetify.theme.dark ? '#35363A' : '#F1F3F4'"
       >

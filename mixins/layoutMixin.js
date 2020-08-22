@@ -38,9 +38,6 @@ export default {
       ? '#202124'
       : '#F1F3F4'
   },
-  mounted() {
-    this.$store.commit('setNav', true)
-  },
   head() {
     return {
       meta: [

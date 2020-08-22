@@ -2,18 +2,9 @@
   <v-app-bar
     flat
     dense
-    style="
-      border-bottom-width: 1px;
-      border-bottom-style: solid;
-      position: sticky;
-      top: 48px;
-      z-index: 20;
-    "
-    :style="{
-      'border-bottom-color': $vuetify.theme.dark
-        ? 'rgba(255, 255, 255, 0.12)'
-        : 'rgba(0, 0, 0, 0.12)'
-    }"
+    :style="`border-bottom-width: 1px; border-bottom-style: solid; position: sticky; top: 48px; z-index: 20; border-bottom-color: ${
+      $vuetify.theme.dark ? 'rgba(255, 255, 255, 0.12)' : 'rgba(0, 0, 0, 0.12)'
+    }`"
   >
     <v-slide-group ref="slider" center-active show-arrows class="slider">
       <v-slide-item v-slot:default="{ active, toggle }">

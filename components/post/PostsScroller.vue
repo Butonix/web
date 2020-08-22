@@ -68,12 +68,7 @@
         v-if="
           $route.name === 'home-sort-time' && !loading && items.length === 0
         "
-        style="
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          text-align: center;
-        "
+        :style="`display: flex; flex-direction: column; align-items: center; text-align: center`"
         class="text--secondary"
       >
         <v-icon class="text--secondary" size="36">{{

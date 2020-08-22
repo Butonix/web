@@ -18,20 +18,11 @@
         style="align-self: start;"
       >
         <div
-          style="
-            height: 16px;
-            width: 16px;
-            border-radius: 50%;
-            position: absolute;
-            bottom: 0;
-            right: 0;
-            z-index: 2;
-          "
-          :style="
+          :style="`height: 16px; width: 16px; border-radius: 50%; position: absolute; bottom: 0; right: 0; z-index: 2; background-color: ${
             lastOnlineString === 'Online' && !user.appearOffline
-              ? 'background-color: #66BB6A'
-              : 'background-color: #9E9E9E'
-          "
+              ? '#66BB6A'
+              : '#9E9E9E'
+          }`"
         />
         <v-img
           v-if="user.profilePicUrl"

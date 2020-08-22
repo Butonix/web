@@ -58,19 +58,11 @@
             v-if="parentTextContent"
             :text-content="parentTextContent"
             class="pa-2"
-            style="
-              font-size: 1rem;
-              height: 25%;
-              max-height: 25%;
-              border-bottom-width: 1px;
-              border-bottom-style: solid;
-              overflow-y: auto;
-            "
-            :style="{
-              'border-bottom-color': $vuetify.theme.dark
+            :style="`font-size: 1rem; height: 25%; max-height: 25%; border-bottom-width: 1px; border-bottom-style: solid; overflow-y: auto; border-bottom-color: ${
+              $vuetify.theme.dark
                 ? 'rgba(255, 255, 255, 0.12)'
                 : 'rgba(0, 0, 0, 0.12)'
-            }"
+            }`"
           />
 
           <div style="font-size: 1rem;">

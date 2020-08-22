@@ -24,13 +24,7 @@
       />
       <div
         v-else
-        style="
-          height: 60px;
-          width: 80px;
-          display: flex;
-          justify-content: center;
-          align-items: center;
-        "
+        :style="`height: 60px; width: 80px; display: flex; justify-content: center; align-items: center;`"
       >
         <v-icon size="32" class="text--secondary">{{
           $vuetify.icons.values.mdiWeb

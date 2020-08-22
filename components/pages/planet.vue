@@ -27,17 +27,11 @@
         >
       </div>
       <div
-        style="
-          min-height: 78px;
-          display: flex;
-          flex-direction: row;
-          align-items: center;
-        "
-        :style="
+        :style="`min-height: 78px; display: flex; flex-direction: row; align-items: center; ${
           $vuetify.theme.dark
             ? 'background-color: #35363A'
             : 'background-color: #F8F9FA; border-bottom: 1px solid rgba(0, 0, 0, 0.12)'
-        "
+        }`"
       >
         <div style="padding-left: 120px; margin-bottom: 2px;">
           <v-row no-gutters align="center" class="text--primary">
@@ -55,14 +49,7 @@
         </div>
       </div>
       <div
-        style="
-          position: absolute;
-          left: 24px;
-          bottom: 12px;
-          border: 4px solid white;
-          border-radius: 50%;
-          background-size: cover;
-        "
+        :style="'position: absolute; left: 24px; bottom: 12px; border: 4px solid white; border-radius: 50%; background-size: cover'"
       >
         <v-avatar
           height="72"
@@ -160,15 +147,7 @@
         </v-card-actions>
       </div>
       <div
-        style="
-          position: absolute;
-          left: 50%;
-          border: 4px solid white;
-          border-radius: 50%;
-          background-size: cover;
-          margin-left: -36px;
-          top: 28px;
-        "
+        :style="`position: absolute; left: 50%; border: 4px solid white; border-radius: 50%; background-size: cover; margin-left: -36px; top: 28px;`"
       >
         <v-avatar
           height="72"

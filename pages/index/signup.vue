@@ -148,6 +148,9 @@ export default {
         await this.$apolloHelpers.onLogin(res.accessToken)
         await this.$store.dispatch('fetchCurrentUser')
         await this.$router.push('/home')
+        if (this.$vuetify.breakpoint.lgAndUp) {
+          this.$store.commit('setNav', true)
+        }
       } catch (e) {
         this.err = e.message
         this.$store.dispatch('displaySnackbar', {

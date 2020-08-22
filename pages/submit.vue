@@ -5,15 +5,11 @@
         <v-row no-gutters>
           <v-tabs v-model="tab" grow background-color="transparent">
             <v-tab
-              style="
-                letter-spacing: normal;
-                text-transform: none;
-                font-size: 1rem;
-              "
               nuxt
               :to="`/submit/text${
                 $route.query.planet ? `?planet=${$route.query.planet}` : ''
               }`"
+              class="tab"
               :class="tab === '/submit/text' ? '' : 'text--primary'"
             >
               <v-icon
@@ -24,16 +20,12 @@
               Text Post
             </v-tab>
             <v-tab
-              style="
-                letter-spacing: normal;
-                text-transform: none;
-                font-size: 1rem;
-              "
               nuxt
               :to="`/submit/link${
                 $route.query.planet ? `?planet=${$route.query.planet}` : ''
               }`"
               :class="tab === '/submit/link' ? '' : 'text--primary'"
+              class="tab"
               ><v-icon
                 class="mr-2"
                 :class="tab === '/submit/link' ? '' : 'text--primary'"
@@ -42,16 +34,12 @@
               Link Post</v-tab
             >
             <v-tab
-              style="
-                letter-spacing: normal;
-                text-transform: none;
-                font-size: 1rem;
-              "
               nuxt
               :to="`/submit/image${
                 $route.query.planet ? `?planet=${$route.query.planet}` : ''
               }`"
               :class="tab === '/submit/image' ? '' : 'text--primary'"
+              class="tab"
               ><v-icon
                 class="mr-2"
                 :class="tab === '/submit/image' ? '' : 'text--primary'"
@@ -98,5 +86,11 @@ export default {
 
 >>> .v-slide-group__next {
   display: none !important;
+}
+
+.tab {
+  letter-spacing: normal;
+  text-transform: none;
+  font-size: 1rem;
 }
 </style>

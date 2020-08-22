@@ -3,17 +3,11 @@
     <v-chip
       pill
       outlined
-      style="
-        border-style: solid;
-        border-width: 1px;
-        margin-bottom: 2px;
-        height: 34px;
-      "
-      :style="{
-        'border-color': $vuetify.theme.dark
+      :style="`border-style: solid; border-width: 1px; margin-bottom: 2px; height: 34px; border-color: ${
+        $vuetify.theme.dark
           ? 'rgba(255, 255, 255, 0.12)'
           : 'rgba(0, 0, 0, 0.12)'
-      }"
+      }`"
       class="px-3"
       nuxt
       to="/planets/explore"
