@@ -16,10 +16,6 @@ export default {
     textContent: {
       type: String,
       required: true
-    },
-    dark: {
-      type: Boolean,
-      required: true
     }
   }
 }

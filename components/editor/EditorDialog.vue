@@ -15,6 +15,7 @@
         <v-card
           :tile="!$device.isDesktop"
           :min-height="$device.isDesktop ? '400' : ''"
+          style="overflow-y: hidden;"
         >
           <div
             style="display: flex;"
@@ -53,21 +54,23 @@
             </v-btn>
           </div>
 
-          <div
+          <TextContent
             v-if="parentTextContent"
+            :text-content="parentTextContent"
+            class="pa-2"
             style="
               font-size: 1rem;
-              max-height: 200px;
+              height: 25%;
+              max-height: 25%;
               border-bottom-width: 1px;
               border-bottom-style: solid;
+              overflow-y: auto;
             "
-            class="pa-2"
             :style="{
               'border-bottom-color': $vuetify.theme.dark
                 ? 'rgba(255, 255, 255, 0.12)'
                 : 'rgba(0, 0, 0, 0.12)'
             }"
-            v-html="parentTextContent"
           />
 
           <div style="font-size: 1rem;">
@@ -76,7 +79,9 @@
               editable
               autofocus
               :style="
-                $device.isDesktop ? 'min-height: 296px; max-height: 600px' : ''
+                $device.isDesktop
+                  ? 'min-height: 296px; max-height: 600px'
+                  : 'height: 75%; max-height: 75%'
               "
               style="overflow-y: auto;"
               class="pa-2"
@@ -90,10 +95,14 @@
 
 <script>
 import { isEditorEmpty } from '@/util/isEditorEmpty'
+import TextContent from '@/components/TextContent'
 
 export default {
   name: 'EditorDialog',
-  components: { Editor: () => import('@/components/editor/Editor') },
+  components: {
+    TextContent,
+    Editor: () => import('@/components/editor/Editor')
+  },
   props: {
     parentTextContent: {
       type: String,

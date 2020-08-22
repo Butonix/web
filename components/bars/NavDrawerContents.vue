@@ -90,7 +90,12 @@
       </v-list-item>
     </v-list>
 
-    <div v-if="$store.state.currentUser.moderatedPlanets.length > 0">
+    <div
+      v-if="
+        $store.state.currentUser &&
+        $store.state.currentUser.moderatedPlanets.length > 0
+      "
+    >
       <div style="font-size: 0.86rem;" class="px-4 pt-4 pb-2 green--text">
         Moderated
       </div>
