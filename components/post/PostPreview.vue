@@ -1,18 +1,20 @@
 <template>
-  <div
-    v-if="post.textContent"
-    v-intersect.once="updateTextContentSize"
-    class="mt-2"
-  >
+  <div v-if="post.textContent" class="mt-2">
     <div
       :class="
-        expand || isPostView || textContentHeight <= 90 ? '' : 'textcontent'
+        expand || isPostView || post.textContent.length <= 300
+          ? ''
+          : 'textcontent'
       "
       :style="
-        expand || isPostView || textContentHeight <= 90 ? '' : 'cursor: pointer'
+        expand || isPostView || post.textContent.length <= 300
+          ? ''
+          : 'cursor: pointer'
       "
       v-on="
-        !isPostView && textContentHeight > 90 ? { click: toggleTextExpand } : {}
+        !isPostView && post.textContent.length > 300
+          ? { click: toggleTextExpand }
+          : {}
       "
     >
       <TextContent ref="textcontent" :text-content="post.textContent" />
@@ -32,7 +34,6 @@
         @click.stop.prevent="openImageLink"
       >
         <img
-          loading="lazy"
           alt="Image preview"
           :src="post.link"
           style="max-height: 500px; max-width: 100%;"
@@ -139,10 +140,6 @@ export default {
       type: Object,
       required: true
     },
-    textContentHeight: {
-      type: Number,
-      required: true
-    },
     expand: {
       type: Boolean,
       required: true
@@ -199,9 +196,6 @@ export default {
       else return this.post.link.split('status/')[1].split('?')[0]
     }
   },
-  mounted() {
-    this.updateTextContentSize()
-  },
   methods: {
     openImageLink() {
       window.open(this.post.link, '_blank')
@@ -210,15 +204,6 @@ export default {
       this.$emit('togglemore')
       e.stopPropagation()
       e.preventDefault()
-    },
-    updateTextContentSize() {
-      if (this.isPostView) return
-
-      this.$nextTick(() => {
-        if (this.$refs.textcontent) {
-          this.$emit('getheight', this.$refs.textcontent.$el.clientHeight)
-        }
-      })
     }
   }
 }

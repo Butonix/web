@@ -103,14 +103,11 @@
 
         <PostPreview
           v-if="$device.isDesktop"
-          ref="textcontent"
           :key="post.id"
           :expand="idState.expand || isPostView"
           :is-post-view="isPostView"
           :post="post"
-          :text-content-height="idState.textContentHeight"
           @togglemore="idState.expand = !idState.expand"
-          @getheight="setHeight"
         />
 
         <PostBottomBar
@@ -127,14 +124,11 @@
 
     <PostPreview
       v-if="!$device.isDesktop"
-      ref="textcontent"
       :key="post.id"
       :expand="idState.expand || isPostView"
       :is-post-view="isPostView"
       :post="post"
-      :text-content-height="idState.textContentHeight"
       @togglemore="idState.expand = !idState.expand"
-      @getheight="setHeight"
     />
 
     <PostBottomBar
@@ -187,19 +181,9 @@ export default {
     }
   },
   computed: {
-    isExpandable() {
-      return (
-        this.post.textContent ||
-        this.isEmbeddableImage ||
-        this.isYoutubeLink ||
-        this.isSpotifyLink ||
-        this.isTweetLink ||
-        this.isInstagramLink
-      )
-    },
     showExpandBtn() {
       return (
-        (this.post.textContent && this.idState.textContentHeight > 90) ||
+        (this.post.textContent && this.post.textContent.length > 300) ||
         this.isEmbeddableImage ||
         this.isYoutubeLink ||
         this.isSpotifyLink ||
@@ -252,8 +236,6 @@ export default {
   },
   idState() {
     return {
-      textContentHeight: -1,
-      didGetTextContentHeight: false,
       reported: false,
       expand: this.$route.query.expanded === 'yes'
     }
@@ -262,23 +244,6 @@ export default {
     doNothing() {},
     openLink() {
       window.open(this.post.link, '_blank')
-    },
-    updateTextContentSize() {
-      this.$nextTick(() => {
-        if (
-          this.$refs.textcontent &&
-          this.post.textContent &&
-          !this.idState.didGetTextContentHeight
-        ) {
-          this.idState.textContentHeight = this.$refs.textcontent.$el.clientHeight
-          this.idState.didGetTextContentHeight = true
-        }
-      })
-    },
-    setHeight(e) {
-      if (this.isPostView) return
-      this.idState.textContentHeight = e
-      this.idState.didGetTextContentHeight = true
     },
     toggleBlock() {
       this.post.author.isBlocking = !this.post.author.isBlocking

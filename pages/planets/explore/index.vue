@@ -39,7 +39,8 @@ export default {
   async asyncData(context) {
     const client = context.app.apolloProvider.defaultClient
     const { data } = await client.query({
-      query: allPlanetsGql
+      query: allPlanetsGql,
+      fetchPolicy: 'network-only'
     })
     return {
       allPlanets: data.allPlanets

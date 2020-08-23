@@ -6,13 +6,15 @@
 
     <v-main>
       <HomePageGalaxyBar
-        v-show="
+        v-if="
           $route.name === 'home-sort-time' ||
           $route.name === 'universe-sort-time' ||
           $route.name === 'g-galaxyname-sort-time'
         "
       />
+
       <nuxt />
+
       <Snackbar />
     </v-main>
 
@@ -21,21 +23,16 @@
 </template>
 
 <script>
-import Snackbar from '@/components/bars/Snackbar'
-import AppBar from '@/components/bars/AppBar'
-import BottomNavBar from '@/components/bars/BottomNavBar'
-import NavDrawer from '@/components/bars/NavDrawer'
-import HomePageGalaxyBar from '@/components/bars/HomePageGalaxyBar'
 import layoutMixin from '@/mixins/layoutMixin'
 
 export default {
   name: 'Default',
   components: {
-    HomePageGalaxyBar,
-    NavDrawer,
-    BottomNavBar,
-    AppBar,
-    Snackbar
+    HomePageGalaxyBar: () => import('@/components/bars/HomePageGalaxyBar'),
+    NavDrawer: () => import('@/components/bars/NavDrawer'),
+    BottomNavBar: () => import('@/components/bars/BottomNavBar'),
+    AppBar: () => import('@/components/bars/AppBar'),
+    Snackbar: () => import('@/components/bars/Snackbar')
   },
   mixins: [layoutMixin]
 }

@@ -161,11 +161,12 @@
             <v-tab-item>
               <PostsScroller
                 v-model="dialog"
-                :loading="$apollo.queries.feed.loading"
+                :loading="loadingMore"
                 :items="feed"
                 :selected-post="selectedPost"
                 @togglehidden="toggleHidden"
                 @toggleblock="toggleBlock"
+                @infinite="showMore"
               />
             </v-tab-item>
 
@@ -263,6 +264,8 @@ import UserCommentsScroller from '@/components/user/UserCommentsScroller'
 import { userHead } from '@/util/userHead'
 import { postHead } from '@/util/postHead'
 import InfoLinks from '@/components/InfoLinks'
+import feedGql from '@/gql/feed'
+import { feedVars } from '@/util/feedVars'
 
 export default {
   name: 'User',
@@ -276,15 +279,21 @@ export default {
     PostsScroller
   },
   mixins: [postDialogMixin],
-  async asyncData(context) {
-    const client = context.app.apolloProvider.defaultClient
-    const { data } = await client.query({
+  async asyncData({ app, params, query, route }) {
+    const client = app.apolloProvider.defaultClient
+    const userQuery = await client.query({
       query: userGql,
-      variables: { username: context.params.username }
+      variables: { username: params.username }
+    })
+    const feedQuery = await client.query({
+      query: feedGql,
+      variables: feedVars(params, query, route),
+      fetchPolicy: 'network-only'
     })
     return {
-      user: data.user,
-      editBio: data.user.bio
+      user: userQuery.data.user,
+      editBio: userQuery.data.user.bio,
+      feed: feedQuery.data.feed
     }
   },
   data() {

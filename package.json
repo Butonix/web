@@ -33,6 +33,7 @@
     "tiptap-extensions": "^1.32.5",
     "vue-clipboard2": "^0.3.1",
     "vue-friendly-iframe": "^0.18.0",
+    "vue-infinite-loading": "^2.4.5",
     "vue-instagram-embed": "^1.0.0",
     "vue-tweet-embed": "^2.4.0",
     "vue-virtual-scroller": "^1.0.10",
@@ -49,6 +50,6 @@
     "eslint-plugin-nuxt": "^1.0.0",
     "eslint-plugin-prettier": "^3.1.4",
     "prettier": "^2.0.5",
-    "vuetify": "2.3.6"
+    "vuetify": "^2.3.9"
   }
 }

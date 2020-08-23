@@ -46,19 +46,14 @@
 
 <script>
 import PlanetListItem from '@/components/planet/PlanetListItem'
-import popularPlanetsGql from '../../gql/popularPlanets.graphql'
 
 export default {
   name: 'PopularPlanetsCard',
   components: { PlanetListItem },
-  data() {
-    return {
-      popularPlanets: []
-    }
-  },
-  apollo: {
+  props: {
     popularPlanets: {
-      query: popularPlanetsGql
+      type: Array,
+      required: true
     }
   }
 }

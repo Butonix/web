@@ -50,7 +50,6 @@
 </template>
 
 <script>
-import popularPlanetsGql from '@/gql/popularPlanets.graphql'
 import PlanetListItem from '@/components/planet/PlanetListItem'
 
 export default {
@@ -64,24 +63,10 @@ export default {
     tile: {
       type: Boolean,
       default: false
-    }
-  },
-  data() {
-    return {
-      popularPlanets: []
-    }
-  },
-  apollo: {
+    },
     popularPlanets: {
-      query: popularPlanetsGql,
-      variables() {
-        return {
-          galaxyName: this.galaxy.name
-        }
-      },
-      skip() {
-        return !this.galaxy
-      }
+      type: Array,
+      required: true
     }
   }
 }

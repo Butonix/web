@@ -31,7 +31,8 @@ export default {
   },
   apollo: {
     allPlanets: {
-      query: allPlanetsGql
+      query: allPlanetsGql,
+      fetchPolicy: 'cache-and-network'
     }
   }
 }

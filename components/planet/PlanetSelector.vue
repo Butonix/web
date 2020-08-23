@@ -105,7 +105,8 @@ export default {
             name
           }
         }
-      `
+      `,
+      fetchPolicy: 'cache-and-network'
     }
   }
 }

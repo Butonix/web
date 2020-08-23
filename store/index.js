@@ -1,5 +1,6 @@
 import currentUserGql from '@/gql/currentUser.graphql'
 import recentPlanetsGql from '@/gql/recentPlanets.graphql'
+import galaxiesGql from '@/gql/galaxies.graphql'
 
 export const state = () => ({
   currentUser: null,
@@ -8,7 +9,8 @@ export const state = () => ({
   snackbarSuccess: false,
   expandedCommentId: '',
   nav: false,
-  recentPlanets: []
+  recentPlanets: [],
+  galaxies: []
 })
 
 export const mutations = {
@@ -35,6 +37,9 @@ export const mutations = {
   },
   setRecentPlanets(state, recentPlanets) {
     state.recentPlanets = recentPlanets
+  },
+  setGalaxies(state, galaxies) {
+    state.galaxies = galaxies
   }
 }
 
@@ -45,8 +50,14 @@ export const actions = {
       newrelic.setTransactionName(context.route.matched[0].path)
     } catch {}
 
-    if (!context.app.$apolloHelpers.getToken()) return
     const client = context.app.apolloProvider.defaultClient
+
+    const galaxiesQuery = await client.query({
+      query: galaxiesGql
+    })
+    commit('setGalaxies', galaxiesQuery.data.galaxies)
+
+    if (!context.app.$apolloHelpers.getToken()) return
     const { data } = await client.query({ query: currentUserGql })
     commit('setCurrentUser', data.currentUser)
     if (!data.currentUser) {

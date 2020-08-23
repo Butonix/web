@@ -12,7 +12,7 @@
   >
     <v-slide-group ref="slider" v-model="model" show-arrows center-active>
       <v-slide-item
-        v-show="$store.state.currentUser"
+        v-if="$store.state.currentUser"
         v-slot:default="{ active, toggle }"
       >
         <v-chip
@@ -78,7 +78,7 @@
       </v-slide-item>
 
       <v-slide-item
-        v-for="galaxy in galaxies"
+        v-for="galaxy in $store.state.galaxies"
         :key="galaxy.name"
         v-slot:default="{ active, toggle }"
       >
@@ -116,27 +116,10 @@
 </template>
 
 <script>
-import gql from 'graphql-tag'
-
 export default {
   name: 'HomePageGalaxyBar',
-  apollo: {
-    galaxies: {
-      query: gql`
-        query {
-          galaxies {
-            fullName
-            name
-            icon
-            bannerImageUrl
-          }
-        }
-      `
-    }
-  },
   data() {
     return {
-      galaxies: [],
       model: null
     }
   }

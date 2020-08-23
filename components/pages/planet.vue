@@ -185,11 +185,12 @@
           <PlanetBar :planet="planet" />
           <PostsScroller
             v-model="dialog"
-            :loading="$apollo.queries.feed.loading"
+            :loading="loadingMore"
             :items="feed"
             :selected-post="selectedPost"
             @togglehidden="toggleHidden"
             @toggleblock="toggleBlock"
+            @infinite="showMore"
           />
         </v-col>
         <v-col v-if="$device.isDesktop" cols="3" class="pl-0">
@@ -225,6 +226,8 @@ import { postHead } from '@/util/postHead'
 import InfoLinks from '@/components/InfoLinks'
 import PlanetBar from '@/components/bars/PlanetBar'
 import MobilePlanetJoinButton from '@/components/planet/MobilePlanetJoinButton'
+import feedGql from '@/gql/feed'
+import { feedVars } from '@/util/feedVars'
 
 export default {
   name: 'Planet',
@@ -239,14 +242,20 @@ export default {
     PostsScroller
   },
   mixins: [postDialogMixin],
-  async asyncData(context) {
-    const client = context.app.apolloProvider.defaultClient
-    const { data } = await client.query({
+  async asyncData({ app, params, query, route }) {
+    const client = app.apolloProvider.defaultClient
+    const planetQuery = await client.query({
       query: planetGql,
-      variables: { planetName: context.params.planetname }
+      variables: { planetName: params.planetname }
+    })
+    const feedQuery = await client.query({
+      query: feedGql,
+      variables: feedVars(params, query, route),
+      fetchPolicy: 'network-only'
     })
     return {
-      planet: data.planet
+      planet: planetQuery.data.planet,
+      feed: feedQuery.data.feed
     }
   },
   data() {

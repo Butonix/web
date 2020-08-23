@@ -5,6 +5,7 @@
       :items="items"
       :min-item-size="54"
       :buffer="3000"
+      :prerender="items.length < 20 ? items.length : 20"
     >
       <template v-slot="{ item, index, active }">
         <DynamicScrollerItem
@@ -50,6 +51,7 @@
             "
           >
             <Post
+              v-intersect.quiet.once="intersect(index)"
               :post="item"
               :index="index"
               :active="active"
@@ -140,6 +142,11 @@ export default {
     }
   },
   methods: {
+    intersect(index) {
+      if (index === this.items.length - 10) {
+        this.$emit('infinite')
+      }
+    },
     urlName(item) {
       return urlName(item.title)
     }

@@ -6,16 +6,17 @@
 
         <PostsScroller
           v-model="dialog"
-          :loading="$apollo.queries.feed.loading"
+          :loading="loadingMore"
           :items="feed"
           :selected-post="selectedPost"
           @togglehidden="toggleHidden"
           @toggleblock="toggleBlock"
+          @infinite="showMore"
         />
       </v-col>
       <v-col v-if="$device.isDesktop" cols="3" class="pl-0">
         <div class="sticky">
-          <PopularPlanetsCard />
+          <PopularPlanetsCard :popular-planets="popularPlanets" />
           <InfoLinks class="mt-3" />
         </div>
       </v-col>
@@ -30,6 +31,9 @@ import PopularPlanetsCard from '@/components/planet/PopularPlanetsCard'
 import { postHead } from '@/util/postHead'
 import InfoLinks from '@/components/InfoLinks'
 import MyPlanetsBar from '@/components/bars/MyPlanetsBar'
+import popularPlanetsGql from '@/gql/popularPlanets.graphql'
+import feedGql from '@/gql/feed'
+import { feedVars } from '@/util/feedVars'
 
 export default {
   middleware({ store, redirect }) {
@@ -39,7 +43,6 @@ export default {
     }
   },
   name: 'Index',
-  scrollToTop: false,
   components: {
     MyPlanetsBar,
     InfoLinks,
@@ -47,6 +50,27 @@ export default {
     PostsScroller
   },
   mixins: [postDialogMixin],
+  async asyncData({ app, params, query, route }) {
+    const client = app.apolloProvider.defaultClient
+    const popularPlanetsQuery = await client.query({
+      query: popularPlanetsGql
+    })
+    const feedQuery = await client.query({
+      query: feedGql,
+      variables: feedVars(params, query, route),
+      fetchPolicy: 'network-only'
+    })
+    return {
+      popularPlanets: popularPlanetsQuery.data.popularPlanets,
+      feed: feedQuery.data.feed
+    }
+  },
+  data() {
+    return {
+      popularPlanets: []
+    }
+  },
+  scrollToTop: false,
   head() {
     if (this.selectedPost && this.dialog) return postHead(this.selectedPost)
     else

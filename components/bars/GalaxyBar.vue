@@ -1,7 +1,6 @@
 <template>
   <SortingBar>
     <v-btn
-      v-if="$store.state.currentUser"
       depressed
       rounded
       color="primary"

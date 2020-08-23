@@ -10,16 +10,20 @@
 
             <PostsScroller
               v-model="dialog"
-              :loading="$apollo.queries.feed.loading"
+              :loading="loadingMore"
               :items="feed"
               :selected-post="selectedPost"
               @togglehidden="toggleHidden"
               @toggleblock="toggleBlock"
+              @infinite="showMore"
             />
           </v-col>
           <v-col v-if="$device.isDesktop" cols="3" class="pl-0">
             <div class="sticky">
-              <GalaxyInfoCard :galaxy="galaxy" />
+              <GalaxyInfoCard
+                :galaxy="galaxy"
+                :popular-planets="popularPlanets"
+              />
               <InfoLinks class="mt-3" />
             </div>
           </v-col>
@@ -60,6 +64,9 @@ import GalaxyCard from '@/components/GalaxyCard'
 import allPlanetsGql from '@/gql/allPlanets.graphql'
 import PlanetInfoCard from '@/components/planet/PlanetInfoCard'
 import GalaxyBar from '@/components/bars/GalaxyBar'
+import popularPlanetsGql from '@/gql/popularPlanets.graphql'
+import feedGql from '@/gql/feed'
+import { feedVars } from '@/util/feedVars'
 
 export default {
   name: 'Galaxy',
@@ -73,30 +80,40 @@ export default {
     PostsScroller
   },
   mixins: [postDialogMixin],
-  async asyncData(context) {
-    const client = context.app.apolloProvider.defaultClient
-    const { data } = await client.query({
+  async asyncData({ app, params, query, route }) {
+    const client = app.apolloProvider.defaultClient
+    const galaxyQuery = await client.query({
       query: galaxyGql,
-      variables: { galaxyName: context.params.galaxyname }
+      variables: { galaxyName: params.galaxyname },
+      fetchPolicy: 'network-only'
+    })
+    const allPlanetsQuery = await client.query({
+      query: allPlanetsGql,
+      variables: { galaxyName: params.galaxyname },
+      fetchPolicy: 'network-only'
+    })
+    const popularPlanetsQuery = await client.query({
+      query: popularPlanetsGql,
+      variables: { galaxyName: params.galaxyname },
+      fetchPolicy: 'network-only'
+    })
+    const feedQuery = await client.query({
+      query: feedGql,
+      variables: feedVars(params, query, route),
+      fetchPolicy: 'network-only'
     })
     return {
-      galaxy: data.galaxy
+      galaxy: galaxyQuery.data.galaxy,
+      allPlanets: allPlanetsQuery.data.allPlanets,
+      popularPlanets: popularPlanetsQuery.data.popularPlanets,
+      feed: feedQuery.data.feed
     }
   },
   data() {
     return {
       galaxy: null,
-      allPlanets: []
-    }
-  },
-  apollo: {
-    allPlanets: {
-      query: allPlanetsGql,
-      variables() {
-        return {
-          galaxyName: this.$route.params.galaxyname
-        }
-      }
+      allPlanets: [],
+      popularPlanets: []
     }
   },
   head() {
