@@ -51,14 +51,17 @@ import GalaxyCard from '@/components/GalaxyCard'
 
 export default {
   components: { GalaxyCard },
+  async asyncData({ app }) {
+    const galaxies = (
+      await app.apolloProvider.defaultClient.query({
+        query: galaxiesGql
+      })
+    ).data.galaxies
+    return { galaxies }
+  },
   data() {
     return {
       galaxies: []
-    }
-  },
-  apollo: {
-    galaxies: {
-      query: galaxiesGql
     }
   }
 }

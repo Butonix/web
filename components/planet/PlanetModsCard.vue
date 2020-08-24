@@ -12,34 +12,6 @@
             class="px-0 pb-2"
             style="min-height: 0;"
           >
-            <!--<v-list-item-avatar size="28" class="mr-2">
-              <v-img :src="mod.profilePicUrl" />
-            </v-list-item-avatar>
-            <v-list-item-content>
-              <v-list-item-title style="font-size: 1.143rem">
-                {{ mod.username }}
-                <v-chip
-                  v-if="mod.tag"
-                  dark
-                  small
-                  :color="mod.tagColor"
-                  class="ml-1"
-                  style="border-radius: 12px !important;"
-                >
-                  {{ mod.tag }}
-                </v-chip>
-                <v-chip
-                  v-if="mod.id === planet.creatorId"
-                  dark
-                  small
-                  color="teal"
-                  class="ml-1"
-                  style="border-radius: 12px !important;"
-                >
-                  Creator
-                </v-chip>
-              </v-list-item-title>
-            </v-list-item-content>-->
             <UsernameMenu :user-data="mod" />
           </v-list-item>
         </div>
@@ -50,6 +22,7 @@
 
 <script>
 import UsernameMenu from '@/components/user/UsernameMenu'
+
 export default {
   name: 'PlanetModsCard',
   components: { UsernameMenu },

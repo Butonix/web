@@ -10,10 +10,12 @@
           <v-icon v-if="!$store.state.currentUser.profilePicUrl">{{
             $vuetify.icons.values.mdiAccountOutline
           }}</v-icon>
-          <v-img
+          <img
             v-else
+            loading="lazy"
             alt="Profile picture"
             :src="$store.state.currentUser.profilePicUrl"
+            style="object-fit: cover;"
           />
         </v-list-item-avatar>
         <v-list-item-content>

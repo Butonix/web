@@ -16,7 +16,8 @@
           "
           size="36"
         >
-          <v-img
+          <img
+            loading="lazy"
             alt="Profile picture"
             :src="$store.state.currentUser.profilePicUrl"
           />
@@ -61,9 +62,11 @@
           size="24"
           class="mr-2"
         >
-          <v-img
+          <img
             alt="Profile picture"
             :src="$store.state.currentUser.profilePicUrl"
+            loading="lazy"
+            style="object-fit: cover;"
           />
         </v-avatar>
 

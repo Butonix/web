@@ -73,7 +73,11 @@
             dark
             >{{ $vuetify.icons.values.mdiPencil }}</v-icon
           >
-          <v-img v-if="planet.avatarImageUrl" :src="planet.avatarImageUrl" />
+          <img
+            v-if="planet.avatarImageUrl"
+            loading="lazy"
+            :src="planet.avatarImageUrl"
+          />
           <v-icon v-else color="white">{{
             $vuetify.icons.values.mdiEarth
           }}</v-icon>
@@ -171,7 +175,12 @@
             dark
             >{{ $vuetify.icons.values.mdiPencil }}</v-icon
           >
-          <v-img v-if="planet.avatarImageUrl" :src="planet.avatarImageUrl" />
+          <img
+            v-if="planet.avatarImageUrl"
+            loading="lazy"
+            :src="planet.avatarImageUrl"
+            style="object-fit: cover;"
+          />
           <v-icon v-else color="white">{{
             $vuetify.icons.values.mdiEarth
           }}</v-icon>
@@ -185,7 +194,7 @@
           <PlanetBar :planet="planet" />
           <PostsScroller
             v-model="dialog"
-            :loading="loadingMore"
+            :loading="$fetchState.pending"
             :items="feed"
             :selected-post="selectedPost"
             @togglehidden="toggleHidden"
@@ -242,21 +251,23 @@ export default {
     PostsScroller
   },
   mixins: [postDialogMixin],
-  async asyncData({ app, params, query, route }) {
-    const client = app.apolloProvider.defaultClient
-    const planetQuery = await client.query({
-      query: planetGql,
-      variables: { planetName: params.planetname }
-    })
-    const feedQuery = await client.query({
-      query: feedGql,
-      variables: feedVars(params, query, route),
-      fetchPolicy: 'network-only'
-    })
-    return {
-      planet: planetQuery.data.planet,
-      feed: feedQuery.data.feed
-    }
+  async fetch() {
+    this.feed = (
+      await this.$apollo.query({
+        query: feedGql,
+        variables: feedVars(this.$route),
+        fetchPolicy: 'network-only'
+      })
+    ).data.feed
+  },
+  async asyncData({ app, params }) {
+    const planet = (
+      await app.apolloProvider.defaultClient.query({
+        query: planetGql,
+        variables: { planetName: params.planetname }
+      })
+    ).data.planet
+    return { planet }
   },
   data() {
     return {
@@ -270,8 +281,7 @@ export default {
       return (
         this.$store.state.currentUser &&
         (!!this.$store.state.currentUser.moderatedPlanets.find(
-          (p) =>
-            p.name.toLowerCase() === this.$route.params.planetname.toLowerCase()
+          (p) => p.name === this.planet.name
         ) ||
           this.$store.state.currentUser.admin)
       )
@@ -321,6 +331,12 @@ export default {
         }
       })
       this.refetchPlanet()
+    }
+  },
+  activated() {
+    // Call fetch again if last fetch more than 30 sec ago
+    if (this.$fetchState.timestamp <= Date.now() - 30000) {
+      this.$fetch()
     }
   },
   mounted() {

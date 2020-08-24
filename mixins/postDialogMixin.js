@@ -15,7 +15,7 @@ export default {
   },
   computed: {
     vars() {
-      return feedVars(this.$route.params, this.$route.query, this.$route)
+      return feedVars(this.$route)
     }
   },
   watch: {

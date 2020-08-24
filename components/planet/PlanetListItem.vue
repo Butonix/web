@@ -15,7 +15,12 @@
           : ''
       "
     >
-      <v-img v-if="planet.avatarImageUrl" :src="planet.avatarImageUrl" />
+      <img
+        v-if="planet.avatarImageUrl"
+        loading="lazy"
+        :src="planet.avatarImageUrl"
+        style="object-fit: cover;"
+      />
       <v-icon v-else class="text--secondary">{{
         $vuetify.icons.values.mdiEarth
       }}</v-icon>

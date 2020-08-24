@@ -8,7 +8,7 @@ export const state = () => ({
   snackbarMessage: '',
   snackbarSuccess: false,
   expandedCommentId: '',
-  nav: false,
+  nav: true,
   recentPlanets: [],
   galaxies: []
 })

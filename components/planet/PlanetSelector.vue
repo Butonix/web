@@ -20,9 +20,10 @@
             : ''
         "
       >
-        <v-img
+        <img
           v-if="planet && planet.avatarImageUrl"
           :src="planet.avatarImageUrl"
+          loading="lazy"
         />
         <v-icon v-else class="text--secondary">{{
           $vuetify.icons.values.mdiEarth
@@ -41,7 +42,11 @@
           :color="data.item.themeColor ? data.item.themeColor : 'primary'"
           left
         >
-          <v-img :src="data.item.avatarImageUrl" />
+          <img
+            loading="lazy"
+            :src="data.item.avatarImageUrl"
+            style="object-fit: cover;"
+          />
         </v-avatar>
         <v-icon v-else class="text--secondary">{{
           $vuetify.icons.values.mdiEarth

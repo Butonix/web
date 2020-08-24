@@ -24,9 +24,10 @@
               : '#9E9E9E'
           }`"
         />
-        <v-img
+        <img
           v-if="user.profilePicUrl"
-          style="border-radius: 50%;"
+          loading="lazy"
+          style="border-radius: 50%; object-fit: cover;"
           alt="Profile picture"
           :src="user.profilePicUrl"
         />

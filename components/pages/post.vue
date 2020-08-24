@@ -18,22 +18,23 @@ import { postHead } from '@/util/postHead'
 export default {
   name: 'PostStandalone',
   components: { PostDialog },
-  async asyncData(context) {
-    const client = context.app.apolloProvider.defaultClient
-    const postQuery = await client.query({
-      query: postGql,
-      variables: { postId: context.params.id },
-      fetchPolicy: 'network-only'
-    })
-    const postCommentsQuery = await client.query({
-      query: postCommentsGql,
-      variables: { postId: context.params.id },
-      fetchPolicy: 'network-only'
-    })
-    return {
-      post: postQuery.data.post,
-      postComments: postCommentsQuery.data.postComments
-    }
+  async asyncData({ app, params }) {
+    const client = app.apolloProvider.defaultClient
+    const post = (
+      await client.query({
+        query: postGql,
+        variables: { postId: params.id },
+        fetchPolicy: 'network-only'
+      })
+    ).data.post
+    const postComments = (
+      await client.query({
+        query: postCommentsGql,
+        variables: { postId: params.id },
+        fetchPolicy: 'network-only'
+      })
+    ).data.post
+    return { post, postComments }
   },
   data() {
     return {
@@ -50,6 +51,12 @@ export default {
           params: { planetname: this.$route.params.planetname }
         })
       }
+    }
+  },
+  activated() {
+    // Call fetch again if last fetch more than 30 sec ago
+    if (this.$fetchState.timestamp <= Date.now() - 30000) {
+      this.$fetch()
     }
   },
   head() {

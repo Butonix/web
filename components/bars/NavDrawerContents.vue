@@ -158,6 +158,13 @@ import PlanetListItem from '@/components/planet/PlanetListItem'
 export default {
   name: 'NavDrawerContents',
   components: { PlanetListItem },
+  async fetch() {
+    this.joinedPlanets = (
+      await this.$apollo.query({
+        query: joinedPlanetsGql
+      })
+    ).data.joinedPlanets
+  },
   data() {
     return {
       joinedPlanets: [],

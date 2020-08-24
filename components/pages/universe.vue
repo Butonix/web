@@ -7,7 +7,7 @@
 
           <PostsScroller
             v-model="dialog"
-            :loading="loadingMore"
+            :loading="$fetchState.pending"
             :items="feed"
             :selected-post="selectedPost"
             @togglehidden="toggleHidden"
@@ -17,7 +17,7 @@
         </v-col>
         <v-col v-if="$device.isDesktop" cols="3" class="pl-0">
           <div class="sticky">
-            <PopularPlanetsCard :popular-planets="popularPlanets" />
+            <PopularPlanetsCard />
             <InfoLinks class="mt-3" />
           </div>
         </v-col>
@@ -33,7 +33,6 @@ import PopularPlanetsCard from '@/components/planet/PopularPlanetsCard'
 import { postHead } from '@/util/postHead'
 import InfoLinks from '@/components/InfoLinks'
 import UniverseBar from '@/components/bars/UniverseBar'
-import popularPlanetsGql from '@/gql/popularPlanets'
 import feedGql from '@/gql/feed'
 import { feedVars } from '@/util/feedVars'
 
@@ -47,24 +46,19 @@ export default {
     PostsScroller
   },
   mixins: [postDialogMixin],
-  async asyncData({ app, params, query, route }) {
-    const client = app.apolloProvider.defaultClient
-    const popularPlanetsQuery = await client.query({
-      query: popularPlanetsGql
-    })
-    const feedQuery = await client.query({
-      query: feedGql,
-      variables: feedVars(params, query, route),
-      fetchPolicy: 'network-only'
-    })
-    return {
-      popularPlanets: popularPlanetsQuery.data.popularPlanets,
-      feed: feedQuery.data.feed
-    }
+  async fetch() {
+    this.feed = (
+      await this.$apollo.query({
+        query: feedGql,
+        variables: feedVars(this.$route),
+        fetchPolicy: 'network-only'
+      })
+    ).data.feed
   },
-  data() {
-    return {
-      popularPlanets: []
+  activated() {
+    // Call fetch again if last fetch more than 30 sec ago
+    if (this.$fetchState.timestamp <= Date.now() - 30000) {
+      this.$fetch()
     }
   },
   head() {

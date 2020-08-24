@@ -10,10 +10,19 @@
     }"
     :tile="tile"
   >
-    <v-img
+    <img
+      v-if="planet.bannerImageUrl"
       alt="Planet cover image"
       :src="planet.bannerImageUrl"
-      :height="40"
+      style="height: 40px; width: 100%; object-fit: cover;"
+      loading="lazy"
+      :style="`background-color: ${
+        planet.themeColor ? planet.themeColor : 'var(--v-primary-base)'
+      }`"
+    />
+    <div
+      v-else
+      style="height: 40px; width: 100%;"
       :style="`background-color: ${
         planet.themeColor ? planet.themeColor : 'var(--v-primary-base)'
       }`"
@@ -24,7 +33,12 @@
           style="height: 48px; min-width: 48px; width: 48px;"
           :to="`/p/${planet.name}`"
         >
-          <v-img v-if="planet.avatarImageUrl" :src="planet.avatarImageUrl" />
+          <img
+            v-if="planet.avatarImageUrl"
+            loading="lazy"
+            :src="planet.avatarImageUrl"
+            style="object-fit: cover;"
+          />
           <v-icon v-else>{{ $vuetify.icons.values.mdiEarth }}</v-icon>
         </nuxt-link>
       </v-list-item-avatar>

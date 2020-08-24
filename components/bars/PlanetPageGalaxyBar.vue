@@ -36,7 +36,7 @@
       </v-slide-item>
 
       <v-slide-item
-        v-for="galaxy in galaxies"
+        v-for="galaxy in $store.state.galaxies"
         :key="galaxy.name"
         v-slot:default="{ active, toggle }"
       >
@@ -75,29 +75,8 @@
 </template>
 
 <script>
-import gql from 'graphql-tag'
-
 export default {
-  name: 'PlanetPageGalaxyBar',
-  apollo: {
-    galaxies: {
-      query: gql`
-        query {
-          galaxies {
-            fullName
-            name
-            icon
-            bannerImageUrl
-          }
-        }
-      `
-    }
-  },
-  data() {
-    return {
-      galaxies: []
-    }
-  }
+  name: 'PlanetPageGalaxyBar'
 }
 </script>
 

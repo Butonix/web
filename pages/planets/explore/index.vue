@@ -36,15 +36,14 @@ import PlanetPageGalaxyBar from '@/components/bars/PlanetPageGalaxyBar'
 
 export default {
   components: { PlanetPageGalaxyBar, GalaxyCard, PlanetInfoCard },
-  async asyncData(context) {
-    const client = context.app.apolloProvider.defaultClient
-    const { data } = await client.query({
-      query: allPlanetsGql,
-      fetchPolicy: 'network-only'
-    })
-    return {
-      allPlanets: data.allPlanets
-    }
+  async asyncData({ app }) {
+    const allPlanets = (
+      await app.apolloProvider.defaultClient.query({
+        query: allPlanetsGql,
+        fetchPolicy: 'network-only'
+      })
+    ).data.allPlanets
+    return { allPlanets }
   },
   data() {
     return {

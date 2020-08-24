@@ -7,6 +7,7 @@
           loading="lazy"
           alt="Profile picture"
           :src="planet.avatarImageUrl"
+          style="object-fit: cover;"
         />
         <v-icon v-else class="text--secondary" size="20">{{
           $vuetify.icons.values.mdiEarth

@@ -1,4 +1,5 @@
-export const feedVars = (params, query, route) => {
+export const feedVars = (route) => {
+  const { params, query } = route
   return {
     sort: params.sort ? params.sort.toUpperCase() : 'HOT',
     time: params.time ? params.time.toUpperCase() : 'ALL',

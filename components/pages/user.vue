@@ -71,9 +71,14 @@
                   dark
                   >{{ $vuetify.icons.values.mdiPencil }}</v-icon
                 >
-                <v-img
+                <img
                   v-if="user.profilePicUrl"
-                  style="border-radius: 50%; background-color: #202124;"
+                  loading="lazy"
+                  style="
+                    border-radius: 50%;
+                    background-color: #202124;
+                    object-fit: cover;
+                  "
                   :src="user.profilePicUrl"
                 />
                 <v-icon v-else>{{
@@ -161,7 +166,7 @@
             <v-tab-item>
               <PostsScroller
                 v-model="dialog"
-                :loading="loadingMore"
+                :loading="$fetchState.pending"
                 :items="feed"
                 :selected-post="selectedPost"
                 @togglehidden="toggleHidden"
@@ -175,7 +180,7 @@
                 v-model="dialog"
                 :items="userComments"
                 :selected-post="selectedPost"
-                :loading="$apollo.queries.userComments.loading"
+                :loading="$fetchState.pending"
               />
             </v-tab-item>
           </v-tabs-items>
@@ -269,7 +274,6 @@ import { feedVars } from '@/util/feedVars'
 
 export default {
   name: 'User',
-  scrollToTop: false,
   components: {
     InfoLinks,
     UserCommentsScroller,
@@ -279,22 +283,33 @@ export default {
     PostsScroller
   },
   mixins: [postDialogMixin],
-  async asyncData({ app, params, query, route }) {
-    const client = app.apolloProvider.defaultClient
-    const userQuery = await client.query({
-      query: userGql,
-      variables: { username: params.username }
-    })
-    const feedQuery = await client.query({
-      query: feedGql,
-      variables: feedVars(params, query, route),
-      fetchPolicy: 'network-only'
-    })
-    return {
-      user: userQuery.data.user,
-      editBio: userQuery.data.user.bio,
-      feed: feedQuery.data.feed
-    }
+  async fetch() {
+    this.feed = (
+      await this.$apollo.query({
+        query: feedGql,
+        variables: feedVars(this.$route),
+        fetchPolicy: 'network-only'
+      })
+    ).data.feed
+    this.userComments = (
+      await this.$apollo.query({
+        query: userCommentsGql,
+        variables: {
+          username: this.$route.params.username
+        },
+        fetchPolicy: 'network-only'
+      })
+    ).data.userComments
+  },
+  async asyncData({ app, params }) {
+    const user = (
+      await app.apolloProvider.defaultClient.query({
+        query: userGql,
+        variables: { username: params.username },
+        fetchPolicy: 'network-only'
+      })
+    ).data.user
+    return { user, editBio: user.bio }
   },
   data() {
     return {
@@ -306,17 +321,6 @@ export default {
       bioDialog: false,
       editBio: '',
       bannerFile: null
-    }
-  },
-  apollo: {
-    userComments: {
-      query: userCommentsGql,
-      variables() {
-        return {
-          username: this.$route.params.username
-        }
-      },
-      fetchPolicy: 'network-only'
     }
   },
   computed: {
@@ -358,6 +362,13 @@ export default {
       this.refetchUser()
     }
   },
+  activated() {
+    // Call fetch again if last fetch more than 30 sec ago
+    if (this.$fetchState.timestamp <= Date.now() - 30000) {
+      this.$fetch()
+    }
+  },
+  scrollToTop: false,
   methods: {
     openBannerInput() {
       if (!this.user.isCurrentUser) return

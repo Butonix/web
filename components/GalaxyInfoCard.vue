@@ -1,9 +1,20 @@
 <template>
   <v-card v-if="galaxy" flat :outlined="!$vuetify.theme.dark" :tile="tile">
-    <v-img
-      height="82"
+    <img
+      v-if="galaxy.bannerImageUrl"
+      loading="lazy"
       :src="galaxy.bannerImageUrl"
-      style="background-color: var(--v-primary-base);"
+      style="
+        background-color: var(--v-primary-base);
+        height: 82px;
+        width: 100%;
+        object-fit: cover;
+      "
+    />
+
+    <div
+      v-else
+      :style="`background-color: var(--v-primary-base); height: 82px; width: 100%; object-fit: cover;`"
     />
 
     <v-card-title class="pb-0" style="word-break: break-word;">
@@ -51,6 +62,7 @@
 
 <script>
 import PlanetListItem from '@/components/planet/PlanetListItem'
+import popularPlanetsGql from '@/gql/popularPlanets'
 
 export default {
   name: 'GalaxyInfoCard',
@@ -63,10 +75,19 @@ export default {
     tile: {
       type: Boolean,
       default: false
-    },
-    popularPlanets: {
-      type: Array,
-      required: true
+    }
+  },
+  async fetch() {
+    const popularPlanetsQuery = await this.$apollo.query({
+      query: popularPlanetsGql,
+      variables: { galaxyName: this.$route.params.galaxyname },
+      fetchPolicy: 'network-only'
+    })
+    this.popularPlanets = popularPlanetsQuery.data.popularPlanets
+  },
+  data() {
+    return {
+      popularPlanets: []
     }
   }
 }

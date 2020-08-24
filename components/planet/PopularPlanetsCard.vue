@@ -46,14 +46,20 @@
 
 <script>
 import PlanetListItem from '@/components/planet/PlanetListItem'
+import popularPlanetsGql from '@/gql/popularPlanets'
 
 export default {
   name: 'PopularPlanetsCard',
   components: { PlanetListItem },
-  props: {
-    popularPlanets: {
-      type: Array,
-      required: true
+  async fetch() {
+    const popularPlanetsQuery = await this.$apollo.query({
+      query: popularPlanetsGql
+    })
+    this.popularPlanets = popularPlanetsQuery.data.popularPlanets
+  },
+  data() {
+    return {
+      popularPlanets: []
     }
   }
 }

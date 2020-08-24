@@ -13,7 +13,11 @@
       to="/planets/explore"
     >
       <v-avatar color="primary" left>
-        <v-img v-if="planet.avatarImageUrl" :src="planet.avatarImageUrl" />
+        <img
+          v-if="planet.avatarImageUrl"
+          loading="lazy"
+          :src="planet.avatarImageUrl"
+        />
         <v-icon v-else>{{ $vuetify.icons.values.mdiEarth }}</v-icon>
       </v-avatar>
       {{ planet.customName || planet.name }}</v-chip
