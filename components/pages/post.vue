@@ -1,12 +1,18 @@
 <template>
   <div>
-    <PostDialog v-model="dialog" :post="post" standalone />
+    <PostDialog
+      v-model="dialog"
+      :post="post"
+      standalone
+      :comments="postComments"
+    />
   </div>
 </template>
 
 <script>
 import PostDialog from '@/components/pages/PostDialog'
 import postGql from '@/gql/post'
+import postCommentsGql from '@/gql/postComments'
 import { postHead } from '@/util/postHead'
 
 export default {
@@ -14,18 +20,26 @@ export default {
   components: { PostDialog },
   async asyncData(context) {
     const client = context.app.apolloProvider.defaultClient
-    const { data } = await client.query({
+    const postQuery = await client.query({
       query: postGql,
-      variables: { postId: context.params.id }
+      variables: { postId: context.params.id },
+      fetchPolicy: 'network-only'
+    })
+    const postCommentsQuery = await client.query({
+      query: postCommentsGql,
+      variables: { postId: context.params.id },
+      fetchPolicy: 'network-only'
     })
     return {
-      post: data.post
+      post: postQuery.data.post,
+      postComments: postCommentsQuery.data.postComments
     }
   },
   data() {
     return {
       dialog: true,
-      post: null
+      post: null,
+      postComments: []
     }
   },
   watch: {

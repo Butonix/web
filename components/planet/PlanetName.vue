@@ -4,6 +4,7 @@
       <v-avatar size="20">
         <img
           v-if="planet.avatarImageUrl"
+          loading="lazy"
           alt="Profile picture"
           :src="planet.avatarImageUrl"
         />

@@ -1,26 +1,56 @@
 <template>
   <v-list class="py-0">
-    <v-list-item
-      :to="`/u/${$store.state.currentUser.username}`"
-      nuxt
-      @click="$emit('selected')"
-    >
-      <v-list-item-avatar>
-        <v-icon v-if="!$store.state.currentUser.profilePicUrl">{{
-          $vuetify.icons.values.mdiAccountOutline
-        }}</v-icon>
-        <v-img
-          v-else
-          alt="Profile picture"
-          :src="$store.state.currentUser.profilePicUrl"
-        />
-      </v-list-item-avatar>
-      <v-list-item-content>
-        <v-list-item-title>{{
-          $store.state.currentUser.username
-        }}</v-list-item-title>
-      </v-list-item-content>
-    </v-list-item>
+    <template v-if="$store.state.currentUser">
+      <v-list-item
+        :to="`/u/${$store.state.currentUser.username}`"
+        nuxt
+        @click="$emit('selected')"
+      >
+        <v-list-item-avatar>
+          <v-icon v-if="!$store.state.currentUser.profilePicUrl">{{
+            $vuetify.icons.values.mdiAccountOutline
+          }}</v-icon>
+          <v-img
+            v-else
+            alt="Profile picture"
+            :src="$store.state.currentUser.profilePicUrl"
+          />
+        </v-list-item-avatar>
+        <v-list-item-content>
+          <v-list-item-title>{{
+            $store.state.currentUser.username
+          }}</v-list-item-title>
+        </v-list-item-content>
+      </v-list-item>
+
+      <v-list-item nuxt to="/settings/account" @click="$emit('selected')">
+        <v-list-item-icon>
+          <v-icon>{{ $vuetify.icons.values.mdiCogOutline }}</v-icon>
+        </v-list-item-icon>
+        <v-list-item-content>
+          <v-list-item-title>Settings</v-list-item-title>
+        </v-list-item-content>
+      </v-list-item>
+    </template>
+
+    <template v-else>
+      <v-list-item nuxt to="/signup">
+        <v-list-item-icon>
+          <v-icon>{{ $vuetify.icons.values.mdiAccountOutline }}</v-icon>
+        </v-list-item-icon>
+        <v-list-item-content>
+          <v-list-item-title>Sign Up</v-list-item-title>
+        </v-list-item-content>
+      </v-list-item>
+      <v-list-item nuxt to="/login">
+        <v-list-item-icon>
+          <v-icon>{{ $vuetify.icons.values.mdiLogin }}</v-icon>
+        </v-list-item-icon>
+        <v-list-item-content>
+          <v-list-item-title>Log In</v-list-item-title>
+        </v-list-item-content>
+      </v-list-item>
+    </template>
 
     <v-list-item @click="toggleDark">
       <v-list-item-icon>
@@ -32,15 +62,6 @@
       <v-list-item-action>
         <v-switch v-model="$vuetify.theme.dark" readonly />
       </v-list-item-action>
-    </v-list-item>
-
-    <v-list-item nuxt to="/settings/account" @click="$emit('selected')">
-      <v-list-item-icon>
-        <v-icon>{{ $vuetify.icons.values.mdiCogOutline }}</v-icon>
-      </v-list-item-icon>
-      <v-list-item-content>
-        <v-list-item-title>Settings</v-list-item-title>
-      </v-list-item-content>
     </v-list-item>
 
     <v-list-item v-if="$store.state.currentUser" @click="logout">

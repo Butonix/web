@@ -54,7 +54,7 @@
         </div>
       </template>
 
-      <ProfileMenu v-if="$store.state.currentUser" />
+      <ProfileMenu />
 
       <template v-if="$device.isDesktop">
         <client-only>

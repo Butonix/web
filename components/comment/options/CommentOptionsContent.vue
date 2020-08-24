@@ -22,9 +22,11 @@
 
     <template
       v-if="
-        !!$store.state.currentUser.moderatedPlanets.find(
+        $store.state.currentUser &&
+        (!!$store.state.currentUser.moderatedPlanets.find(
           (p) => p.name === post.planet.name
-        ) || $store.state.currentUser.admin
+        ) ||
+          $store.state.currentUser.admin)
       "
     >
       <v-list-item @click="$emit('removecomment')">

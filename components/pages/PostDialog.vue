@@ -65,62 +65,22 @@
         >
           <div
             ref="dialog"
-            style="
-              height: 100%;
-              overflow-y: auto;
-              position: relative;
-              width: 100%;
-              will-change: transform;
-              contain: layout style size;
-            "
+            :style="`height: 100%; overflow-y: auto; position: relative; width: 100%; will-change: transform; contain: layout style size;`"
             @click="goBack"
           >
             <div
               v-if="$device.isDesktop"
-              style="
-                background-color: var(--v-primary-base);
-                color: #e8eaed;
-                position: sticky;
-                box-sizing: border-box;
-                height: 48px;
-                left: 0;
-                margin: 0 auto;
-                max-width: 1280px;
-                right: 0;
-                top: 0;
-                width: calc(100% - 160px);
-                z-index: 70;
-              "
+              :style="`background-color: var(--v-primary-base); color: #e8eaed; position: sticky; box-sizing: border-box; height: 48px; left: 0; margin: 0 auto; max-width: 1280px; right: 0; top: 0; width: calc(100% - 160px); z-index: 70;`"
               @click.stop="doNothing"
             >
               <div
-                style="
-                  padding-left: 32px;
-                  padding-right: 24px;
-                  align-items: center;
-                  box-sizing: border-box;
-                  display: flex;
-                  height: 100%;
-                  margin: auto;
-                  max-width: 1280px;
-                  width: 100%;
-                "
+                :style="`padding-left: 32px; padding-right: 24px; align-items: center; box-sizing: border-box; display: flex; height: 100%; margin: auto; max-width: 1280px; width: 100%;`"
               >
                 <div
-                  style="
-                    align-items: center;
-                    display: flex;
-                    flex: 1;
-                    max-width: calc(100% - 324px);
-                    width: 100%;
-                  "
+                  :style="`align-items: center; display: flex; flex: 1; max-width: calc(100% - 324px); width: 100%;`"
                 >
                   <div
-                    style="
-                      overflow: hidden;
-                      text-overflow: ellipsis;
-                      white-space: nowrap;
-                    "
+                    :style="`overflow: hidden; text-overflow: ellipsis; white-space: nowrap;`"
                     class="white--text font-weight-medium"
                   >
                     {{ post ? post.title : '' }}
@@ -128,12 +88,7 @@
                 </div>
 
                 <div
-                  style="
-                    display: flex;
-                    justify-content: flex-end;
-                    margin-left: 12px;
-                    width: 312px;
-                  "
+                  :style="`display: flex; justify-content: flex-end; margin-left: 12px; width: 312px;`"
                 >
                   <v-btn
                     icon
@@ -151,35 +106,25 @@
             </div>
 
             <div
-              style="
-                will-change: transform;
-                box-sizing: border-box;
-                display: flex;
-                justify-content: center;
-                max-width: 1280px;
-                padding-bottom: 32px;
-                position: relative;
-              "
               :style="{
                 'background-color': $vuetify.theme.dark ? '#202124' : '#F1F3F4',
                 margin: $device.isDesktop ? '0 auto' : '',
-                width: $device.isDesktop ? 'calc(100% - 160px)' : '100%'
+                width: $device.isDesktop ? 'calc(100% - 160px)' : '100%',
+                'will-change': 'transform',
+                'box-sizing': 'border-box',
+                display: 'flex',
+                'justify-content': 'center',
+                'max-width': '1280px',
+                'padding-bottom': '32px',
+                position: 'relative'
               }"
               @click.stop="doNothing"
             >
               <div
-                style="
-                  flex: 1;
-                  min-height: calc(100vh - 124px);
-                  min-width: 0;
-                  padding-bottom: 1px;
-                  width: 100%;
-                  word-break: break-word;
-                "
+                :style="`flex: 1; min-height: calc(100vh - 124px); min-width: 0; padding-bottom: 1px; width: 100%; word-break: break-word; ${
+                  $device.isDesktop ? 'margin: 12px 12px 32px 32px' : ''
+                }`"
                 class="left"
-                :style="{
-                  margin: $device.isDesktop ? '12px 12px 32px 32px' : ''
-                }"
               >
                 <div
                   :style="{

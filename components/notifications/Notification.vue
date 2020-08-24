@@ -23,11 +23,7 @@
           >&nbsp;"<span class="hoverable">{{ notif.post.title }}</span
           >"</nuxt-link
         >
-        <div
-          style="font-size: 1rem;"
-          class="text--primary py-2"
-          v-html="notif.comment.textContent"
-        />
+        <TextContent :text-content="notif.comment.textContent" />
       </div>
       <v-card-actions class="pt-0">
         <UsernameMenu :user-data="notif.fromUser" />
@@ -44,11 +40,12 @@
 import UsernameMenu from '@/components/user/UsernameMenu'
 import { urlName } from '@/util/urlName'
 import notificationsGql from '@/gql/notifications'
+import TextContent from '@/components/TextContent'
 import markNotificationReadGql from '../../gql/markNotificationRead.graphql'
 
 export default {
   name: 'Notification',
-  components: { UsernameMenu },
+  components: { TextContent, UsernameMenu },
   props: {
     notif: {
       type: Object,

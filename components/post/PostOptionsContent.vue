@@ -165,11 +165,17 @@
 <script>
 import gql from 'graphql-tag'
 import hiddenPostsGql from '@/gql/hiddenPosts.graphql'
+import Vue from 'vue'
+import VueClipboard from 'vue-clipboard2'
 import hidePostGql from '../../gql/hidePost.graphql'
 import unhidePostGql from '../../gql/unhidePost.graphql'
 import reportPostGql from '../../gql/reportPost.graphql'
 import deletePostGql from '../../gql/deletePost.graphql'
 import { urlName } from '~/util/urlName'
+
+if (process.client) {
+  Vue.use(VueClipboard)
+}
 
 export default {
   name: 'PostOptionsContent',
@@ -216,9 +222,11 @@ export default {
     },
     copyLink() {
       this.$emit('selected')
-      this.$copyText(
-        `https://www.getcomet.net/p/${this.post.planet.name}/comments/${this.post.id}/${this.urlName}`
-      )
+      if (process.client) {
+        this.$copyText(
+          `https://www.getcomet.net/p/${this.post.planet.name}/comments/${this.post.id}/${this.urlName}`
+        )
+      }
       this.$store.dispatch('displaySnackbar', {
         message: 'Copied link to clipboard',
         success: true

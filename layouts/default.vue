@@ -1,5 +1,5 @@
 <template>
-  <v-app id="app">
+  <v-app v-cloak id="app">
     <AppBar />
 
     <NavDrawer v-if="$device.isDesktop" />
@@ -38,4 +38,8 @@ export default {
 }
 </script>
 
-<style scoped></style>
+<style>
+[v-cloak] {
+  display: none;
+}
+</style>

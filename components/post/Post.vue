@@ -102,7 +102,7 @@
         </div>
 
         <PostPreview
-          v-if="$device.isDesktop"
+          v-if="$device.isDesktop && (post.textContent || idState.expand)"
           :key="post.id"
           :expand="idState.expand || isPostView"
           :is-post-view="isPostView"
@@ -123,7 +123,7 @@
     </v-list-item>
 
     <PostPreview
-      v-if="!$device.isDesktop"
+      v-if="!$device.isDesktop && (post.textContent || idState.expand)"
       :key="post.id"
       :expand="idState.expand || isPostView"
       :is-post-view="isPostView"
@@ -144,7 +144,6 @@
 <script>
 import { IdState } from 'vue-virtual-scroller'
 import PostBottomBar from '@/components/post/PostBottomBar'
-import PostPreview from '@/components/post/PostPreview'
 import PlanetNameMenu from '@/components/planet/PlanetNameMenu'
 import PostThumbnail from './PostThumbnail'
 import { urlName } from '~/util/urlName'
@@ -153,7 +152,7 @@ export default {
   name: 'Post',
   components: {
     PlanetNameMenu,
-    PostPreview,
+    PostPreview: () => import('@/components/post/PostPreview'),
     PostBottomBar,
     PostThumbnail
   },

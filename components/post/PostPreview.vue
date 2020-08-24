@@ -34,6 +34,7 @@
         @click.stop.prevent="openImageLink"
       >
         <img
+          loading="lazy"
           alt="Image preview"
           :src="post.link"
           style="max-height: 500px; max-width: 100%;"
@@ -127,6 +128,36 @@ import { getIdFromUrl } from 'vue-youtube'
 import InstagramEmbed from 'vue-instagram-embed'
 import { Tweet } from 'vue-tweet-embed'
 import TextContent from '@/components/TextContent'
+import Vue from 'vue'
+import VueFriendlyIframe from 'vue-friendly-iframe'
+
+if (process.client) {
+  Vue.use(VueFriendlyIframe)
+  ;(function (w, d) {
+    const id = 'embedly-platform'
+    const n = 'script'
+    if (!d.getElementById(id)) {
+      w.embedly =
+        w.embedly ||
+        function () {
+          ;(w.embedly.q = w.embedly.q || []).push(arguments)
+        }
+      const e = d.createElement(n)
+      e.id = id
+      e.async = 1
+      e.src =
+        (document.location.protocol === 'https:' ? 'https' : 'http') +
+        '://cdn.embedly.com/widgets/platform.js'
+      const s = d.getElementsByTagName(n)[0]
+      s.parentNode.insertBefore(e, s)
+    }
+  })(window, document)
+
+  // eslint-disable-next-line no-undef
+  embedly('defaults', {
+    key: process.env.EMBEDLY_KEY
+  })
+}
 
 export default {
   name: 'PostPreview',

@@ -17,6 +17,7 @@
     >
       <img
         v-if="post.thumbnailUrl"
+        loading="lazy"
         alt="Thumbnail"
         style="object-fit: cover;"
         :src="post.thumbnailUrl"

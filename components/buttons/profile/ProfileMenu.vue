@@ -28,7 +28,7 @@
           {{
             $store.state.currentUser
               ? $store.state.currentUser.username
-              : 'Log In'
+              : 'Logged Out'
           }}
         </span>
       </v-btn>
@@ -74,7 +74,7 @@
         {{
           $store.state.currentUser
             ? $store.state.currentUser.username
-            : 'Log In'
+            : 'Logged Out'
         }}
       </v-btn>
     </template>

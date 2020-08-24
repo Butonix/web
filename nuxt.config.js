@@ -230,12 +230,7 @@ export default {
   /*
    ** Plugins to load before mounting the App
    */
-  plugins: [
-    '~/plugins/vue-clipboard2.client.js',
-    '~/plugins/vue-friendly-iframe.client.js',
-    '~/plugins/color.js',
-    '~/plugins/embedly.client.js'
-  ],
+  plugins: ['~/plugins/color.js'],
   /*
    ** Nuxt.js dev-modules
    */
