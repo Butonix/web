@@ -133,30 +133,6 @@ import VueFriendlyIframe from 'vue-friendly-iframe'
 
 if (process.client) {
   Vue.use(VueFriendlyIframe)
-  ;(function (w, d) {
-    const id = 'embedly-platform'
-    const n = 'script'
-    if (!d.getElementById(id)) {
-      w.embedly =
-        w.embedly ||
-        function () {
-          ;(w.embedly.q = w.embedly.q || []).push(arguments)
-        }
-      const e = d.createElement(n)
-      e.id = id
-      e.async = 1
-      e.src =
-        (document.location.protocol === 'https:' ? 'https' : 'http') +
-        '://cdn.embedly.com/widgets/platform.js'
-      const s = d.getElementsByTagName(n)[0]
-      s.parentNode.insertBefore(e, s)
-    }
-  })(window, document)
-
-  // eslint-disable-next-line no-undef
-  embedly('defaults', {
-    key: process.env.EMBEDLY_KEY
-  })
 }
 
 export default {
@@ -226,6 +202,30 @@ export default {
       if (!this.isTweetLink) return ''
       else return this.post.link.split('status/')[1].split('?')[0]
     }
+  },
+  mounted() {
+    const id = 'embedly-platform'
+    const n = 'script'
+    if (!document.getElementById(id)) {
+      window.embedly =
+        window.embedly ||
+        function () {
+          ;(window.embedly.q = window.embedly.q || []).push(arguments)
+        }
+      const e = document.createElement(n)
+      e.id = id
+      e.async = 1
+      e.src =
+        (document.location.protocol === 'https:' ? 'https' : 'http') +
+        '://cdn.embedly.com/widgets/platform.js'
+      const s = document.getElementsByTagName(n)[0]
+      s.parentNode.insertBefore(e, s)
+    }
+
+    // eslint-disable-next-line no-undef
+    embedly('defaults', {
+      key: process.env.EMBEDLY_KEY
+    })
   },
   methods: {
     openImageLink() {

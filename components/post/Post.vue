@@ -102,7 +102,10 @@
         </div>
 
         <PostPreview
-          v-if="$device.isDesktop && (post.textContent || idState.expand)"
+          v-if="
+            $device.isDesktop &&
+            (post.textContent || idState.expand || isPostView)
+          "
           :key="post.id"
           :expand="idState.expand || isPostView"
           :is-post-view="isPostView"
@@ -123,7 +126,9 @@
     </v-list-item>
 
     <PostPreview
-      v-if="!$device.isDesktop && (post.textContent || idState.expand)"
+      v-if="
+        !$device.isDesktop && (post.textContent || idState.expand || isPostView)
+      "
       :key="post.id"
       :expand="idState.expand || isPostView"
       :is-post-view="isPostView"
